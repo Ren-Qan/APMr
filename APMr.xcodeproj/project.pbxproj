@@ -1,0 +1,621 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* APMrApp.swift */; };
+		C7483B9629373A0400F32BE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9529373A0400F32BE0 /* ContentView.swift */; };
+		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
+		C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */; };
+		C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA429373ADC00F32BE0 /* MobileManager.swift */; };
+		C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA529373ADC00F32BE0 /* IDevice.swift */; };
+		C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */; };
+		C7483BEC29373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA929373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift */; };
+		C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */; };
+		C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */; };
+		C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */; };
+		C7483BF029373ADC00F32BE0 /* IIntruments.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAE29373ADC00F32BE0 /* IIntruments.swift */; };
+		C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BB329373ADC00F32BE0 /* DTXReceiveObject.m */; };
+		C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BB429373ADC00F32BE0 /* DTXMessageHandle.m */; };
+		C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BB529373ADC00F32BE0 /* DTXArguments.m */; };
+		C7483BF429373ADC00F32BE0 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BB929373ADC00F32BE0 /* libcrypto.a */; };
+		C7483BF529373ADC00F32BE0 /* libplist-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BBA29373ADC00F32BE0 /* libplist-2.0.a */; };
+		C7483BF629373ADC00F32BE0 /* libimobiledevice-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BBB29373ADC00F32BE0 /* libimobiledevice-1.0.a */; };
+		C7483BF729373ADC00F32BE0 /* libimobiledevice-glue-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BBC29373ADC00F32BE0 /* libimobiledevice-glue-1.0.a */; };
+		C7483BF829373ADC00F32BE0 /* libusbmuxd-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BBD29373ADC00F32BE0 /* libusbmuxd-2.0.a */; };
+		C7483BF929373ADC00F32BE0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BBE29373ADC00F32BE0 /* libssl.a */; };
+		C7483BFA29373ADC00F32BE0 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC029373ADC00F32BE0 /* libcrypto.a */; };
+		C7483BFB29373ADC00F32BE0 /* libplist-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC129373ADC00F32BE0 /* libplist-2.0.a */; };
+		C7483BFC29373ADC00F32BE0 /* libimobiledevice-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC229373ADC00F32BE0 /* libimobiledevice-1.0.a */; };
+		C7483BFD29373ADC00F32BE0 /* libimobiledevice-glue-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC329373ADC00F32BE0 /* libimobiledevice-glue-1.0.a */; };
+		C7483BFE29373ADC00F32BE0 /* libusbmuxd-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC429373ADC00F32BE0 /* libusbmuxd-2.0.a */; };
+		C7483BFF29373ADC00F32BE0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC529373ADC00F32BE0 /* libssl.a */; };
+		C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BE529373ADC00F32BE0 /* MDUtil.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7483B9329373A0400F32BE0 /* APMrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APMrApp.swift; sourceTree = "<group>"; };
+		C7483B9529373A0400F32BE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C7483B9729373A0600F32BE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C7483B9C29373A0600F32BE0 /* APMr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APMr.entitlements; sourceTree = "<group>"; };
+		C7483BA429373ADC00F32BE0 /* MobileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileManager.swift; sourceTree = "<group>"; };
+		C7483BA529373ADC00F32BE0 /* IDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IDevice.swift; sourceTree = "<group>"; };
+		C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsBaseService.swift; sourceTree = "<group>"; };
+		C7483BA929373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentRunningProcessModel.swift; sourceTree = "<group>"; };
+		C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceProtocols.swift; sourceTree = "<group>"; };
+		C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmontap.swift; sourceTree = "<group>"; };
+		C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsDeviceInfo.swift; sourceTree = "<group>"; };
+		C7483BAE29373ADC00F32BE0 /* IIntruments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IIntruments.swift; sourceTree = "<group>"; };
+		C7483BB029373ADC00F32BE0 /* DTXMessageHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMessageHandle.h; sourceTree = "<group>"; };
+		C7483BB129373ADC00F32BE0 /* DTXReceiveObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXReceiveObject.h; sourceTree = "<group>"; };
+		C7483BB229373ADC00F32BE0 /* DTXArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXArguments.h; sourceTree = "<group>"; };
+		C7483BB329373ADC00F32BE0 /* DTXReceiveObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTXReceiveObject.m; sourceTree = "<group>"; };
+		C7483BB429373ADC00F32BE0 /* DTXMessageHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTXMessageHandle.m; sourceTree = "<group>"; };
+		C7483BB529373ADC00F32BE0 /* DTXArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTXArguments.m; sourceTree = "<group>"; };
+		C7483BB929373ADC00F32BE0 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
+		C7483BBA29373ADC00F32BE0 /* libplist-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libplist-2.0.a"; sourceTree = "<group>"; };
+		C7483BBB29373ADC00F32BE0 /* libimobiledevice-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libimobiledevice-1.0.a"; sourceTree = "<group>"; };
+		C7483BBC29373ADC00F32BE0 /* libimobiledevice-glue-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libimobiledevice-glue-1.0.a"; sourceTree = "<group>"; };
+		C7483BBD29373ADC00F32BE0 /* libusbmuxd-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libusbmuxd-2.0.a"; sourceTree = "<group>"; };
+		C7483BBE29373ADC00F32BE0 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		C7483BC029373ADC00F32BE0 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
+		C7483BC129373ADC00F32BE0 /* libplist-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libplist-2.0.a"; sourceTree = "<group>"; };
+		C7483BC229373ADC00F32BE0 /* libimobiledevice-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libimobiledevice-1.0.a"; sourceTree = "<group>"; };
+		C7483BC329373ADC00F32BE0 /* libimobiledevice-glue-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libimobiledevice-glue-1.0.a"; sourceTree = "<group>"; };
+		C7483BC429373ADC00F32BE0 /* libusbmuxd-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libusbmuxd-2.0.a"; sourceTree = "<group>"; };
+		C7483BC529373ADC00F32BE0 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		C7483BC829373ADC00F32BE0 /* plist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plist.h; sourceTree = "<group>"; };
+		C7483BCA29373ADC00F32BE0 /* installation_proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = installation_proxy.h; sourceTree = "<group>"; };
+		C7483BCB29373ADC00F32BE0 /* companion_proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = companion_proxy.h; sourceTree = "<group>"; };
+		C7483BCC29373ADC00F32BE0 /* notification_proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = notification_proxy.h; sourceTree = "<group>"; };
+		C7483BCD29373ADC00F32BE0 /* restore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = restore.h; sourceTree = "<group>"; };
+		C7483BCE29373ADC00F32BE0 /* mobilebackup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mobilebackup.h; sourceTree = "<group>"; };
+		C7483BCF29373ADC00F32BE0 /* misagent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = misagent.h; sourceTree = "<group>"; };
+		C7483BD029373ADC00F32BE0 /* property_list_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = property_list_service.h; sourceTree = "<group>"; };
+		C7483BD129373ADC00F32BE0 /* service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = service.h; sourceTree = "<group>"; };
+		C7483BD229373ADC00F32BE0 /* mobileactivation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mobileactivation.h; sourceTree = "<group>"; };
+		C7483BD329373ADC00F32BE0 /* screenshotr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = screenshotr.h; sourceTree = "<group>"; };
+		C7483BD429373ADC00F32BE0 /* file_relay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = file_relay.h; sourceTree = "<group>"; };
+		C7483BD529373ADC00F32BE0 /* heartbeat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heartbeat.h; sourceTree = "<group>"; };
+		C7483BD629373ADC00F32BE0 /* preboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = preboard.h; sourceTree = "<group>"; };
+		C7483BD729373ADC00F32BE0 /* mobilebackup2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mobilebackup2.h; sourceTree = "<group>"; };
+		C7483BD829373ADC00F32BE0 /* mobile_image_mounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mobile_image_mounter.h; sourceTree = "<group>"; };
+		C7483BD929373ADC00F32BE0 /* bt_packet_logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bt_packet_logger.h; sourceTree = "<group>"; };
+		C7483BDA29373ADC00F32BE0 /* lockdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lockdown.h; sourceTree = "<group>"; };
+		C7483BDB29373ADC00F32BE0 /* syslog_relay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syslog_relay.h; sourceTree = "<group>"; };
+		C7483BDC29373ADC00F32BE0 /* webinspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webinspector.h; sourceTree = "<group>"; };
+		C7483BDD29373ADC00F32BE0 /* libimobiledevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libimobiledevice.h; sourceTree = "<group>"; };
+		C7483BDE29373ADC00F32BE0 /* debugserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debugserver.h; sourceTree = "<group>"; };
+		C7483BDF29373ADC00F32BE0 /* sbservices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sbservices.h; sourceTree = "<group>"; };
+		C7483BE029373ADC00F32BE0 /* reverse_proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reverse_proxy.h; sourceTree = "<group>"; };
+		C7483BE129373ADC00F32BE0 /* diagnostics_relay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diagnostics_relay.h; sourceTree = "<group>"; };
+		C7483BE229373ADC00F32BE0 /* afc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = afc.h; sourceTree = "<group>"; };
+		C7483BE329373ADC00F32BE0 /* mobilesync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mobilesync.h; sourceTree = "<group>"; };
+		C7483BE429373ADC00F32BE0 /* house_arrest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = house_arrest.h; sourceTree = "<group>"; };
+		C7483BE529373ADC00F32BE0 /* MDUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDUtil.m; sourceTree = "<group>"; };
+		C7483BE629373ADC00F32BE0 /* headers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = headers.h; sourceTree = "<group>"; };
+		C7483BE729373ADC00F32BE0 /* MDUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDUtil.h; sourceTree = "<group>"; };
+		C7483BE829373ADC00F32BE0 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C7483B8D29373A0400F32BE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7483BFE29373ADC00F32BE0 /* libusbmuxd-2.0.a in Frameworks */,
+				C7483BF729373ADC00F32BE0 /* libimobiledevice-glue-1.0.a in Frameworks */,
+				C7483BF829373ADC00F32BE0 /* libusbmuxd-2.0.a in Frameworks */,
+				C7483BFC29373ADC00F32BE0 /* libimobiledevice-1.0.a in Frameworks */,
+				C7483BF929373ADC00F32BE0 /* libssl.a in Frameworks */,
+				C7483BF429373ADC00F32BE0 /* libcrypto.a in Frameworks */,
+				C7483BF529373ADC00F32BE0 /* libplist-2.0.a in Frameworks */,
+				C7483BFD29373ADC00F32BE0 /* libimobiledevice-glue-1.0.a in Frameworks */,
+				C7483BFF29373ADC00F32BE0 /* libssl.a in Frameworks */,
+				C7483BFB29373ADC00F32BE0 /* libplist-2.0.a in Frameworks */,
+				C7483BF629373ADC00F32BE0 /* libimobiledevice-1.0.a in Frameworks */,
+				C7483BFA29373ADC00F32BE0 /* libcrypto.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C7483B8729373A0400F32BE0 = {
+			isa = PBXGroup;
+			children = (
+				C7483B9229373A0400F32BE0 /* APMr */,
+				C7483B9129373A0400F32BE0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C7483B9129373A0400F32BE0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7483B9029373A0400F32BE0 /* APMr.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C7483B9229373A0400F32BE0 /* APMr */ = {
+			isa = PBXGroup;
+			children = (
+				C7483B9329373A0400F32BE0 /* APMrApp.swift */,
+				C7483B9529373A0400F32BE0 /* ContentView.swift */,
+				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
+				C7483B9C29373A0600F32BE0 /* APMr.entitlements */,
+				C7483B9929373A0600F32BE0 /* Preview Content */,
+				C7483BA329373ADC00F32BE0 /* MobileManager */,
+				C7483BA229373A8A00F32BE0 /* LibIMobileDevice */,
+			);
+			path = APMr;
+			sourceTree = "<group>";
+		};
+		C7483B9929373A0600F32BE0 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C7483BA229373A8A00F32BE0 /* LibIMobileDevice */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BB629373ADC00F32BE0 /* libimobiledevice */,
+			);
+			path = LibIMobileDevice;
+			sourceTree = "<group>";
+		};
+		C7483BA329373ADC00F32BE0 /* MobileManager */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BA429373ADC00F32BE0 /* MobileManager.swift */,
+				C7483BA529373ADC00F32BE0 /* IDevice.swift */,
+				C7483BA629373ADC00F32BE0 /* Instruments */,
+			);
+			path = MobileManager;
+			sourceTree = "<group>";
+		};
+		C7483BA629373ADC00F32BE0 /* Instruments */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */,
+				C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */,
+				C7483BAE29373ADC00F32BE0 /* IIntruments.swift */,
+				C7483BA829373ADC00F32BE0 /* Models */,
+				C7483BAB29373ADC00F32BE0 /* Services */,
+			);
+			path = Instruments;
+			sourceTree = "<group>";
+		};
+		C7483BA829373ADC00F32BE0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BA929373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C7483BAB29373ADC00F32BE0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */,
+				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C7483BAF29373ADC00F32BE0 /* DTXMessageHandle */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BE729373ADC00F32BE0 /* MDUtil.h */,
+				C7483BE529373ADC00F32BE0 /* MDUtil.m */,
+				C7483BB229373ADC00F32BE0 /* DTXArguments.h */,
+				C7483BB529373ADC00F32BE0 /* DTXArguments.m */,
+				C7483BB029373ADC00F32BE0 /* DTXMessageHandle.h */,
+				C7483BB429373ADC00F32BE0 /* DTXMessageHandle.m */,
+				C7483BB129373ADC00F32BE0 /* DTXReceiveObject.h */,
+				C7483BB329373ADC00F32BE0 /* DTXReceiveObject.m */,
+			);
+			path = DTXMessageHandle;
+			sourceTree = "<group>";
+		};
+		C7483BB629373ADC00F32BE0 /* libimobiledevice */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BB729373ADC00F32BE0 /* Libraries */,
+				C7483BC629373ADC00F32BE0 /* Headers */,
+			);
+			path = libimobiledevice;
+			sourceTree = "<group>";
+		};
+		C7483BB729373ADC00F32BE0 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BB829373ADC00F32BE0 /* x86 */,
+				C7483BBF29373ADC00F32BE0 /* arm64 */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		C7483BB829373ADC00F32BE0 /* x86 */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BB929373ADC00F32BE0 /* libcrypto.a */,
+				C7483BBA29373ADC00F32BE0 /* libplist-2.0.a */,
+				C7483BBB29373ADC00F32BE0 /* libimobiledevice-1.0.a */,
+				C7483BBC29373ADC00F32BE0 /* libimobiledevice-glue-1.0.a */,
+				C7483BBD29373ADC00F32BE0 /* libusbmuxd-2.0.a */,
+				C7483BBE29373ADC00F32BE0 /* libssl.a */,
+			);
+			path = x86;
+			sourceTree = "<group>";
+		};
+		C7483BBF29373ADC00F32BE0 /* arm64 */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BC029373ADC00F32BE0 /* libcrypto.a */,
+				C7483BC129373ADC00F32BE0 /* libplist-2.0.a */,
+				C7483BC229373ADC00F32BE0 /* libimobiledevice-1.0.a */,
+				C7483BC329373ADC00F32BE0 /* libimobiledevice-glue-1.0.a */,
+				C7483BC429373ADC00F32BE0 /* libusbmuxd-2.0.a */,
+				C7483BC529373ADC00F32BE0 /* libssl.a */,
+			);
+			path = arm64;
+			sourceTree = "<group>";
+		};
+		C7483BC629373ADC00F32BE0 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BE629373ADC00F32BE0 /* headers.h */,
+				C7483BE829373ADC00F32BE0 /* module.modulemap */,
+				C7483BAF29373ADC00F32BE0 /* DTXMessageHandle */,
+				C7483BC929373ADC00F32BE0 /* libimobiledevice */,
+				C7483BC729373ADC00F32BE0 /* plist */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		C7483BC729373ADC00F32BE0 /* plist */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BC829373ADC00F32BE0 /* plist.h */,
+			);
+			path = plist;
+			sourceTree = "<group>";
+		};
+		C7483BC929373ADC00F32BE0 /* libimobiledevice */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BCA29373ADC00F32BE0 /* installation_proxy.h */,
+				C7483BCB29373ADC00F32BE0 /* companion_proxy.h */,
+				C7483BCC29373ADC00F32BE0 /* notification_proxy.h */,
+				C7483BCD29373ADC00F32BE0 /* restore.h */,
+				C7483BCE29373ADC00F32BE0 /* mobilebackup.h */,
+				C7483BCF29373ADC00F32BE0 /* misagent.h */,
+				C7483BD029373ADC00F32BE0 /* property_list_service.h */,
+				C7483BD129373ADC00F32BE0 /* service.h */,
+				C7483BD229373ADC00F32BE0 /* mobileactivation.h */,
+				C7483BD329373ADC00F32BE0 /* screenshotr.h */,
+				C7483BD429373ADC00F32BE0 /* file_relay.h */,
+				C7483BD529373ADC00F32BE0 /* heartbeat.h */,
+				C7483BD629373ADC00F32BE0 /* preboard.h */,
+				C7483BD729373ADC00F32BE0 /* mobilebackup2.h */,
+				C7483BD829373ADC00F32BE0 /* mobile_image_mounter.h */,
+				C7483BD929373ADC00F32BE0 /* bt_packet_logger.h */,
+				C7483BDA29373ADC00F32BE0 /* lockdown.h */,
+				C7483BDB29373ADC00F32BE0 /* syslog_relay.h */,
+				C7483BDC29373ADC00F32BE0 /* webinspector.h */,
+				C7483BDD29373ADC00F32BE0 /* libimobiledevice.h */,
+				C7483BDE29373ADC00F32BE0 /* debugserver.h */,
+				C7483BDF29373ADC00F32BE0 /* sbservices.h */,
+				C7483BE029373ADC00F32BE0 /* reverse_proxy.h */,
+				C7483BE129373ADC00F32BE0 /* diagnostics_relay.h */,
+				C7483BE229373ADC00F32BE0 /* afc.h */,
+				C7483BE329373ADC00F32BE0 /* mobilesync.h */,
+				C7483BE429373ADC00F32BE0 /* house_arrest.h */,
+			);
+			path = libimobiledevice;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C7483B8F29373A0400F32BE0 /* APMr */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7483B9F29373A0600F32BE0 /* Build configuration list for PBXNativeTarget "APMr" */;
+			buildPhases = (
+				C7483B8C29373A0400F32BE0 /* Sources */,
+				C7483B8D29373A0400F32BE0 /* Frameworks */,
+				C7483B8E29373A0400F32BE0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = APMr;
+			productName = APMr;
+			productReference = C7483B9029373A0400F32BE0 /* APMr.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C7483B8829373A0400F32BE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					C7483B8F29373A0400F32BE0 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+				};
+			};
+			buildConfigurationList = C7483B8B29373A0400F32BE0 /* Build configuration list for PBXProject "APMr" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C7483B8729373A0400F32BE0;
+			productRefGroup = C7483B9129373A0400F32BE0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C7483B8F29373A0400F32BE0 /* APMr */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C7483B8E29373A0400F32BE0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */,
+				C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C7483B8C29373A0400F32BE0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7483B9629373A0400F32BE0 /* ContentView.swift in Sources */,
+				C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */,
+				C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */,
+				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
+				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
+				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
+				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
+				C7483BF029373ADC00F32BE0 /* IIntruments.swift in Sources */,
+				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
+				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
+				C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */,
+				C7483BEC29373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift in Sources */,
+				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
+				C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C7483B9D29373A0600F32BE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C7483B9E29373A0600F32BE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		C7483BA029373A0600F32BE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = APMr/APMr.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"APMr/Preview Content\"";
+				DEVELOPMENT_TEAM = 88JVP7LE4V;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/APMr/LibIMobileDevice/libimobiledevice/Headers";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/arm64",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C7483BA129373A0600F32BE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = APMr/APMr.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"APMr/Preview Content\"";
+				DEVELOPMENT_TEAM = 88JVP7LE4V;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/APMr/LibIMobileDevice/libimobiledevice/Headers";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/arm64",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C7483B8B29373A0400F32BE0 /* Build configuration list for PBXProject "APMr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7483B9D29373A0600F32BE0 /* Debug */,
+				C7483B9E29373A0600F32BE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7483B9F29373A0600F32BE0 /* Build configuration list for PBXNativeTarget "APMr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7483BA029373A0600F32BE0 /* Debug */,
+				C7483BA129373A0600F32BE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C7483B8829373A0400F32BE0 /* Project object */;
+}
