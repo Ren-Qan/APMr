@@ -37,4 +37,5 @@
 #import "libimobiledevice/service.h"
 #import "libimobiledevice/syslog_relay.h"
 #import "libimobiledevice/webinspector.h"
+#import "libimobiledevice/bt_packet_logger.h"
 #endif /* headers_h */

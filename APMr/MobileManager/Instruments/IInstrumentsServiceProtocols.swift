@@ -19,6 +19,8 @@ enum IInstrumentsServiceName: String, CaseIterable {
     
     case deviceinfo = "com.apple.instruments.server.services.deviceinfo"
         
+    case opengl = "com.apple.instruments.server.services.graphics.opengl"
+    
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */; };
 		C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* APMrApp.swift */; };
 		C7483B9629373A0400F32BE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9529373A0400F32BE0 /* ContentView.swift */; };
 		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7483B9329373A0400F32BE0 /* APMrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APMrApp.swift; sourceTree = "<group>"; };
 		C7483B9529373A0400F32BE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -186,11 +188,11 @@
 		C7483BA629373ADC00F32BE0 /* Instruments */ = {
 			isa = PBXGroup;
 			children = (
-				C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */,
-				C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */,
 				C7483BAE29373ADC00F32BE0 /* IIntruments.swift */,
-				C7483BA829373ADC00F32BE0 /* Models */,
+				C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */,
+				C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */,
 				C7483BAB29373ADC00F32BE0 /* Services */,
+				C7483BA829373ADC00F32BE0 /* Models */,
 			);
 			path = Instruments;
 			sourceTree = "<group>";
@@ -208,6 +210,7 @@
 			children = (
 				C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */,
 				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
+				C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -230,8 +233,8 @@
 		C7483BB629373ADC00F32BE0 /* libimobiledevice */ = {
 			isa = PBXGroup;
 			children = (
-				C7483BB729373ADC00F32BE0 /* Libraries */,
 				C7483BC629373ADC00F32BE0 /* Headers */,
+				C7483BB729373ADC00F32BE0 /* Libraries */,
 			);
 			path = libimobiledevice;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
 				C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */,
 				C7483BEC29373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift in Sources */,
+				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
 				C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */,
 			);

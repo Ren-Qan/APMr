@@ -35,8 +35,6 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
 
     func response(_ response: DTXReceiveObject?) {
-        if let object = response?.object {
-            print(object)
-        }
+        
     }
 }

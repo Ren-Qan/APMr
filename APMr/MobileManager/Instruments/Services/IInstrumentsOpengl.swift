@@ -1,0 +1,48 @@
+//
+//  IInstrumentsOpengl.swift
+//  APMr
+//
+//  Created by 任玉乾 on 2022/12/1.
+//
+
+import Cocoa
+import LibMobileDevice
+
+enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
+    case startSampling
+    
+    var selector: String {
+        switch self {
+            case .startSampling:
+                return "startSamplingAtTimeInterval:"
+        }
+    }
+    
+    var args: DTXArguments? {
+        switch self {
+            case .startSampling:
+                let arg = DTXArguments()
+                arg.appendNum32(0)
+                return arg
+        }
+    }
+}
+
+class IInstrumentsOpengl: IInstrumentsBaseService {
+
+}
+
+extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
+    typealias Arg = IInstrumentsOpenglArgs
+    
+    var server: IInstrumentsServiceName {
+        return .opengl
+    }
+
+    func response(_ response: DTXReceiveObject?) {
+        if let obj = response?.object {
+            print(obj)
+        }
+    }
+    
+}
