@@ -7,13 +7,15 @@
 
 import SwiftUI
 import LibMobileDevice
+import Charts
+
 
 struct LandMarkItem: Identifiable, Hashable {
     var id = 0
-}
-
-struct SectionItem {
     
+    var y = 0
+    
+    var x = 0
 }
 
 struct ContentView: View {
@@ -26,64 +28,47 @@ struct ContentView: View {
     
     var opengl = IInstrumentsOpengl()
     
-     var i = 0
-    
     @State private var items = [LandMarkItem]()
     
-    private var item: LandMarkItem = .init()
-    
-//    @state privat var sections = [Section]()
-    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-            Button("click") {
-                items.append(.init(id: .random(in: 0 ..< 100)))
-            }
-            
-//            List(items) { item in
-//                Text("\(item.id)")
-//            }
-            
-            
-            Table(items) {
-                TableColumn("1") { i in
-                    Text("\(i.id)")
+        
+        ScrollView {
+            LazyVStack {
+                Spacer(minLength: 20)
+                
+                Button("Connect") {
+                    connectAction()
                 }
                 
-                TableColumn("1") { i in
-                    Text("\(i.id)")
+                Spacer(minLength: 20)
+                
+                Section {
+                    BarChartView(marks: items)
+                        .frame(height: 150)
+                        .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+                } header: {
+                    Text("CPU")
                 }
                 
-                TableColumn("1") { i in
-                    Text("\(i.id)")
-                }
+                Spacer(minLength: 10)
                 
-                TableColumn("1") { i in
-                    Text("\(i.id)")
-                }
-                
-                TableColumn("1") { i in
-                    Text("\(i.id)")
+                Section {
+                    BarChartView(marks: items)
+                        .frame(height: 150)
+                        .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+                } header: {
+                    Text("GPU")
                 }
             }
-
-            
         }
-        .padding()
     }
     
     
-    func clickAction() {
-        if instrument.isConnected {
-//            self.sysmontap.request()
-//            self.deviceInfo.request()
-//            self.opengl.request()
-            return
+    private func connectAction() {
+        if MobileManager.share.deviceList.count < 2 {
+            MobileManager.share.refreshDeviceList()
         }
+        
         
         let device = MobileManager.share.deviceList.first { item in
             if item.type == .usb {
@@ -98,23 +83,11 @@ struct ContentView: View {
         }
         
         if !instrument.isConnected, instrument.start(iDevice) {
-//            self.sysmontap.start(instrument)
-//            self.sysmontap.register(.setConfig)
-//            self.sysmontap.register(.start)
-//
-//            self.deviceInfo.start(instrument)
-//            self.deviceInfo.register(.runningProcesses)
-            
-            self.opengl.start(instrument)
-            self.opengl.register(.startSampling)
-            
+            self.sysmontap.start(instrument)
+            self.sysmontap.register(.setConfig)
+            self.sysmontap.register(.start)
+            self.sysmontap.autoRequest()
             return
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

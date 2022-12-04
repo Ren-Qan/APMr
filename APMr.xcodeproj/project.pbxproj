@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */; };
+		C7150E6F293C738000C2B380 /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7150E6E293C738000C2B380 /* BarChartView.swift */; };
 		C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* APMrApp.swift */; };
 		C7483B9629373A0400F32BE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9529373A0400F32BE0 /* ContentView.swift */; };
 		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
+		C7150E6E293C738000C2B380 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7483B9329373A0400F32BE0 /* APMrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APMrApp.swift; sourceTree = "<group>"; };
 		C7483B9529373A0400F32BE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -129,6 +131,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C7150E6D293C736500C2B380 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				C7150E6E293C738000C2B380 /* BarChartView.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		C7150E70293C901900C2B380 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C7150E73293C912300C2B380 /* Tools */,
+				C7150E72293C910A00C2B380 /* Core */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C7150E71293C902800C2B380 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C7150E6D293C736500C2B380 /* Charts */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C7150E72293C910A00C2B380 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BB629373ADC00F32BE0 /* libimobiledevice */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		C7150E73293C912300C2B380 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BA329373ADC00F32BE0 /* MobileManager */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 		C7483B8729373A0400F32BE0 = {
 			isa = PBXGroup;
 			children = (
@@ -148,13 +191,13 @@
 		C7483B9229373A0400F32BE0 /* APMr */ = {
 			isa = PBXGroup;
 			children = (
+				C7150E70293C901900C2B380 /* Utilities */,
+				C7150E71293C902800C2B380 /* Views */,
 				C7483B9329373A0400F32BE0 /* APMrApp.swift */,
 				C7483B9529373A0400F32BE0 /* ContentView.swift */,
 				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
 				C7483B9C29373A0600F32BE0 /* APMr.entitlements */,
 				C7483B9929373A0600F32BE0 /* Preview Content */,
-				C7483BA329373ADC00F32BE0 /* MobileManager */,
-				C7483BA229373A8A00F32BE0 /* LibIMobileDevice */,
 			);
 			path = APMr;
 			sourceTree = "<group>";
@@ -167,19 +210,11 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		C7483BA229373A8A00F32BE0 /* LibIMobileDevice */ = {
-			isa = PBXGroup;
-			children = (
-				C7483BB629373ADC00F32BE0 /* libimobiledevice */,
-			);
-			path = LibIMobileDevice;
-			sourceTree = "<group>";
-		};
 		C7483BA329373ADC00F32BE0 /* MobileManager */ = {
 			isa = PBXGroup;
 			children = (
-				C7483BA429373ADC00F32BE0 /* MobileManager.swift */,
 				C7483BA529373ADC00F32BE0 /* IDevice.swift */,
+				C7483BA429373ADC00F32BE0 /* MobileManager.swift */,
 				C7483BA629373ADC00F32BE0 /* Instruments */,
 			);
 			path = MobileManager;
@@ -413,6 +448,7 @@
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
 				C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */,
+				C7150E6F293C738000C2B380 /* BarChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,7 +582,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/APMr/LibIMobileDevice/libimobiledevice/Headers";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Headers";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -554,8 +590,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/x86",
-					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -579,7 +615,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/APMr/LibIMobileDevice/libimobiledevice/Headers";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Headers";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -587,8 +623,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/x86",
-					"$(PROJECT_DIR)/APMr/LibIMobileDevice/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
