@@ -7,44 +7,11 @@
 
 import Cocoa
 import LibMobileDevice
-
-enum IInstrumentsSysmontapArgs: IInstrumentRequestArgsProtocol {
-    case setConfig
-    
-    case start
-    
-    var selector: String {
-        switch self {
-            case .setConfig:
-                return "setConfig:"
-            case .start:
-                return "start"
-        }
-    }
-    
-    var args: DTXArguments? {
-        if self == .setConfig {
-            let config: [String : Any] = [
-                "bm": 0,
-                "cpuUsage": true,
-                "ur": 1000,
-                "sampleInterval": 1000000000,
-                "procAttrs": [
-                    "memVirtualSize", "cpuUsage", "ctxSwitch", "intWakeups", "physFootprint", "memResidentSize", "memAnon", "pid"
-                ],
-                "sysAttrs": [
-                    "vmExtPageCount", "vmFreeCount", "vmPurgeableCount", "vmSpeculativeCount", "physMemSize"
-                ]
-            ]
-            let args = DTXArguments()
-            args.add(config)
-            return args
-        }
-        return nil
-    }
-}
+import ObjectMapper
 
 class IInstrumentsSysmontap: IInstrumentsBaseService  {
+    
+    public var callBack: ((IInstrumentsSysmotapInfo, IInstrumentsSysmotapProcessesInfo) -> Void)? = nil
     
     private var timer: Timer? = nil
     
@@ -75,8 +42,47 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject?) {
-        if let result = response?.object {
-            print(result)
+        if let result = response?.object as? [[String : Any]], result.count >= 2 {
+           if let sysmotapInfo = Mapper<IInstrumentsSysmotapInfo>().map(JSON: result[0]),
+              let processInfo = Mapper<IInstrumentsSysmotapProcessesInfo>().map(JSON: result[1]) {
+               callBack?(sysmotapInfo, processInfo)
+           }
         }
+    }
+}
+
+enum IInstrumentsSysmontapArgs: IInstrumentRequestArgsProtocol {
+    case setConfig
+    
+    case start
+    
+    var selector: String {
+        switch self {
+            case .setConfig:
+                return "setConfig:"
+            case .start:
+                return "start"
+        }
+    }
+    
+    var args: DTXArguments? {
+        if self == .setConfig {
+            let config: [String : Any] = [
+                "bm": 0,
+                "cpuUsage": true,
+                "ur": 1000,
+                "sampleInterval": 1000000000,
+                "procAttrs": [
+                    "memVirtualSize", "cpuUsage", "ctxSwitch", "intWakeups", "physFootprint", "memResidentSize", "memAnon", "pid", "name"
+                ],
+                "sysAttrs": [
+                    "vmExtPageCount", "vmFreeCount", "vmPurgeableCount", "vmSpeculativeCount", "physMemSize"
+                ]
+            ]
+            let args = DTXArguments()
+            args.add(config)
+            return args
+        }
+        return nil
     }
 }

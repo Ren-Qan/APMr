@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,7 +16,6 @@
 		C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA429373ADC00F32BE0 /* MobileManager.swift */; };
 		C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA529373ADC00F32BE0 /* IDevice.swift */; };
 		C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */; };
-		C7483BEC29373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA929373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift */; };
 		C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */; };
 		C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */; };
 		C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */; };
@@ -37,9 +36,13 @@
 		C7483BFE29373ADC00F32BE0 /* libusbmuxd-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC429373ADC00F32BE0 /* libusbmuxd-2.0.a */; };
 		C7483BFF29373ADC00F32BE0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7483BC529373ADC00F32BE0 /* libssl.a */; };
 		C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BE529373ADC00F32BE0 /* MDUtil.m */; };
+		C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */; };
+		E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		374BA59AE5D9FF76AC88121A /* Pods-APMr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.release.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.release.xcconfig"; sourceTree = "<group>"; };
+		9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
 		C7150E6E293C738000C2B380 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,7 +54,6 @@
 		C7483BA429373ADC00F32BE0 /* MobileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileManager.swift; sourceTree = "<group>"; };
 		C7483BA529373ADC00F32BE0 /* IDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IDevice.swift; sourceTree = "<group>"; };
 		C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsBaseService.swift; sourceTree = "<group>"; };
-		C7483BA929373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentRunningProcessModel.swift; sourceTree = "<group>"; };
 		C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceProtocols.swift; sourceTree = "<group>"; };
 		C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmontap.swift; sourceTree = "<group>"; };
 		C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsDeviceInfo.swift; sourceTree = "<group>"; };
@@ -106,6 +108,8 @@
 		C7483BE629373ADC00F32BE0 /* headers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = headers.h; sourceTree = "<group>"; };
 		C7483BE729373ADC00F32BE0 /* MDUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDUtil.h; sourceTree = "<group>"; };
 		C7483BE829373ADC00F32BE0 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmotapModels.swift; sourceTree = "<group>"; };
+		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,12 +129,22 @@
 				C7483BFB29373ADC00F32BE0 /* libplist-2.0.a in Frameworks */,
 				C7483BF629373ADC00F32BE0 /* libimobiledevice-1.0.a in Frameworks */,
 				C7483BFA29373ADC00F32BE0 /* libcrypto.a in Frameworks */,
+				E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3FD3499BFE868DFDD4BDDC1B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */,
+				374BA59AE5D9FF76AC88121A /* Pods-APMr.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		C7150E6D293C736500C2B380 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,8 +156,8 @@
 		C7150E70293C901900C2B380 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				C7150E73293C912300C2B380 /* Tools */,
 				C7150E72293C910A00C2B380 /* Core */,
+				C7150E73293C912300C2B380 /* Tools */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -177,6 +191,8 @@
 			children = (
 				C7483B9229373A0400F32BE0 /* APMr */,
 				C7483B9129373A0400F32BE0 /* Products */,
+				3FD3499BFE868DFDD4BDDC1B /* Pods */,
+				CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -235,7 +251,7 @@
 		C7483BA829373ADC00F32BE0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C7483BA929373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift */,
+				C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -363,6 +379,14 @@
 			path = libimobiledevice;
 			sourceTree = "<group>";
 		};
+		CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -370,6 +394,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7483B9F29373A0600F32BE0 /* Build configuration list for PBXNativeTarget "APMr" */;
 			buildPhases = (
+				CFE13271B2197FE879D05317 /* [CP] Check Pods Manifest.lock */,
 				C7483B8C29373A0400F32BE0 /* Sources */,
 				C7483B8D29373A0400F32BE0 /* Frameworks */,
 				C7483B8E29373A0400F32BE0 /* Resources */,
@@ -399,7 +424,7 @@
 				};
 			};
 			buildConfigurationList = C7483B8B29373A0400F32BE0 /* Build configuration list for PBXProject "APMr" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -428,6 +453,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		CFE13271B2197FE879D05317 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APMr-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C7483B8C29373A0400F32BE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -441,10 +491,10 @@
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
 				C7483BF029373ADC00F32BE0 /* IIntruments.swift in Sources */,
+				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
 				C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */,
-				C7483BEC29373ADC00F32BE0 /* IInstrumentRunningProcessModel.swift in Sources */,
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
 				C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */,
@@ -570,6 +620,7 @@
 		};
 		C7483BA029373A0600F32BE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -590,8 +641,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -603,6 +654,7 @@
 		};
 		C7483BA129373A0600F32BE0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 374BA59AE5D9FF76AC88121A /* Pods-APMr.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -623,8 +675,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/Utilities/Core/libimobiledevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

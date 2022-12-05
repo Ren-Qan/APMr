@@ -16,14 +16,12 @@ struct BarChartView: View {
         Group {
             Chart(marks) { mark in
                 BarMark(x: .value("date", mark.x),
-                        y: .value("present", mark.y),
+                        y: .value("present", Int(mark.y * 10)),
                         width: .fixed(3)
                 )
             }
             .chartXScale(domain: -1 ... 300)
-            .chartYScale(domain: -1 ... 100)
-        }.background {
-            Color(.green)
+            .chartYScale(domain: -1 ... 1000)
         }
     }
 }
