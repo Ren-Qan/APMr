@@ -20,40 +20,73 @@ struct LandMarkItem: Identifiable, Hashable {
 
 struct ContentView: View {
     
-    var instrument = IIntruments()
+    @State private var offsetY: CGFloat = 0
+    @State private var ruleY: CGFloat = 50
+    @State private var ruleDashLineHidden = true
     
-    var sysmontap = IInstrumentsSysmontap()
+    @State private var items: [LandMarkItem] = {
+        var arr = [LandMarkItem]()
+        (0 ..< 270).forEach { i in
+            arr.append(.init(id: i,
+                             y: .random(in: 0 ..< 100),
+                             x: i))
+        }
+        return arr
+    }()
     
-    var deviceInfo = IInstrumentsDeviceInfo()
     
-    var opengl = IInstrumentsOpengl()
     
-    @State private var items = [LandMarkItem]()
-    
-    @State private var btnText = "Connect"
     
     var body: some View {
-        
         ScrollView {
             LazyVStack {
                 Spacer(minLength: 20)
                 
-                Button(btnText) {
-                    connectAction()
-                    
-                    
-                }
-                
-                Spacer(minLength: 20)
-                
                 Section {
-                    BarChartView(marks: items)
-                        .frame(height: 150)
-                        .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 10))
-                        .background {
-                            Color.white
+                    ZStack(alignment: .trailing) {
+                        BarChartView(marks: items, ruleY: ruleY)
+                            .frame(height: 170)
+                            .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 20))
+                        
+                        HStack {
+                            Text(String(format: "%.1f%%", 100 * (1 - (offsetY + 70) / 135)))
+                                .font(.system(size: 10, weight: .medium))
+                                .frame(width: 40)
+                            
+                            Line()
+                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                                .frame(height: 1)
+                                .opacity(ruleDashLineHidden ? 0 : 1)
+                            
                         }
-                } header: {
+                        .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 20))
+                        .offset(y: offsetY)
+                        
+                        
+                        Text("M")
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onChanged{ value in
+                                        let newOffsetY = offsetY + value.location.y - value.startLocation.y
+                                        
+                                        if newOffsetY >= -70, newOffsetY <= 65 {
+                                            offsetY = newOffsetY
+                                            ruleDashLineHidden = false
+                                        }
+                                    }
+                                    .onEnded{ value in
+                                        ruleY = 100 * (1 - (offsetY + 70) / 135)
+                                        ruleDashLineHidden = true
+                                    }
+                            )
+                            .offset(y: offsetY)
+                            .offset(x: -5)
+                        
+                    }
+                    .background {
+                        Color.white
+                    }
+                } header : {
                     Text("CPU")
                 }
                 
@@ -61,61 +94,13 @@ struct ContentView: View {
             }
         }
     }
-    
-    
-    private func connectAction() {
-        btnText = "loading"
-        if MobileManager.share.deviceList.count < 2 {
-            MobileManager.share.refreshDeviceList()
-        }
-        
-        
-        let device = MobileManager.share.deviceList.first { item in
-            if item.type == .usb {
-                return true
-            }
-            return false
-        }
-        
-        guard let device = device,
-              let iDevice = IDevice(device) else {
-            btnText = "failed"
-            return
-        }
-        
-        if !instrument.isConnected, instrument.start(iDevice) {
-            self.sysmontap.start(instrument)
-            self.sysmontap.register(.setConfig)
-            self.sysmontap.register(.start)
-            self.sysmontap.autoRequest()
-            
-            self.sysmontap.callBack = { cpu, processes in
-                
-                let process = processes.Processes.first { (pid, values) in
-                    if let name = (values as? Array<Any>)?.last as? String,
-                       name == "WeChat" {
-                        return true
-                    }
-                    return false
-                }
-                
-                if let process = process,
-                   let values = process.value as? Array<Any>,
-                   let cpu = values[1] as? CGFloat {
-                    let x = items.count
-                    var item = LandMarkItem()
-                    item.id = x
-                    item.x = x
-                    item.y = cpu
-                    self.items.append(item)
-                    
-                    print("\(item.y) -- \(processes.type)")
-                }
-            }
-            
-            btnText = "success"
-            return
-        }
-        btnText = "failed"
+}
+
+struct Line: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: rect.width, y: 0))
+        return path
     }
 }
