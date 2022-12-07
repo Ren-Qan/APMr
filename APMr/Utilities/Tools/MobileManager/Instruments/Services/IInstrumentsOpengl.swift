@@ -8,6 +8,25 @@
 import Cocoa
 import LibMobileDevice
 
+class IInstrumentsOpengl: IInstrumentsBaseService {
+
+}
+
+extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
+    typealias Arg = IInstrumentsOpenglArgs
+    
+    var server: IInstrumentsServiceName {
+        return .opengl
+    }
+
+    func response(_ response: DTXReceiveObject?) {
+        if let obj = response?.object {
+            print(obj)
+        }
+    }
+    
+}
+
 enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
     case startSampling
     
@@ -26,23 +45,4 @@ enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
                 return arg
         }
     }
-}
-
-class IInstrumentsOpengl: IInstrumentsBaseService {
-
-}
-
-extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsOpenglArgs
-    
-    var server: IInstrumentsServiceName {
-        return .opengl
-    }
-
-    func response(_ response: DTXReceiveObject?) {
-        if let obj = response?.object {
-            print(obj)
-        }
-    }
-    
 }

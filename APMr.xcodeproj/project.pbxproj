@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */; };
 		C7150E6F293C738000C2B380 /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7150E6E293C738000C2B380 /* BarChartView.swift */; };
+		C745D39B294055C900B2068A /* CoordinateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D39A294055C900B2068A /* CoordinateChartView.swift */; };
+		C745D39E294065B400B2068A /* HomePageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D39D294065B400B2068A /* HomePageContentView.swift */; };
+		C745D3A32940675C00B2068A /* HomePageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D3A22940675C00B2068A /* HomePageService.swift */; };
 		C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* APMrApp.swift */; };
-		C7483B9629373A0400F32BE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9529373A0400F32BE0 /* ContentView.swift */; };
 		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
 		C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */; };
 		C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BA429373ADC00F32BE0 /* MobileManager.swift */; };
@@ -19,7 +21,7 @@
 		C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */; };
 		C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */; };
 		C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */; };
-		C7483BF029373ADC00F32BE0 /* IIntruments.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAE29373ADC00F32BE0 /* IIntruments.swift */; };
+		C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483BAE29373ADC00F32BE0 /* IInstruments.swift */; };
 		C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BB329373ADC00F32BE0 /* DTXReceiveObject.m */; };
 		C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BB429373ADC00F32BE0 /* DTXMessageHandle.m */; };
 		C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BB529373ADC00F32BE0 /* DTXArguments.m */; };
@@ -45,9 +47,11 @@
 		9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
 		C7150E6E293C738000C2B380 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
+		C745D39A294055C900B2068A /* CoordinateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateChartView.swift; sourceTree = "<group>"; };
+		C745D39D294065B400B2068A /* HomePageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageContentView.swift; sourceTree = "<group>"; };
+		C745D3A22940675C00B2068A /* HomePageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageService.swift; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7483B9329373A0400F32BE0 /* APMrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APMrApp.swift; sourceTree = "<group>"; };
-		C7483B9529373A0400F32BE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C7483B9729373A0600F32BE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C7483B9C29373A0600F32BE0 /* APMr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APMr.entitlements; sourceTree = "<group>"; };
@@ -57,7 +61,7 @@
 		C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceProtocols.swift; sourceTree = "<group>"; };
 		C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmontap.swift; sourceTree = "<group>"; };
 		C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstrumentsDeviceInfo.swift; sourceTree = "<group>"; };
-		C7483BAE29373ADC00F32BE0 /* IIntruments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IIntruments.swift; sourceTree = "<group>"; };
+		C7483BAE29373ADC00F32BE0 /* IInstruments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IInstruments.swift; sourceTree = "<group>"; };
 		C7483BB029373ADC00F32BE0 /* DTXMessageHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMessageHandle.h; sourceTree = "<group>"; };
 		C7483BB129373ADC00F32BE0 /* DTXReceiveObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXReceiveObject.h; sourceTree = "<group>"; };
 		C7483BB229373ADC00F32BE0 /* DTXArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXArguments.h; sourceTree = "<group>"; };
@@ -149,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				C7150E6E293C738000C2B380 /* BarChartView.swift */,
+				C745D39A294055C900B2068A /* CoordinateChartView.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -165,7 +170,8 @@
 		C7150E71293C902800C2B380 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C7150E6D293C736500C2B380 /* Charts */,
+				C745D3A12940671F00B2068A /* Component */,
+				C745D3A02940671500B2068A /* Business */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -184,6 +190,38 @@
 				C7483BA329373ADC00F32BE0 /* MobileManager */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		C745D39C294065A000B2068A /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				C745D39D294065B400B2068A /* HomePageContentView.swift */,
+			);
+			path = HomePage;
+			sourceTree = "<group>";
+		};
+		C745D39F294066D100B2068A /* BusinessServices */ = {
+			isa = PBXGroup;
+			children = (
+				C745D3A22940675C00B2068A /* HomePageService.swift */,
+			);
+			path = BusinessServices;
+			sourceTree = "<group>";
+		};
+		C745D3A02940671500B2068A /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				C745D39C294065A000B2068A /* HomePage */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		C745D3A12940671F00B2068A /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				C7150E6D293C736500C2B380 /* Charts */,
+			);
+			path = Component;
 			sourceTree = "<group>";
 		};
 		C7483B8729373A0400F32BE0 = {
@@ -207,10 +245,10 @@
 		C7483B9229373A0400F32BE0 /* APMr */ = {
 			isa = PBXGroup;
 			children = (
+				C745D39F294066D100B2068A /* BusinessServices */,
 				C7150E70293C901900C2B380 /* Utilities */,
 				C7150E71293C902800C2B380 /* Views */,
 				C7483B9329373A0400F32BE0 /* APMrApp.swift */,
-				C7483B9529373A0400F32BE0 /* ContentView.swift */,
 				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
 				C7483B9C29373A0600F32BE0 /* APMr.entitlements */,
 				C7483B9929373A0600F32BE0 /* Preview Content */,
@@ -239,7 +277,7 @@
 		C7483BA629373ADC00F32BE0 /* Instruments */ = {
 			isa = PBXGroup;
 			children = (
-				C7483BAE29373ADC00F32BE0 /* IIntruments.swift */,
+				C7483BAE29373ADC00F32BE0 /* IInstruments.swift */,
 				C7483BAA29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift */,
 				C7483BA729373ADC00F32BE0 /* IInstrumentsBaseService.swift */,
 				C7483BAB29373ADC00F32BE0 /* Services */,
@@ -260,8 +298,8 @@
 			isa = PBXGroup;
 			children = (
 				C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */,
-				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
 				C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */,
+				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -483,21 +521,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7483B9629373A0400F32BE0 /* ContentView.swift in Sources */,
 				C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */,
 				C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */,
 				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
 				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
-				C7483BF029373ADC00F32BE0 /* IIntruments.swift in Sources */,
+				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
 				C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */,
+				C745D3A32940675C00B2068A /* HomePageService.swift in Sources */,
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
 				C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */,
+				C745D39B294055C900B2068A /* CoordinateChartView.swift in Sources */,
+				C745D39E294065B400B2068A /* HomePageContentView.swift in Sources */,
 				C7150E6F293C738000C2B380 /* BarChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

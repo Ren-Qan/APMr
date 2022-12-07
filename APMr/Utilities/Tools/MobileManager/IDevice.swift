@@ -22,7 +22,9 @@ enum DeviceConnectType {
     }
 }
 
-struct DeviceItem {
+struct DeviceItem: Identifiable {
+    var id: String { udid + "\(type)" }
+    
     var udid: String = ""
     var type = DeviceConnectType.usb
 }

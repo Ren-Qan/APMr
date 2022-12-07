@@ -8,6 +8,13 @@
 import SwiftUI
 import Charts
 
+struct LandMarkItem: Identifiable {
+    var id: Int { x }
+    
+    var x: Int = 0
+    
+    var y: CGFloat = 0
+}
 
 struct BarChartView: View {
     var marks : [LandMarkItem]
@@ -17,20 +24,21 @@ struct BarChartView: View {
     var body: some View {
         LazyVStack {
             Spacer(minLength: 10)
-            
-            Chart(marks) { mark in
-                BarMark(x: .value("date", mark.x),
-                        y: .value("present", Int(mark.y * 10)),
-                        width: .fixed(3)
-                )
-                .foregroundStyle(mark.y <= ruleY ? Color.blue.gradient : Color.orange.gradient)
+        
+            Chart {
+                ForEach(marks) { mark in
+                    BarMark(x: .value("date", mark.x),
+                            y: .value("present", Int(mark.y * 10)),
+                            width: .fixed(3)
+                    )
+                    .foregroundStyle(mark.y <= ruleY ? Color.blue.gradient : Color.orange.gradient)
+                }
                 
                 RuleMark(
                     y: .value("use", Int(ruleY * 10))
                 )
                 .lineStyle(StrokeStyle(lineWidth: 1))
                 .foregroundStyle(.red.gradient)
-                    
             }
             .frame(height: 150)
             .chartXScale(domain: 0 ... 300)

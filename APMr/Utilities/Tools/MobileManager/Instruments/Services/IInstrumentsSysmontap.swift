@@ -10,28 +10,7 @@ import LibMobileDevice
 import ObjectMapper
 
 class IInstrumentsSysmontap: IInstrumentsBaseService  {
-    
     public var callBack: ((IInstrumentsSysmotapInfo, IInstrumentsSysmotapProcessesInfo) -> Void)? = nil
-    
-    private var timer: Timer? = nil
-    
-    public func autoRequest() {
-        stopAutoRequest()
-        
-        let timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
-            self?.request()
-        }
-        
-        RunLoop.main.add(timer, forMode: .common)
-        timer.fire()
-        
-        self.timer = timer
-    }
-    
-    public func stopAutoRequest() {
-        timer?.invalidate()
-        timer = nil
-    }
 }
 
 extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {

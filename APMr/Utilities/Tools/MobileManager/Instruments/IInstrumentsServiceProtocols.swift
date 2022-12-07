@@ -45,13 +45,13 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
     
     // MARK: - optional -
     
-    var instrument: IIntruments? { get }
+    var instrument: IInstruments? { get }
     
     var identifier: UInt32 { get }
     
     var expectsReply: Bool { get }
     
-    func start(_ handle: IIntruments?)
+    func start(_ handle: IInstruments?)
     
     func register(_ arg: Arg)
     
@@ -59,7 +59,7 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
 }
 
 extension IInstrumentsServiceProtocol {
-    var instrument: IIntruments? {
+    var instrument: IInstruments? {
         if let service = self as? IInstrumentsBaseService {
             return service.instrumentHandle
         }
@@ -77,7 +77,7 @@ extension IInstrumentsServiceProtocol {
         return true
     }
     
-    func start(_ handle: IIntruments? = nil) {
+    func start(_ handle: IInstruments? = nil) {
         if let handle = handle,
            let service = self as? IInstrumentsBaseService {
             service.instrumentHandle = handle

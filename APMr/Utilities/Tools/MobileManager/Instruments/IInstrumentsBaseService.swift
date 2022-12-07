@@ -8,7 +8,7 @@
 import Cocoa
 
 class IInstrumentsBaseService: NSObject {
-    public weak var instrumentHandle: IIntruments? = nil
+    public weak var instrumentHandle: IInstruments? = nil
     
     public private(set) var currentIdentifier: UInt32 = 1
         

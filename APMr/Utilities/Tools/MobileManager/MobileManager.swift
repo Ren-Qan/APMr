@@ -16,9 +16,10 @@ class MobileManager: NSObject {
     }()
         
     public private(set) var deviceList: [DeviceItem] = []
+    private var context_t: idevice_subscription_context_t? = nil
     
-    private func subscribe() {        
-        idevice_event_subscribe({ event, _ in
+    private func subscribe() {
+        idevice_event_subscribe({ _, _ in
             NotificationCenter.default.post(name: MobileManager.subscribeChangedNotification, object: nil)
         }, nil)
     }

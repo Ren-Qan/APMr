@@ -1,5 +1,5 @@
 //
-//  IIntruments.swift
+//  IInstruments.swift
 //  TestAPP
 //
 //  Created by 任玉乾 on 2022/11/24.
@@ -8,7 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-class IIntruments: NSObject {
+class IInstruments: NSObject {
     // MARK: - Private -
     private lazy var dtxService: DTXMessageHandle = {
         let server = DTXMessageHandle()
@@ -36,14 +36,14 @@ class IIntruments: NSObject {
 
 // MARK: - Private -
 
-private extension IIntruments {
+private extension IInstruments {
     var nextIdentifier: UInt32 {
         identifier += 1
         return identifier
     }
 }
 
-extension IIntruments {
+extension IInstruments {
     func stop() {
         isConnected = false
         dtxService.stopService()
