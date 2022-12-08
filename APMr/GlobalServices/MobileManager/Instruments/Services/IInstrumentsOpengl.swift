@@ -7,8 +7,10 @@
 
 import Cocoa
 import LibMobileDevice
+import ObjectMapper
 
 class IInstrumentsOpengl: IInstrumentsBaseService {
+    public var callBack: ((IInstrumentsOpenglInfo) -> Void)? = nil
 
 }
 
@@ -20,11 +22,11 @@ extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
     }
 
     func response(_ response: DTXReceiveObject?) {
-        if let obj = response?.object {
-            print(obj)
+        if let obj = response?.object as? [String : Any],
+           let model = Mapper<IInstrumentsOpenglInfo>().map(JSON: obj) {
+           callBack?(model)
         }
     }
-    
 }
 
 enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {

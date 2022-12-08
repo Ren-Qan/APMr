@@ -11,7 +11,7 @@ struct CoordinateChartView: View {
     @State private var offsetY: CGFloat = 0
     @State private var ruleY: CGFloat = 50
     @State private var ruleLineIsHidden = true
-    var items : [LandMarkItem] = []
+    var items : [LandMarkItem]
     
     var body: some View {
         VStack {

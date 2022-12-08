@@ -8,7 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-protocol IInstrumentRequestArgsProtocol {
+protocol IInstrumentRequestArgsProtocol: CaseIterable {
     var selector: String { get }
     
     var args: DTXArguments? { get }
@@ -18,21 +18,26 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case sysmontap = "com.apple.instruments.server.services.sysmontap"
     
     case deviceinfo = "com.apple.instruments.server.services.deviceinfo"
-        
+    
     case opengl = "com.apple.instruments.server.services.graphics.opengl"
     
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
     }
     
+    var callbackChannel: UInt32 {
+        return UINT32_MAX - channel + 1
+    }
+    
     init?(channel: UInt32) {
         let name = IInstrumentsServiceName.allCases.first { name in
-            return name.channel == channel
+            return name.channel == channel || name.callbackChannel == channel
         }
         if let name = name {
             self = name
+        } else {
+            return nil
         }
-        return nil
     }
 }
 
@@ -40,7 +45,7 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
     associatedtype Arg : IInstrumentRequestArgsProtocol
     
     var server: IInstrumentsServiceName { get }
-        
+    
     func response(_ response: DTXReceiveObject?)
     
     // MARK: - optional -
@@ -55,7 +60,9 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
     
     func register(_ arg: Arg)
     
-    func request()    
+    func defaultRegister()
+    
+    func request()
 }
 
 extension IInstrumentsServiceProtocol {
@@ -97,9 +104,20 @@ extension IInstrumentsServiceProtocol {
                      expectsReply: expectsReply)
     }
     
+    func defaultRegister() {
+        Arg.allCases.forEach { arg in
+            self.register(arg)
+        }
+    }
+    
     func request() {
         instrument?.response { [weak self] response in
-            self?.response(response)
+            if let response = response,
+               let channelID = self?.server.channel,
+               let callbackChannel = self?.server.callbackChannel,
+               (channelID == response.channel || callbackChannel == response.channel) {
+                self?.response(response)
+            }
         }
     }
 }
