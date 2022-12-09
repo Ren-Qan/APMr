@@ -276,6 +276,7 @@ struct DTXMessagePayloadHeader {
                     
             if ( nrecv <= 0 ) {
                 fprintf(stderr, "failed reading from socket: %s\n", strerror(errno));
+                free(fragData);
                 return NULL;
             }
             
@@ -285,6 +286,8 @@ struct DTXMessagePayloadHeader {
             nbytes += nrecv;
         }
 
+        free(fragData);
+        
         [payload append_v:frag.bytes.bytes len:frag.bytes.length];
         if (mheader.fragmentId == mheader.fragmentCount - 1) {
             break;

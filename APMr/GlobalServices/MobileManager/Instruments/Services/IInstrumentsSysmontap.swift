@@ -25,9 +25,12 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
             var sysI = 0
             var proI = 1
             
-            if result[0].count < result[1].count {
-                sysI = 1
-                proI = 0
+            for (index, item) in result.enumerated() {
+                if let _ = item["Processes"] {
+                    proI = index
+                    sysI = 1 - proI
+                    break
+                }
             }
             
             if let sysmotapInfo = Mapper<IInstrumentsSysmotapInfo>().map(JSON: result[sysI]),

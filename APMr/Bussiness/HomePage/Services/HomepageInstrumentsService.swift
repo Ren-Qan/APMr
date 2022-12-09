@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import Combine
 
 struct HomepageChartModel: Identifiable {
     var id: String { serviceName.rawValue }
@@ -15,20 +16,10 @@ struct HomepageChartModel: Identifiable {
     var serviceName: IInstrumentsServiceName
 }
 
-class HomepageInstrumentsService: NSObject {
-    public weak var root: HomepageService? = nil
+class HomepageInstrumentsService: NSObject, ObservableObject {    
+    @Published public var sysmontap = HomepageChartModel(title: "Sysmontap" ,serviceName: .sysmontap)
     
-    public var sysmontap = HomepageChartModel(title: "Sysmontap" ,serviceName: .sysmontap) {
-        didSet {
-            root?.objectWillChange.send()
-        }
-    }
-    
-    public var opengl = HomepageChartModel(title: "Opengl" ,serviceName: .opengl) {
-        didSet {
-            root?.objectWillChange.send()
-        }
-    }
+    @Published public var opengl = HomepageChartModel(title: "Opengl" ,serviceName: .opengl)
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
@@ -61,8 +52,6 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
             landmark.x = x
             landmark.y = y
             sysmontap.items.append(landmark)
-            
-            root?.objectWillChange.send()
         }
     }
     

@@ -8,32 +8,14 @@
 import Cocoa
 import Combine
 
-class HomepageDeviceService: NSObject {
-    public weak var root: HomepageService? = nil
+class HomepageDeviceService: NSObject, ObservableObject {    
+    @Published public var deviceList: [DeviceItem] = []
     
-    public var deviceList: [DeviceItem] = [] {
-        didSet {
-            root?.objectWillChange.send()
-        }
-    }
+    @Published public var selectDevice: DeviceItem? = nil
     
-    public var selectDevice: DeviceItem? = nil {
-        didSet {
-            root?.objectWillChange.send()
-        }
-    }
-
-    public var appList: [IInstproxyAppInfo] = [] {
-        didSet {
-            root?.objectWillChange.send()
-        }
-    }
+    @Published public var appList: [IInstproxyAppInfo] = []
     
-    public var selectApp: IInstproxyAppInfo? = nil {
-        didSet {
-            root?.objectWillChange.send()
-        }
-    }
+    @Published public var selectApp: IInstproxyAppInfo? = nil
     
     override init() {
         super.init()

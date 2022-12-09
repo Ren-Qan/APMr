@@ -18,7 +18,6 @@
 		C73BBB1A29431AD200472A75 /* IInstrumentsProcesscontrol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */; };
 		C745D39B294055C900B2068A /* CoordinateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D39A294055C900B2068A /* CoordinateChartView.swift */; };
 		C745D39E294065B400B2068A /* HomepageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D39D294065B400B2068A /* HomepageContentView.swift */; };
-		C745D3A32940675C00B2068A /* HomepageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D3A22940675C00B2068A /* HomepageService.swift */; };
 		C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* APMrApp.swift */; };
 		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
 		C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */; };
@@ -52,8 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		374BA59AE5D9FF76AC88121A /* Pods-APMr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.release.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.release.xcconfig"; sourceTree = "<group>"; };
-		9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
+		ACD59CADAF1357C5444C9979 /* Pods-APMr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.release.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.release.xcconfig"; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
 		C7150E6E293C738000C2B380 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
 		C73BBB0A2942E25100472A75 /* ILockdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdown.swift; sourceTree = "<group>"; };
@@ -65,7 +63,6 @@
 		C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsProcesscontrol.swift; sourceTree = "<group>"; };
 		C745D39A294055C900B2068A /* CoordinateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateChartView.swift; sourceTree = "<group>"; };
 		C745D39D294065B400B2068A /* HomepageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageContentView.swift; sourceTree = "<group>"; };
-		C745D3A22940675C00B2068A /* HomepageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageService.swift; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7483B9329373A0400F32BE0 /* APMrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APMrApp.swift; sourceTree = "<group>"; };
 		C7483B9729373A0600F32BE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,6 +128,7 @@
 		C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmotapModels.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
+		CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -158,11 +156,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3FD3499BFE868DFDD4BDDC1B /* Pods */ = {
+		2AE30AA43703526A575D7BE6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */,
-				374BA59AE5D9FF76AC88121A /* Pods-APMr.release.xcconfig */,
+				CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */,
+				ACD59CADAF1357C5444C9979 /* Pods-APMr.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -217,8 +215,8 @@
 			children = (
 				C7483B9229373A0400F32BE0 /* APMr */,
 				C7483B9129373A0400F32BE0 /* Products */,
-				3FD3499BFE868DFDD4BDDC1B /* Pods */,
 				CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */,
+				2AE30AA43703526A575D7BE6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -420,7 +418,6 @@
 		C780D10D29418B5800EF5633 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C745D3A22940675C00B2068A /* HomepageService.swift */,
 				C73BBB17294315A600472A75 /* HomepageDeviceService.swift */,
 				C73BBB152943154300472A75 /* HomepageInstrumentsService.swift */,
 			);
@@ -572,7 +569,6 @@
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
 				C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */,
-				C745D3A32940675C00B2068A /* HomepageService.swift in Sources */,
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
@@ -704,11 +700,12 @@
 		};
 		C7483BA029373A0600F32BE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */;
+			baseConfigurationReference = CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = APMr/APMr.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -725,8 +722,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -738,11 +735,12 @@
 		};
 		C7483BA129373A0600F32BE0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 374BA59AE5D9FF76AC88121A /* Pods-APMr.release.xcconfig */;
+			baseConfigurationReference = ACD59CADAF1357C5444C9979 /* Pods-APMr.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = APMr/APMr.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -759,8 +757,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

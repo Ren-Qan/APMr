@@ -1,4 +1,5 @@
 use_frameworks! :linkage => :static
+platform :macos, '13.0'
 
 target 'APMr' do
  
