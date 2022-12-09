@@ -22,10 +22,18 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
     
     func response(_ response: DTXReceiveObject?) {
         if let result = response?.object as? [[String : Any]], result.count >= 2 {
-           if let sysmotapInfo = Mapper<IInstrumentsSysmotapInfo>().map(JSON: result[0]),
-              let processInfo = Mapper<IInstrumentsSysmotapProcessesInfo>().map(JSON: result[1]) {
-               callBack?(sysmotapInfo, processInfo)
-           }
+            var sysI = 0
+            var proI = 1
+            
+            if result[0].count < result[1].count {
+                sysI = 1
+                proI = 0
+            }
+            
+            if let sysmotapInfo = Mapper<IInstrumentsSysmotapInfo>().map(JSON: result[sysI]),
+               let processInfo = Mapper<IInstrumentsSysmotapProcessesInfo>().map(JSON: result[proI]) {
+                callBack?(sysmotapInfo, processInfo)
+            }
         }
     }
 }

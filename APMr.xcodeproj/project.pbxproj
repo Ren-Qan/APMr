@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */; };
 		C7150E6F293C738000C2B380 /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7150E6E293C738000C2B380 /* BarChartView.swift */; };
+		C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0A2942E25100472A75 /* ILockdown.swift */; };
+		C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0D2942E84D00472A75 /* IInstproxy.swift */; };
+		C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB102942FBE700472A75 /* IInstproxyModels.swift */; };
+		C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB122943094B00472A75 /* ILockdownModels.swift */; };
+		C73BBB162943154300472A75 /* HomepageInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB152943154300472A75 /* HomepageInstrumentsService.swift */; };
+		C73BBB18294315A600472A75 /* HomepageDeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB17294315A600472A75 /* HomepageDeviceService.swift */; };
+		C73BBB1A29431AD200472A75 /* IInstrumentsProcesscontrol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */; };
 		C745D39B294055C900B2068A /* CoordinateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D39A294055C900B2068A /* CoordinateChartView.swift */; };
 		C745D39E294065B400B2068A /* HomepageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D39D294065B400B2068A /* HomepageContentView.swift */; };
 		C745D3A32940675C00B2068A /* HomepageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C745D3A22940675C00B2068A /* HomepageService.swift */; };
@@ -49,6 +56,13 @@
 		9CFD212945DDC70F7A9B42CA /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
 		C7150E6E293C738000C2B380 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
+		C73BBB0A2942E25100472A75 /* ILockdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdown.swift; sourceTree = "<group>"; };
+		C73BBB0D2942E84D00472A75 /* IInstproxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxy.swift; sourceTree = "<group>"; };
+		C73BBB102942FBE700472A75 /* IInstproxyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxyModels.swift; sourceTree = "<group>"; };
+		C73BBB122943094B00472A75 /* ILockdownModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdownModels.swift; sourceTree = "<group>"; };
+		C73BBB152943154300472A75 /* HomepageInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageInstrumentsService.swift; sourceTree = "<group>"; };
+		C73BBB17294315A600472A75 /* HomepageDeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageDeviceService.swift; sourceTree = "<group>"; };
+		C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsProcesscontrol.swift; sourceTree = "<group>"; };
 		C745D39A294055C900B2068A /* CoordinateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateChartView.swift; sourceTree = "<group>"; };
 		C745D39D294065B400B2068A /* HomepageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageContentView.swift; sourceTree = "<group>"; };
 		C745D3A22940675C00B2068A /* HomepageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageService.swift; sourceTree = "<group>"; };
@@ -178,6 +192,26 @@
 			path = ComponentViews;
 			sourceTree = "<group>";
 		};
+		C73BBB0C2942E25700472A75 /* IServices */ = {
+			isa = PBXGroup;
+			children = (
+				C7483BA529373ADC00F32BE0 /* IDevice.swift */,
+				C73BBB0A2942E25100472A75 /* ILockdown.swift */,
+				C73BBB0D2942E84D00472A75 /* IInstproxy.swift */,
+				C73BBB0F2942FBC900472A75 /* Models */,
+			);
+			path = IServices;
+			sourceTree = "<group>";
+		};
+		C73BBB0F2942FBC900472A75 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C73BBB102942FBE700472A75 /* IInstproxyModels.swift */,
+				C73BBB122943094B00472A75 /* ILockdownModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		C7483B8729373A0400F32BE0 = {
 			isa = PBXGroup;
 			children = (
@@ -222,8 +256,8 @@
 		C7483BA329373ADC00F32BE0 /* MobileManager */ = {
 			isa = PBXGroup;
 			children = (
-				C7483BA529373ADC00F32BE0 /* IDevice.swift */,
 				C7483BA429373ADC00F32BE0 /* MobileManager.swift */,
+				C73BBB0C2942E25700472A75 /* IServices */,
 				C7483BA629373ADC00F32BE0 /* Instruments */,
 			);
 			path = MobileManager;
@@ -257,6 +291,7 @@
 				C7483BAC29373ADC00F32BE0 /* IInstrumentsSysmontap.swift */,
 				C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */,
 				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
+				C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -386,6 +421,8 @@
 			isa = PBXGroup;
 			children = (
 				C745D3A22940675C00B2068A /* HomepageService.swift */,
+				C73BBB17294315A600472A75 /* HomepageDeviceService.swift */,
+				C73BBB152943154300472A75 /* HomepageInstrumentsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -520,13 +557,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */,
+				C73BBB162943154300472A75 /* HomepageInstrumentsService.swift in Sources */,
 				C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */,
+				C73BBB1A29431AD200472A75 /* IInstrumentsProcesscontrol.swift in Sources */,
 				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
 				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
+				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
+				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
@@ -534,11 +575,14 @@
 				C745D3A32940675C00B2068A /* HomepageService.swift in Sources */,
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
+				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
+				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
 				C7483B9429373A0400F32BE0 /* APMrApp.swift in Sources */,
 				C745D39B294055C900B2068A /* CoordinateChartView.swift in Sources */,
 				C745D39E294065B400B2068A /* HomepageContentView.swift in Sources */,
 				C7150E6F293C738000C2B380 /* BarChartView.swift in Sources */,
 				C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */,
+				C73BBB18294315A600472A75 /* HomepageDeviceService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

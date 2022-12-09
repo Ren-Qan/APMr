@@ -23,7 +23,7 @@ extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
 
     func response(_ response: DTXReceiveObject?) {
         if let obj = response?.object as? [String : Any],
-           let model = Mapper<IInstrumentsOpenglInfo>().map(JSON: obj) {
+           let model = Mapper<IInstrumentsOpenglInfo>().map(JSON: obj) {            
            callBack?(model)
         }
     }

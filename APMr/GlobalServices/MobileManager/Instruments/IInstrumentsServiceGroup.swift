@@ -11,6 +11,8 @@ protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo)
     
     func opengl(info: IInstrumentsOpenglInfo)
+    
+    func launch(pid: UInt32)
 }
 
 extension IInstrumentsServiceGroupDelegate {
@@ -21,18 +23,22 @@ extension IInstrumentsServiceGroupDelegate {
     func opengl(info: IInstrumentsOpenglInfo) {
         
     }
+    
+    func launch(pid: UInt32) {
+        
+    }
 }
 
 class IInstrumentsServiceGroup: NSObject {
-    fileprivate typealias Service = (IInstrumentsServiceProtocol & IInstrumentsBaseService)
-        
-    private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
-    
-    private lazy var instruments = IInstruments()
-    
-    private var timer: Timer? = nil
+    typealias Service = (IInstrumentsServiceProtocol & IInstrumentsBaseService)
+
+    public lazy var instruments = IInstruments()
     
     public weak var delegate: IInstrumentsServiceGroupDelegate? = nil
+    
+    private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
+
+    private var timer: Timer? = nil
     
     deinit {
         timer?.invalidate()
@@ -54,12 +60,12 @@ extension IInstrumentsServiceGroup {
         
         addInstance(type: type)
     }
-    
+   
+    @discardableResult
     func start(_ device: IDevice) -> Bool {
         if instruments.start(device) {
             serviceDic.forEach { item in
                 item.value.start(instruments)
-                item.value.defaultRegister()
             }
             return true
         }
@@ -80,6 +86,10 @@ extension IInstrumentsServiceGroup {
     func stopRequest() {
         timer?.invalidate()
         timer = nil
+    }
+    
+    func client<T : Service>(_ type: IInstrumentsServiceName) -> T? {
+        return serviceDic[type] as? T
     }
 }
 
@@ -106,16 +116,25 @@ private extension IInstrumentsServiceGroup {
                     self?.delegate?.sysmontap(sysmotapInfo: sysmotapInfo, processInfo: processInfo)
                 }
                 service = sysmotap
-            case .deviceinfo:
                 
-                break
+            case .deviceinfo:
+                let deviceInfo = IInstrumentsDeviceInfo()
+                
+                service = deviceInfo
+                
             case .opengl:
                 let opengl = IInstrumentsOpengl()
                 opengl.callBack = { [weak self] openglInfo in
                     self?.delegate?.opengl(info: openglInfo)
                 }
                 service = opengl
-                break
+                
+            case .processcontrol:
+                let processControl = IInstrumentsProcesscontrol()
+                processControl.callback = { [weak self] pid in
+                    self?.delegate?.launch(pid: pid)
+                }
+                service = processControl
         }
         
         if let service = service {

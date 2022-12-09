@@ -8,7 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-protocol IInstrumentRequestArgsProtocol: CaseIterable {
+protocol IInstrumentRequestArgsProtocol {
     var selector: String { get }
     
     var args: DTXArguments? { get }
@@ -17,10 +17,12 @@ protocol IInstrumentRequestArgsProtocol: CaseIterable {
 enum IInstrumentsServiceName: String, CaseIterable {
     case sysmontap = "com.apple.instruments.server.services.sysmontap"
     
-    case deviceinfo = "com.apple.instruments.server.services.deviceinfo"
-    
     case opengl = "com.apple.instruments.server.services.graphics.opengl"
     
+    case deviceinfo = "com.apple.instruments.server.services.deviceinfo"
+    
+    case processcontrol = "com.apple.instruments.server.services.processcontrol"
+        
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
     }
@@ -59,9 +61,7 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
     func start(_ handle: IInstruments?)
     
     func register(_ arg: Arg)
-    
-    func defaultRegister()
-    
+        
     func request()
 }
 
@@ -102,12 +102,6 @@ extension IInstrumentsServiceProtocol {
                      selector: arg.selector,
                      args: args,
                      expectsReply: expectsReply)
-    }
-    
-    func defaultRegister() {
-        Arg.allCases.forEach { arg in
-            self.register(arg)
-        }
     }
     
     func request() {

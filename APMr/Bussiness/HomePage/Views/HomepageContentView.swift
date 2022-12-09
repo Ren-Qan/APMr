@@ -10,28 +10,42 @@ import SwiftUI
 struct HomepageContentView: View {
     @ObservedObject private var service = HomepageService()
     
-    @State private var devices: [DeviceItem] = []
-    @State private var selectDevice: DeviceItem? = nil
-    
     var body: some View {
         VStack {
-            Menu(menuTitle) {
-                ForEach(devices) { item in
-                    Button("\(item.type)" + ": \(item.udid)") {
-                        selectDevice = item
+            Menu(service.device.selectDevice?.deviceName ?? "请选择设备") {
+                ForEach(service.device.deviceList) { device in
+                    Button("\(device.type)" + " : " + device.deviceName) {
+                        service.device.selectDevice = device
+                        service.device.refreshApplist()
+                        if let iDevice = IDevice(device) {
+                            service.insturment.start(iDevice)
+                        }
                     }
                 }
             }
             
-            Button("start") {
-                startService()
+            Spacer(minLength: 10)
+            
+            Menu(service.device.selectApp?.name ?? "请选择APP") {
+                ForEach(service.device.appList) { app in
+                    Button(app.name) {
+                        service.device.selectApp = app
+                    }
+                }
+            }
+            
+            Button(service.device.selectApp?.name ?? "selelct App") {
+                if let app = service.device.selectApp {
+                    service.insturment.launch(app: app)
+                    service.insturment.autoRequest()
+                }
             }
             
             ScrollView {
                 LazyVStack {
                     Spacer(minLength: 20)
-                    Text(service.gpu.text)
-                    CoordinateChartView(items: service.gpu.items)
+                    Text(service.insturment.sysmontap.title)
+                    CoordinateChartView(items: service.insturment.sysmontap.items)
                         .background {
                             Color.white
                         }
@@ -40,31 +54,7 @@ struct HomepageContentView: View {
             }
         }
         .onAppear {
-            reloadDeviceList()
-            NotificationCenter.default.addObserver(forName: MobileManager.subscribeChangedNotification, object: nil, queue: nil) { _ in
-                reloadDeviceList()
-            }
+            service.device.refreshDeviceList()
         }
-    }
-    
-    
-    private var menuTitle: String {
-        if let device = selectDevice {
-            return "\(device.type)" + ": \(device.udid)"
-        }
-        return "请选择设备"
-    }
-    
-    private func startService() {
-        if let selectDevice = selectDevice,
-           let idevice = IDevice(selectDevice),
-           service.start(idevice){
-            service.autoRequest()
-        }
-    }
-    
-    private func reloadDeviceList() {
-        MobileManager.share.refreshDeviceList()
-        devices = MobileManager.share.deviceList
     }
 }

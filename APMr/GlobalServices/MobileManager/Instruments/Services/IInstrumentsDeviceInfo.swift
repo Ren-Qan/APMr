@@ -8,9 +8,26 @@
 import Cocoa
 import LibMobileDevice
 
+class IInstrumentsDeviceInfo: IInstrumentsBaseService {
+
+}
+
+extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
+    typealias Arg = IInstrumentsDeviceInfoArgs
+    
+    
+    var server: IInstrumentsServiceName {
+        return .deviceinfo
+    }
+
+    func response(_ response: DTXReceiveObject?) {
+   
+    }
+}
+
 enum IInstrumentsDeviceInfoArgs: IInstrumentRequestArgsProtocol {
     case runningProcesses
-    
+        
     var selector: String {
         switch self {
             case .runningProcesses:
@@ -20,21 +37,5 @@ enum IInstrumentsDeviceInfoArgs: IInstrumentRequestArgsProtocol {
     
     var args: DTXArguments? {
         return nil
-    }
-}
-
-class IInstrumentsDeviceInfo: IInstrumentsBaseService {
-
-}
-
-extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsDeviceInfoArgs
-    
-    var server: IInstrumentsServiceName {
-        return .deviceinfo
-    }
-
-    func response(_ response: DTXReceiveObject?) {
-        
     }
 }

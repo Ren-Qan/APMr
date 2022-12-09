@@ -27,12 +27,14 @@ struct DeviceItem: Identifiable {
     
     var udid: String = ""
     var type = DeviceConnectType.usb
+    
+    var deviceName: String = ""
 }
 
 class IDevice: NSObject {
     public private(set) var device_t: idevice_t? = nil
     public private(set) var deviceItem: DeviceItem? = nil
-
+    
     convenience init?(_ udid: String, _ type: DeviceConnectType) {
         self.init(.init(udid: udid, type: type))
     }
