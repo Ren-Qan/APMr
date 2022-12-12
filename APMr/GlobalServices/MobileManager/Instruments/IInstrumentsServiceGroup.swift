@@ -135,6 +135,10 @@ private extension IInstrumentsServiceGroup {
                     self?.delegate?.launch(pid: pid)
                 }
                 service = processControl
+            case .gpu:
+                let gpu = IInstrumentsGPU()
+                
+                service = gpu
         }
         
         if let service = service {

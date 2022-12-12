@@ -69,8 +69,8 @@ extension IInstruments {
         }
         
         let arg = DTXArguments()
-        arg.appendNum32(Int32(service.server.channel))
-        arg.add(service.server.rawValue)
+        arg.appendUInt32Num(service.server.channel)
+        arg.append(service.server.rawValue)
 
         dtxService.send(withChannel: 0,
                         identifier: nextIdentifier,

@@ -17,17 +17,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSData *)getArgBytes;
 
-- (void)addObject:(id)object;
+- (void)appendObject:(id)object;
 
 - (void)appendData:(NSData *)data;
 
-- (void)appendNum32:(int32_t)num;
+- (void)appendInt32Num:(int32_t)num;
 
-- (void)appendLong:(int64_t)num;
+- (void)appendUInt32Num:(uint32_t)num;
 
-- (void)append_d:(uint32_t)num;
+- (void)appendInt64Num:(int64_t)num;
 
-- (void)append_q:(uint64_t)num;
+- (void)appendUInt64Num:(uint64_t)num;
 
 - (void)append_b:(NSData *)data;
 

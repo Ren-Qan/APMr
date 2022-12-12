@@ -70,7 +70,7 @@ enum IInstrumentsSysmontapArgs: IInstrumentRequestArgsProtocol {
                 ]
             ]
             let args = DTXArguments()
-            args.add(config)
+            args.append(config)
             return args
         }
         return nil

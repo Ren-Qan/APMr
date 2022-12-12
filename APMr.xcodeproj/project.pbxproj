@@ -47,6 +47,7 @@
 		C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
+		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
 		E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */; };
 /* End PBXBuildFile section */
 
@@ -128,6 +129,7 @@
 		C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmotapModels.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
+		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
 		CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -290,6 +292,7 @@
 				C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */,
 				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
 				C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */,
+				C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -557,6 +560,7 @@
 				C73BBB162943154300472A75 /* HomepageInstrumentsService.swift in Sources */,
 				C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */,
 				C73BBB1A29431AD200472A75 /* IInstrumentsProcesscontrol.swift in Sources */,
+				C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */,
 				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
 				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
@@ -722,8 +726,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -757,8 +761,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

@@ -41,13 +41,12 @@ enum IInstrumentsProcesscontrolArgs: IInstrumentRequestArgsProtocol {
         switch self {
             case .launch(let bundleId):
                 let options: [String : Any] = ["StartSuspendedKey" : 0, "KillExisting" : false]
-                
                 let arg = DTXArguments()
-                arg.add("") // devicePath
-                arg.add(bundleId) // bundleID
-                arg.add([String : Any]()) // environment
-                arg.add([]) // arguments
-                arg.add(options) // options
+                arg.append("") // devicePath
+                arg.append(bundleId) // bundleID
+                arg.append([String : Any]()) // environment
+                arg.append([]) // arguments
+                arg.append(options) // options
                 return arg
         }
     }

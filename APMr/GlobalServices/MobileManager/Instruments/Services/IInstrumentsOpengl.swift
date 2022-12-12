@@ -43,7 +43,7 @@ enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
         switch self {
             case .startSampling:
                 let arg = DTXArguments()
-                arg.appendNum32(0)
+                arg.appendUInt32Num(0)
                 return arg
         }
     }

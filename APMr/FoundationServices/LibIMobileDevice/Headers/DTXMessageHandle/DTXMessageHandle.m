@@ -131,7 +131,7 @@ struct DTXMessagePayloadHeader {
     };
     
     DTXArguments *args = [[DTXArguments alloc] init];
-    [args addObject:par];
+    [args appendObject:par];
     
     [self sendWithChannel:9
                identifier:10000

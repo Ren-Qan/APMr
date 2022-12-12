@@ -28,10 +28,15 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
 enum IInstrumentsDeviceInfoArgs: IInstrumentRequestArgsProtocol {
     case runningProcesses
         
+    case machTimeInfo
+    
     var selector: String {
         switch self {
             case .runningProcesses:
                 return "runningProcesses"
+                
+            case .machTimeInfo:
+                return "machTimeInfo"
         }
     }
     

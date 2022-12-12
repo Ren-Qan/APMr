@@ -23,7 +23,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
-        group.config(types: [.sysmontap, .opengl, .processcontrol])
+        group.config(types: [.sysmontap, .opengl, .processcontrol, .gpu])
         group.delegate = self
         return group
     }()
@@ -62,11 +62,11 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
     func launch(pid: UInt32) {
         selectPid = pid
         
-        if let client: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
-            client.register(.setConfig)
-            client.register(.start)
+        if let client: IInstrumentsGPU = serviceGroup.client(.gpu) {
+            client.register(.requestDeviceGPUInfo)
+            client.register(.configure(pid: pid))
+            client.register(.startCollectingCounters)
         }
-        
     }
 }
 

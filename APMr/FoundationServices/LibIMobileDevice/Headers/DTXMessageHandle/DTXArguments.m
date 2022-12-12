@@ -46,7 +46,7 @@
     return result.bytes;
 }
 
-- (void)addObject:(id)object {
+- (void)appendObject:(id)object {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:NULL];
     if (data) {
         [self appendData:data];
@@ -61,13 +61,21 @@
     [self append_b:data];
 }
 
-- (void)appendNum32:(int32_t)num {
+- (void)appendInt32Num:(int32_t)num {
+    [self appendUInt32Num:num];
+}
+
+- (void)appendUInt32Num:(uint32_t)num {
     [self append_d:10];
     [self append_d:3];
     [self append_d:num];
 }
 
-- (void)appendLong:(int64_t)num {
+- (void)appendInt64Num:(int64_t)num {
+    [self appendUInt64Num:num];
+}
+
+- (void)appendUInt64Num:(uint64_t)num {
     [self append_d:10];
     [self append_d:4];
     [self append_q:num];

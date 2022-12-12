@@ -22,6 +22,8 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case deviceinfo = "com.apple.instruments.server.services.deviceinfo"
     
     case processcontrol = "com.apple.instruments.server.services.processcontrol"
+    
+    case gpu = "com.apple.instruments.server.services.gpu"
         
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
@@ -106,11 +108,15 @@ extension IInstrumentsServiceProtocol {
     
     func request() {
         instrument?.response { [weak self] response in
-            if let response = response,
-               let channelID = self?.server.channel,
-               let callbackChannel = self?.server.callbackChannel,
-               (channelID == response.channel || callbackChannel == response.channel) {
-                self?.response(response)
+            if let response = response {
+                if let channelID = self?.server.channel,
+                   let callbackChannel = self?.server.callbackChannel,
+                   (channelID == response.channel || callbackChannel == response.channel) {
+                    self?.response(response)
+                } else {
+                    
+                }
+               
             }
         }
     }
