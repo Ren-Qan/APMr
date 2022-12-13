@@ -15,13 +15,13 @@ class IInstruments: NSObject {
         return server
     }()
     
-    private lazy var requestQ: OperationQueue = {
+    private lazy var sendQ: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
     
-    private lazy var responseQ: OperationQueue = {
+    private lazy var receiceQ: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         return queue
@@ -44,13 +44,16 @@ private extension IInstruments {
 }
 
 extension IInstruments {
-    func stop() {
+    public func stop() {
         isConnected = false
         dtxService.stopService()
     }
     
+    /// 启动instruments服务通道 socket
+    /// - Parameter device: deivce
+    /// - Returns: success
     @discardableResult
-    func start(_ device: IDevice) -> Bool {
+    public func start(_ device: IDevice) -> Bool {
         guard let device_t = device.device_t else {
             return false
         }
@@ -59,7 +62,9 @@ extension IInstruments {
         return isConnected
     }
     
-    func setup(service: any IInstrumentsServiceProtocol) {
+    /// 设置服务建立频道 channel
+    /// - Parameter service: 对应的服务 IInstrumentsServiceName
+    public func setup(service: any IInstrumentsServiceProtocol) {
         if !isConnected {
             return
         }
@@ -79,12 +84,19 @@ extension IInstruments {
                         expectsReply: true)
     }
     
-    func request(channel: UInt32,
+    /// 对socket通道发送请求
+    /// - Parameters:
+    ///   - channel: 对应的服务id
+    ///   - identifier: 发送消息的id
+    ///   - selector: 对应服务响应的selector 例：响应"com.apple.instruments.server.services.deviceinfo" 对应的 "runningProcesses"
+    ///   - args: 响应服务所需的参数
+    ///   - expectsReply: expectsReply
+    public func send(channel: UInt32,
                  identifier: UInt32,
                  selector: String,
                  args: DTXArguments?,
                  expectsReply: Bool) {
-        requestQ.addOperation { [weak self] in
+        sendQ.addOperation { [weak self] in
             self?.dtxService.send(withChannel: channel,
                                   identifier: identifier,
                                   selector: selector,
@@ -93,8 +105,10 @@ extension IInstruments {
         }
     }
     
-    func response(_ complete: ((DTXReceiveObject?) -> Void)? = nil) {
-        responseQ.addOperation { [weak self] in
+    /// 从建立的instruments socket通道取数据
+    /// - Parameter complete: 完成的回调
+    public func receive(_ complete: ((DTXReceiveObject?) -> Void)? = nil) {
+        receiceQ.addOperation { [weak self] in
             let result = self?.dtxService.receive()
             complete?(result)
         }

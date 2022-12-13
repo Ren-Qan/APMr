@@ -65,37 +65,27 @@ extension IInstrumentsServiceGroup {
     func start(_ device: IDevice) -> Bool {
         if instruments.start(device) {
             serviceDic.forEach { item in
-                item.value.start(instruments)
+                item.value.setup(instruments)
             }
             return true
         }
         return false
     }
     
-    func autoRequest(_ timeInterval: TimeInterval = 0.5) {
-        stopRequest()
-        
-        timer = Timer(timeInterval: 0.5, repeats: true, block: { [weak self] _ in
-            self?.request()
-        })
-        
-        timer?.fire()
-        RunLoop.main.add(timer!, forMode: .common)
+    @discardableResult
+    func restart(_ device: IDevice) -> Bool {
+        stop()
+        return start(device)
     }
     
-    func stopRequest() {
-        timer?.invalidate()
-        timer = nil
+    func stop() {
+        stopAutoRequest()
+        instruments.stop()
     }
     
-    func client<T : Service>(_ type: IInstrumentsServiceName) -> T? {
-        return serviceDic[type] as? T
-    }
-}
-
-private extension IInstrumentsServiceGroup {
+    /// 此处的request 相当于从 socket通道拿数据
     func request() {
-        instruments.response { [weak self] response in
+        instruments.receive { [weak self] response in
             guard let response = response,
                   let name = IInstrumentsServiceName(channel: response.channel),
                   let service = self?.serviceDic[name] else {
@@ -106,6 +96,28 @@ private extension IInstrumentsServiceGroup {
         }
     }
     
+    func autoRequest(_ timeInterval: TimeInterval = 0.5) {
+        stopAutoRequest()
+        
+        timer = Timer(timeInterval: 0.5, repeats: true, block: { [weak self] _ in
+            self?.request()
+        })
+        
+        timer?.fire()
+        RunLoop.main.add(timer!, forMode: .common)
+    }
+    
+    func stopAutoRequest() {
+        timer?.invalidate()
+        timer = nil
+    }
+        
+    func client<T : Service>(_ type: IInstrumentsServiceName) -> T? {
+        return serviceDic[type] as? T
+    }
+}
+
+private extension IInstrumentsServiceGroup {
     func addInstance(type: IInstrumentsServiceName) {
         var service: (any Service)? = nil
         

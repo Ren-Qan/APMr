@@ -25,17 +25,17 @@ struct IInstrumentsOpenglInfo: Mappable {
     init?(map: Map) {}
 
     mutating func mapping(map: Map) {
-        AllocatedPBSize              <- map["AllocatedPBSize"]
-        Allocsystemmemory            <- map["Allocsystemmemory"]
+        AllocatedPBSize              <- map["Allocated PB Size"]
+        Allocsystemmemory            <- map["Alloc system memory"]
         CoreAnimationFramesPerSecond <- map["CoreAnimationFramesPerSecond"]
-        DeviceUtilization            <- map["DeviceUtilization%"]
-        Inusesystemmemory            <- map["Inusesystemmemory"]
+        DeviceUtilization            <- map["Device Utilization %"]
+        Inusesystemmemory            <- map["In use system memory"]
         IOGLBundleName               <- map["IOGLBundleName"]
         recoveryCount                <- map["recoveryCount"]
-        RendererUtilization          <- map["RendererUtilization%"]
+        RendererUtilization          <- map["Renderer Utilization %"]
         SplitSceneCount              <- map["SplitSceneCount"]
         TiledSceneBytes              <- map["TiledSceneBytes"]
-        TilerUtilization             <- map["TilerUtilization%"]
+        TilerUtilization             <- map["Tiler Utilization %"]
         XRVideoCardRunTimeStamp      <- map["XRVideoCardRunTimeStamp"]
     }
 }

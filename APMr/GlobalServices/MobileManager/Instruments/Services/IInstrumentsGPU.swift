@@ -8,7 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-import SwiftyJSON
+// FIXME: - 暂时没研究明白怎么用，configure()之后的流程一直走不通，资料较少 查查在补充上去 -
 
 class IInstrumentsGPU: IInstrumentsBaseService {
 
@@ -20,15 +20,11 @@ extension IInstrumentsGPU: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .gpu
     }
-
+    
     func response(_ response: DTXReceiveObject?) {
-        print("\(response?.identifier)")
-        if let object = response?.object {
-            print(object)
-        }
+        
     }
 }
-
 
 enum IInstrumentsGPUArgs: IInstrumentRequestArgsProtocol {
     case requestDeviceGPUInfo
@@ -61,7 +57,7 @@ enum IInstrumentsGPUArgs: IInstrumentRequestArgsProtocol {
             case .configure(let pid):
                 let arg = DTXArguments()
                 arg.appendInt64Num(0) // counters
-                arg.appendInt64Num(0) // counterProfile
+                arg.appendInt64Num(3) // counterProfile
                 arg.appendInt64Num(0) // interval
                 arg.appendInt64Num(0) // windowLimit
                 arg.appendUInt32Num(pid) // tracingPID

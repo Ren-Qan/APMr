@@ -31,7 +31,41 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     private var selectPid: UInt32 = 0
 }
 
+// MARK: - Public API -
+extension HomepageInstrumentsService {
+   public func launch(app: IInstproxyAppInfo) {
+        guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
+            return
+        }
+        
+        processControl.send(.launch(bundleId: app.bundleId))
+    }
+}
 
+// MARK: - Public Service Setup Functions -
+extension HomepageInstrumentsService {
+    public func start(_ device: IDevice) {
+        DispatchQueue.global().async {
+            self.serviceGroup.start(device)
+        }
+    }
+    
+    public func request() {
+        serviceGroup.request()
+    }
+    
+    public func autoRequest() {
+        serviceGroup.autoRequest(0.25)
+    }
+}
+
+// MARK: - Privce -
+
+private extension HomepageInstrumentsService {
+    
+}
+
+// MARK: - IInstrumentsServiceGroupDelegate -
 extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) {
         guard selectPid != 0 else {
@@ -56,42 +90,31 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
     }
     
     func opengl(info: IInstrumentsOpenglInfo) {
-
+        guard selectPid != 0, info.Allocsystemmemory > 0 else {
+            return
+        }
+        
+        let x = opengl.items.count
+        var landmark = LandMarkItem()
+        landmark.x = x
+        landmark.y = CGFloat(info.RendererUtilization + info.TilerUtilization + info.DeviceUtilization) / 3
+        opengl.items.append(landmark)
     }
     
     func launch(pid: UInt32) {
         selectPid = pid
         
-        if let client: IInstrumentsGPU = serviceGroup.client(.gpu) {
-            client.register(.requestDeviceGPUInfo)
-            client.register(.configure(pid: pid))
-            client.register(.startCollectingCounters)
-        }
-    }
-}
-
-extension HomepageInstrumentsService {
-    func launch(app: IInstproxyAppInfo) {
-        guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
-            return
+        if let sysmontap: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
+            sysmontap.register(.setConfig)
+            sysmontap.register(.start)
         }
         
-        processControl.register(.launch(bundleId: app.bundleId))
+        if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
+            opengl.register(.startSampling)
+        }
+        
+        
     }
 }
 
-extension HomepageInstrumentsService {
-    func start(_ device: IDevice) {
-        DispatchQueue.global().async {
-            self.serviceGroup.start(device)
-        }
-    }
-    
-    func autoRequest() {
-        serviceGroup.autoRequest()
-    }
-    
-    func stop() {
-        serviceGroup.stopRequest()
-    }
-}
+

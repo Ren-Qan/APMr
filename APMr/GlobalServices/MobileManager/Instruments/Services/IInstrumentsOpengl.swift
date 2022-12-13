@@ -30,10 +30,15 @@ extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
 }
 
 enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
+    case setSamplingRate
+    
     case startSampling
     
     var selector: String {
         switch self {
+            case .setSamplingRate:
+                return "setSamplingRate:"
+                
             case .startSampling:
                 return "startSamplingAtTimeInterval:"
         }
@@ -41,6 +46,11 @@ enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
     
     var args: DTXArguments? {
         switch self {
+            case .setSamplingRate:
+                let arg = DTXArguments()
+                arg.appendUInt32Num(5)
+                return arg
+                
             case .startSampling:
                 let arg = DTXArguments()
                 arg.appendUInt32Num(0)

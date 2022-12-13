@@ -60,11 +60,11 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
     
     var expectsReply: Bool { get }
     
-    func start(_ handle: IInstruments?)
-    
     func register(_ arg: Arg)
-        
-    func request()
+    
+    func send(_ arg: Arg)
+    
+    func setup(_ handle: IInstruments)
 }
 
 extension IInstrumentsServiceProtocol {
@@ -85,39 +85,26 @@ extension IInstrumentsServiceProtocol {
     var expectsReply: Bool {
         return true
     }
-    
-    func start(_ handle: IInstruments? = nil) {
-        if let handle = handle,
-           let service = self as? IInstrumentsBaseService {
-            service.instrumentHandle = handle
-        }
-        instrument?.setup(service: self)
+        
+    func register(_ arg: Arg) {
+        send(arg)
     }
     
-    func register(_ arg: Arg) {
+    func send(_ arg: Arg) {
         let args = arg.args
         let channel = server.channel
         
-        instrument?
-            .request(channel: channel,
-                     identifier: identifier,
-                     selector: arg.selector,
-                     args: args,
-                     expectsReply: expectsReply)
+        instrument?.send(channel: channel,
+                         identifier: identifier,
+                         selector: arg.selector,
+                         args: args,
+                         expectsReply: expectsReply)
     }
     
-    func request() {
-        instrument?.response { [weak self] response in
-            if let response = response {
-                if let channelID = self?.server.channel,
-                   let callbackChannel = self?.server.callbackChannel,
-                   (channelID == response.channel || callbackChannel == response.channel) {
-                    self?.response(response)
-                } else {
-                    
-                }
-               
-            }
+    func setup(_ handle: IInstruments) {
+        if let service = self as? IInstrumentsBaseService {
+            service.instrumentHandle = handle
         }
+        handle.setup(service: self)
     }
 }
