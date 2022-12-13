@@ -4,25 +4,24 @@
 ### Depends
 
 - `Xcode` 
-  - 主要依赖`../DeviceSupport`里面对应的`DeveloperDiskImage`，如果没有当前对应的版本[iOS-DeviceSupport](https://github.com/iGhibli/iOS-DeviceSupport) 找一下下载下来，否则会链接不成功，虽然目前的代码都是测试代码。
+  - 主要依赖`../DeviceSupport`里面对应的`DeveloperDiskImage`，如果没有当前对应的版本[iOS-DeviceSupport](https://github.com/iGhibli/iOS-DeviceSupport) 找对应的镜像，否则会链接不成功，虽然目前的代码都是测试代码。
 
 ### Features
 
-`开发中，以微信(WeChat)为测试APP`
-
-- [ ]  `CPU`实时图。
-  - [x]  `CPU`数据接口
-  - [x]  `UI` 
-- [ ]  `GPU`实时图。
-  - [x]  `GPU`数据接口
-  - [x]  `UI`
-- [ ]  `Memory` 实时图。
-  - [ ]  `Memory`实时接口
-  - [x]  `UI`
-- [ ]  检测的`App`列表
-  - [ ]  `AppList`接口
-  - [ ]   `UI`
-- [ ] 其他(想起一个补充一个).....
+- Client
+  - [x] deviceList
+  - [x] appList
+  - [x] launchApp
+  - [x] cpu
+  - [x] gpu
+  - [ ] 内存
+  - [ ] network
+  - [ ] 电池
+- Learn
+  - [ ] swiftUI 关键字(@state @ObservedObject 等)底层、对于更新UI的性能影响
+  - [ ] 类与结构体对于UI更新的影响
+- Bug
+  - [ ] 在调整基准线的时候主线程会跑满
 
 ### Chat
 
