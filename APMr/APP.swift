@@ -12,7 +12,6 @@ struct APP: App {
     var body: some Scene {
         WindowGroup {
             HomepageContentView()
-                .frame(minWidth: 800)
         }
     }
 }

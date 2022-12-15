@@ -63,7 +63,7 @@ enum IInstrumentsSysmontapArgs: IInstrumentRequestArgsProtocol {
                 "ur": 1000,
                 "sampleInterval": 1000000000,
                 "procAttrs": [
-                    "memVirtualSize", "cpuUsage", "ctxSwitch", "intWakeups", "physFootprint", "memResidentSize", "memAnon", "pid", "name"
+                    "cpuUsage", "ctxSwitch", "intWakeups", "physFootprint", "memVirtualSize", "memResidentSize", "memAnon", "pid", "name"
                 ],
                 "sysAttrs": [
                     "vmExtPageCount", "vmFreeCount", "vmPurgeableCount", "vmSpeculativeCount", "physMemSize"

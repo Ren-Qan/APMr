@@ -9,18 +9,29 @@
 ### Features
 
 - Client
-  - [x] deviceList
-  - [x] appList
-  - [x] launchApp
-  - [x] cpu
-  - [x] gpu
-  - [ ] 内存
-  - [ ] network
-  - [ ] 电池
+
+  - UI
+
+    - [ ] homePage (doing)
+
+  - Service
+
+    - [x] deviceList
+
+    - [x] appList
+    - [x] launchApp
+    - [x] cpu
+    - [x] gpu 
+    - [ ] 内存
+    - [ ] network
+    - [ ] 电池
+
 - Learn
   - [ ] swiftUI 关键字(@state @ObservedObject 等)底层、对于更新UI的性能影响
   - [ ] 类与结构体对于UI更新的影响
+  
 - Bug
+  
   - [ ] 在调整基准线的时候主线程会跑满
 
 ### Chat

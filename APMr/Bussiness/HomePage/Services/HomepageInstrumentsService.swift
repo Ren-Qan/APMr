@@ -9,21 +9,22 @@ import Cocoa
 import Combine
 
 struct HomepageChartModel: Identifiable {
-    var id: String { serviceName.rawValue }
-    var items: [LandMarkItem] = []
-    
+    var id: String { title }
     var title: String
-    var serviceName: IInstrumentsServiceName
+    
+    
 }
 
 class HomepageInstrumentsService: NSObject, ObservableObject {    
-    @Published public var sysmontap = HomepageChartModel(title: "Sysmontap" ,serviceName: .sysmontap)
+    @Published public var cpu = HomepageChartModel(title: "CPU")
+        
+    @Published public var gpu = HomepageChartModel(title: "GPU")
     
-    @Published public var opengl = HomepageChartModel(title: "Opengl" ,serviceName: .opengl)
+    @Published public var memory = HomepageChartModel(title: "Memory")
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
-        group.config(types: [.sysmontap, .opengl, .processcontrol, .gpu])
+        group.config(types: [.sysmontap, .opengl, .processcontrol])
         group.delegate = self
         return group
     }()
@@ -57,6 +58,10 @@ extension HomepageInstrumentsService {
     public func autoRequest() {
         serviceGroup.autoRequest(0.25)
     }
+    
+    public func stopService() {
+        serviceGroup.stop()
+    }
 }
 
 // MARK: - Privce -
@@ -68,37 +73,11 @@ private extension HomepageInstrumentsService {
 // MARK: - IInstrumentsServiceGroupDelegate -
 extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) {
-        guard selectPid != 0 else {
-            return
-        }
-        
-        let pid = Int64(selectPid)
-        
-        let item = processInfo.Processes.first { value in
-           return value.key == pid
-        }
-        
-        if let item = item,
-           let arr = item.value as? [Any],
-           let y = arr[1] as? CGFloat {
-            let x = sysmontap.items.count
-            var landmark = LandMarkItem()
-            landmark.x = x
-            landmark.y = y
-            sysmontap.items.append(landmark)
-        }
+
     }
     
     func opengl(info: IInstrumentsOpenglInfo) {
-        guard selectPid != 0, info.Allocsystemmemory > 0 else {
-            return
-        }
-        
-        let x = opengl.items.count
-        var landmark = LandMarkItem()
-        landmark.x = x
-        landmark.y = CGFloat(info.RendererUtilization + info.TilerUtilization + info.DeviceUtilization) / 3
-        opengl.items.append(landmark)
+
     }
     
     func launch(pid: UInt32) {
@@ -111,9 +90,7 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
         
         if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
             opengl.register(.startSampling)
-        }
-        
-        
+        }        
     }
 }
 

@@ -7,85 +7,85 @@
 
 import SwiftUI
 
+struct ID: Identifiable {
+    var id: Int { item }
+    var item: Int
+}
+
 struct HomepageContentView: View {
     @ObservedObject private var deviceService = HomepageDeviceService()
     
     @ObservedObject private var instrumentService = HomepageInstrumentsService()
+        
+    @State var isShow = false
+    
+    var items: [ID] = {
+        var items = [ID]()
+        (0 ..< 20).forEach { i in
+            items.append(.init(item: i))
+        }
+        return items
+    }()
     
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .center) {
-                Spacer(minLength: 10)
-                selectDevice
-                Spacer(minLength: 10)
-                selelctApp
-                
-                Spacer(minLength: 20)
-                Text(instrumentService.sysmontap.title)
-                CoordinateChartView(
-                    items: instrumentService.sysmontap.items
-                )
-                .background {
-                    Color.white
-                }
-                Spacer(minLength: 10)
-                
-                Text(instrumentService.opengl.title)
-                CoordinateChartView(
-                    items: instrumentService.opengl.items
-                )
-                .background {
-                    Color.white
-                }
+            LazyVStack(alignment: .center, spacing: 10) {
+                PerformanceCoordinateView()
+                    .frame(height: 190)
+                    .background {
+                        Color.white
+                    }
             }
         }
-
         .onAppear {
             deviceService.refreshDeviceList()
         }
-    }
-    
-    
-   private var selectDevice: some View {
-        HStack {
-            Menu(deviceService.selectDevice?.deviceName ?? "请选择设备") {
-                ForEach(deviceService.deviceList) { device in
-                    Button("\(device.type)" + " : " + device.deviceName) {
-                        deviceService.selectDevice = device
-                        deviceService.refreshApplist()
-                        if let iDevice = IDevice(device) {
-                            instrumentService.start(iDevice)
+        .navigationTitle("")
+        .frame(minWidth: 800)
+        .frame(minHeight: 250)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                MenuButton("asdasdasd") {
+                    ForEach(items) { id in
+                        Button("\(id.item)") {
+                            print(id.item)
                         }
                     }
                 }
             }
-            .frame(width: 100)
             
-            Button("RefreshDevice") {
-                deviceService.refreshDeviceList()
-            }
-        }
-        .offset(x: 20)
-    }
-    
-    private var selelctApp: some View {
-        HStack {
-            Menu(deviceService.selectApp?.name ?? "请选择APP") {
-                ForEach(deviceService.appList) { app in
-                    Button(app.name) {
-                        deviceService.selectApp = app
+            ToolbarItem(placement: .navigation) {
+//                Image(systemName: "wifi.circle")
+//                Image(systemName: "cable.connector")
+
+                Meuns {
+                    HStack {
+                        Text("乾")
+                        Image(systemName: "cable.connector")
+                        Spacer()
+                        Image(systemName: "chevron.down")
                     }
+                    .padding(.leading, 10)
+                    .padding(.trailing, 8)
+                    .frame(width: 150)
+                    .frame(height: 35)
+                } popContent: {
+
+                    
+  
+                
+                    
                 }
+                .background {
+                    Color
+                        .white
+                        .opacity(0.9)
+                        .frame(height: 35)
+                        .cornerRadius(4)
+                }
+                
             }
-            .frame(width: 100)
             
-            Button(deviceService.selectApp?.name ?? "selelct App") {
-                if let app = deviceService.selectApp {
-                    instrumentService.launch(app: app)
-                }
-                instrumentService.autoRequest()
-            }
         }
-        .offset(x: 20)
     }
 }
