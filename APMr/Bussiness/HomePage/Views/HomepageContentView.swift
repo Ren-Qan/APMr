@@ -21,7 +21,7 @@ struct HomepageContentView: View {
     
     var items: [ID] = {
         var items = [ID]()
-        (0 ..< 20).forEach { i in
+        (0 ..< 200).forEach { i in
             items.append(.init(item: i))
         }
         return items
@@ -32,9 +32,6 @@ struct HomepageContentView: View {
             LazyVStack(alignment: .center, spacing: 10) {
                 PerformanceCoordinateView()
                     .frame(height: 190)
-                    .background {
-                        Color.white
-                    }
             }
         }
         .onAppear {
@@ -43,49 +40,5 @@ struct HomepageContentView: View {
         .navigationTitle("")
         .frame(minWidth: 800)
         .frame(minHeight: 250)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                MenuButton("asdasdasd") {
-                    ForEach(items) { id in
-                        Button("\(id.item)") {
-                            print(id.item)
-                        }
-                    }
-                }
-            }
-            
-            ToolbarItem(placement: .navigation) {
-//                Image(systemName: "wifi.circle")
-//                Image(systemName: "cable.connector")
-
-                Meuns {
-                    HStack {
-                        Text("乾")
-                        Image(systemName: "cable.connector")
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                    }
-                    .padding(.leading, 10)
-                    .padding(.trailing, 8)
-                    .frame(width: 150)
-                    .frame(height: 35)
-                } popContent: {
-
-                    
-  
-                
-                    
-                }
-                .background {
-                    Color
-                        .white
-                        .opacity(0.9)
-                        .frame(height: 35)
-                        .cornerRadius(4)
-                }
-                
-            }
-            
-        }
     }
 }

@@ -46,7 +46,7 @@
 		C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
-		C7C359CF294AC84A009ED34D /* Meuns.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C359CE294AC84A009ED34D /* Meuns.swift */; };
+		C7A4CE24294C36A600213592 /* HorizontalScrollChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A4CE23294C36A600213592 /* HorizontalScrollChart.swift */; };
 		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
 		E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */; };
 /* End PBXBuildFile section */
@@ -128,7 +128,7 @@
 		C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmotapModels.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
-		C7C359CE294AC84A009ED34D /* Meuns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meuns.swift; sourceTree = "<group>"; };
+		C7A4CE23294C36A600213592 /* HorizontalScrollChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalScrollChart.swift; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
 		CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +170,7 @@
 		C7150E6D293C736500C2B380 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				C7A4CE23294C36A600213592 /* HorizontalScrollChart.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -185,7 +186,6 @@
 		C7150E71293C902800C2B380 /* ComponentViews */ = {
 			isa = PBXGroup;
 			children = (
-				C7C359CD294AC823009ED34D /* Button */,
 				C7150E6D293C736500C2B380 /* Charts */,
 			);
 			path = ComponentViews;
@@ -452,14 +452,6 @@
 			path = GlobalServices;
 			sourceTree = "<group>";
 		};
-		C7C359CD294AC823009ED34D /* Button */ = {
-			isa = PBXGroup;
-			children = (
-				C7C359CE294AC84A009ED34D /* Meuns.swift */,
-			);
-			path = Button;
-			sourceTree = "<group>";
-		};
 		CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -578,7 +570,7 @@
 				C73D6F1D294991CC0027FB6E /* PerformanceCoordinateView.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
-				C7C359CF294AC84A009ED34D /* Meuns.swift in Sources */,
+				C7A4CE24294C36A600213592 /* HorizontalScrollChart.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,

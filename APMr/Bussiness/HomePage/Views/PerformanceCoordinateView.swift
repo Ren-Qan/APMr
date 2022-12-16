@@ -32,48 +32,38 @@ struct PerformanceCoordinateView: View {
                 datas.append(item)
             }
             
-            GeometryReader { rootProxy in
-                ScrollView(.horizontal) {
-                    Chart {
-                        ForEach(datas) { item in
-                            BarMark(x: .value("x", item.x),
-                                    y: .value("y", Int(item.y)),
-                                    width: .init(floatLiteral: lineWidth))
+            HorizontalScrollChart(chartDatas: $datas) { data in
+                LineMark(x: .value("x", data.x),
+                         y: .value("y", Int(data.y * 10)))
+                .foregroundStyle(.orange)
+                .interpolationMethod(.cardinal)
+            }
+            .chartYScale(domain: 0 ... 1000)
+            .chartXAxis {
+                AxisMarks(values: .automatic(desiredCount: datas.count + 10)) { value in
+                    if let x = value.as(Int.self) {
+                        if x % 5 == 0 {
+                            AxisTick(stroke: .init(lineWidth: 1))
+                                .foregroundStyle(.gray)
+                            AxisValueLabel() {
+                                Text("\(x)s")
+                            }
+                            AxisGridLine(stroke: .init(lineWidth: 1))
+                                .foregroundStyle(.gray)
+                        } else {
+                            AxisGridLine(stroke: .init(lineWidth: 1))
+                                .foregroundStyle(.gray.opacity(0.25))
                         }
+
                     }
-                    .chartXScale(domain: 0 ... xScale(rootProxy.size.width - 10))
-                    .chartYScale(domain: 0 ... 100)
-                    .frame(width: chartWidth(rootProxy.size.width - 10))
-                    .offset(x: 10)
                 }
-                
             }
-            
-            Slider(value: $padding,
-                   in: 22 ... 100)
-            {
-                Text("Padding:\(padding)")
+            .chartYAxis {
+                AxisMarks(values: .automatic(desiredCount: 5)) { value in
+                    AxisGridLine(stroke: .init(lineWidth: 1))
+                        .foregroundStyle(.gray.opacity(0.25))
+                }
             }
-            .padding(.leading, 10)
-            .padding(.trailing, 10)
-            
-            Slider(value: $lineWidth,
-                   in: 3 ... 10)
-            {
-                Text("LineWidth:\(lineWidth)")
-            }
-            .padding(.leading, 10)
-            .padding(.trailing, 10)
         }
-    }
-    
-    private func chartWidth(_ rootWidth: CGFloat) -> CGFloat {
-        let dataWidth = (padding + lineWidth) * CGFloat(xScale(rootWidth))
-        return dataWidth
-    }
-    
-    private func xScale(_ rootWidth: CGFloat) -> Int {
-        let screenXScale = Int(rootWidth / (padding + lineWidth))
-        return screenXScale > datas.count ? screenXScale : datas.count
     }
 }
