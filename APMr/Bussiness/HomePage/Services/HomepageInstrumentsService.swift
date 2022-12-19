@@ -8,19 +8,34 @@
 import Cocoa
 import Combine
 
-struct HomepageChartModel: Identifiable {
-    var id: String { title }
+struct HomepageBarCharItem: PerformanceCoordinateViewMarkProtocol {
+    var x: Int
+    
+    var y: Int
+    
+    var tips: String
+    
+    var id: Int {
+        return x
+    }
+}
+
+struct HomepageBarChartModel: Identifiable {
     var title: String
+    var datas: [HomepageBarCharItem] = []
     
-    
+    var id: String { title }
 }
 
 class HomepageInstrumentsService: NSObject, ObservableObject {    
-    @Published public var cpu = HomepageChartModel(title: "CPU")
-        
-    @Published public var gpu = HomepageChartModel(title: "GPU")
+    @Published public var cpu = HomepageBarChartModel(title: "CPU")
     
-    @Published public var memory = HomepageChartModel(title: "Memory")
+    @Published public var gpu = HomepageBarChartModel(title: "GPU")
+    
+    @Published public var isRunningService = false
+    @Published public var isLinkingService = false
+    
+    //    @Published public var memory = HomepageChartModel(title: "Memory")
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
@@ -34,20 +49,22 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
 
 // MARK: - Public API -
 extension HomepageInstrumentsService {
-   public func launch(app: IInstproxyAppInfo) {
+    public func launch(app: IInstproxyAppInfo) {
         guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
             return
         }
-        
+        isLinkingService = true
         processControl.send(.launch(bundleId: app.bundleId))
     }
 }
 
 // MARK: - Public Service Setup Functions -
 extension HomepageInstrumentsService {
-    public func start(_ device: IDevice) {
+    public func start(_ device: DeviceItem) {
         DispatchQueue.global().async {
-            self.serviceGroup.start(device)
+            if let iDevice = IDevice(device) {
+                self.serviceGroup.start(iDevice)
+            }
         }
     }
     
@@ -61,23 +78,33 @@ extension HomepageInstrumentsService {
     
     public func stopService() {
         serviceGroup.stop()
+        isLinkingService = false
+        isRunningService = false
     }
 }
 
 // MARK: - Privce -
 
-private extension HomepageInstrumentsService {
-    
+extension HomepageInstrumentsService {
+    private func resetData() {
+        cpu.datas = []
+        gpu.datas = []
+    }
 }
 
 // MARK: - IInstrumentsServiceGroupDelegate -
 extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
+    func receiveNil() {
+        stopService()
+        isLinkingService = false
+    }
+    
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) {
-
+        
     }
     
     func opengl(info: IInstrumentsOpenglInfo) {
-
+        
     }
     
     func launch(pid: UInt32) {
@@ -90,7 +117,11 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
         
         if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
             opengl.register(.startSampling)
-        }        
+        }
+        
+        resetData()
+        isRunningService = true
+        isLinkingService = false
     }
 }
 

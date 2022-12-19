@@ -8,62 +8,79 @@
 import SwiftUI
 import Charts
 
-struct LandMarkItem: Identifiable {
-    var id: Int { x }
-    
-    var x: Int = 0
-    
-    var y: CGFloat = 0
+protocol PerformanceCoordinateViewMarkProtocol: Identifiable {
+    var x: Int { get }
+    var y: Int { get }
+    var tips: String { get }
 }
 
-struct PerformanceCoordinateView: View {
-    @State var datas: [LandMarkItem] = []
+struct PerformanceCoordinateView<Mark, Content>: View where Mark: PerformanceCoordinateViewMarkProtocol, Content: ChartContent {
     
-    @State var padding: CGFloat = 22
-    @State var lineWidth: CGFloat = 3
+    public var lineSpace: CGFloat = 25
+    public var xAxisExtraPadding = 10
+    public var maxY = 100
+    
+    var items: [Mark]
+    var content: (Mark, Int) -> Content
+    
+    @State private var selectX = -1
     
     var body: some View {
-        VStack(spacing: 10) {
-            Button("Click") {
-                let x = datas.count
-                var item = LandMarkItem()
-                item.x = x
-                item.y = CGFloat.random(in: 0 ..< 100)
-                datas.append(item)
-            }
-            
-            HorizontalScrollChart(chartDatas: $datas) { data in
-                LineMark(x: .value("x", data.x),
-                         y: .value("y", Int(data.y * 10)))
-                .foregroundStyle(.orange)
-                .interpolationMethod(.cardinal)
-            }
-            .chartYScale(domain: 0 ... 1000)
-            .chartXAxis {
-                AxisMarks(values: .automatic(desiredCount: datas.count + 10)) { value in
-                    if let x = value.as(Int.self) {
-                        if x % 5 == 0 {
-                            AxisTick(stroke: .init(lineWidth: 1))
-                                .foregroundStyle(.gray)
-                            AxisValueLabel() {
-                                Text("\(x)s")
-                            }
-                            AxisGridLine(stroke: .init(lineWidth: 1))
-                                .foregroundStyle(.gray)
-                        } else {
-                            AxisGridLine(stroke: .init(lineWidth: 1))
-                                .foregroundStyle(.gray.opacity(0.25))
-                        }
-
+        GeometryReader { rootProxy in
+            ScrollView(.horizontal) {
+                Chart {
+                    ForEach(items) { item in                        
+                        content(item, selectX)
                     }
                 }
-            }
-            .chartYAxis {
-                AxisMarks(values: .automatic(desiredCount: 5)) { value in
-                    AxisGridLine(stroke: .init(lineWidth: 1))
-                        .foregroundStyle(.gray.opacity(0.25))
+                .padding(.leading, 10)
+                .padding(.top, 10)
+                .chartYScale(domain: 0 ... maxY)
+                .chartXScale(domain: 0 ... xScale(rootProxy.size.width))
+                .frame(width: chartWidth(rootProxy.size.width))
+                .chartLegend(position: .top, alignment: .center)
+                .chartLegend(.visible)
+                .chartXAxis {
+                    AxisMarks(values: .automatic(desiredCount: xScale(rootProxy.size.width))) { value in
+                        if let x = value.as(Int.self) {
+                            if x % 5 == 0 {
+                                AxisTick(stroke: .init(lineWidth: 1))
+                                    .foregroundStyle(.gray)
+                                AxisValueLabel() {
+                                    Text("\(x)")
+                                }
+                            }
+                        }
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartOverlay { proxy in
+                    GeometryReader { g in
+                        Rectangle().fill(.clear).contentShape(Rectangle())
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onChanged { value in
+                                        let x = value.location.x - g[proxy.plotAreaFrame].origin.x
+                                        if let index: Int = proxy.value(atX: x), index < items.count {
+                                            selectX = index
+                                        }
+                                    }
+                            )
+                    }
+
                 }
             }
         }
+    }
+    
+    private func chartWidth(_ rootWidth: CGFloat) -> CGFloat {
+        return CGFloat(xScale(rootWidth)) * lineSpace
+    }
+    
+    private func xScale(_ width: CGFloat) -> Int {
+        let widthCount = Int(width / lineSpace) + 1
+        return (widthCount > items.count ? widthCount : items.count) + xAxisExtraPadding
     }
 }

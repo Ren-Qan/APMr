@@ -8,6 +8,8 @@
 import Cocoa
 
 protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
+    func receiveNil()
+    
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo)
     
     func opengl(info: IInstrumentsOpenglInfo)
@@ -89,6 +91,9 @@ extension IInstrumentsServiceGroup {
             guard let response = response,
                   let name = IInstrumentsServiceName(channel: response.channel),
                   let service = self?.serviceDic[name] else {
+                if response == nil {
+                    self?.delegate?.receiveNil()
+                }
                 return
             }
             

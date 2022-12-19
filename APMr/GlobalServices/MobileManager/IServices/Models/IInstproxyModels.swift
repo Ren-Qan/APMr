@@ -9,12 +9,19 @@ import Cocoa
 import ObjectMapper
 
 struct IInstproxyAppInfo: Mappable, Identifiable {
+    enum AppType: String {
+        case other
+        case user = "User"
+        case system = "System"
+    }
+    
     var id: String { bundleId }
     
     var name: String = ""
     var bundleId: String = ""
     var container: String?
     var signerIdentity: String?
+    var applicationType: AppType = .other
     
     var isDeveloping: Bool {
         guard let signer = signerIdentity else {
@@ -39,5 +46,6 @@ struct IInstproxyAppInfo: Mappable, Identifiable {
         bundleId <- map["CFBundleIdentifier"]
         container <- map["Container"]
         signerIdentity <- map["SignerIdentity"]
+        applicationType <- map["ApplicationType"]
     }
 }

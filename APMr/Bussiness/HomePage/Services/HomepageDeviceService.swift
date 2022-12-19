@@ -10,12 +10,10 @@ import Combine
 
 class HomepageDeviceService: NSObject, ObservableObject {    
     @Published public var deviceList: [DeviceItem] = []
+            
+    @Published public var userApplist: [IInstproxyAppInfo] = []
+    @Published public var systemApplist: [IInstproxyAppInfo] = []
     
-    @Published public var selectDevice: DeviceItem? = nil
-    
-    @Published public var appList: [IInstproxyAppInfo] = []
-    
-    @Published public var selectApp: IInstproxyAppInfo? = nil
     
     override init() {
         super.init()
@@ -50,16 +48,26 @@ extension HomepageDeviceService {
         }
     }
     
-    func refreshApplist() {
+    func refreshApplist(_ device: DeviceItem) {
         DispatchQueue.global().async {
-            guard let device = self.selectDevice else {
-                return
-            }
-            
             if let iDevice = IDevice(device),
                let lockdown = ILockdown(iDevice),
                let instproxy = IInstproxy(iDevice, lockdown) {
-                self.appList = instproxy.applist
+                let applist = instproxy.applist
+                
+                var user = [IInstproxyAppInfo]()
+                var system = [IInstproxyAppInfo]()
+                
+                applist.forEach { app in
+                    if app.applicationType == .user {
+                        user.append(app)
+                    } else if app.applicationType == .system {
+                        system.append(app)
+                    }
+                }
+                
+                self.userApplist = user
+                self.systemApplist = system
             }
         }
     }
