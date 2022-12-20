@@ -45,6 +45,8 @@
 		C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C7483BE529373ADC00F32BE0 /* MDUtil.m */; };
 		C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */; };
 		C76E7B5829517CC3004F009B /* HomepageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B5729517CC3004F009B /* HomepageModels.swift */; };
+		C76E7B5D2951BBB3004F009B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C76E7B5C2951BBB3004F009B /* Colors.xcassets */; };
+		C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B602951BC70004F009B /* Color+Extensions.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
 		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
@@ -127,6 +129,8 @@
 		C7483BE829373ADC00F32BE0 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		C75750F6293DA1980074E707 /* IInstrumentsSysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsSysmotapModels.swift; sourceTree = "<group>"; };
 		C76E7B5729517CC3004F009B /* HomepageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageModels.swift; sourceTree = "<group>"; };
+		C76E7B5C2951BBB3004F009B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		C76E7B602951BC70004F009B /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
@@ -227,10 +231,8 @@
 				C7150E71293C902800C2B380 /* ComponentViews */,
 				C780D11129418C2E00EF5633 /* GlobalServices */,
 				C7150E70293C901900C2B380 /* FoundationServices */,
+				C76E7B592951BA36004F009B /* ProjectConfigs */,
 				C7483B9329373A0400F32BE0 /* APP.swift */,
-				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
-				C7483B9C29373A0600F32BE0 /* APMr.entitlements */,
-				C7483B9929373A0600F32BE0 /* Preview Content */,
 			);
 			path = APMr;
 			sourceTree = "<group>";
@@ -408,6 +410,41 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		C76E7B592951BA36004F009B /* ProjectConfigs */ = {
+			isa = PBXGroup;
+			children = (
+				C76E7B5B2951BAA7004F009B /* Assets */,
+				C7483B9929373A0600F32BE0 /* Preview Content */,
+				C76E7B5A2951BA88004F009B /* CodeSignEntilements */,
+			);
+			path = ProjectConfigs;
+			sourceTree = "<group>";
+		};
+		C76E7B5A2951BA88004F009B /* CodeSignEntilements */ = {
+			isa = PBXGroup;
+			children = (
+				C7483B9C29373A0600F32BE0 /* APMr.entitlements */,
+			);
+			path = CodeSignEntilements;
+			sourceTree = "<group>";
+		};
+		C76E7B5B2951BAA7004F009B /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				C76E7B5C2951BBB3004F009B /* Colors.xcassets */,
+				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		C76E7B5E2951BC29004F009B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C76E7B602951BC70004F009B /* Color+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C780D10C29418B4800EF5633 /* Bussiness */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,6 +484,7 @@
 		C780D11129418C2E00EF5633 /* GlobalServices */ = {
 			isa = PBXGroup;
 			children = (
+				C76E7B5E2951BC29004F009B /* Extensions */,
 				C7483BA329373ADC00F32BE0 /* MobileManager */,
 			);
 			path = GlobalServices;
@@ -519,6 +557,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C76E7B5D2951BBB3004F009B /* Colors.xcassets in Resources */,
 				C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */,
 				C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */,
 			);
@@ -567,6 +606,7 @@
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */,
+				C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */,
 				C73D6F1D294991CC0027FB6E /* PerformanceCoordinateView.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
@@ -708,12 +748,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = APMr/APMr.entitlements;
+				CODE_SIGN_ENTITLEMENTS = APMr/ProjectConfigs/CodeSignEntilements/APMr.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"APMr/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"APMr/ProjectConfigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 88JVP7LE4V;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
@@ -743,12 +783,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = APMr/APMr.entitlements;
+				CODE_SIGN_ENTITLEMENTS = APMr/ProjectConfigs/CodeSignEntilements/APMr.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"APMr/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"APMr/ProjectConfigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 88JVP7LE4V;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;

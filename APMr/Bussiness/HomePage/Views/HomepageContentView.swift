@@ -45,9 +45,9 @@ struct HomepageContentView: View {
         .onAppear {
             deviceService.refreshDeviceList()
         }
-        .navigationTitle(navigationTitle)
         .frame(minWidth: 800)
         .frame(minHeight: 250)
+        .navigationTitle(navigationTitle)
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 MenuButton(label: menuButtonLabel(selectDevice)) {
@@ -112,7 +112,7 @@ struct HomepageContentView: View {
             .foregroundStyle(selectIndex == item.x ? .green : .blue)
             .annotation {
                 if selectIndex == item.x {
-                    Text("Selected Index : \(selectIndex)")
+                    Text(item.tips)
                 }
             }
         }
@@ -139,11 +139,15 @@ struct HomepageContentView: View {
                         .padding(.init(top: -1, leading: -5, bottom: -1, trailing: -5))
                 }
                 .padding(.leading, 15)
+                .foregroundColor(.fabulaFore1)
             
             PerformanceCoordinateView(maxY: maxY, items: items) { item, selectIndex in
                 mark(item, selectIndex)
             }
             .frame(height: 180)
+            .background {
+                Color.fabulaBack1
+            }
         }
     }
     
