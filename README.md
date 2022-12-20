@@ -12,7 +12,7 @@
 
   - UI
 
-    - [ ] homepage (doing)
+    - [x] homepage (doing)
 
   - Service
 
@@ -22,14 +22,16 @@
     - [x] launchApp
     - [x] cpu
     - [x] gpu 
-    - [ ] 内存
+    - [x] 内存
     - [ ] network
     - [ ] 电池
-
 - Learn
   - [x] swiftUI 关键字(@state @ObservedObject 等)底层、对于更新UI的性能影响
   - [x] 类与结构体对于UI更新的影响
   
+- Optimize
+  - [ ] 渲染时机优化
+  - [ ] 展示效果优化
 
 ### Chat
 

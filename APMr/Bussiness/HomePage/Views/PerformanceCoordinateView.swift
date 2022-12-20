@@ -35,6 +35,7 @@ struct PerformanceCoordinateView<Mark, Content>: View where Mark: PerformanceCoo
                 }
                 .padding(.leading, 10)
                 .padding(.top, 10)
+                .padding(.bottom, 10)
                 .chartYScale(domain: 0 ... maxY)
                 .chartXScale(domain: 0 ... xScale(rootProxy.size.width))
                 .frame(width: chartWidth(rootProxy.size.width))

@@ -7,35 +7,18 @@
 
 import Cocoa
 import Combine
-
-struct HomepageBarCharItem: PerformanceCoordinateViewMarkProtocol {
-    var x: Int
-    
-    var y: Int
-    
-    var tips: String
-    
-    var id: Int {
-        return x
-    }
-}
-
-struct HomepageBarChartModel: Identifiable {
-    var title: String
-    var datas: [HomepageBarCharItem] = []
-    
-    var id: String { title }
-}
+import LibMobileDevice
 
 class HomepageInstrumentsService: NSObject, ObservableObject {    
-    @Published public var cpu = HomepageBarChartModel(title: "CPU")
+    @Published public var cpu = HomepageBarChartModel(title: "CPU", yMax: 10000)
+    @Published public var gpu = HomepageBarChartModel(title: "GPU", yMax: 10000)
+    @Published public var memory = HomepageLineChartModel(title: "Memory")
     
-    @Published public var gpu = HomepageBarChartModel(title: "GPU")
     
     @Published public var isRunningService = false
     @Published public var isLinkingService = false
+    @Published public var selectPid: UInt32 = 0
     
-    //    @Published public var memory = HomepageChartModel(title: "Memory")
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
@@ -44,27 +27,30 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
         return group
     }()
     
-    private var selectPid: UInt32 = 0
+    private var receiceNilCount = 0
 }
 
 // MARK: - Public API -
 extension HomepageInstrumentsService {
     public func launch(app: IInstproxyAppInfo) {
         guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
+            isLinkingService = false
             return
         }
-        isLinkingService = true
         processControl.send(.launch(bundleId: app.bundleId))
     }
 }
 
 // MARK: - Public Service Setup Functions -
 extension HomepageInstrumentsService {
-    public func start(_ device: DeviceItem) {
+    public func start(_ device: DeviceItem, _ complete: ((Bool, HomepageInstrumentsService) -> Void)? = nil) {
         DispatchQueue.global().async {
+            self.isLinkingService = true
+            var success = false
             if let iDevice = IDevice(device) {
-                self.serviceGroup.start(iDevice)
+                success = self.serviceGroup.start(iDevice)
             }
+            complete?(success, self)
         }
     }
     
@@ -80,6 +66,7 @@ extension HomepageInstrumentsService {
         serviceGroup.stop()
         isLinkingService = false
         isRunningService = false
+        selectPid = 0
     }
 }
 
@@ -94,17 +81,68 @@ extension HomepageInstrumentsService {
 
 // MARK: - IInstrumentsServiceGroupDelegate -
 extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
-    func receiveNil() {
-        stopService()
-        isLinkingService = false
+    func receive(response: DTXReceiveObject?) {
+        if response == nil {
+            receiceNilCount += 1
+        } else {
+            receiceNilCount = 0
+        }
+        
+        if receiceNilCount == 10 {
+            stopService()
+        }
     }
     
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) {
+        guard selectPid != 0 else {
+            return
+        }
         
+        if let info = processInfo.Processes[Int64(selectPid)] as? [Any] {
+            if let cpuUse = info[0] as? CGFloat {
+                let item = HomepageBarCharItem(x: cpu.datas.count,
+                                               y: Int(cpuUse * 100),
+                                               tips: "cpuUse: \(String(format: "%.2f", cpuUse))%")
+                cpu.datas.append(item)
+            }
+            
+            var newMaxY = memory.yMax
+            
+            if let res = info[5] as? Int,
+               let anon = info[6] as? Int {
+                func item(y: Int, tips: String, xKey: String, yKey: String) -> HomepageLineCharItem {
+                    
+                    if y > newMaxY {
+                        newMaxY = y
+                    }
+                    
+                    let x = memory.datas.count / 2
+                    let Item = HomepageLineCharItem(x: x,
+                                                    y: y,
+                                                    tips: tips,
+                                                    xAxisKey: xKey,
+                                                    yAxisKey: yKey)
+                    return Item
+                }
+                
+                let resItem = item(y: res, tips: "memResidentSize:\(res)", xKey: "res_x", yKey: "res_y")
+                let anonItem = item(y: anon, tips: "memAnon:\(anon)", xKey: "anon_x", yKey: "anon_y")
+                memory.yMax = newMaxY
+                memory.datas.append(contentsOf: [resItem, anonItem])
+            }
+        }
     }
     
     func opengl(info: IInstrumentsOpenglInfo) {
+        guard selectPid != 0 else {
+            return
+        }
         
+        let gpuUse = CGFloat(info.DeviceUtilization + info.TilerUtilization + info.RendererUtilization) / 3.0
+        let item = HomepageBarCharItem(x: gpu.datas.count,
+                                       y: Int(gpuUse * 100),
+                                       tips: "gpuUse: \(String(format: "%.2f", gpuUse))%")
+        gpu.datas.append(item)
     }
     
     func launch(pid: UInt32) {

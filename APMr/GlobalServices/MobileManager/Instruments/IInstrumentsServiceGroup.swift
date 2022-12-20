@@ -6,9 +6,10 @@
 //
 
 import Cocoa
+import LibMobileDevice
 
 protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
-    func receiveNil()
+    func receive(response: DTXReceiveObject?)
     
     func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo)
     
@@ -88,12 +89,11 @@ extension IInstrumentsServiceGroup {
     /// 此处的request 相当于从 socket通道拿数据
     func request() {
         instruments.receive { [weak self] response in
+            self?.delegate?.receive(response: response)
+            
             guard let response = response,
                   let name = IInstrumentsServiceName(channel: response.channel),
                   let service = self?.serviceDic[name] else {
-                if response == nil {
-                    self?.delegate?.receiveNil()
-                }
                 return
             }
             
