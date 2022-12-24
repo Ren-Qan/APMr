@@ -30,14 +30,14 @@ struct HomepageContentView: View {
                 barChart(instrumentService.cpu.title,
                          instrumentService.cpu.yMax,
                          instrumentService.cpu.datas)
-                
-                barChart(instrumentService.gpu.title,
-                         instrumentService.gpu.yMax,
-                         instrumentService.gpu.datas)
-                
-                lineChart(instrumentService.memory.title,
-                          Int(CGFloat(instrumentService.memory.yMax) / 0.8),
-                          instrumentService.memory.datas)
+//
+//                barChart(instrumentService.gpu.title,
+//                         instrumentService.gpu.yMax,
+//                         instrumentService.gpu.datas)
+//
+//                lineChart(instrumentService.memory.title,
+//                          Int(CGFloat(instrumentService.memory.yMax) / 0.8),
+//                          instrumentService.memory.datas)
             }
             .padding(.top, 20)
             .padding(.bottom, 20)
@@ -158,7 +158,7 @@ struct HomepageContentView: View {
                 Spacer()
                 Image(systemName: devce.type == .usb ? "cable.connector" : "wifi")
             } else {
-                Text("请选择设备")
+                Text(deviceService.deviceList.count > 0 ? "请选择设备" : "为监测到设备")
             }
         }
     }

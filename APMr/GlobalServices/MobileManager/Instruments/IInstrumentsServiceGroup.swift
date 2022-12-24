@@ -104,7 +104,7 @@ extension IInstrumentsServiceGroup {
     func autoRequest(_ timeInterval: TimeInterval = 0.5) {
         stopAutoRequest()
         
-        timer = Timer(timeInterval: 0.5, repeats: true, block: { [weak self] _ in
+        timer = Timer(timeInterval: timeInterval, repeats: true, block: { [weak self] _ in
             self?.request()
         })
         
@@ -152,10 +152,20 @@ private extension IInstrumentsServiceGroup {
                     self?.delegate?.launch(pid: pid)
                 }
                 service = processControl
+            
             case .gpu:
                 let gpu = IInstrumentsGPU()
                 
                 service = gpu
+            
+            case.networkStatistics:
+                let networkStatic = IInstrumentsNetworkStatistics()
+            
+                service = networkStatic
+            
+            case .networking:
+                let networking = IInstrumentsNetworking()
+                service = networking
         }
         
         if let service = service {

@@ -49,6 +49,8 @@
 		C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B602951BC70004F009B /* Color+Extensions.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
+		C7AC987F2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */; };
+		C7AC98812956EB1D00A6580B /* IInstrumentsNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */; };
 		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
 		E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */; };
 /* End PBXBuildFile section */
@@ -133,6 +135,8 @@
 		C76E7B602951BC70004F009B /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
+		C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworkStatistics.swift; sourceTree = "<group>"; };
+		C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworking.swift; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
 		CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -179,13 +183,6 @@
 			path = FoundationServices;
 			sourceTree = "<group>";
 		};
-		C7150E71293C902800C2B380 /* ComponentViews */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ComponentViews;
-			sourceTree = "<group>";
-		};
 		C73BBB0C2942E25700472A75 /* IServices */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,7 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				C780D10C29418B4800EF5633 /* Bussiness */,
-				C7150E71293C902800C2B380 /* ComponentViews */,
+				C7AC987D2956DF4200A6580B /* ComponentViews */,
 				C780D11129418C2E00EF5633 /* GlobalServices */,
 				C7150E70293C901900C2B380 /* FoundationServices */,
 				C76E7B592951BA36004F009B /* ProjectConfigs */,
@@ -284,6 +281,8 @@
 				C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */,
 				C7483BAD29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift */,
 				C73BBB1929431AD200472A75 /* IInstrumentsProcesscontrol.swift */,
+				C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */,
+				C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */,
 				C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */,
 			);
 			path = Services;
@@ -490,6 +489,13 @@
 			path = GlobalServices;
 			sourceTree = "<group>";
 		};
+		C7AC987D2956DF4200A6580B /* ComponentViews */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ComponentViews;
+			sourceTree = "<group>";
+		};
 		CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -607,11 +613,13 @@
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */,
 				C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */,
+				C7AC987F2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift in Sources */,
 				C73D6F1D294991CC0027FB6E /* PerformanceCoordinateView.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
+				C7AC98812956EB1D00A6580B /* IInstrumentsNetworking.swift in Sources */,
 				C7483BEF29373ADC00F32BE0 /* IInstrumentsDeviceInfo.swift in Sources */,
 				C7483BE929373ADC00F32BE0 /* MobileManager.swift in Sources */,
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
@@ -766,8 +774,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -801,8 +809,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

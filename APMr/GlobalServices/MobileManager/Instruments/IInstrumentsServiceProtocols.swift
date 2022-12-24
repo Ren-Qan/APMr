@@ -24,6 +24,10 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case processcontrol = "com.apple.instruments.server.services.processcontrol"
     
     case gpu = "com.apple.instruments.server.services.gpu"
+    
+    case networkStatistics = "com.apple.xcode.debug-gauge-data-providers.NetworkStatistics"
+    
+    case networking = "com.apple.instruments.server.services.networking"
         
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
