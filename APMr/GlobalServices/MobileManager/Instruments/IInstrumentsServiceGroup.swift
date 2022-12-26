@@ -120,6 +120,19 @@ extension IInstrumentsServiceGroup {
     func client<T : Service>(_ type: IInstrumentsServiceName) -> T? {
         return serviceDic[type] as? T
     }
+    
+    func client<T : Service>(_ block: (T) -> Void) {
+        let client = serviceDic.values.first { service in
+            if let _ = service as? T {
+                return true
+            }
+            return false
+        }
+        
+        if let client = client as? T {
+            block(client)
+        }
+    }
 }
 
 private extension IInstrumentsServiceGroup {
@@ -166,6 +179,10 @@ private extension IInstrumentsServiceGroup {
             case .networking:
                 let networking = IInstrumentsNetworking()
                 service = networking
+            
+            case .engery:
+                let engery = IInstrumentsEngery()
+                service = engery
         }
         
         if let service = service {

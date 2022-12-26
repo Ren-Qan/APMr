@@ -28,6 +28,8 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case networkStatistics = "com.apple.xcode.debug-gauge-data-providers.NetworkStatistics"
     
     case networking = "com.apple.instruments.server.services.networking"
+    
+    case engery = "com.apple.xcode.debug-gauge-data-providers.Energy"
         
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)

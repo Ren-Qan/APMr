@@ -30,7 +30,7 @@ enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
     
     case stop(pid: UInt32)
     
-    case sampleAttributes(pid: UInt32)
+    case sample(pid: UInt32)
     
     var selector: String {
         switch self {
@@ -38,7 +38,7 @@ enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
                 return "startSamplingForPIDs:"
             case .stop(_):
                 return "stopSamplingForPIDs:"
-            case .sampleAttributes(_):
+            case .sample(_):
                 return "sampleAttributes:forPIDs:"
         }
     }
@@ -47,13 +47,13 @@ enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
         switch self {
             case .start(let pid):
                 let arg = DTXArguments()
-                arg.appendUInt32Num(pid)
+                arg.append([pid])
                 return arg
             case .stop(let pid):
                 let arg = DTXArguments()
-                arg.appendUInt32Num(pid)
+                arg.append([pid])
                 return arg
-            case .sampleAttributes(let pid):
+            case .sample(let pid):
                 let arg = DTXArguments()
                 arg.append(["net.bytes",
                             "net.bytes.delta",
@@ -68,7 +68,7 @@ enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
                             "net.tx.bytes.delta",
                             "net.tx.packets",
                             "net.tx.packets.delta"])
-                arg.appendUInt32Num(pid)
+                arg.append([pid])
                 return arg
         }
     }
