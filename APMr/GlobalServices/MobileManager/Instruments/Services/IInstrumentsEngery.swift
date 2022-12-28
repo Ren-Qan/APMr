@@ -26,9 +26,9 @@ extension IInstrumentsEngery: IInstrumentsServiceProtocol {
 
 
 enum IInstrumentsEngeryArgs: IInstrumentRequestArgsProtocol {
-    case start(pid: UInt32)
+    case start(pids: [UInt32])
     
-    case sample(pid: UInt32)
+    case sample(pids: [UInt32])
     
     var selector: String {
         switch self {
@@ -41,14 +41,14 @@ enum IInstrumentsEngeryArgs: IInstrumentRequestArgsProtocol {
     
     var args: DTXArguments? {
         switch self {
-            case .start(let pid):
+            case .start(let pids):
                 let arg = DTXArguments()
-                arg.append([pid])
+                arg.append(pids)
                 return arg
-            case .sample(let pid):
+            case .sample(let pids):
                 let arg = DTXArguments()
                 arg.append(Dictionary<String, Any>())
-                arg.append([pid])
+                arg.append(pids)
                 return arg
         }
     }

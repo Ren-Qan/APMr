@@ -30,7 +30,7 @@ struct HomepageContentView: View {
                 barChart(instrumentService.cpu.title,
                          instrumentService.cpu.yMax,
                          instrumentService.cpu.datas)
-//
+
 //                barChart(instrumentService.gpu.title,
 //                         instrumentService.gpu.yMax,
 //                         instrumentService.gpu.datas)
@@ -105,7 +105,6 @@ struct HomepageContentView: View {
     }
     
     private func barChart<Item>(_ title: String, _ maxY: Int, _ items: [Item]) -> some View where Item: PerformanceCoordinateViewMarkProtocol  {
-                
         return makeChart(title, maxY: maxY, items) { item, selectIndex in
             BarMark(x: .value("x", item.x),
                     y: .value("y", item.y))

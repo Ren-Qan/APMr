@@ -15,6 +15,8 @@ protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
     
     func opengl(info: IInstrumentsOpenglInfo)
     
+    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel])
+    
     func launch(pid: UInt32)
 }
 
@@ -24,6 +26,10 @@ extension IInstrumentsServiceGroupDelegate {
     }
     
     func opengl(info: IInstrumentsOpenglInfo) {
+        
+    }
+    
+    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel]) {
         
     }
     
@@ -173,7 +179,9 @@ private extension IInstrumentsServiceGroup {
             
             case.networkStatistics:
                 let networkStatic = IInstrumentsNetworkStatistics()
-            
+                networkStatic.callback = { [weak self] response in
+                    self?.delegate?.networkStatistics(info: response)
+                }
                 service = networkStatic
             
             case .networking:
