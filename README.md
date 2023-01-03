@@ -21,8 +21,8 @@
     - [x] gpu 
     - [x] 内存
     - [x] network
-    - [ ] 电池
-    
+    - [x] 耗电
+  
 - Learn
   - [x] swiftUI 关键字(@state @ObservedObject 等)底层、对于更新UI的性能影响
   - [x] 类与结构体对于UI更新的影响
