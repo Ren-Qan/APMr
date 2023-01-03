@@ -20,10 +20,121 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject?) {
+        guard let datas = response?.object as? [Any],
+              datas.count == 2,
+              let modelDatas = datas[1] as? [Any],
+              let typeNumber = datas[0] as? Int64,
+              let type = IInstrumentsNetworkingMessageType(rawValue: typeNumber) else {
+            return
+        }
         
+        switch type {
+            case .interfaceDetection:
+                interfaceDetection(datas: modelDatas)
+            case .connectionDetected:
+                if let addData = modelDatas.first as? Data {
+                    if addData.count == 16 {
+                        connectionDetectedV4(datas: modelDatas)
+                    } else if addData.count == 28 {
+                        connectionDetectedV6(datas: modelDatas)
+                    }
+                }
+            case .connectionUpdate:
+                connectionUpdate(datas: modelDatas)
+        }
+    }
+    
+    private func interfaceDetection(datas: [Any]) -> IInstrumentsNetworkingInterfaceDetectionModel? {
+        guard datas.count == 2 else {
+            return nil
+        }
+        var model = IInstrumentsNetworkingInterfaceDetectionModel()
+        model.interfaceIndex = datas[0] as? Int64
+        model.name = datas[1] as? String
+        return model
+    }
+    
+    private func connectionDetectedV4(datas: [Any]) -> IInstrumentsNetworkingConnectionDetectedModelV4? {
+        guard datas.count == 8 else {
+            return nil
+        }
+        
+        var model = IInstrumentsNetworkingConnectionDetectedModelV4()
+        if let local = datas[0] as? Data {
+            model.local = local.withUnsafeBytes { buffer in
+                buffer.load(as: sockaddr_in.self)
+            }
+        }
+        
+        if let remote = datas[1] as? Data {
+            model.remote = remote.withUnsafeBytes { buffer in
+                buffer.load(as: sockaddr_in.self)
+            }
+        }
+        
+        model.interfaceIndex = datas[2] as? Int64
+        model.pid = datas[3] as? Int64
+        model.recvBufferSize = datas[4] as? Int64
+        model.recvBufferUsed = datas[5] as? Int64
+        model.serialNumber = datas[6] as? Int64
+        
+        if let type = datas[7] as? Int64 {
+            model.netProtocol = type == 1 ? .tcp4 : .udp4
+        }
+        
+        return model
+    }
+
+    private func connectionDetectedV6(datas: [Any]) -> IInstrumentsNetworkingConnectionDetectedModelV6? {
+        guard datas.count == 8 else {
+            return nil
+        }
+                
+        var model = IInstrumentsNetworkingConnectionDetectedModelV6()
+        
+        if let local = datas[0] as? Data {
+            model.local = local.withUnsafeBytes { buffer in
+                buffer.load(as: sockaddr_in6.self)
+            }
+        }
+        
+        if let remote = datas[1] as? Data {
+            model.remote = remote.withUnsafeBytes { buffer in
+                buffer.load(as: sockaddr_in6.self)
+            }
+        }
+        
+        model.interfaceIndex = datas[2] as? Int64
+        model.pid = datas[3] as? Int64
+        model.recvBufferSize = datas[4] as? Int64
+        model.recvBufferUsed = datas[5] as? Int64
+        model.serialNumber = datas[6] as? Int64
+        
+        if let type = datas[7] as? Int64 {
+            model.netProtocol = type == 1 ? .tcp6 : .udp6
+        }
+        return model
+    }
+    
+    private func connectionUpdate(datas: [Any]) -> IInstrumentsNetworkingConnectionUpdateModel? {
+        guard datas.count == 11 else {
+            return nil
+        }
+        var model = IInstrumentsNetworkingConnectionUpdateModel()
+        model.rxPackets = datas[0] as? Int64
+        model.rxBytes = datas[1] as? Int64
+        model.txPackets = datas[2] as? Int64
+        model.txBytes = datas[3] as? Int64
+        model.rxDups = datas[4] as? Int64
+        model.rx000 = datas[5] as? Int64
+        model.txRetx = datas[6] as? Int64
+        model.minRTT = datas[7] as? TimeInterval
+        model.avgRTT = datas[8] as? TimeInterval
+        model.connectionSerial = datas[9] as? Int64
+        model.time = datas[10] as? Int64
+        return model
     }
 }
-
 
 enum IInstrumentsNetworkingArgs: IInstrumentRequestArgsProtocol {
     case replayLastRecordedSession

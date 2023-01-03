@@ -157,7 +157,7 @@ struct HomepageContentView: View {
                 Spacer()
                 Image(systemName: devce.type == .usb ? "cable.connector" : "wifi")
             } else {
-                Text(deviceService.deviceList.count > 0 ? "请选择设备" : "为监测到设备")
+                Text(deviceService.deviceList.count > 0 ? "请选择设备" : "未监测到设备")
             }
         }
     }

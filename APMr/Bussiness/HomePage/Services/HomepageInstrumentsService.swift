@@ -20,7 +20,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
-        group.config(types: [.sysmontap, .opengl, .processcontrol, .networkStatistics])
+        group.config(types: [.sysmontap, .opengl, .processcontrol, .networkStatistics, .networking])
         group.delegate = self
         return group
     }()
@@ -181,6 +181,11 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
         if let sysmontap: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
             sysmontap.register(.setConfig)
             sysmontap.register(.start)
+        }
+        
+        if let client: IInstrumentsNetworking = serviceGroup.client(.networking) {
+            client.register(.replayLastRecordedSession)
+            client.register(.startMonitoring)
         }
         
 //        if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
