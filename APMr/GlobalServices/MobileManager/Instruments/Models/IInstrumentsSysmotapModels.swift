@@ -22,6 +22,25 @@ struct IInstrumentsSysmotapProcessesInfo: Mappable {
         EndMachAbsTime  <- map["EndMachAbsTime"]
         type   <- map["Type"]
     }
+    
+    func processInfo(pid: Int64) -> IInstrumentsSysmotapSystemProcessesModel? {
+        guard let datas = Processes[pid] as? [Any],
+              datas.count == 9 else {
+            return nil
+        }
+        
+        var model = IInstrumentsSysmotapSystemProcessesModel()
+        model.cpuUsage = datas[0] as? CGFloat ?? 0
+        model.ctxSwitch = datas[1] as? Int64 ?? 0
+        model.intWakeups = datas[2] as? Int64 ?? 0
+        model.physFootprint = datas[3] as? Int64 ?? 0
+        model.memVirtualSize = datas[4] as? Int64 ?? 0
+        model.memResidentSize = datas[5] as? Int64 ?? 0
+        model.memAnon = datas[6] as? Int64 ?? 0
+        model.pid = datas[7] as? Int64 ?? 0
+        model.name = datas[8] as? String
+        return model
+    }
 }
 
 struct IInstrumentsSysmotapInfo: Mappable {
@@ -82,4 +101,17 @@ struct IInstrumentsSysmotapSystemCPUUsage: Mappable {
         CPU_TotalLoad  <- map["CPU_TotalLoad"]
         CPU_UserLoad   <- map["CPU_UserLoad"]
     }
+}
+
+// MARK: - 与 IInstrumentsSysmontap 请求的参数保持一致
+struct IInstrumentsSysmotapSystemProcessesModel {
+    var cpuUsage: CGFloat = 0
+    var ctxSwitch: Int64 = 0
+    var intWakeups: Int64 = 0
+    var physFootprint: Int64 = 0
+    var memVirtualSize: Int64 = 0
+    var memResidentSize: Int64 = 0
+    var memAnon: Int64 = 0
+    var pid: Int64 = 0
+    var name: String?
 }

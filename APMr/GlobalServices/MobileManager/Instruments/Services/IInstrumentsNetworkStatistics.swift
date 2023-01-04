@@ -23,8 +23,9 @@ extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
     func response(_ response: DTXReceiveObject?) {
         if let response = response?.object as? [Int64 : [String : Any]] {
             var result = [Int64 : IInstrumentsNetworkStatisticsModel]()
+            let mapper = Mapper<IInstrumentsNetworkStatisticsModel>()
             response.forEach { item in
-                if let model = Mapper<IInstrumentsNetworkStatisticsModel>().map(JSON: item.value) {
+                if let model = mapper.map(JSON: item.value) {
                     result[item.key] = model
                 }
             }

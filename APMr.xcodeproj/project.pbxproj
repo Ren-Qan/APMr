@@ -48,6 +48,7 @@
 		C76E7B5829517CC3004F009B /* HomepageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B5729517CC3004F009B /* HomepageModels.swift */; };
 		C76E7B5D2951BBB3004F009B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C76E7B5C2951BBB3004F009B /* Colors.xcassets */; };
 		C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B602951BC70004F009B /* Color+Extensions.swift */; };
+		C7764FDE29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
 		C7AC987F2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */; };
@@ -137,6 +138,7 @@
 		C76E7B5729517CC3004F009B /* HomepageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageModels.swift; sourceTree = "<group>"; };
 		C76E7B5C2951BBB3004F009B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		C76E7B602951BC70004F009B /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsEnergyModels.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
 		C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworkStatistics.swift; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 				C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */,
 				C7AC9894295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift */,
 				C704D00F2963EC600065004D /* IInstrumentsNetworkingModels.swift */,
+				C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				C745D39E294065B400B2068A /* HomepageContentView.swift in Sources */,
 				C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */,
 				C73BBB18294315A600472A75 /* HomepageDeviceService.swift in Sources */,
+				C7764FDE29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift in Sources */,
 				C76E7B5829517CC3004F009B /* HomepageModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

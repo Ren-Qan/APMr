@@ -1,5 +1,5 @@
 //
-//  IInstrumentsEngery.swift
+//  IInstrumentsEnergy.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/26.
@@ -7,25 +7,34 @@
 
 import Foundation
 import LibMobileDevice
+import ObjectMapper
 
-class IInstrumentsEngery: IInstrumentsBaseService {
-    
+class IInstrumentsEnergy: IInstrumentsBaseService {
+    var callback: (([Int64 : IInstrumentsEnergyModel]) -> Void)? = nil
 }
 
-extension IInstrumentsEngery: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsEngeryArgs
+extension IInstrumentsEnergy: IInstrumentsServiceProtocol {
+    typealias Arg = IInstrumentsEnergyArgs
     
     var server: IInstrumentsServiceName {
-        return .engery
+        return .energy
     }
     
     func response(_ response: DTXReceiveObject?) {
-        
+        if let response = response?.object as? [Int64 : [String : Any]] {
+            var result = [Int64 : IInstrumentsEnergyModel]()
+            let mapper = Mapper<IInstrumentsEnergyModel>()
+            response.forEach { item in
+                if let model = mapper.map(JSON: item.value) {
+                    result[item.key] = model
+                }
+            }
+            callback?(result)
+        }
     }
 }
 
-
-enum IInstrumentsEngeryArgs: IInstrumentRequestArgsProtocol {
+enum IInstrumentsEnergyArgs: IInstrumentRequestArgsProtocol {
     case start(pids: [UInt32])
     
     case sample(pids: [UInt32])

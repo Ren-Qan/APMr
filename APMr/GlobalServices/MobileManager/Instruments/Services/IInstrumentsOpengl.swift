@@ -11,7 +11,6 @@ import ObjectMapper
 
 class IInstrumentsOpengl: IInstrumentsBaseService {
     public var callBack: ((IInstrumentsOpenglInfo) -> Void)? = nil
-
 }
 
 extension IInstrumentsOpengl: IInstrumentsServiceProtocol {

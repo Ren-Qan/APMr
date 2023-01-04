@@ -20,7 +20,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
-        group.config(types: [.sysmontap, .opengl, .processcontrol, .networkStatistics, .networking])
+        group.config(types: [.sysmontap, .opengl, .processcontrol, .networkStatistics, .energy])
         group.delegate = self
         return group
     }()
@@ -64,12 +64,12 @@ extension HomepageInstrumentsService {
     }
     
     public func autoRequest() {
-//        serviceGroup.autoRequest(0.25)
         timer?.invalidate()
         timer = nil
         
         timer = Timer(timeInterval: 0.25, repeats: true, block: { [weak self] _ in
-            self?.requestNetData()
+//            self?.requestNetData()
+//            self?.requestEnergyData()
             self?.serviceGroup.request()
         })
         
@@ -95,7 +95,17 @@ extension HomepageInstrumentsService {
         
         if let client: IInstrumentsNetworkStatistics = serviceGroup.client(.networkStatistics) {
             client.send(.sample(pids: [selectPid]))
-//            client.send(.start(pid: selectPid))
+        }
+    }
+    
+    private func requestEnergyData() {
+        guard selectPid != 0 else {
+            return
+        }
+        
+        if let client: IInstrumentsEnergy = serviceGroup.client(.energy) {
+            client.register(.sample(pids: [selectPid]))
+            client.register(.start(pids: [selectPid]))
         }
     }
     
@@ -124,39 +134,44 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
             return
         }
         
-        if let info = processInfo.Processes[Int64(selectPid)] as? [Any] {
-            if let cpuUse = info[0] as? CGFloat {
-                let item = HomepageBarCharItem(x: cpu.datas.count,
-                                               y: Int(cpuUse * 100),
-                                               tips: "cpuUse: \(String(format: "%.2f", cpuUse))%")
-                cpu.datas.append(item)
-            }
-            
-            var newMaxY = memory.yMax
-            
-            if let res = info[5] as? Int,
-               let anon = info[6] as? Int {
-                func item(y: Int, tips: String, xKey: String, yKey: String) -> HomepageLineCharItem {
-                    
-                    if y > newMaxY {
-                        newMaxY = y
-                    }
-                    
-                    let x = memory.datas.count / 2
-                    let Item = HomepageLineCharItem(x: x,
-                                                    y: y,
-                                                    tips: tips,
-                                                    xAxisKey: xKey,
-                                                    yAxisKey: yKey)
-                    return Item
-                }
-                
-                let resItem = item(y: res, tips: "memResidentSize:\(res)", xKey: "res_x", yKey: "res_y")
-                let anonItem = item(y: anon, tips: "memAnon:\(anon)", xKey: "anon_x", yKey: "anon_y")
-                memory.yMax = newMaxY
-                memory.datas.append(contentsOf: [resItem, anonItem])
-            }
+        guard let processModel = processInfo.processInfo(pid: Int64(selectPid)) else {
+            return
         }
+        
+        // MARK: - CPU -
+        let item = HomepageBarCharItem(x: cpu.datas.count,
+                                       y: Int(processModel.cpuUsage * 100),
+                                       tips: "cpuUse: \(String(format: "%.2f", processModel.cpuUsage))%")
+        cpu.datas.append(item)
+        
+        // MARK: - Memory -
+        var newMaxY = memory.yMax
+        func Item(y: Int64, tips: String, xKey: String, yKey: String) -> HomepageLineCharItem {
+            if y > newMaxY {
+                newMaxY = Int(y)
+            }
+            
+            let x = memory.datas.count / 2
+            let Item = HomepageLineCharItem(x: x,
+                                            y: Int(y),
+                                            tips: tips,
+                                            xAxisKey: xKey,
+                                            yAxisKey: yKey)
+            return Item
+        }
+        
+        let resItem = Item(y: processModel.memResidentSize,
+                           tips: "memResidentSize:\(processModel.memResidentSize)",
+                           xKey: "res_x",
+                           yKey: "res_y")
+        
+        let anonItem = Item(y: processModel.memAnon,
+                            tips: "memAnon:\(processModel.memAnon)",
+                            xKey: "anon_x",
+                            yKey: "anon_y")
+        memory.yMax = newMaxY
+        memory.datas.append(contentsOf: [resItem, anonItem])
+        
     }
     
     func opengl(info: IInstrumentsOpenglInfo) {
@@ -175,6 +190,14 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
         
     }
     
+    func deviceNetworking(info: IInstrumentsNetworkingCallback) {
+        
+    }
+    
+    func energy(info: [Int64 : IInstrumentsEnergyModel]) {
+        
+    }
+    
     func launch(pid: UInt32) {
         selectPid = pid
         
@@ -182,27 +205,6 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
             sysmontap.register(.setConfig)
             sysmontap.register(.start)
         }
-        
-        if let client: IInstrumentsNetworking = serviceGroup.client(.networking) {
-            client.register(.replayLastRecordedSession)
-            client.register(.startMonitoring)
-        }
-        
-//        if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
-//            opengl.register(.startSampling)
-//        }
-        
-//        if let network: IInstrumentsNetworking = serviceGroup.client(.networking) {
-//            network.register(.replayLastRecordedSession)
-//            network.register(.startMonitoring)
-//        }
-  
-        
-//        if let engery: IInstrumentsNetworkStatistics = serviceGroup.client(.networkStatistics) {
-//            engery.register(.start(pid: pid))
-//            engery.register(.sample(pid: pid))
-//        }
-        
         
         resetData()
         isRunningService = true

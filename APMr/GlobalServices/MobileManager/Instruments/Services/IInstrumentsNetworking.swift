@@ -8,8 +8,15 @@
 import Foundation
 import LibMobileDevice
 
+enum IInstrumentsNetworkingCallback {
+    case interfaceDetection(IInstrumentsNetworkingInterfaceDetectionModel)
+    case connectionDetectedV4(IInstrumentsNetworkingConnectionDetectedModelV4)
+    case connectionDetectedV6(IInstrumentsNetworkingConnectionDetectedModelV6)
+    case connectionUpdate(IInstrumentsNetworkingConnectionUpdateModel)
+}
+
 class IInstrumentsNetworking: IInstrumentsBaseService {
-    
+    var callback: ((IInstrumentsNetworkingCallback) -> Void)? = nil
 }
 
 extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
@@ -30,17 +37,22 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
         
         switch type {
             case .interfaceDetection:
-                interfaceDetection(datas: modelDatas)
+                if let model = interfaceDetection(datas: modelDatas) {
+                    callback?(.interfaceDetection(model))
+                }
+                
             case .connectionDetected:
                 if let addData = modelDatas.first as? Data {
-                    if addData.count == 16 {
-                        connectionDetectedV4(datas: modelDatas)
-                    } else if addData.count == 28 {
-                        connectionDetectedV6(datas: modelDatas)
+                    if addData.count == 16, let model = connectionDetectedV4(datas: modelDatas) {
+                        callback?(.connectionDetectedV4(model))
+                    } else if addData.count == 28, let model = connectionDetectedV6(datas: modelDatas) {
+                        callback?(.connectionDetectedV6(model))
                     }
                 }
             case .connectionUpdate:
-                connectionUpdate(datas: modelDatas)
+                if let model = connectionUpdate(datas: modelDatas) {
+                    callback?(.connectionUpdate(model))
+                }
         }
     }
     

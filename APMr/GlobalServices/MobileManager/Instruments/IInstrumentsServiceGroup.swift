@@ -17,25 +17,25 @@ protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
     
     func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel])
     
+    func energy(info: [Int64 : IInstrumentsEnergyModel])
+    
+    func deviceNetworking(info: IInstrumentsNetworkingCallback)
+    
     func launch(pid: UInt32)
 }
 
 extension IInstrumentsServiceGroupDelegate {
-    func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) {
-        
-    }
+    func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) { }
     
-    func opengl(info: IInstrumentsOpenglInfo) {
-        
-    }
+    func opengl(info: IInstrumentsOpenglInfo) { }
     
-    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel]) {
-        
-    }
+    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel]) { }
     
-    func launch(pid: UInt32) {
-        
-    }
+    func energy(info: [Int64 : IInstrumentsEnergyModel]) { }
+    
+    func deviceNetworking(info: IInstrumentsNetworkingCallback) { }
+    
+    func launch(pid: UInt32) { }
 }
 
 class IInstrumentsServiceGroup: NSObject {
@@ -186,11 +186,17 @@ private extension IInstrumentsServiceGroup {
             
             case .networking:
                 let networking = IInstrumentsNetworking()
+                networking.callback = { [weak self] response in
+                    self?.delegate?.deviceNetworking(info: response)
+                }
                 service = networking
             
-            case .engery:
-                let engery = IInstrumentsEngery()
-                service = engery
+            case .energy:
+                let energy = IInstrumentsEnergy()
+                energy.callback = { [weak self] response in
+                    self?.delegate?.energy(info: response)
+                }
+                service = energy
         }
         
         if let service = service {
