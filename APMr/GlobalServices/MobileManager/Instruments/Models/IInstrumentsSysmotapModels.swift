@@ -25,10 +25,11 @@ struct IInstrumentsSysmotapProcessesInfo: Mappable {
     
     func processInfo(pid: Int64) -> IInstrumentsSysmotapSystemProcessesModel? {
         guard let datas = Processes[pid] as? [Any],
-              datas.count == 9 else {
+              datas.count == IInstrumentsSysmontap.procAttrs.count else {
             return nil
         }
         
+        // 属性与IInstrumentsSysmontap.procAttrs一一对应
         var model = IInstrumentsSysmotapSystemProcessesModel()
         model.cpuUsage = datas[0] as? CGFloat ?? 0
         model.ctxSwitch = datas[1] as? Int64 ?? 0
@@ -39,6 +40,8 @@ struct IInstrumentsSysmotapProcessesInfo: Mappable {
         model.memAnon = datas[6] as? Int64 ?? 0
         model.pid = datas[7] as? Int64 ?? 0
         model.name = datas[8] as? String
+        model.diskBytesWritten = datas[9] as? Int64 ?? 0
+        model.diskBytesRead = datas[10] as? Int64 ?? 0
         return model
     }
 }
@@ -114,4 +117,6 @@ struct IInstrumentsSysmotapSystemProcessesModel {
     var memAnon: Int64 = 0
     var pid: Int64 = 0
     var name: String?
+    var diskBytesWritten: Int64 = 0
+    var diskBytesRead: Int64 = 0
 }

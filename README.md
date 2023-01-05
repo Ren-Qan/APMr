@@ -9,9 +9,9 @@
 ### Features
 
 - Client
-
   - UI
     - [x] homepage
+    - [ ] homepage2.0 rebuild (Doing) 
 
   - Service
     - [x] deviceList
@@ -22,15 +22,15 @@
     - [x] 内存
     - [x] network
     - [x] 耗电
-    - [ ] I/O
+    - [x] I/O
   
 - Learn
   - [x] swiftUI 关键字(@state @ObservedObject 等)底层、对于更新UI的性能影响
   - [x] 类与结构体对于UI更新的影响
 
 - Optimize
-  - [ ] 渲染时机优化
-  - [ ] 展示效果优化
+  - [ ] 渲染时机优化 (Doing)
+  - [ ] 展示效果优化 (Doing)
 
 ### Chat
 
@@ -39,5 +39,5 @@
 - 为什么想写这个项目：
   - 兴趣使然。
 - 扩展
-  - `instruments`提供的服务挺多，[参考文章](https://github.com/troybowman/dtxmsg/blob/master/slides.pdf)之后可以尝试一下获取其他`服务`的方法。
+  - `instruments`提供的服务挺多，[参考文章](https://github.com/troybowman/dtxmsg/blob/master/slides.pdf)之后可以尝试一下获取其他`服务`的`selector`。
 

@@ -69,7 +69,7 @@ extension HomepageInstrumentsService {
         
         timer = Timer(timeInterval: 0.25, repeats: true, block: { [weak self] _ in
 //            self?.requestNetData()
-//            self?.requestEnergyData()
+            self?.requestEnergyData()
             self?.serviceGroup.request()
         })
         
@@ -78,6 +78,8 @@ extension HomepageInstrumentsService {
     }
     
     public func stopService() {
+        timer?.invalidate()
+        timer = nil
         serviceGroup.stop()
         isLinkingService = false
         isRunningService = false
@@ -104,8 +106,8 @@ extension HomepageInstrumentsService {
         }
         
         if let client: IInstrumentsEnergy = serviceGroup.client(.energy) {
-            client.register(.sample(pids: [selectPid]))
-            client.register(.start(pids: [selectPid]))
+            client.send(.start(pids: [selectPid]))
+            client.send(.sample(pids: [selectPid]))
         }
     }
     

@@ -11,6 +11,28 @@ import ObjectMapper
 
 class IInstrumentsSysmontap: IInstrumentsBaseService  {
     public var callBack: ((IInstrumentsSysmotapInfo, IInstrumentsSysmotapProcessesInfo) -> Void)? = nil
+    
+    public static let procAttrs = [
+        "cpuUsage",
+        "ctxSwitch",
+        "intWakeups",
+        "physFootprint",
+        "memVirtualSize",
+        "memResidentSize",
+        "memAnon",
+        "pid",
+        "name",
+        "diskBytesWritten",
+        "diskBytesRead"
+    ]
+    
+    public static let sysAttrs = [
+        "vmExtPageCount",
+        "vmFreeCount",
+        "vmPurgeableCount",
+        "vmSpeculativeCount",
+        "physMemSize"
+    ]
 }
 
 extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
@@ -62,12 +84,8 @@ enum IInstrumentsSysmontapArgs: IInstrumentRequestArgsProtocol {
                 "cpuUsage": true,
                 "ur": 1000,
                 "sampleInterval": 1000000000,
-                "procAttrs": [
-                    "cpuUsage", "ctxSwitch", "intWakeups", "physFootprint", "memVirtualSize", "memResidentSize", "memAnon", "pid", "name"
-                ],
-                "sysAttrs": [
-                    "vmExtPageCount", "vmFreeCount", "vmPurgeableCount", "vmSpeculativeCount", "physMemSize"
-                ]
+                "procAttrs": IInstrumentsSysmontap.procAttrs,
+                "sysAttrs": IInstrumentsSysmontap.sysAttrs,
             ]
             let args = DTXArguments()
             args.append(config)

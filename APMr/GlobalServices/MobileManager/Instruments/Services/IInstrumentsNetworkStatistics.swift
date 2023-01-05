@@ -34,24 +34,6 @@ extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
     }
 }
 
-extension Dictionary {
-
-    var json: String {
-        let invalidJson = "Not a valid JSON"
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .withoutEscapingSlashes)
-            return String(bytes: jsonData, encoding: String.Encoding.utf8) ?? invalidJson
-        } catch {
-            return invalidJson
-        }
-    }
-
-    func printJson() {
-        print(json)
-    }
-
-}
-
 enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
     case start(pids: [UInt32])
     
