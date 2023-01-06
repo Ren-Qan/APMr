@@ -11,10 +11,7 @@ import SwiftUI
 struct APP: App {
     var body: some Scene {
         WindowGroup {
-            HomepageContentView()
-                .background {
-                    Color.fabulaBack0
-                }
+            AppStructuralLayout()
         }
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C704D0102963EC600065004D /* IInstrumentsNetworkingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C704D00F2963EC600065004D /* IInstrumentsNetworkingModels.swift */; };
 		C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */; };
+		C732FFF329682283006729E2 /* AppStructuralLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C732FFF229682283006729E2 /* AppStructuralLayout.swift */; };
 		C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0A2942E25100472A75 /* ILockdown.swift */; };
 		C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0D2942E84D00472A75 /* IInstproxy.swift */; };
 		C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB102942FBE700472A75 /* IInstproxyModels.swift */; };
@@ -63,6 +64,7 @@
 		ACD59CADAF1357C5444C9979 /* Pods-APMr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.release.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.release.xcconfig"; sourceTree = "<group>"; };
 		C704D00F2963EC600065004D /* IInstrumentsNetworkingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworkingModels.swift; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
+		C732FFF229682283006729E2 /* AppStructuralLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStructuralLayout.swift; sourceTree = "<group>"; };
 		C73BBB0A2942E25100472A75 /* ILockdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdown.swift; sourceTree = "<group>"; };
 		C73BBB0D2942E84D00472A75 /* IInstproxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxy.swift; sourceTree = "<group>"; };
 		C73BBB102942FBE700472A75 /* IInstproxyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxyModels.swift; sourceTree = "<group>"; };
@@ -191,6 +193,14 @@
 			path = FoundationServices;
 			sourceTree = "<group>";
 		};
+		C732FFF12968221D006729E2 /* AppStructuralLayout */ = {
+			isa = PBXGroup;
+			children = (
+				C732FFF229682283006729E2 /* AppStructuralLayout.swift */,
+			);
+			path = AppStructuralLayout;
+			sourceTree = "<group>";
+		};
 		C73BBB0C2942E25700472A75 /* IServices */ = {
 			isa = PBXGroup;
 			children = (
@@ -233,7 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				C780D10C29418B4800EF5633 /* Bussiness */,
-				C7AC987D2956DF4200A6580B /* ComponentViews */,
+				C7AC987D2956DF4200A6580B /* Components */,
 				C780D11129418C2E00EF5633 /* GlobalServices */,
 				C7150E70293C901900C2B380 /* FoundationServices */,
 				C76E7B592951BA36004F009B /* ProjectConfigs */,
@@ -501,11 +511,12 @@
 			path = GlobalServices;
 			sourceTree = "<group>";
 		};
-		C7AC987D2956DF4200A6580B /* ComponentViews */ = {
+		C7AC987D2956DF4200A6580B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C732FFF12968221D006729E2 /* AppStructuralLayout */,
 			);
-			path = ComponentViews;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */ = {
@@ -614,6 +625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */,
+				C732FFF329682283006729E2 /* AppStructuralLayout.swift in Sources */,
 				C73BBB162943154300472A75 /* HomepageInstrumentsService.swift in Sources */,
 				C704D0102963EC600065004D /* IInstrumentsNetworkingModels.swift in Sources */,
 				C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */,
@@ -790,8 +802,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -825,8 +837,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
