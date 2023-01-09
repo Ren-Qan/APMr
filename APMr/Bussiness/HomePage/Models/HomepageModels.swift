@@ -17,6 +17,7 @@ struct HomepageBarChartModel: Identifiable {
     var id: String { title }
 }
 
+
 struct HomepageLineChartModel: Identifiable {
     var title: String
     var yMax: Int = 100
@@ -24,6 +25,7 @@ struct HomepageLineChartModel: Identifiable {
     
     var id: String { title }
 }
+
 
 struct HomepageBarCharItem: PerformanceCoordinateViewMarkProtocol {
     var x: Int
