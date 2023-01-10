@@ -47,16 +47,10 @@ class IInstrumentsServiceGroup: NSObject {
     
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
 
-    private var timer: Timer? = nil
-    
-    deinit {
-        timer?.invalidate()
-        timer = nil
-    }
 }
 
 extension IInstrumentsServiceGroup {
-    func config(types: [IInstrumentsServiceName]) {
+    func config(_ types: [IInstrumentsServiceName]) {
         types.forEach { type in
             config(type)
         }
@@ -88,7 +82,6 @@ extension IInstrumentsServiceGroup {
     }
     
     func stop() {
-        stopAutoRequest()
         instruments.stop()
     }
     
@@ -107,22 +100,6 @@ extension IInstrumentsServiceGroup {
         }
     }
     
-    func autoRequest(_ timeInterval: TimeInterval = 0.5) {
-        stopAutoRequest()
-        
-        timer = Timer(timeInterval: timeInterval, repeats: true, block: { [weak self] _ in
-            self?.request()
-        })
-        
-        timer?.fire()
-        RunLoop.main.add(timer!, forMode: .common)
-    }
-    
-    func stopAutoRequest() {
-        timer?.invalidate()
-        timer = nil
-    }
-        
     func client<T : Service>(_ type: IInstrumentsServiceName) -> T? {
         return serviceDic[type] as? T
     }
@@ -141,8 +118,8 @@ extension IInstrumentsServiceGroup {
     }
 }
 
-private extension IInstrumentsServiceGroup {
-    func addInstance(type: IInstrumentsServiceName) {
+extension IInstrumentsServiceGroup {
+    private func addInstance(type: IInstrumentsServiceName) {
         var service: (any Service)? = nil
         
         switch type {

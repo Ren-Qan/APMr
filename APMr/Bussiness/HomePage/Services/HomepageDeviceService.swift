@@ -6,14 +6,14 @@
 //
 
 import Cocoa
-import Combine
 
 class HomepageDeviceService: NSObject, ObservableObject {    
-    @Published public var deviceList: [DeviceItem] = []
-            
-    @Published public var userApplist: [IInstproxyAppInfo] = []
-    @Published public var systemApplist: [IInstproxyAppInfo] = []
+    @Published var deviceList: [DeviceItem] = []
+    @Published var userApplist: [IInstproxyAppInfo] = []
+    @Published var systemApplist: [IInstproxyAppInfo] = []
     
+    @Published var selectDevice: DeviceItem? = nil
+    @Published var selectApp: IInstproxyAppInfo? = nil
     
     override init() {
         super.init()

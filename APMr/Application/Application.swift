@@ -8,12 +8,13 @@
 import SwiftUI
 
 @main
-struct Application: App {
-    @State var currentState = AppConfigs.siders.first!
-    
+struct Application: App {    
     var body: some Scene {
         WindowGroup {
-            Split(selection: $currentState)
+            HomepageView()
+                .background {
+                    Color.fabulaBack1
+                }
         }
     }
 }

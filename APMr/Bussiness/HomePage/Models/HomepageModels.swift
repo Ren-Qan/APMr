@@ -7,46 +7,17 @@
 
 import Foundation
 
-// MARK: - Chart Models -
-
-struct HomepageBarChartModel: Identifiable {
+// MARK: - 侧边功能按钮模型 -
+struct ApplicationSider: Identifiable, Hashable, Codable {
+    var state: HomepageServiceType
+    
     var title: String
-    var yMax: Int = 100
-    var datas: [HomepageBarCharItem] = []
     
-    var id: String { title }
-}
-
-
-struct HomepageLineChartModel: Identifiable {
-    var title: String
-    var yMax: Int = 100
-    var datas: [HomepageLineCharItem] = []
+    var id: UUID
     
-    var id: String { title }
-}
-
-
-struct HomepageBarCharItem: PerformanceCoordinateViewMarkProtocol {
-    var x: Int
-    var y: Int
-    var tips: String
-
-    var id: Int {
-        return x
-    }
-}
-
-
-struct HomepageLineCharItem: PerformanceCoordinateViewMarkProtocol {
-    var x: Int
-    var y: Int
-    var tips: String
-    
-    var xAxisKey: String = ""
-    var yAxisKey: String = ""
-    
-    var id: Int {
-        return x
+    init(state: HomepageServiceType, title: String) {
+        self.state = state
+        self.title = title
+        self.id = UUID()
     }
 }
