@@ -487,7 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				C754F0DE296D29040053DBA3 /* HomepageView.swift */,
-				C754F0E2296D33360053DBA3 /* PerformanceView.swift */,
+				C7E05EBA2970494B00B94DD9 /* Performance */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -509,6 +509,14 @@
 				C7483BA329373ADC00F32BE0 /* MobileManager */,
 			);
 			path = GlobalServices;
+			sourceTree = "<group>";
+		};
+		C7E05EBA2970494B00B94DD9 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				C754F0E2296D33360053DBA3 /* PerformanceView.swift */,
+			);
+			path = Performance;
 			sourceTree = "<group>";
 		};
 		CE95B25BB2AD54E6AE8BD8A2 /* Frameworks */ = {
@@ -794,8 +802,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -829,8 +837,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

@@ -13,7 +13,7 @@ struct Application: App {
         WindowGroup {
             HomepageView()
                 .background {
-                    Color.fabulaBack1
+                    Color.fabulaBack0
                 }
         }
     }
