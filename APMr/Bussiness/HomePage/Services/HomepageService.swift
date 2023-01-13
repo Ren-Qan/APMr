@@ -26,4 +26,11 @@ class HomepageService: ObservableObject {
     ]
     
     @Published var selectionSider: ApplicationSider = (siders.first)!
+    
+    @Published var selectDevice: DeviceItem? = nil
+    @Published var selectApp: IInstproxyAppInfo? = nil
+}
+
+extension HomepageService {
+
 }

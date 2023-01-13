@@ -17,7 +17,7 @@ struct PerformanceView: View {
     @State var timeRange: CGFloat = 0
     
     var body: some View {
-        VStack {
+        VStack {            
             HStack {
                 Button("启动") {
                     

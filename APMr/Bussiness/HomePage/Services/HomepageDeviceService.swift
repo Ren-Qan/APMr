@@ -11,10 +11,7 @@ class HomepageDeviceService: NSObject, ObservableObject {
     @Published var deviceList: [DeviceItem] = []
     @Published var userApplist: [IInstproxyAppInfo] = []
     @Published var systemApplist: [IInstproxyAppInfo] = []
-    
-    @Published var selectDevice: DeviceItem? = nil
-    @Published var selectApp: IInstproxyAppInfo? = nil
-    
+        
     override init() {
         super.init()
         NotificationCenter.default.addObserver(forName: MobileManager.subscribeChangedNotification, object: nil, queue: nil) { _ in
