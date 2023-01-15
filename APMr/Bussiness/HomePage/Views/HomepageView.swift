@@ -27,6 +27,8 @@ struct HomepageView: View {
             switch service.selectionSider.state {
             case .performance:
                 PerformanceView()
+                        .environmentObject(service)
+                        
             default:
                 Text(service.selectionSider.title + " In Progress")
             }

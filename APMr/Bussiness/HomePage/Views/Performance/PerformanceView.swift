@@ -12,16 +12,29 @@ struct TestItem: Identifiable {
 }
 
 struct PerformanceView: View {
-    let charts = [TestItem(id: "CPU"), TestItem(id: "FPS"), TestItem(id: "Memory"), TestItem(id: "GPU"), TestItem(id: "Network"), TestItem(id: "I/O"), TestItem(id: "Battery")]
     
+    let charts = [TestItem(id: "CPU"), TestItem(id: "FPS"), TestItem(id: "Memory"), TestItem(id: "GPU"), TestItem(id: "Network"), TestItem(id: "I/O"), TestItem(id: "Battery")]
     @State var timeRange: CGFloat = 0
+        
+    
+    @EnvironmentObject var service: HomepageService
     
     var body: some View {
         VStack {            
             HStack {
-                Button("启动") {
-                    
+                Button {
+                    print("Start")
+                } label: {
+                    HStack {
+                        Image(systemName: "play.circle.fill")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                        Text("启动")
+                    }
+                    .frame(minHeight: 25)
                 }
+                .buttonStyle(ButtonCommonStyle(backColor: .blue))
+                
                 
                 Button("选择指标") {
                     
