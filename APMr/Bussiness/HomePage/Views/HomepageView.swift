@@ -13,7 +13,7 @@ struct HomepageView: View {
     @StateObject private var deviceService = HomepageDeviceService()
     
     @StateObject private var instrumentService = HomepageInstrumentsService()
-        
+            
     var body: some View {
         NavigationSplitView {
             List(selection: $service.selectionSider) {
