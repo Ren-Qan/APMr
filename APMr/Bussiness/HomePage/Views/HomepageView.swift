@@ -28,6 +28,7 @@ struct HomepageView: View {
             case .performance:
                 PerformanceView()
                         .environmentObject(service)
+                        .padding(.all, 5)
                         
             default:
                 Text(service.selectionSider.title + " In Progress")
@@ -47,14 +48,14 @@ struct HomepageView: View {
                             }
                         } label: {
                             Label(device.deviceName,
-                                  systemImage: device.type == .usb ? "cable.connector" : "wifi")
+                                  systemImage: device.type == .usb ? "bolt.square" : "wifi.square")
                             .labelStyle(.titleAndIcon)
                         }
                     }
                 } label: {
                     if let device = service.selectDevice {
                         Label(device.deviceName,
-                              systemImage: device.type == .usb ? "cable.connector" : "wifi")
+                              systemImage: device.type == .usb ? "bolt.square" : "wifi.square")
                             .labelStyle(.titleAndIcon)
                     } else {
                         Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
@@ -62,6 +63,7 @@ struct HomepageView: View {
                 }
                 .monospaced()
                 .disabled(deviceService.deviceList.count <= 0)
+                .disabled(service.isMonitoringPerformance)
                 .frame(minWidth: 100)
             }
             
@@ -78,6 +80,7 @@ struct HomepageView: View {
                     Text(service.selectApp?.name ?? "请选择App")
                 }
                 .disabled(deviceService.userApplist.count <= 0)
+                .disabled(service.isMonitoringPerformance)
                 .monospaced()
                 .frame(minWidth: 100)
             }

@@ -19,6 +19,8 @@ enum HomepageServiceType: Codable {
 
 struct TestItem: Identifiable {
     var id: String
+    
+    var chartViewShow: Bool = true
 }
 
 class HomepageService: ObservableObject {
@@ -33,16 +35,38 @@ class HomepageService: ObservableObject {
     
     @Published var selectionSider: ApplicationSider = (siders.first)!
     
-    // MARK: - Tool Bar -
+    // MARK: - Navigation Bar -
     @Published var selectDevice: DeviceItem? = nil
     @Published var selectApp: IInstproxyAppInfo? = nil
     
     // MARK: - Performance -
-    @Published var isMonitoringPreformance = false
+    @Published var isMonitoringPerformance = false
     @Published var isShowPerformanceSummary = false
+
+    var recordDuration = 2 * 60 * 60
+    var samplingTime: TimeInterval = 1
+    var sampleFragmentTime: TimeInterval = 5 * 1 * 60
+    
     
     // MARK: - Test Data -
-    let testDatas = [TestItem(id: "CPU"), TestItem(id: "FPS"), TestItem(id: "Memory"), TestItem(id: "GPU"), TestItem(id: "Network"), TestItem(id: "I/O"), TestItem(id: "Battery")]
+    @Published var testDatas = [TestItem(id: "CPU"),
+                                TestItem(id: "FPS"),
+                                TestItem(id: "Memory"),
+                                TestItem(id: "GPU"),
+                                TestItem(id: "Network"),
+                                TestItem(id: "I/O"),
+                                TestItem(id: "Battery")]
+    
+    func updatePerformanceChartShow(_ item: TestItem) {
+        let id = item.id
+        let index = testDatas.firstIndex { item in
+            return id == item.id
+        }
+        
+        if let index = index {
+            testDatas[index].chartViewShow = item.chartViewShow
+        }
+    }
 }
 
 extension HomepageService {

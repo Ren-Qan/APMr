@@ -16,23 +16,29 @@ struct PerformanceSettingBarView: View {
     
     var body: some View {
         HStack {
+            // MARK: - 启动/停止按钮 -
             Button {
-                service.isMonitoringPreformance.toggle()
+                service.isMonitoringPerformance.toggle()
             } label: {
                 HStack {
-                    Image(systemName: "\(service.isMonitoringPreformance ? "stop" : "play")" + ".circle.fill")
+                    Image(systemName: "\(service.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
                         .resizable()
                         .frame(width: 15, height: 15)
-                    Text("\(service.isMonitoringPreformance ? "停止" : "启动")")
+                    Text("\(service.isMonitoringPerformance ? "停止" : "启动")")
                 }
                 .frame(height: 25)
             }
             .buttonStyle(
                 ButtonCommonStyle(
-                    backColor: service.isMonitoringPreformance ? .red : .blue
+                    backColor: service.isMonitoringPerformance ? .red : .blue,
+                    enable: service.selectDevice != nil && service.selectApp != nil
                 )
             )
+            .disabled(
+                service.selectDevice == nil || service.selectApp == nil
+            )
             
+            // MARK: - 选择指标按钮 -
             Button {
                 isShowPerformanceItem.toggle()
             } label: {
@@ -41,58 +47,57 @@ struct PerformanceSettingBarView: View {
             }
             .buttonStyle(
                 ButtonCommonStyle(
-                    backColor: .fabulaBar1
+                    backColor: .fabulaBar1,
+                    enable: !service.isMonitoringPerformance
                 )
             )
+            .disabled(service.isMonitoringPerformance)
             .popover(isPresented: $isShowPerformanceItem,
                      arrowEdge: .bottom) {
-                VStack(spacing: 8) {
-                    ForEach(service.testDatas) { chart in
-                        Button {
-                            
-                        } label: {
-                            HStack() {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .padding(.trailing, 8)
-                                Text(chart.id)
-                            }
-                            .frame(minHeight: 30)
-                            .frame(minWidth: 150, alignment: .leading)
-                        }
-                        .buttonStyle(
-                            ButtonCommonStyle(
-                                backColor: .fabulaBar2
-                            )
-                        )
-                    }
-                }
-                .padding(.vertical, 5)
-                .background {
-                    Color.fabulaBack2
-                }
+                PerformanceChartShowSettingPopoverView()
+                    .environmentObject(service)
             }
             
             
             Spacer()
             
-            Button("设置") {
+            // MARK: - 设置按钮 -
+            Button {
                 isShowPerformanceSetting.toggle()
+            } label: {
+                Text("设置")
+                    .frame(minHeight: 25)
             }
-            .popover(isPresented: $isShowPerformanceSetting, arrowEdge: .bottom) {
-                Text("Preformace Setting In Progress\n采样周期 单屏长度 录制时长")
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .monospaced()
-                    .frame(minWidth: 200)
-                    .frame(minHeight: 400)
+            .buttonStyle(
+                ButtonCommonStyle(
+                    backColor: .fabulaBar1,
+                    enable: !service.isMonitoringPerformance
+                )
+            )
+            .disabled(service.isMonitoringPerformance)
+            .popover(isPresented: $isShowPerformanceSetting,
+                     arrowEdge: .bottom) {
+                PerformanceTimeRecordSettingView()
+                    .environmentObject(service)
             }
             
-            Button("报告") {
+            
+            // MARK: - 报告按钮 -
+            Button {
                 service.isShowPerformanceSummary.toggle()
+            } label: {
+                Text("报告")
+                    .frame(minHeight: 25)
             }
+            .buttonStyle(
+                ButtonCommonStyle(
+                    backColor: .fabulaBar1
+                )
+            )
             
         }
-        .padding()
+        .padding(.vertical, 5)
+        .padding(.horizontal, 10)
         .background {
             Color.fabulaBack1
         }
@@ -100,5 +105,51 @@ struct PerformanceSettingBarView: View {
         Text("时间片控制 In Progress")
             .monospaced()
         
+    }
+}
+
+struct PerformanceChartShowSettingPopoverView: View {
+    @EnvironmentObject var service: HomepageService
+    
+    var body: some View {
+        VStack(spacing: 1) {
+            ForEach(service.testDatas) { chart in
+                Button {
+                    var item = chart
+                    item.chartViewShow.toggle()
+                    service.updatePerformanceChartShow(item)
+                } label: {
+                    HStack {
+                        Image(systemName: chart.chartViewShow ? "checkmark.square.fill" : "square")
+                            .padding(.trailing, 5)
+                        Text(chart.id)
+                    }
+                    .frame(minHeight: 30)
+                    .frame(minWidth: 150, alignment: .leading)
+                }
+                .buttonStyle(
+                    ButtonCommonStyle(
+                        backColor: .fabulaBar2
+                    )
+                )
+            }
+        }
+        .padding(.vertical, 3)
+
+    }
+}
+
+struct PerformanceTimeRecordSettingView: View {
+    @EnvironmentObject var service: HomepageService
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("采样周期: \(service.samplingTime, specifier: "%g") s")
+            Text("单屏时长: \(service.sampleFragmentTime, specifier: "%g") s")
+            Text("录制时长: \(service.recordDuration, specifier: "%d") s")
+        }
+        .padding()
+        .monospaced()
+        .frame(minWidth: 200)
     }
 }

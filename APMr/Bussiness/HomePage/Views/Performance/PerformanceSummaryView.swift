@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PerformanceSummaryView: View {
     var body: some View {
-        Text("Performance Infomation \n In Progress")
+        Text("Performance Infomation\nIn Progress")
             .monospaced()
     }
 }

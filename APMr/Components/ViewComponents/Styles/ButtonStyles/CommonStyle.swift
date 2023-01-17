@@ -10,7 +10,9 @@ import SwiftUI
 struct ButtonCommonStyle: ButtonStyle {
     var backColor: Color?
     
-    @State var isHoivering = false
+    var enable: Bool = true
+    
+    @State private var isHoivering = false
     
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration
@@ -18,12 +20,22 @@ struct ButtonCommonStyle: ButtonStyle {
             .padding(.horizontal, 10)
             .opacity(configuration.isPressed ? 0.75 : 1)
             .background {
-                if let backColor = backColor {
-                    backColor.opacity(isHoivering ? 0.5 : 1)
+                backColor?.opacity(isHoivering ? 0.5 : 1)
+            }
+            .opacity(enable ? 1 : 0.3)
+            .onHover { isHover in
+                if enable {
+                    isHoivering = isHover
+                }
+                
+                if isHover {
+                    if !enable {
+                        NSCursor.operationNotAllowed.set()
+                    }
+                } else {
+                    NSCursor.arrow.set()
                 }
             }
-            .onHover { isHover in
-                isHoivering = isHover
-            }
+        
     }
 }

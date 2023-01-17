@@ -15,6 +15,8 @@ struct Application: App {
                 .background {
                     Color.fabulaBack0
                 }
+                .frame(minWidth: 1200)
+                .frame(minHeight: 600)
         }
     }
 }

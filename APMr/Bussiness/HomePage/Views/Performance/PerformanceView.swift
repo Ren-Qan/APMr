@@ -15,29 +15,17 @@ struct PerformanceView: View {
         HStack {
             VStack {
                 PerformanceSettingBarView()
-                    .environmentObject(service)
-                
-                GeometryReader { proxy in
-                    ScrollView {
-                        LazyVStack {
-                            ForEach(service.testDatas) { item in
-                                Text(item.id)
-                                    .fontDesign(.monospaced)
-                                    .frame(height: 300)
-                                    .frame(width: proxy.size.width)
-                                    .padding(.bottom, 20)
-                                    .background {
-                                        Color.fabulaBack1
-                                    }
-                            }
-                        }
-                    }
-                }
+                PerformaceChartView()
             }
+            .environmentObject(service)
             
             if service.isShowPerformanceSummary {
                 PerformanceSummaryView()
-                    .frame(minWidth: 300)
+                    .padding(.leading, 5)
+                    .frame(minWidth: 200)
+                    .background {
+                        Color.fabulaBack1
+                    }
             }
         }
         .animation(.default, value: service.isShowPerformanceSummary)

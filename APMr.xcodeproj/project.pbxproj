@@ -57,6 +57,7 @@
 		C7AC98812956EB1D00A6580B /* IInstrumentsNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */; };
 		C7AC988529599BA600A6580B /* IInstrumentsEngery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC988429599BA600A6580B /* IInstrumentsEngery.swift */; };
 		C7AC9895295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift */; };
+		C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5B94329767921009A88D7 /* PerformaceChartView.swift */; };
 		C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */; };
 		C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */; };
 		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
@@ -151,6 +152,7 @@
 		C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworking.swift; sourceTree = "<group>"; };
 		C7AC988429599BA600A6580B /* IInstrumentsEngery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsEngery.swift; sourceTree = "<group>"; };
 		C7AC9894295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworkStatisticsModels.swift; sourceTree = "<group>"; };
+		C7B5B94329767921009A88D7 /* PerformaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartView.swift; sourceTree = "<group>"; };
 		C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSettingBarView.swift; sourceTree = "<group>"; };
 		C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSummaryView.swift; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
@@ -554,6 +556,7 @@
 			isa = PBXGroup;
 			children = (
 				C754F0E2296D33360053DBA3 /* PerformanceView.swift */,
+				C7B5B94329767921009A88D7 /* PerformaceChartView.swift */,
 				C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */,
 				C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */,
 			);
@@ -667,6 +670,7 @@
 			files = (
 				C7483BEE29373ADC00F32BE0 /* IInstrumentsSysmontap.swift in Sources */,
 				C73BBB162943154300472A75 /* HomepageInstrumentsService.swift in Sources */,
+				C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */,
 				C704D0102963EC600065004D /* IInstrumentsNetworkingModels.swift in Sources */,
 				C7483BEB29373ADC00F32BE0 /* IInstrumentsBaseService.swift in Sources */,
 				C73BBB1A29431AD200472A75 /* IInstrumentsProcesscontrol.swift in Sources */,
