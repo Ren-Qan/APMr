@@ -61,7 +61,6 @@ struct HomepageView: View {
                         Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
                     }
                 }
-                .monospaced()
                 .disabled(deviceService.deviceList.count <= 0)
                 .disabled(service.isMonitoringPerformance)
                 .frame(minWidth: 100)
@@ -81,7 +80,6 @@ struct HomepageView: View {
                 }
                 .disabled(deviceService.userApplist.count <= 0)
                 .disabled(service.isMonitoringPerformance)
-                .monospaced()
                 .frame(minWidth: 100)
             }
         }

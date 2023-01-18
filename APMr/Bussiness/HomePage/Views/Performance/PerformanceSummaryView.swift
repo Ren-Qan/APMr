@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct PerformanceSummaryView: View {
+    @EnvironmentObject var service: HomepageService
+    
     var body: some View {
-        Text("Performance Infomation\nIn Progress")
-            .monospaced()
+        VStack {
+            Text("StartX: \(service.summaryRegion.x)\nLen:\(service.summaryRegion.len)")
+                .multilineTextAlignment(.leading)
+        }
     }
 }

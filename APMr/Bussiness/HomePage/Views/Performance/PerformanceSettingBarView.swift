@@ -94,7 +94,6 @@ struct PerformanceSettingBarView: View {
                     backColor: .fabulaBar1
                 )
             )
-            
         }
         .padding(.vertical, 5)
         .padding(.horizontal, 10)
@@ -102,9 +101,7 @@ struct PerformanceSettingBarView: View {
             Color.fabulaBack1
         }
 
-        Text("时间片控制 In Progress")
-            .monospaced()
-        
+        Text("时间片控制 In Progress")        
     }
 }
 
@@ -149,7 +146,6 @@ struct PerformanceTimeRecordSettingView: View {
             Text("录制时长: \(service.recordDuration, specifier: "%d") s")
         }
         .padding()
-        .monospaced()
         .frame(minWidth: 200)
     }
 }

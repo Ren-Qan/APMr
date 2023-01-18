@@ -17,12 +17,6 @@ enum HomepageServiceType: Codable {
     case lag
 }
 
-struct TestItem: Identifiable {
-    var id: String
-    
-    var chartViewShow: Bool = true
-}
-
 class HomepageService: ObservableObject {
     
     // MARK: - Sider -
@@ -41,23 +35,47 @@ class HomepageService: ObservableObject {
     
     // MARK: - Performance -
     @Published var isMonitoringPerformance = false
-    @Published var isShowPerformanceSummary = false
+    @Published var isShowPerformanceSummary = false {
+        didSet {
+            if !isShowPerformanceSummary {
+                summaryRegion.len = 0
+            }
+        }
+    }
 
+    @Published var summaryRegion: (x: Int, len: Int) = (0, 0)
+    
     var recordDuration = 2 * 60 * 60
     var samplingTime: TimeInterval = 1
     var sampleFragmentTime: TimeInterval = 5 * 1 * 60
     
     
-    // MARK: - Test Data -
-    @Published var testDatas = [TestItem(id: "CPU"),
-                                TestItem(id: "FPS"),
-                                TestItem(id: "Memory"),
-                                TestItem(id: "GPU"),
-                                TestItem(id: "Network"),
-                                TestItem(id: "I/O"),
-                                TestItem(id: "Battery")]
     
-    func updatePerformanceChartShow(_ item: TestItem) {
+    // MARK: - Test Data -
+    @Published public var testDatas = [TestItem(id: "CPU"),
+                                       TestItem(id: "FPS"),
+                                       TestItem(id: "Memory"),
+                                       TestItem(id: "GPU"),
+                                       TestItem(id: "Network"),
+                                       TestItem(id: "I/O"),
+                                       TestItem(id: "Battery")]
+    
+    public let testChartItems: [TestChartItem] = {
+        var items = [TestChartItem]()
+        
+        (0 ..< 300).forEach { x in
+            let item = TestChartItem(x: x, y: .random(in: 0 ... 105))
+            items.append(item)
+        }
+        
+        return items
+    }()
+}
+
+// MARK: - Test Func -
+
+extension HomepageService {
+    public func updatePerformanceChartShow(_ item: TestItem) {
         let id = item.id
         let index = testDatas.firstIndex { item in
             return id == item.id
@@ -69,6 +87,15 @@ class HomepageService: ObservableObject {
     }
 }
 
-extension HomepageService {
+struct TestItem: Identifiable {
+    var id: String
+    
+    var chartViewShow: Bool = true
+}
 
+struct TestChartItem: Identifiable {
+    var id = UUID()
+    
+    var x: Int
+    var y: Double
 }
