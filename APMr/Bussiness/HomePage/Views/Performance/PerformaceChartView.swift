@@ -35,7 +35,6 @@ struct PerformaceChartView: View {
                                         LineMark(x: .value("Time", landmark.x),
                                                  y: .value("value", landmark.y)
                                         )
-                                        
                                     }
                                 }
                                 .padding(.bottom, 20)
@@ -136,7 +135,7 @@ struct PerformaceChartView: View {
             _x = 0
         }
         
-        service.summaryRegion = (_x, _len)
+        service.testSummaryRegion = (_x, _len)
     }
 }
 

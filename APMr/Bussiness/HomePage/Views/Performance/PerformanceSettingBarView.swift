@@ -15,93 +15,92 @@ struct PerformanceSettingBarView: View {
     @State private var isShowPerformanceSetting = false
     
     var body: some View {
-        HStack {
-            // MARK: - 启动/停止按钮 -
-            Button {
-                service.isMonitoringPerformance.toggle()
-            } label: {
-                HStack {
-                    Image(systemName: "\(service.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                    Text("\(service.isMonitoringPerformance ? "停止" : "启动")")
+        VStack {
+            HStack {
+                // MARK: - 启动/停止按钮 -
+                Button {
+                    service.isMonitoringPerformance.toggle()
+                } label: {
+                    HStack {
+                        Image(systemName: "\(service.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                        Text("\(service.isMonitoringPerformance ? "停止" : "启动")")
+                    }
+                    .frame(height: 25)
                 }
-                .frame(height: 25)
-            }
-            .buttonStyle(
-                ButtonCommonStyle(
-                    backColor: service.isMonitoringPerformance ? .red : .blue,
-                    enable: service.selectDevice != nil && service.selectApp != nil
+                .buttonStyle(
+                    ButtonCommonStyle(
+                        backColor: service.isMonitoringPerformance ? .red : .blue,
+                        enable: service.selectDevice != nil && service.selectApp != nil
+                    )
                 )
-            )
-            .disabled(
-                service.selectDevice == nil || service.selectApp == nil
-            )
-            
-            // MARK: - 选择指标按钮 -
-            Button {
-                isShowPerformanceItem.toggle()
-            } label: {
-                Text("选择指标")
-                    .frame(minHeight: 25)
-            }
-            .buttonStyle(
-                ButtonCommonStyle(
-                    backColor: .fabulaBar1,
-                    enable: !service.isMonitoringPerformance
+                .disabled(
+                    service.selectDevice == nil || service.selectApp == nil
                 )
-            )
-            .disabled(service.isMonitoringPerformance)
-            .popover(isPresented: $isShowPerformanceItem,
-                     arrowEdge: .bottom) {
-                PerformanceChartShowSettingPopoverView()
-                    .environmentObject(service)
-            }
-            
-            
-            Spacer()
-            
-            // MARK: - 设置按钮 -
-            Button {
-                isShowPerformanceSetting.toggle()
-            } label: {
-                Text("设置")
-                    .frame(minHeight: 25)
-            }
-            .buttonStyle(
-                ButtonCommonStyle(
-                    backColor: .fabulaBar1,
-                    enable: !service.isMonitoringPerformance
+                
+                // MARK: - 选择指标按钮 -
+                Button {
+                    isShowPerformanceItem.toggle()
+                } label: {
+                    Text("选择指标")
+                        .frame(minHeight: 25)
+                }
+                .buttonStyle(
+                    ButtonCommonStyle(
+                        backColor: .fabulaBar1,
+                        enable: !service.isMonitoringPerformance
+                    )
                 )
-            )
-            .disabled(service.isMonitoringPerformance)
-            .popover(isPresented: $isShowPerformanceSetting,
-                     arrowEdge: .bottom) {
-                PerformanceTimeRecordSettingView()
-                    .environmentObject(service)
-            }
-            
-            
-            // MARK: - 报告按钮 -
-            Button {
-                service.isShowPerformanceSummary.toggle()
-            } label: {
-                Text("报告")
-                    .frame(minHeight: 25)
-            }
-            .buttonStyle(
-                ButtonCommonStyle(
-                    backColor: .fabulaBar1
+                .disabled(service.isMonitoringPerformance)
+                .popover(isPresented: $isShowPerformanceItem,
+                         arrowEdge: .bottom) {
+                    PerformanceChartShowSettingPopoverView()
+                }
+                
+                
+                Spacer()
+                
+                // MARK: - 设置按钮 -
+                Button {
+                    isShowPerformanceSetting.toggle()
+                } label: {
+                    Text("设置")
+                        .frame(minHeight: 25)
+                }
+                .buttonStyle(
+                    ButtonCommonStyle(
+                        backColor: .fabulaBar1,
+                        enable: !service.isMonitoringPerformance
+                    )
                 )
-            )
+                .disabled(service.isMonitoringPerformance)
+                .popover(isPresented: $isShowPerformanceSetting,
+                         arrowEdge: .bottom) {
+                    PerformanceTimeRecordSettingView()
+                }
+                
+                
+                // MARK: - 报告按钮 -
+                Button {
+                    service.isShowPerformanceSummary.toggle()
+                } label: {
+                    Text("报告")
+                        .frame(minHeight: 25)
+                }
+                .buttonStyle(
+                    ButtonCommonStyle(
+                        backColor: .fabulaBar1
+                    )
+                )
+            }
+            .padding(.vertical, 5)
+            .padding(.horizontal, 10)
+            .background {
+                Color.fabulaBack2
+            }
         }
-        .padding(.vertical, 5)
-        .padding(.horizontal, 10)
-        .background {
-            Color.fabulaBack1
-        }
-
-        Text("时间片控制 In Progress")        
+        .environmentObject(service)
     }
 }
 
@@ -132,7 +131,7 @@ struct PerformanceChartShowSettingPopoverView: View {
             }
         }
         .padding(.vertical, 3)
-
+        
     }
 }
 
@@ -142,7 +141,6 @@ struct PerformanceTimeRecordSettingView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("采样周期: \(service.samplingTime, specifier: "%g") s")
-            Text("单屏时长: \(service.sampleFragmentTime, specifier: "%g") s")
             Text("录制时长: \(service.recordDuration, specifier: "%d") s")
         }
         .padding()

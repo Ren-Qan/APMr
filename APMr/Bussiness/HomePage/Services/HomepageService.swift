@@ -38,20 +38,19 @@ class HomepageService: ObservableObject {
     @Published var isShowPerformanceSummary = false {
         didSet {
             if !isShowPerformanceSummary {
-                summaryRegion.len = 0
+                testSummaryRegion.len = 0
             }
         }
     }
 
-    @Published var summaryRegion: (x: Int, len: Int) = (0, 0)
-    
-    var recordDuration = 2 * 60 * 60
-    var samplingTime: TimeInterval = 1
-    var sampleFragmentTime: TimeInterval = 5 * 1 * 60
-    
-    
+    public var recordDuration = 2 * 60 * 60
+    public var samplingTime: TimeInterval = 1
+    public var sampleFragmentTime: TimeInterval = 5 * 1 * 60
     
     // MARK: - Test Data -
+    
+    @Published var testSummaryRegion: (x: Int, len: Int) = (0, 0)
+        
     @Published public var testDatas = [TestItem(id: "CPU"),
                                        TestItem(id: "FPS"),
                                        TestItem(id: "Memory"),
@@ -59,6 +58,16 @@ class HomepageService: ObservableObject {
                                        TestItem(id: "Network"),
                                        TestItem(id: "I/O"),
                                        TestItem(id: "Battery")]
+    
+    public var summaryData: [TestChartItem] {
+        if testSummaryRegion.len == 1 {
+            return [testChartItems.randomElement()!]
+        } else {
+            let len = Int.random(in: 0 ..< 300)
+            let x = Int.random(in: 0 ..< (300 - len))
+            return Array(testChartItems[x..<(x + len)])
+        }
+    }
     
     public let testChartItems: [TestChartItem] = {
         var items = [TestChartItem]()
