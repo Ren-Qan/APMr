@@ -28,13 +28,16 @@ struct HomepageView: View {
             case .performance:
                 PerformanceView()
                         .environmentObject(service)
+                        .environmentObject(instrumentService)
                         .padding(.all, 5)
                         
             default:
                 Text(service.selectionSider.title + " In Progress")
             }
         }
-        .navigationTitle(Text(""))
+        .navigationTitle(
+            Text(verbatim: instrumentService.isMonitoringPerformance ? "Pid: \(instrumentService.monitorPid)" : "")
+        )
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Menu {
@@ -62,7 +65,7 @@ struct HomepageView: View {
                     }
                 }
                 .disabled(deviceService.deviceList.count <= 0)
-                .disabled(service.isMonitoringPerformance)
+                .disabled(instrumentService.isMonitoringPerformance)
                 .frame(minWidth: 100)
             }
             
@@ -79,7 +82,7 @@ struct HomepageView: View {
                     Text(service.selectApp?.name ?? "请选择App")
                 }
                 .disabled(deviceService.userApplist.count <= 0)
-                .disabled(service.isMonitoringPerformance)
+                .disabled(instrumentService.isMonitoringPerformance)
                 .frame(minWidth: 100)
             }
         }

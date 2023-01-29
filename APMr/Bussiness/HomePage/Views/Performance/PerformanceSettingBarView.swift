@@ -10,6 +10,7 @@ import SwiftUI
 struct PerformanceSettingBarView: View {
     
     @EnvironmentObject var service: HomepageService
+    @EnvironmentObject var instruments: HomepageInstrumentsService
     
     @State private var isShowPerformanceItem = false
     @State private var isShowPerformanceSetting = false
@@ -19,25 +20,38 @@ struct PerformanceSettingBarView: View {
             HStack {
                 // MARK: - 启动/停止按钮 -
                 Button {
-                    service.isMonitoringPerformance.toggle()
+                    if instruments.isMonitoringPerformance {
+                        instruments.stopService()
+                    } else {
+                        if let device = service.selectDevice,
+                           let app = service.selectApp {
+                            instruments.isLaunchingApp = true
+                            instruments.start(device) { success, server in
+                                if success {
+                                    server.launch(app: app)
+                                    server.autoRequest()
+                                }
+                            }
+                        }
+                    }
                 } label: {
                     HStack {
-                        Image(systemName: "\(service.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
+                        Image(systemName: "\(instruments.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
                             .resizable()
                             .frame(width: 15, height: 15)
-                        Text("\(service.isMonitoringPerformance ? "停止" : "启动")")
+                        Text("\(instruments.isMonitoringPerformance ? "停止" : "启动")")
                     }
                     .frame(height: 25)
                 }
                 .buttonStyle(
                     ButtonCommonStyle(
-                        backColor: service.isMonitoringPerformance ? .red : .blue,
-                        enable: service.selectDevice != nil && service.selectApp != nil
+                        backColor: instruments.isMonitoringPerformance ? .red : .blue,
+                        enable: service.selectDevice != nil && service.selectApp != nil && !instruments.isLaunchingApp
                     )
                 )
-                .disabled(
-                    service.selectDevice == nil || service.selectApp == nil
-                )
+                .disabled(service.selectDevice == nil)
+                .disabled(service.selectApp == nil)
+                .disabled(instruments.isLaunchingApp)
                 
                 // MARK: - 选择指标按钮 -
                 Button {
@@ -49,10 +63,10 @@ struct PerformanceSettingBarView: View {
                 .buttonStyle(
                     ButtonCommonStyle(
                         backColor: .fabulaBar1,
-                        enable: !service.isMonitoringPerformance
+                        enable: !instruments.isMonitoringPerformance
                     )
                 )
-                .disabled(service.isMonitoringPerformance)
+                .disabled(instruments.isMonitoringPerformance)
                 .popover(isPresented: $isShowPerformanceItem,
                          arrowEdge: .bottom) {
                     PerformanceChartShowSettingPopoverView()
@@ -71,15 +85,14 @@ struct PerformanceSettingBarView: View {
                 .buttonStyle(
                     ButtonCommonStyle(
                         backColor: .fabulaBar1,
-                        enable: !service.isMonitoringPerformance
+                        enable: !instruments.isMonitoringPerformance
                     )
                 )
-                .disabled(service.isMonitoringPerformance)
+                .disabled(instruments.isMonitoringPerformance)
                 .popover(isPresented: $isShowPerformanceSetting,
                          arrowEdge: .bottom) {
                     PerformanceTimeRecordSettingView()
                 }
-                
                 
                 // MARK: - 报告按钮 -
                 Button {
@@ -101,6 +114,7 @@ struct PerformanceSettingBarView: View {
             }
         }
         .environmentObject(service)
+        .environmentObject(instruments)
     }
 }
 
@@ -108,30 +122,30 @@ struct PerformanceChartShowSettingPopoverView: View {
     @EnvironmentObject var service: HomepageService
     
     var body: some View {
-        VStack(spacing: 1) {
-            ForEach(service.testDatas) { chart in
-                Button {
-                    var item = chart
-                    item.chartViewShow.toggle()
-                    service.updatePerformanceChartShow(item)
-                } label: {
-                    HStack {
-                        Image(systemName: chart.chartViewShow ? "checkmark.square.fill" : "square")
-                            .padding(.trailing, 5)
-                        Text(chart.id)
-                    }
-                    .frame(minHeight: 30)
-                    .frame(minWidth: 150, alignment: .leading)
-                }
-                .buttonStyle(
-                    ButtonCommonStyle(
-                        backColor: .fabulaBar2
-                    )
-                )
-            }
-        }
-        .padding(.vertical, 3)
-        
+//        VStack(spacing: 1) {
+//            ForEach(service.testDatas) { chart in
+//                Button {
+//                    var item = chart
+//                    item.chartViewShow.toggle()
+//                    service.updatePerformanceChartShow(item)
+//                } label: {
+//                    HStack {
+//                        Image(systemName: true ? "checkmark.square.fill" : "square")
+//                            .padding(.trailing, 5)
+//                        Text(chart.id)
+//                    }
+//                    .frame(minHeight: 30)
+//                    .frame(minWidth: 150, alignment: .leading)
+//                }
+//                .buttonStyle(
+//                    ButtonCommonStyle(
+//                        backColor: .fabulaBar2
+//                    )
+//                )
+//            }
+//        }
+//        .padding(.vertical, 3)
+        Text("In Progress")
     }
 }
 
@@ -140,8 +154,7 @@ struct PerformanceTimeRecordSettingView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("采样周期: \(service.samplingTime, specifier: "%g") s")
-            Text("录制时长: \(service.recordDuration, specifier: "%d") s")
+            Text("In Progress")
         }
         .padding()
         .frame(minWidth: 200)

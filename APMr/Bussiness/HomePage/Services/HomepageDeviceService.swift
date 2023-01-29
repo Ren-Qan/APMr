@@ -14,7 +14,11 @@ class HomepageDeviceService: NSObject, ObservableObject {
         
     override init() {
         super.init()
-        NotificationCenter.default.addObserver(forName: MobileManager.subscribeChangedNotification, object: nil, queue: nil) { _ in
+        NotificationCenter
+            .default
+            .addObserver(forName: MobileManager.subscribeChangedNotification,
+                         object: nil,
+                         queue: nil) { _ in
             self.refreshDeviceList()
         }
     }

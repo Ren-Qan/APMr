@@ -49,6 +49,8 @@
 		C76E7B5829517CC3004F009B /* HomepageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B5729517CC3004F009B /* HomepageModels.swift */; };
 		C76E7B5D2951BBB3004F009B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C76E7B5C2951BBB3004F009B /* Colors.xcassets */; };
 		C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B602951BC70004F009B /* Color+Extensions.swift */; };
+		C7719B402985312100DC6044 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7719B3F2985312100DC6044 /* UserManager.swift */; };
+		C7719B42298664A100DC6044 /* HomepageInstrumentsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */; };
 		C7764FDE29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
@@ -144,6 +146,8 @@
 		C76E7B5729517CC3004F009B /* HomepageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageModels.swift; sourceTree = "<group>"; };
 		C76E7B5C2951BBB3004F009B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		C76E7B602951BC70004F009B /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		C7719B3F2985312100DC6044 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageInstrumentsModels.swift; sourceTree = "<group>"; };
 		C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsEnergyModels.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
@@ -427,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				C76E7B5729517CC3004F009B /* HomepageModels.swift */,
+				C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -466,6 +471,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		C7719B3E298530F400DC6044 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				C7719B3F2985312100DC6044 /* UserManager.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		C779C6B2296BDE9A00F710D4 /* Application */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +491,7 @@
 			isa = PBXGroup;
 			children = (
 				C780D11029418BB400EF5633 /* HomePage */,
+				C7719B3E298530F400DC6044 /* User */,
 			);
 			path = Bussiness;
 			sourceTree = "<group>";
@@ -699,6 +713,7 @@
 				C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */,
 				C7483BF229373ADC00F32BE0 /* DTXMessageHandle.m in Sources */,
 				C754F0E1296D2A350053DBA3 /* HomepageService.swift in Sources */,
+				C7719B42298664A100DC6044 /* HomepageInstrumentsModels.swift in Sources */,
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
 				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
 				C78CB9172973AD0300F86B33 /* CommonStyle.swift in Sources */,
@@ -706,6 +721,7 @@
 				C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */,
 				C73BBB18294315A600472A75 /* HomepageDeviceService.swift in Sources */,
 				C7764FDE29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift in Sources */,
+				C7719B402985312100DC6044 /* UserManager.swift in Sources */,
 				C76E7B5829517CC3004F009B /* HomepageModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -850,8 +866,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -885,8 +901,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

@@ -13,36 +13,28 @@ struct PerformaceChartView: View {
     // MARK: - Public -
     @EnvironmentObject var service: HomepageService
     
+    @EnvironmentObject var instruments: HomepageInstrumentsService
+    
     // MARK: - Private -
+    @State private var mouseState = MouseState.none
+    
     private enum MouseState {
         case none
         case drag(CGPoint, CGSize)
         case hover(CGPoint)
         case tap(CGPoint)
     }
-    
-    @State private var mouseState = MouseState.none
-    
+        
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
                 ZStack {
                     LazyVStack {
-                        ForEach(service.testDatas) { item in
-                            if item.chartViewShow {
-                                Chart {
-                                    ForEach(service.testChartItems) { landmark in
-                                        LineMark(x: .value("Time", landmark.x),
-                                                 y: .value("value", landmark.y)
-                                        )
-                                    }
-                                }
-                                .padding(.bottom, 20)
-                                .background {
-                                    Color.fabulaBack1
-                                }
-                            }
+                        Chart {
+                            
                         }
+                        
+                        
                     }
                                         
                     if let location = hoverPoint {
@@ -68,6 +60,11 @@ struct PerformaceChartView: View {
                             if dragStartPoint.x + dragSize.width > proxy.size.width {
                                 dragSize.width = proxy.size.width - dragStartPoint.x
                             }
+                            
+                            if dragStartPoint.x + dragSize.width < 0 {
+                                dragSize.width = -dragStartPoint.x
+                            }
+                            
                             mouseState = .drag(dragStartPoint, dragSize)
                         })
                         .onEnded({ value in
@@ -131,11 +128,9 @@ struct PerformaceChartView: View {
             _len = -len
         }
         
-        if _x < 0 {
-            _x = 0
+        if _x < 5 {
+            _x = 5
         }
-        
-        service.testSummaryRegion = (_x, _len)
     }
 }
 

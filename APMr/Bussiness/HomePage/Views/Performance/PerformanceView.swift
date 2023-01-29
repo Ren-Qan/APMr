@@ -10,7 +10,9 @@ import SwiftUI
 struct PerformanceView: View {
     
     @EnvironmentObject var service: HomepageService
-            
+    
+    @EnvironmentObject var instruments: HomepageInstrumentsService
+    
     var body: some View {
         HStack {
             VStack {
@@ -18,6 +20,7 @@ struct PerformanceView: View {
                 PerformaceChartView()
             }
             .environmentObject(service)
+            .environmentObject(instruments)
             
             if service.isShowPerformanceSummary {
                 PerformanceSummaryView()
@@ -26,6 +29,11 @@ struct PerformanceView: View {
                     .background {
                         Color.fabulaBack1
                     }
+                    .transition(
+                        .move(
+                            edge: .trailing
+                        )
+                    )
             }
         }
         .animation(.default, value: service.isShowPerformanceSummary)
