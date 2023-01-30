@@ -30,6 +30,8 @@ struct PerformanceSettingBarView: View {
                                 if success {
                                     server.launch(app: app)
                                     server.autoRequest()
+                                } else {
+                                    server.stopService()
                                 }
                             }
                         }

@@ -8,7 +8,5 @@
 import Cocoa
 
 class UserManager: NSObject {
-    static let share = UserManager()
-    
-    
+    static let share = UserManager()    
 }

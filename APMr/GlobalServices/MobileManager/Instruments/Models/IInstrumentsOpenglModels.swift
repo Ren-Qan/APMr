@@ -11,7 +11,7 @@ import ObjectMapper
 struct IInstrumentsOpenglInfo: Mappable {
     var AllocatedPBSize: Int = 0
     var Allocsystemmemory: Int = 0
-    var CoreAnimationFramesPerSecond: Int = 0
+    var CoreAnimationFramesPerSecond: CGFloat = 0
     var DeviceUtilization: Int = 0
     var Inusesystemmemory: Int = 0
     var IOGLBundleName: String?
