@@ -257,6 +257,7 @@ extension HomepageInstrumentsService {
         item.battery = (dic["CurrentCapacity"] as? CGFloat ?? 0) / 100
         item.temperature = (dic["Temperature"] as? CGFloat ?? 0) / 100
         if let amperage = dic["InstantAmperage"] as? UInt64 {
+            // 参考 https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py
             item.amperage = CGFloat(UInt64.max - amperage) + 1
         }
         cSPI.diagnostic = item
