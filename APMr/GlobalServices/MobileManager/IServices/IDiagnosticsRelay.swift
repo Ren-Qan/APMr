@@ -28,6 +28,16 @@ class IDiagnosticsRelay: NSObject {
             return nil
         }
     }
+    
+    deinit {
+        if let service_t = service_t {
+            lockdownd_service_descriptor_free(service_t)
+        }
+        
+        if let client_t = client_t {
+            diagnostics_relay_client_free(client_t)
+        }
+    }
 }
 
 extension IDiagnosticsRelay {
@@ -37,8 +47,7 @@ extension IDiagnosticsRelay {
         }
         
         var result: plist_t? = nil
-        let state = diagnostics_relay_query_ioregistry_entry(client_t, "AppleSmartBattery", "", &result)
-        
+        diagnostics_relay_query_ioregistry_entry(client_t, "AppleSmartBattery", "", &result)
         
         if let result = result,
            let dic = plist_to_nsobject(result) as? [String : Any] {

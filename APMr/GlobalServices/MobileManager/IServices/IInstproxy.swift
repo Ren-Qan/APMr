@@ -11,7 +11,7 @@ import ObjectMapper
 
 class IInstproxy: NSObject {
     private var service_t: lockdownd_service_descriptor_t? = nil
-    private var instproxy_t: instproxy_client_t? = nil
+    private var client_t: instproxy_client_t? = nil
     
     convenience init?(_ device: IDevice, _ lockdown: ILockdown) {
         self.init()
@@ -21,7 +21,7 @@ class IInstproxy: NSObject {
         }
         
         self.service_t = service_t
-        let state = instproxy_client_new(device_t, service_t, &instproxy_t)
+        let state = instproxy_client_new(device_t, service_t, &client_t)
         
         if (state.rawValue != 0) {
             return nil
@@ -33,15 +33,15 @@ class IInstproxy: NSObject {
             lockdownd_service_descriptor_free(service_t)
         }
         
-        if let instproxy_t = instproxy_t {
-            instproxy_client_free(instproxy_t)
+        if let client_t = client_t {
+            instproxy_client_free(client_t)
         }
     }
 }
 
 extension IInstproxy {
     public var applist: [IInstproxyAppInfo] {
-        guard let client_t = instproxy_t else {
+        guard let client_t = client_t else {
             return []
         }
         
