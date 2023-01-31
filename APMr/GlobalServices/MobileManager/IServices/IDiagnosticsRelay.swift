@@ -7,7 +7,6 @@
 
 import Cocoa
 import LibMobileDevice
-import SwiftyJSON
 
 class IDiagnosticsRelay: NSObject {
     private var service_t: lockdownd_service_descriptor_t? = nil
@@ -47,6 +46,7 @@ extension IDiagnosticsRelay {
         }
         
         var result: plist_t? = nil
+        // name = ["AppleSmartBattery" >= 13.0 , "AppleARMPMUCharger" < 13.0] by https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py
         diagnostics_relay_query_ioregistry_entry(client_t, "AppleSmartBattery", "", &result)
         
         if let result = result,

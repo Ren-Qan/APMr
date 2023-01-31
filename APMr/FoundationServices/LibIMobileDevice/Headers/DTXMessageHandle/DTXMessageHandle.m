@@ -52,9 +52,15 @@ struct DTXMessagePayloadHeader {
 
 // MARK: - Private -
 
-- (void)makeError:(NSString *)error {
-    if ([self.delegate respondsToSelector:@selector(error:handle:)]) {
-        [self.delegate error:error handle:self];
+- (void)error:(DTXMessageErrorCode)error message:(NSString *)message {
+    if ([self.delegate respondsToSelector:@selector(error:message:handle:)]) {
+        [self.delegate error:error message:message handle:self];
+    }
+}
+
+- (void)progress:(DTXMessageProgressState)progress message:(NSString *)message {
+    if ([self.delegate respondsToSelector:@selector(progress:message:handle:)]) {
+        [self.delegate progress:progress message:message handle:self];
     }
 }
 
@@ -64,18 +70,22 @@ struct DTXMessagePayloadHeader {
     if (!device) {
         return NO;
     }
+    
+    [self progress:DTXMessageProgressStateMonterStartService message:@"mobile_image_mounter_start_service"];
     int error = mobile_image_mounter_start_service(device, &_mounter_client, "INSTRUMENTS");
     if (error != 0) {
-        [self makeError:@"mounter_start_service_failed"];
+        [self error:DTXMessageErrorCodeMounterStartFailed message:@"mounter_start_service_failed"];
         return NO;
     }
     
     plist_t mounter_lookup_result;
+    [self progress:DTXMessageProgressStateMonterLookupImage message:@"mobile_image_mounter_lookup_image"];
     if (mobile_image_mounter_lookup_image(_mounter_client, "Developer", &mounter_lookup_result) != 0) {
-        [self makeError:@"mounter_lookup_image_failed"];
+        [self error:DTXMessageErrorCodeMounterLookupImageFailed message:@"mounter_lookup_image_failed"];
         return NO;
     }
     
+    [self progress:DTXMessageProgressStateFindSignature message:@"finding ImageSignature"];
     plist_t signatureDic = plist_dict_get_item(mounter_lookup_result, "ImageSignature");
     plist_t signatureArr = plist_array_get_item(signatureDic, 0);
         
@@ -85,26 +95,29 @@ struct DTXMessagePayloadHeader {
     
     plist_free(signatureDic);
     if (signtureLen <= 0 || signatureString == NULL) {
-        [self makeError:@"not found signature"];
+        [self error:DTXMessageErrorCodeNotFoundSignature message:@"not found signature"];
         return NO;
     }
     
     // upload image
+    [self progress:DTXMessageProgressStateMonterUploadImage message:@"mobile_image_mounter_upload_image"];
     if (mobile_image_mounter_upload_image(_mounter_client, "Developer", 9, signatureString, (uint16_t)signtureLen, upload_mounter_callback, NULL) != 0) {
-        [self makeError:@"upload image error"];
+        [self error:DTXMessageErrorCodeUploadImageFailed message:@"upload image error"];
         return NO;
     }
     
     // get imagePath
+    [self progress:DTXMessageProgressStateFindImagePath message:@"find_image_path"];
     char * image_path = find_image_path(device);
     if (image_path == NULL) {
-        [self makeError:@"not found imagePath"];
+        [self error:DTXMessageErrorCodeNotFoundImagePath message:@"not found imagePath"];
         return NO;
     }
     
     plist_t result = NULL;
+    [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
     if (mobile_image_mounter_mount_image(_mounter_client, image_path, signatureString, signtureLen, "Developer", &result) != 0) {
-        [self makeError:@"mount image failed"];
+        [self error:DTXMessageErrorCodeMonterMountImageFailed message:@"mount image failed"];
         free(image_path);
         return NO;
     }
@@ -112,8 +125,9 @@ struct DTXMessagePayloadHeader {
     free(image_path);
         
     // service start
+    [self progress:DTXMessageProgressStateStartInstrumentsService message:@"service_client_factory_start_service"];
     if (service_client_factory_start_service(device, REMOTESERVER_SERVICE_NAME, (void **)(&_connection), "Remote", SERVICE_CONSTRUCTOR(constructor_remote_service), NULL) != 0) {
-        [self makeError:@"strat instruments service failed"];
+        [self error:DTXMessageErrorCodeStartInstrumentsServiceFailed message:@"strat instruments service failed"];
         return NO;
     }
     
@@ -125,6 +139,8 @@ struct DTXMessagePayloadHeader {
 }
 
 - (BOOL)instrumentsShakeHand {
+    [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instrumentsShakeHand"];
+    
     NSDictionary * par = @{
         @"com.apple.private.DTXBlockCompression" : [NSNumber numberWithLongLong:2],
         @"com.apple.private.DTXConnection" : [NSNumber numberWithLongLong:1]
@@ -153,7 +169,7 @@ struct DTXMessagePayloadHeader {
     }
     
     if (!success) {
-        [self makeError:@"instruments hand shake failed"];
+        [self error:DTXMessageErrorCodeInstrumentsHandShakeFailed message:@"instruments hand shake failed"];
     }
     
     return success;
@@ -244,17 +260,20 @@ struct DTXMessagePayloadHeader {
         idevice_connection_receive(_connection, (char *)(&mheader), sizeof(mheader), &nrecv);
         
         if (nrecv != sizeof(mheader)) {
-            fprintf(stderr, "failed to read message header: %s, nrecv = %x\n", strerror(errno), nrecv);
+            [self error:DTXMessageErrorCodeReadMessageHeaderFailed
+                message:[NSString stringWithFormat:@"failed to read message header: %s, nrecv = %x", strerror(errno), nrecv]];
             return NULL;
         }
         
         if ( mheader.magic != 0x1F3D5B79 ) {
-            fprintf(stderr, "bad header magic: %x\n", mheader.magic);
+            [self error:DTXMessageErrorCodeBadHeaderMagic
+                message:[NSString stringWithFormat:@"bad header magic: %x", mheader.magic]];
             return NULL;
         }
         
         if (mheader.conversationIndex != 0 && mheader.conversationIndex != 1) {
-            fprintf(stderr, "invalid conversation index: %d\n", mheader.conversationIndex);
+            [self error:DTXMessageErrorCodeInvalidConversationIndex
+                message:[NSString stringWithFormat:@"invalid conversation index: %d", mheader.conversationIndex]];
             return NULL;
         }
         
@@ -275,7 +294,8 @@ struct DTXMessagePayloadHeader {
             idevice_connection_receive(_connection, (char *)curptr, (uint32_t)curlen, &nrecv);
                     
             if ( nrecv <= 0 ) {
-                fprintf(stderr, "failed reading from socket: %s\n", strerror(errno));
+                [self error:DTXMessageErrorCodeReadingFromSocketFailed
+                    message:[NSString stringWithFormat:@"failed reading from socket: %s", strerror(errno)]];
                 free(fragData);
                 return NULL;
             }

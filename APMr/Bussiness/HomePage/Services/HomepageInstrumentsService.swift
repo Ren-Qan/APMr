@@ -71,8 +71,8 @@ extension HomepageInstrumentsService {
                     self.lockdown = lockdown
                     self.diagnostics = IDiagnosticsRelay(iDevice, lockdown)
                 }
-                
             }
+            if success { self.pDatas = [] }
             complete?(success, self)
         }
     }
@@ -140,7 +140,7 @@ extension HomepageInstrumentsService {
         }
         
         if let diagnostics = diagnostics?.analysis {
-            cDiagnostic(diagnostics)
+//            cDiagnostic(diagnostics)
         }
     }
     

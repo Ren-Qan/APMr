@@ -12,6 +12,7 @@ class IInstruments: NSObject {
     // MARK: - Private -
     private lazy var dtxService: DTXMessageHandle = {
         let server = DTXMessageHandle()
+        server.delegate = self
         return server
     }()
     
@@ -112,5 +113,16 @@ extension IInstruments {
             let result = self?.dtxService.receive()
             complete?(result)
         }
+    }
+}
+
+
+extension IInstruments: DTXMessageHandleDelegate {
+    func progress(_ progress: DTXMessageProgressState, message: String?, handle: DTXMessageHandle) {
+        debugPrint("[progress] - \(progress) - \(message ?? "none message")")
+    }
+    
+    func error(_ error: DTXMessageErrorCode, message: String?, handle: DTXMessageHandle) {
+        debugPrint("[err0r] - \(error) - \(message ?? "none message")")
     }
 }

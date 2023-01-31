@@ -21,11 +21,3 @@ struct ApplicationSider: Identifiable, Hashable, Codable {
         self.id = UUID()
     }
 }
-
-struct PerformanceChartSetting: Identifiable {
-    var id = UUID()
-    
-    var title: String
-    
-    var isHidden: Bool
-}

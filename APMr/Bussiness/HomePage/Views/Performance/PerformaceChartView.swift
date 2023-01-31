@@ -31,10 +31,36 @@ struct PerformaceChartView: View {
                 ZStack {
                     LazyVStack {
                         Chart {
-                            
+                            ForEach(instruments.pDatas) { data in
+                                LineMark(x: .value("time", Int(data.seconds)),
+                                         y: .value("process", Int(data.cpu.process)),
+                                         series: .value("type", "process")
+                                )
+                                .foregroundStyle(.red)
+                                
+                                LineMark(
+                                    x: .value("time", Int(data.seconds)),
+                                    y: .value("total", Int(data.cpu.total)),
+                                    series: .value("type", "total")
+                                )
+                            }
                         }
                         
-                        
+                        Chart {
+                            ForEach(instruments.pDatas) { data in
+                                LineMark(x: .value("time", Int(data.seconds)),
+                                         y: .value("process", data.memory.memory),
+                                         series: .value("type", "process")
+                                )
+                                .foregroundStyle(.red)
+                                
+                                LineMark(
+                                    x: .value("time", Int(data.seconds)),
+                                    y: .value("total", data.memory.resident),
+                                    series: .value("type", "total")
+                                )
+                            }
+                        }
                     }
                                         
                     if let location = hoverPoint {

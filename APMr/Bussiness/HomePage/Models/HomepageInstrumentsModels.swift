@@ -35,8 +35,8 @@ struct PerformanceIndicator: Identifiable {
 
 struct PCPUIndicator: PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType = .cpu
-    var process: CGFloat = 0
-    var total: CGFloat = 0
+    var process: CGFloat = 0 // 0 - 100
+    var total: CGFloat = 0 // 0 - 100
 }
 
 struct PMemoryIndicator: PerformanceIndicatorProtocol {
