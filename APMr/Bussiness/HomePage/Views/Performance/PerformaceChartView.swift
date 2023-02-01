@@ -29,36 +29,22 @@ struct PerformaceChartView: View {
         GeometryReader { proxy in
             ScrollView {
                 ZStack {
-                    LazyVStack {
-                        Chart {
-                            ForEach(instruments.pDatas) { data in
-                                LineMark(x: .value("time", Int(data.seconds)),
-                                         y: .value("process", Int(data.cpu.process)),
-                                         series: .value("type", "process")
-                                )
-                                .foregroundStyle(.red)
-                                
-                                LineMark(
-                                    x: .value("time", Int(data.seconds)),
-                                    y: .value("total", Int(data.cpu.total)),
-                                    series: .value("type", "total")
-                                )
-                            }
-                        }
-                        
-                        Chart {
-                            ForEach(instruments.pDatas) { data in
-                                LineMark(x: .value("time", Int(data.seconds)),
-                                         y: .value("process", data.memory.memory),
-                                         series: .value("type", "process")
-                                )
-                                .foregroundStyle(.red)
-                                
-                                LineMark(
-                                    x: .value("time", Int(data.seconds)),
-                                    y: .value("total", data.memory.resident),
-                                    series: .value("type", "total")
-                                )
+                    LazyVStack(spacing: 10) {
+                        ForEach(instruments.pCM.models) { chartModel in
+                            if chartModel.visiable {
+                                Text(chartModel.title)
+                                Chart {
+                                    ForEach(chartModel.series) { series in
+                                        ForEach(series.landmarks) { landmark in
+                                            LineMark(x: .value("time", landmark.x),
+                                                     y: .value("value", landmark.y),
+                                                     series: .value("series", series.value))
+                                            .interpolationMethod(.cardinal)
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 5)
+                                .chartYAxis(.hidden)
                             }
                         }
                     }

@@ -45,15 +45,10 @@ struct PerformanceSettingBarView: View {
                     }
                     .frame(height: 25)
                 }
-                .buttonStyle(
-                    ButtonCommonStyle(
-                        backColor: instruments.isMonitoringPerformance ? .red : .blue,
-                        enable: service.selectDevice != nil && service.selectApp != nil && !instruments.isLaunchingApp
-                    )
+                .common(
+                    backColor: instruments.isMonitoringPerformance ? .red : .blue,
+                    enable: service.selectDevice != nil && service.selectApp != nil && !instruments.isLaunchingApp
                 )
-                .disabled(service.selectDevice == nil)
-                .disabled(service.selectApp == nil)
-                .disabled(instruments.isLaunchingApp)
                 
                 // MARK: - 选择指标按钮 -
                 Button {
@@ -62,18 +57,14 @@ struct PerformanceSettingBarView: View {
                     Text("选择指标")
                         .frame(minHeight: 25)
                 }
-                .buttonStyle(
-                    ButtonCommonStyle(
-                        backColor: .fabulaBar1,
-                        enable: !instruments.isMonitoringPerformance
-                    )
+                .common(
+                    backColor: .fabulaBar1,
+                    enable: !instruments.isMonitoringPerformance
                 )
-                .disabled(instruments.isMonitoringPerformance)
                 .popover(isPresented: $isShowPerformanceItem,
                          arrowEdge: .bottom) {
                     PerformanceChartShowSettingPopoverView()
                 }
-                
                 
                 Spacer()
                 
@@ -84,13 +75,10 @@ struct PerformanceSettingBarView: View {
                     Text("设置")
                         .frame(minHeight: 25)
                 }
-                .buttonStyle(
-                    ButtonCommonStyle(
-                        backColor: .fabulaBar1,
-                        enable: !instruments.isMonitoringPerformance
-                    )
+                .common(
+                    backColor: .fabulaBar1,
+                    enable: !instruments.isMonitoringPerformance
                 )
-                .disabled(instruments.isMonitoringPerformance)
                 .popover(isPresented: $isShowPerformanceSetting,
                          arrowEdge: .bottom) {
                     PerformanceTimeRecordSettingView()
@@ -103,11 +91,7 @@ struct PerformanceSettingBarView: View {
                     Text("报告")
                         .frame(minHeight: 25)
                 }
-                .buttonStyle(
-                    ButtonCommonStyle(
-                        backColor: .fabulaBar1
-                    )
-                )
+                .common(backColor: .fabulaBar1)
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 10)
@@ -121,33 +105,28 @@ struct PerformanceSettingBarView: View {
 }
 
 struct PerformanceChartShowSettingPopoverView: View {
-    @EnvironmentObject var service: HomepageService
+    @EnvironmentObject var instruments: HomepageInstrumentsService
     
     var body: some View {
-//        VStack(spacing: 1) {
-//            ForEach(service.testDatas) { chart in
-//                Button {
-//                    var item = chart
-//                    item.chartViewShow.toggle()
-//                    service.updatePerformanceChartShow(item)
-//                } label: {
-//                    HStack {
-//                        Image(systemName: true ? "checkmark.square.fill" : "square")
-//                            .padding(.trailing, 5)
-//                        Text(chart.id)
-//                    }
-//                    .frame(minHeight: 30)
-//                    .frame(minWidth: 150, alignment: .leading)
-//                }
-//                .buttonStyle(
-//                    ButtonCommonStyle(
-//                        backColor: .fabulaBar2
-//                    )
-//                )
-//            }
-//        }
-//        .padding(.vertical, 3)
-        Text("In Progress")
+        VStack(spacing: 1) {
+            ForEach(instruments.pCM.models) { chartModel in
+                Button {
+                    var item = chartModel
+                    item.visiable.toggle()
+                    instruments.updateVisiable(type: item.type, visiable: item.visiable)
+                } label: {
+                    HStack {
+                        Image(systemName: chartModel.visiable ? "checkmark.square.fill" : "square")
+                            .padding(.trailing, 5)
+                        Text(chartModel.title)
+                    }
+                    .frame(minHeight: 30)
+                    .frame(minWidth: 150, alignment: .leading)
+                }
+                .common(backColor: .fabulaBar2)
+            }
+        }
+        .padding(.vertical, 3)
     }
 }
 

@@ -55,7 +55,7 @@
 		C7764FDE29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
-		C78CB9172973AD0300F86B33 /* CommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* CommonStyle.swift */; };
+		C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */; };
 		C7AC987F2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */; };
 		C7AC98812956EB1D00A6580B /* IInstrumentsNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */; };
 		C7AC988529599BA600A6580B /* IInstrumentsEngery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC988429599BA600A6580B /* IInstrumentsEngery.swift */; };
@@ -63,6 +63,8 @@
 		C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5B94329767921009A88D7 /* PerformaceChartView.swift */; };
 		C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */; };
 		C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */; };
+		C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */; };
+		C7CCDA97298A176900948BA3 /* HomepageChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA96298A176900948BA3 /* HomepageChartModels.swift */; };
 		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
 		E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */; };
 /* End PBXBuildFile section */
@@ -153,7 +155,7 @@
 		C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsEnergyModels.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
-		C78CB9162973AD0300F86B33 /* CommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStyle.swift; sourceTree = "<group>"; };
+		C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonStyle.swift; sourceTree = "<group>"; };
 		C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworkStatistics.swift; sourceTree = "<group>"; };
 		C7AC98802956EB1D00A6580B /* IInstrumentsNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworking.swift; sourceTree = "<group>"; };
 		C7AC988429599BA600A6580B /* IInstrumentsEngery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsEngery.swift; sourceTree = "<group>"; };
@@ -161,6 +163,8 @@
 		C7B5B94329767921009A88D7 /* PerformaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartView.swift; sourceTree = "<group>"; };
 		C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSettingBarView.swift; sourceTree = "<group>"; };
 		C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSummaryView.swift; sourceTree = "<group>"; };
+		C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonModifier.swift; sourceTree = "<group>"; };
+		C7CCDA96298A176900948BA3 /* HomepageChartModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageChartModels.swift; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
 		CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -435,6 +439,7 @@
 			children = (
 				C76E7B5729517CC3004F009B /* HomepageModels.swift */,
 				C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */,
+				C7CCDA96298A176900948BA3 /* HomepageChartModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -540,33 +545,50 @@
 		C78CB9122973ABBE00F86B33 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				C78CB9132973AC3300F86B33 /* ViewComponents */,
+				C78CB9132973AC3300F86B33 /* View */,
 			);
 			path = Components;
 			sourceTree = "<group>";
 		};
-		C78CB9132973AC3300F86B33 /* ViewComponents */ = {
+		C78CB9132973AC3300F86B33 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C7CCDA92298A115300948BA3 /* Modifiers */,
 				C78CB9142973AC3E00F86B33 /* Styles */,
 			);
-			path = ViewComponents;
+			path = View;
 			sourceTree = "<group>";
 		};
 		C78CB9142973AC3E00F86B33 /* Styles */ = {
 			isa = PBXGroup;
 			children = (
-				C78CB9152973AC4600F86B33 /* ButtonStyles */,
+				C78CB9152973AC4600F86B33 /* Button */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
 		};
-		C78CB9152973AC4600F86B33 /* ButtonStyles */ = {
+		C78CB9152973AC4600F86B33 /* Button */ = {
 			isa = PBXGroup;
 			children = (
-				C78CB9162973AD0300F86B33 /* CommonStyle.swift */,
+				C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */,
 			);
-			path = ButtonStyles;
+			path = Button;
+			sourceTree = "<group>";
+		};
+		C7CCDA92298A115300948BA3 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				C7CCDA93298A117600948BA3 /* Button */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		C7CCDA93298A117600948BA3 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */,
+			);
+			path = Button;
 			sourceTree = "<group>";
 		};
 		C7E05EBA2970494B00B94DD9 /* Performance */ = {
@@ -617,7 +639,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					C7483B8F29373A0400F32BE0 = {
 						CreatedOnToolsVersion = 14.1;
@@ -693,6 +715,7 @@
 				C73BBB1A29431AD200472A75 /* IInstrumentsProcesscontrol.swift in Sources */,
 				C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */,
 				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
+				C7CCDA97298A176900948BA3 /* HomepageChartModels.swift in Sources */,
 				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
 				C754F0E3296D33360053DBA3 /* PerformanceView.swift in Sources */,
@@ -706,6 +729,7 @@
 				C7AC987F2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
+				C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */,
 				C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
 				C7AC9895295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift in Sources */,
@@ -720,7 +744,7 @@
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
 				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
 				C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */,
-				C78CB9172973AD0300F86B33 /* CommonStyle.swift in Sources */,
+				C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */,
 				C7483B9429373A0400F32BE0 /* Application.swift in Sources */,
 				C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */,
 				C73BBB18294315A600472A75 /* HomepageDeviceService.swift in Sources */,
@@ -766,6 +790,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -826,6 +851,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -853,10 +879,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = APMr/ProjectConfigs/CodeSignEntilements/APMr.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"APMr/ProjectConfigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 88JVP7LE4V;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -870,8 +898,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -888,10 +916,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = APMr/ProjectConfigs/CodeSignEntilements/APMr.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"APMr/ProjectConfigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 88JVP7LE4V;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -905,8 +935,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

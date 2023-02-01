@@ -1,5 +1,5 @@
 //
-//  CommonStyle.swift
+//  ButtonCommonStyle.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/1/15.
@@ -20,13 +20,15 @@ struct ButtonCommonStyle: ButtonStyle {
             .padding(.horizontal, 10)
             .opacity(configuration.isPressed ? 0.75 : 1)
             .background {
-                backColor?.opacity(isHoivering ? 0.5 : 1)
+                if enable {
+                    backColor?.opacity(isHoivering ? 0.5 : 1)
+                } else {
+                    backColor
+                }
             }
             .opacity(enable ? 1 : 0.3)
             .onHover { isHover in
-                if enable {
-                    isHoivering = isHover
-                }
+                isHoivering = isHover
                 
                 if isHover {
                     if !enable {
@@ -36,6 +38,5 @@ struct ButtonCommonStyle: ButtonStyle {
                     NSCursor.arrow.set()
                 }
             }
-        
     }
 }

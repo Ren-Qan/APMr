@@ -13,8 +13,8 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     @Published var isMonitoringPerformance = false
     
     @Published var isLaunchingApp = false
-    
-    @Published var pDatas: [PerformanceIndicator] = []
+        
+    @Published var pCM: PerformanceChartModel = .init()
     
     @Published private(set) var monitorPid: UInt32 = 0
     
@@ -34,7 +34,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     private var receiceSeriesNilCount = 0
     
-    private var currentSeconds = 1
+    private var currentSeconds = 0
     
     private var cSPI = PerformanceIndicator()
     
@@ -72,7 +72,17 @@ extension HomepageInstrumentsService {
                     self.diagnostics = IDiagnosticsRelay(iDevice, lockdown)
                 }
             }
-            if success { self.pDatas = [] }
+            
+            
+            let old = self.pCM
+            var new = PerformanceChartModel()
+            
+            (0 ..< old.models.count).forEach { i in
+                new.models[i].visiable = old.models[i].visiable
+            }
+            
+            self.pCM = new
+            self.cSPI = PerformanceIndicator()
             complete?(success, self)
         }
     }
@@ -80,11 +90,11 @@ extension HomepageInstrumentsService {
     public func request() {
         serviceGroup.request()
     }
-        
+    
     public func autoRequest() {
         timer?.invalidate()
         timer = nil
-                
+        
         var count = 0
         let sampleTimer = 0.125
         let cycle = Int(1 / sampleTimer)
@@ -112,12 +122,23 @@ extension HomepageInstrumentsService {
         timer = nil
         serviceGroup.stop()
         monitorPid = 0
-        currentSeconds = 1
+        currentSeconds = 0
         receiceSeriesNilCount = 0
         isLaunchingApp = false
         isMonitoringPerformance = false
         diagnostics = nil
         lockdown = nil
+    }
+    
+    public func updateVisiable(type: PerformanceIndicatorType, visiable: Bool) {
+        var old = pCM
+        for i in (0 ..< old.models.count) {
+            if old.models[i].type == type {
+                old.models[i].visiable = visiable
+                break
+            }
+        }
+        pCM = old
     }
 }
 
@@ -139,16 +160,68 @@ extension HomepageInstrumentsService {
             network.send(.sample(pids: [monitorPid]))
         }
         
-        if let diagnostics = diagnostics?.analysis {
-//            cDiagnostic(diagnostics)
-        }
+        //        if let diagnostics = diagnostics?.analysis {
+        //            cDiagnostic(diagnostics)
+        //        }
     }
     
     private func dataRecord() {
         print("第\(currentSeconds)秒-数据同步")
-        pDatas.append(cSPI)
+        
+        let x = Int(currentSeconds)
+        let old = pCM
+        var new = pCM
+        
+        func lm(_ y: Int) -> ChartLandmarkItem {
+            ChartLandmarkItem(x: x, y: y)
+        }
+        
+        for (index, item) in old.models.enumerated() {
+            var model = item
+            var landmarks: [ChartLandmarkItem] = []
+            switch model.type {
+                case .cpu:
+                    landmarks = [lm(Int(cSPI.cpu.process)),
+                                 lm(Int(cSPI.cpu.total))]
+                case .gpu:
+                    landmarks = [lm(Int(cSPI.gpu.device)),
+                                 lm(Int(cSPI.gpu.renderer)),
+                                 lm(Int(cSPI.gpu.tiler))]
+                case .fps:
+                    landmarks = [lm(Int(cSPI.fps.fps)),
+                                 lm(Int(cSPI.fps.jank)),
+                                 lm(Int(cSPI.fps.bigJank)),
+                                 lm(Int(cSPI.fps.stutter))]
+                case .memory:
+                    landmarks = [lm(Int(cSPI.memory.memory)),
+                                 lm(Int(cSPI.memory.resident)),
+                                 lm(Int(cSPI.memory.vm))]
+                    
+                case .network:
+                    landmarks = [lm(Int(cSPI.network.up)),
+                                 lm(Int(cSPI.network.down))]
+                    
+                case .io:
+                    landmarks = [lm(Int(cSPI.io.read)),
+                                 lm(Int(cSPI.io.write))]
+                    
+                case .diagnostic:
+                    landmarks = [lm(Int(cSPI.diagnostic.amperage)),
+                                 lm(Int(cSPI.diagnostic.voltage)),
+                                 lm(Int(cSPI.diagnostic.battery)),
+                                 lm(Int(cSPI.diagnostic.temperature))]
+            }
+            
+            var series = model.series
+            (0 ..< series.count).forEach { i in
+                series[i].landmarks.append(landmarks[i])
+            }
+            model.series = series
+            new.models[index] = model
+        }
+        pCM = new
         currentSeconds += 1
-        cSPI = PerformanceIndicator(seconds: CGFloat(currentSeconds))
+        cSPI.seconds = CGFloat(currentSeconds)
     }
 }
 
@@ -166,7 +239,7 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
             stopService()
         }
     }
-        
+    
     func launch(pid: UInt32) {
         monitorPid = pid
         if pid != 0 {
@@ -217,12 +290,12 @@ extension HomepageInstrumentsService {
     
     private func cGPU(_ info: IInstrumentsOpenglInfo) {
         var item = PGPUIndicator()
-        item.divice = CGFloat(info.DeviceUtilization) / 100
-        item.renderer = CGFloat(info.RendererUtilization) / 100
-        item.tiler = CGFloat(info.TilerUtilization) / 100
+        item.device = CGFloat(info.DeviceUtilization)
+        item.renderer = CGFloat(info.RendererUtilization)
+        item.tiler = CGFloat(info.TilerUtilization)
         cSPI.gpu = item
     }
-        
+    
     private func cMemory(_ process: IInstrumentsSysmotapSystemProcessesModel) {
         var item = PMemoryIndicator()
         item.memory = process.physFootprint
@@ -254,7 +327,7 @@ extension HomepageInstrumentsService {
     private func cDiagnostic(_ dic: [String : Any]) {
         var item = PDiagnosticIndicator()
         item.voltage = (dic["Voltage"] as? CGFloat ?? 0) / 1000
-        item.battery = (dic["CurrentCapacity"] as? CGFloat ?? 0) / 100
+        item.battery = (dic["CurrentCapacity"] as? CGFloat ?? 0)
         item.temperature = (dic["Temperature"] as? CGFloat ?? 0) / 100
         if let amperage = dic["InstantAmperage"] as? UInt64 {
             // 参考 https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py

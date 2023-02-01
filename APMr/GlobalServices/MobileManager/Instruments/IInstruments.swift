@@ -123,6 +123,6 @@ extension IInstruments: DTXMessageHandleDelegate {
     }
     
     func error(_ error: DTXMessageErrorCode, message: String?, handle: DTXMessageHandle) {
-        debugPrint("[err0r] - \(error) - \(message ?? "none message")")
+        debugPrint("[error] - \(error) - \(message ?? "none message")")
     }
 }

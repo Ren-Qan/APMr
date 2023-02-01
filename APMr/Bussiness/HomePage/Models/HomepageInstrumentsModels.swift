@@ -21,8 +21,7 @@ protocol PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { get }
 }
 
-struct PerformanceIndicator: Identifiable {
-    var id = UUID()
+struct PerformanceIndicator {
     var seconds: CGFloat = 0
     var cpu = PCPUIndicator()
     var gpu = PGPUIndicator()
@@ -56,9 +55,9 @@ struct PFPSIndicator: PerformanceIndicatorProtocol {
 
 struct PGPUIndicator: PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType = .gpu
-    var divice: CGFloat = 0
-    var renderer: CGFloat = 0
-    var tiler: CGFloat = 0
+    var device: CGFloat = 0 // 0 - 100
+    var renderer: CGFloat = 0 // 0 - 100
+    var tiler: CGFloat = 0 // 0 - 100
 }
 
 struct PNetworkIndicator: PerformanceIndicatorProtocol {
@@ -77,6 +76,6 @@ struct PDiagnosticIndicator: PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType = .diagnostic
     var amperage: CGFloat = 0 // mA
     var voltage: CGFloat = 0 // V
-    var battery: CGFloat = 0 // 0.01 - 1.00
+    var battery: CGFloat = 0 // 1 - 100
     var temperature: CGFloat = 0 // °C
 }
