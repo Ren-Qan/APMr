@@ -40,9 +40,9 @@ struct PCPUIndicator: PerformanceIndicatorProtocol {
 
 struct PMemoryIndicator: PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .memory }
-    var resident: Int64 = 0
-    var memory: Int64 = 0
-    var vm: Int64 = 0
+    var resident: CGFloat = 0 // MB
+    var memory: CGFloat = 0 // MB
+    var vm: CGFloat = 0 // GB
 }
 
 struct PFPSIndicator: PerformanceIndicatorProtocol {
@@ -62,14 +62,16 @@ struct PGPUIndicator: PerformanceIndicatorProtocol {
 
 struct PNetworkIndicator: PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .network }
-    var down: CGFloat = 0
-    var up: CGFloat = 0
+    var downDelta: CGFloat = 0 //KB/s
+    var upDelta: CGFloat = 0 // KB/s
 }
 
 struct PIOIndicator: PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .io }
-    var read: CGFloat = 0 // MB
-    var write: CGFloat = 0 // MB
+    var read: CGFloat = 0 // KB
+    var write: CGFloat = 0 // KB
+    var readDelta: CGFloat = 0 // KB/s
+    var writeDelta: CGFloat = 0 // KB/s
 }
 
 struct PDiagnosticIndicator: PerformanceIndicatorProtocol {

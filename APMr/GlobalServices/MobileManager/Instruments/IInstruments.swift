@@ -22,12 +22,12 @@ class IInstruments: NSObject {
         return queue
     }()
     
-    private lazy var receiceQ: OperationQueue = {
+    private lazy var receiveQ: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-            
+    
     private var identifier: UInt32 = 0
     private var channel_tag: UInt32 = 0
     
@@ -77,7 +77,7 @@ extension IInstruments {
         let arg = DTXArguments()
         arg.appendUInt32Num(service.server.channel)
         arg.append(service.server.rawValue)
-
+        
         dtxService.send(withChannel: 0,
                         identifier: nextIdentifier,
                         selector: "_requestChannelWithCode:identifier:",
@@ -93,10 +93,10 @@ extension IInstruments {
     ///   - args: 响应服务所需的参数
     ///   - expectsReply: expectsReply
     public func send(channel: UInt32,
-                 identifier: UInt32,
-                 selector: String,
-                 args: DTXArguments?,
-                 expectsReply: Bool) {
+                     identifier: UInt32,
+                     selector: String,
+                     args: DTXArguments?,
+                     expectsReply: Bool) {
         sendQ.addOperation { [weak self] in
             self?.dtxService.send(withChannel: channel,
                                   identifier: identifier,
@@ -109,7 +109,7 @@ extension IInstruments {
     /// 从建立的instruments socket通道取数据
     /// - Parameter complete: 完成的回调
     public func receive(_ complete: ((DTXReceiveObject?) -> Void)? = nil) {
-        receiceQ.addOperation { [weak self] in
+        receiveQ.addOperation { [weak self] in
             let result = self?.dtxService.receive()
             complete?(result)
         }

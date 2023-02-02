@@ -126,7 +126,7 @@ struct PerformanceChartShowSettingPopoverView: View {
                 .common(backColor: .fabulaBar2)
             }
         }
-        .padding(.vertical, 3)
+        .padding(.top, 3)
     }
 }
 

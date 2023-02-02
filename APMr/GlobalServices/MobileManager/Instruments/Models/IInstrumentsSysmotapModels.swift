@@ -106,7 +106,7 @@ struct IInstrumentsSysmotapSystemCPUUsage: Mappable {
     }
 }
 
-// MARK: - 与 IInstrumentsSysmontap 请求的参数保持一致
+// MARK: - 与 IInstrumentsSysmontap 请求的参数保持一致(顺序，个数)
 struct IInstrumentsSysmotapSystemProcessesModel {
     var cpuUsage: CGFloat = 0
     var ctxSwitch: Int64 = 0

@@ -29,25 +29,14 @@ struct PerformaceChartView: View {
         GeometryReader { proxy in
             ScrollView {
                 ZStack {
-                    LazyVStack(spacing: 10) {
+                    VStack(spacing: 10) {
                         ForEach(instruments.pCM.models) { chartModel in
                             if chartModel.visiable {
-                                Text(chartModel.title)
-                                Chart {
-                                    ForEach(chartModel.series) { series in
-                                        ForEach(series.landmarks) { landmark in
-                                            LineMark(x: .value("time", landmark.x),
-                                                     y: .value("value", landmark.y),
-                                                     series: .value("series", series.value))
-                                            .interpolationMethod(.cardinal)
-                                        }
-                                    }
-                                }
-                                .padding(.vertical, 5)
-                                .chartYAxis(.hidden)
+                                chart(chartModel)
                             }
                         }
                     }
+                    .padding(.top, 7)
                                         
                     if let location = hoverPoint {
                         GeometryReader { inProxy in
@@ -146,3 +135,52 @@ struct PerformaceChartView: View {
     }
 }
 
+extension PerformaceChartView {
+    private func chart(_ chartModel: ChartModel) -> some View {
+        VStack(alignment: .leading) {
+            ZStack(alignment: .leading) {
+                GroupBox {
+                    Text(chartModel.title)
+                }
+                
+                HStack {
+                    ForEach(chartModel.series) { series in
+                        Rectangle()
+                            .fill(series.style)
+                            .frame(width: 9, height: 2)
+                        Text(series.value)
+                    }
+                }
+                .padding(.leading, 120)
+            }
+            .offset(x: 10)
+            .padding(.top, 5)
+            
+            Chart {
+                ForEach(chartModel.series) { series in
+                    ForEach(series.landmarks) { landmark in
+                        LineMark(x: .value("time", landmark.x),
+                                 y: .value("value", landmark.y),
+                                 series: .value("series", series.value))
+                        .foregroundStyle(series.style)
+                        .interpolationMethod(.cardinal)
+                    }
+                }
+            }
+            .offset(x: 10)
+            .padding(.vertical, 10)
+            .chartYAxis {
+                AxisMarks(position: .leading) { value in
+                    if let rawValue = value.as(Int.self), rawValue == 0 {
+                        AxisGridLine()
+                    }
+                    AxisValueLabel()
+                }
+            }
+        }
+        .background {
+            Color.fabulaBack2
+        }
+        .padding(.bottom, 10)
+    }
+}

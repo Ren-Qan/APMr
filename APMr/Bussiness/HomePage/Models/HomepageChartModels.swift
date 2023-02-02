@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import SwiftUI
 
 struct PerformanceChartModel {
     var models: [ChartModel]
@@ -67,6 +68,7 @@ struct ChartSeriesItem: Identifiable {
     var id = UUID()
     var value: String
     var visiable: Bool = true
+    var style: Color = .random
     var landmarks: [ChartLandmarkItem] = []
 }
 

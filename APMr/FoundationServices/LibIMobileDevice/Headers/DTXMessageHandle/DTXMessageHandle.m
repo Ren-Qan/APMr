@@ -182,10 +182,6 @@ struct DTXMessagePayloadHeader {
 // MARK: - Public -
 
 - (void)stopService {
-    _connection = NULL;
-    _mounter_client = NULL;
-    _server_dic = NULL;
-    
     if (_connection) {
         idevice_disconnect(_connection);
     }
@@ -193,6 +189,10 @@ struct DTXMessagePayloadHeader {
     if (_mounter_client) {
         mobile_image_mounter_free(_mounter_client);
     }
+    
+    _connection = NULL;
+    _mounter_client = NULL;
+    _server_dic = NULL;
 }
 
 - (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device {

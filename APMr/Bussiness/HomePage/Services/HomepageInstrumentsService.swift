@@ -198,12 +198,12 @@ extension HomepageInstrumentsService {
                                  lm(Int(cSPI.memory.vm))]
                     
                 case .network:
-                    landmarks = [lm(Int(cSPI.network.up)),
-                                 lm(Int(cSPI.network.down))]
+                    landmarks = [lm(Int(cSPI.network.upDelta)),
+                                 lm(Int(cSPI.network.downDelta))]
                     
                 case .io:
-                    landmarks = [lm(Int(cSPI.io.read)),
-                                 lm(Int(cSPI.io.write))]
+                    landmarks = [lm(Int(cSPI.io.readDelta)),
+                                 lm(Int(cSPI.io.writeDelta))]
                     
                 case .diagnostic:
                     landmarks = [lm(Int(cSPI.diagnostic.amperage)),
@@ -298,16 +298,22 @@ extension HomepageInstrumentsService {
     
     private func cMemory(_ process: IInstrumentsSysmotapSystemProcessesModel) {
         var item = PMemoryIndicator()
-        item.memory = process.physFootprint
-        item.resident = process.memResidentSize
-        item.vm = process.memVirtualSize
+        item.memory = process.physFootprint.MB
+        item.resident = process.memResidentSize.MB
+        item.vm = process.memVirtualSize.GB
         cSPI.memory = item
     }
     
     private func cIO(_ process: IInstrumentsSysmotapSystemProcessesModel) {
         var item = PIOIndicator()
-        item.read = CGFloat(Double(process.diskBytesRead) / (1024 * 1024 * 8))
-        item.write = CGFloat(Double(process.diskBytesWritten) / (1024 * 1024 * 8))
+        
+        let lastR = cSPI.io.read
+        let lastW = cSPI.io.write
+        item.read = process.diskBytesRead.KB
+        item.write = process.diskBytesWritten.KB
+        item.readDelta = item.read - lastR
+        item.writeDelta = item.write - lastW
+        
         cSPI.io = item
     }
     
@@ -319,8 +325,8 @@ extension HomepageInstrumentsService {
     
     private func cNetwork(_ info: IInstrumentsNetworkStatisticsModel) {
         var item = PNetworkIndicator()
-        item.down = CGFloat(info.net_rx_bytes)
-        item.up = CGFloat(info.net_tx_bytes)
+        item.downDelta = info.net_rx_bytes_delta.KB
+        item.upDelta = info.net_tx_bytes_delta.KB
         cSPI.network = item
     }
     

@@ -23,27 +23,7 @@ struct PerformanceSummaryView: View {
     var body: some View {
         ScrollView {
             Text("In Progress")
-//            ForEach(service.summaryData) { item in
-//                LazyVStack {
-//                    Text("第\(item.x)秒性能报告")
-//                    ForEach(service.testDatas) { data in
-//                        if data.chartViewShow {
-//                            Text(data.id)
-//                            Group {
-//                                ForEach((1..<4)) { id in
-//                                    HStack {
-//                                        Text("指标\(id)")
-//                                        Text("value")
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                .background {
-//                    Color.fabulaBack2
-//                }
-//            }
+
         }
         .frame(maxWidth: 350)
     }

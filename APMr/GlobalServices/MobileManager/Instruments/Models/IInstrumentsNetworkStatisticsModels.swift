@@ -23,9 +23,9 @@ struct IInstrumentsNetworkStatisticsModel: Mappable {
     var net_connections: [IInstrumentsNetworkStaticesConnectItem]? = nil
     var pid: Int64 = 0
     var time: Date?
-
+    
     init?(map: Map) {}
-
+    
     mutating func mapping(map: Map) {
         net_bytes            <- map["net.bytes", nested: false]
         net_bytes_delta      <- map["net.bytes.delta", nested: false]
@@ -61,9 +61,9 @@ struct IInstrumentsNetworkStaticesConnectItem: Mappable {
     var txBytesDelta: Int64 = 0
     var txPackets: Int64 = 0
     var txPacketsDelta: Int64 = 0
-
+    
     init?(map: Map) {}
-
+    
     mutating func mapping(map: Map) {
         Int64erface      <- map["Int64erface"]
         localAddr      <- map["localAddr"]

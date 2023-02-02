@@ -15,7 +15,7 @@ struct PerformanceView: View {
     
     var body: some View {
         HStack {
-            VStack {
+            VStack(spacing: 5) {
                 PerformanceSettingBarView()
                 PerformaceChartView()
             }
