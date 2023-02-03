@@ -1,20 +1,30 @@
 PODS:
+  - Charts (4.1.0):
+    - Charts/Core (= 4.1.0)
+  - Charts/Core (4.1.0):
+    - SwiftAlgorithms (~> 1.0)
   - ObjectMapper (4.2.0)
+  - SwiftAlgorithms (1.0.0)
   - SwiftyJSON (5.0.1)
 
 DEPENDENCIES:
+  - Charts
   - ObjectMapper
   - SwiftyJSON
 
 SPEC REPOS:
   trunk:
+    - Charts
     - ObjectMapper
+    - SwiftAlgorithms
     - SwiftyJSON
 
 SPEC CHECKSUMS:
+  Charts: 354f86803d11d9c35de280587fef50d1af063978
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: bc3ba69a06154e725e2bd89b44ed0a3da65ea074
+PODFILE CHECKSUM: 925e31b8949dc531c3afb81789732994088354ab
 
 COCOAPODS: 1.11.3

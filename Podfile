@@ -4,6 +4,7 @@ platform :macos, '13.0'
 target 'APMr' do
  
   pod 'ObjectMapper'
+  pod 'Charts'
   
   # 方便在控制台看数据
   pod 'SwiftyJSON', :configurations => ['Debug']
