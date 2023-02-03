@@ -8,7 +8,6 @@
 import SwiftUI
 import Charts
 
-
 struct PerformaceChartView: View {
     // MARK: - Public -
     @EnvironmentObject var service: HomepageService

@@ -18,6 +18,12 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     @Published private(set) var monitorPid: UInt32 = 0
     
+    private lazy var operationQ = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+    
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
         group.delegate = self
@@ -101,16 +107,18 @@ extension HomepageInstrumentsService {
         timer = Timer(timeInterval: sampleTimer,
                       repeats: true,
                       block: { [weak self] _ in
-            self?.request()
-            if count % cycle == 0 {
-                self?.send()
-            }
-            
-            if count % cycle == cycle - 1 {
-                self?.dataRecord()
-            }
-            
-            count += 1
+            self?.operationQ.addOperation({
+                self?.request()
+                if count % cycle == 0 {
+                    self?.send()
+                }
+                
+                if count % cycle == cycle - 1 {
+                    self?.dataRecord()
+                }
+                
+                count += 1
+            })
         })
         
         timer?.fire()
@@ -128,6 +136,7 @@ extension HomepageInstrumentsService {
         isMonitoringPerformance = false
         diagnostics = nil
         lockdown = nil
+        operationQ.cancelAllOperations()
     }
     
     public func updateVisiable(type: PerformanceIndicatorType, visiable: Bool) {
@@ -160,9 +169,9 @@ extension HomepageInstrumentsService {
             network.send(.sample(pids: [monitorPid]))
         }
         
-        //        if let diagnostics = diagnostics?.analysis {
-        //            cDiagnostic(diagnostics)
-        //        }
+        if let diagnostics = diagnostics?.analysis {
+            cDiagnostic(diagnostics)
+        }
     }
     
     private func dataRecord() {
@@ -335,7 +344,7 @@ extension HomepageInstrumentsService {
         item.voltage = (dic["Voltage"] as? CGFloat ?? 0) / 1000
         item.battery = (dic["CurrentCapacity"] as? CGFloat ?? 0)
         item.temperature = (dic["Temperature"] as? CGFloat ?? 0) / 100
-        if let amperage = dic["InstantAmperage"] as? UInt64 {
+        if let amperage = dic["InstantAmperage"] as? UInt64, (amperage >> 63) == 0x1 {
             // 参考 https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py
             item.amperage = CGFloat(UInt64.max - amperage) + 1
         }
