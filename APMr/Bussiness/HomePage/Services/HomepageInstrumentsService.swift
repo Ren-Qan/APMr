@@ -8,13 +8,14 @@
 import Cocoa
 import Combine
 import LibMobileDevice
+import Charts
 
 class HomepageInstrumentsService: NSObject, ObservableObject {
     @Published var isMonitoringPerformance = false
     
     @Published var isLaunchingApp = false
         
-    @Published var pCM: PerformanceChartModel = .init()
+    @Published private(set) var pCM = ChartD()
     
     @Published private(set) var monitorPid: UInt32 = 0
     
@@ -40,7 +41,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     private var receiceSeriesNilCount = 0
     
-    private var currentSeconds = 0
+    private var currentSeconds: Double = 0
     
     private var cSPI = PerformanceIndicator()
     
@@ -79,9 +80,8 @@ extension HomepageInstrumentsService {
                 }
             }
             
-            
             let old = self.pCM
-            var new = PerformanceChartModel()
+            var new = ChartD()
             
             (0 ..< old.models.count).forEach { i in
                 new.models[i].visiable = old.models[i].visiable
@@ -175,20 +175,18 @@ extension HomepageInstrumentsService {
     }
     
     private func dataRecord() {
-        print("第\(currentSeconds)秒-数据同步")
+        debugPrint("第\(currentSeconds)秒-数据同步")
         
-        let x = Int(currentSeconds)
-        let old = pCM
-        var new = pCM
+        let x = currentSeconds
         
-        func lm(_ y: Int) -> ChartLandmarkItem {
-            ChartLandmarkItem(x: x, y: y)
+        func lm(_ y: Int) -> ChartDataEntry {
+            ChartDataEntry(x: x, y: Double(y))
         }
         
-        for (index, item) in old.models.enumerated() {
-            var model = item
-            var landmarks: [ChartLandmarkItem] = []
-            switch model.type {
+        for (index, item) in pCM.models.enumerated() {
+            let model = pCM.models[index]
+            var landmarks: [ChartDataEntry] = []
+            switch item.type {
                 case .cpu:
                     landmarks = [lm(Int(cSPI.cpu.process)),
                                  lm(Int(cSPI.cpu.total))]
@@ -221,14 +219,17 @@ extension HomepageInstrumentsService {
                                  lm(Int(cSPI.diagnostic.temperature))]
             }
             
-            var series = model.series
-            (0 ..< series.count).forEach { i in
-                series[i].landmarks.append(landmarks[i])
+            (0 ..< landmarks.count).forEach { i in
+                model.chartData.appendEntry(landmarks[i], toDataSet: i)
+                
             }
-            model.series = series
-            new.models[index] = model
+            
+            if model.visiable {
+                model.objectWillChange.send()
+            }
         }
-        pCM = new
+        
+        pCM.version += 1
         currentSeconds += 1
         cSPI.seconds = CGFloat(currentSeconds)
     }
@@ -349,5 +350,44 @@ extension HomepageInstrumentsService {
             item.amperage = CGFloat(UInt64.max - amperage) + 1
         }
         cSPI.diagnostic = item
+    }
+}
+
+
+// MARK: - TEST FUNC
+extension HomepageInstrumentsService {
+    func insertTestData(count: Int) {
+        func randomCPCM() {
+            cSPI.cpu.process = .random(in:  0 ... 100)
+            cSPI.cpu.total = .random(in: 0 ... 100)
+            
+            cSPI.gpu.renderer = .random(in: 0 ... 100)
+            cSPI.gpu.device = .random(in: 0 ... 100)
+            cSPI.gpu.tiler = .random(in: 0 ... 100)
+            
+            cSPI.fps.fps = .random(in: 0 ... 120)
+            
+            cSPI.io.readDelta = .random(in: 0 ... 40)
+            cSPI.io.writeDelta = .random(in: 0 ... 40)
+            
+            cSPI.network.downDelta = .random(in: 0 ... 100)
+            cSPI.network.upDelta = .random(in: 0 ... 100)
+            
+            cSPI.diagnostic.amperage = .random(in:  0 ... 40)
+            cSPI.diagnostic.battery = .random(in: 0 ... 100)
+            cSPI.diagnostic.voltage = .random(in: 0 ... 20)
+            cSPI.diagnostic.temperature = .random(in:  10 ... 44)
+            
+            cSPI.memory.memory = .random(in: 0 ... 500)
+            cSPI.memory.resident = .random(in: 0 ... 500)
+            cSPI.memory.vm = .random(in: 0 ... 500)
+        }
+        
+        DispatchQueue.global().async {
+            (0 ..< count).forEach { _ in
+                randomCPCM()
+                self.dataRecord()
+            }
+        }
     }
 }

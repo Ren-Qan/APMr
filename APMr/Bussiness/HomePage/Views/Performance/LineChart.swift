@@ -10,43 +10,52 @@ import SwiftUI
 import Charts
 
 struct LineChart: NSViewRepresentable {
+        
     typealias NSViewType = LineChartView
+        
+    @EnvironmentObject var chartModel: ChartModel
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
     
     func makeNSView(context: Context) -> LineChartView {
         let view = LineChartView()
+        view.delegate = context.coordinator
+        view.data = chartModel.chartData
+        view.doubleTapToZoomEnabled = false
+        view.xAxis.labelCount = 20
+        view.dragYEnabled = false
+        view.dragXEnabled = true
+        view.scaleYEnabled = false
+        view.pinchZoomEnabled = false
+        view.xAxis.labelPosition = .bottom
+        view.xAxis.drawGridLinesEnabled = false
+        view.legend.horizontalAlignment = .center
+        view.legend.verticalAlignment = .top
+        
+        view.leftAxis.drawTopYLabelEntryEnabled = true
+        view.leftAxis.drawGridLinesEnabled = false
+        
+        view.rightAxis.enabled = false
+        view.drawGridBackgroundEnabled = false
+        
         return view
     }
     
     func updateNSView(_ nsView: Charts.LineChartView, context: Context) {
-        let set = LineChartDataSet()
-        set.drawCirclesEnabled = false
-        set.mode = .cubicBezier
-        set.drawHorizontalHighlightIndicatorEnabled = true
-        set.colors = [.brown, .red]
-        set.highlightColor = .white
-        set.highlightLineDashLengths = [1, 2]
-        
-        (0 ..< 1000).forEach { i in
-            set.append(.init(x: Double(i), y: .random(in: 0 ... 100)))
+        nsView.notifyDataSetChanged()
+        if chartModel.chartData.entryCount > 0 {
+            nsView.setVisibleXRange(minXRange: 100, maxXRange: 100)
         }
-        
-        let chartData = LineChartData(dataSet: set)
-        
-        nsView.data = chartData
-        nsView.pinchZoomEnabled = false
-        nsView.doubleTapToZoomEnabled = false
-                
-        nsView.setVisibleXRange(minXRange: 100, maxXRange: 100)
-        nsView.minOffset = 20
-        
-        nsView.xAxis.labelPosition = .bottom
-        nsView.xAxis.drawGridLinesEnabled = false
-        
-        nsView.leftAxis.drawTopYLabelEntryEnabled = true
-        nsView.leftAxis.drawGridLinesEnabled = false
-        
-        nsView.rightAxis.enabled = false
-        nsView.drawGridBackgroundEnabled = false
-        nsView.viewPortHandler.setChartDimens(width: 10, height: 10)
+    }
+}
+
+extension LineChart {
+    internal class Coordinator: NSObject, ChartViewDelegate {
+        func chartValueSelected(_ chartView: ChartViewBase,
+                                entry: ChartDataEntry,
+                                highlight: Highlight) {
+        }
     }
 }

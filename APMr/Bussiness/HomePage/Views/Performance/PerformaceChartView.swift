@@ -17,6 +17,8 @@ struct PerformaceChartView: View {
     // MARK: - Private -
     @State private var mouseState = MouseState.none
     
+    @State private var highLightX: Double = 0
+    
     private enum MouseState {
         case none
         case drag(CGPoint, CGSize)
@@ -27,10 +29,15 @@ struct PerformaceChartView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
+                Button {
+                    instruments.insertTestData(count: 1)
+                } label: {
+                    Text("插入测试数据")
+                }
+
                 ForEach(instruments.pCM.models) { chartModel in
                     if chartModel.visiable {
-                        chart(chartModel)
-                            
+                        Chart().environmentObject(chartModel)
                     }
                 }
             }
@@ -39,57 +46,25 @@ struct PerformaceChartView: View {
     }
 }
 
-extension PerformaceChartView {
-    private func chart(_ chartModel: ChartModel) -> some View {
+private struct Chart: View {    
+   @EnvironmentObject var model: ChartModel
+    
+    var body: some View {
         VStack(alignment: .leading) {
-            ZStack(alignment: .leading) {
-                GroupBox {
-                    Text(chartModel.title)
-                }
-                
-                HStack {
-                    ForEach(chartModel.series) { series in
-                        Rectangle()
-                            .fill(series.style)
-                            .frame(width: 9, height: 2)
-                        Text(series.value)
-                    }
-                }
-                .padding(.leading, 120)
+            GroupBox {
+                Text(model.title)
+                Text("\(model.chartData.dataSets[0].entryCount)")
             }
             .offset(x: 10)
             .padding(.top, 5)
-            
+                                    
             LineChart()
+                .environmentObject(model)
                 .frame(height: 170)
-            
-            
-            //            Chart {
-            //                ForEach(chartModel.series) { series in
-            //                    ForEach(series.landmarks) { landmark in
-            //                        LineMark(x: .value("time", landmark.x),
-            //                                 y: .value("value", landmark.y),
-            //                                 series: .value("series", series.value))
-            //                        .foregroundStyle(series.style)
-            //                        .interpolationMethod(.cardinal)
-            //                    }
-            //                }
-            //            }
-            //            .offset(x: 10)
-            //            .padding(.vertical, 10)
-            //            .chartYAxis {
-            //                AxisMarks(position: .leading) { value in
-            //                    if let rawValue = value.as(Int.self), rawValue == 0 {
-            //                        AxisGridLine()
-            //                    }
-            //                    AxisValueLabel()
-            //                }
-            //            }
         }
         .background {
             Color.fabulaBack2
         }
         .padding(.bottom, 10)
-        
     }
 }
