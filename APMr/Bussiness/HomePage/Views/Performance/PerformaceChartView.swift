@@ -29,12 +29,6 @@ struct PerformaceChartView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                Button {
-                    instruments.insertTestData(count: 100)
-                } label: {
-                    Text("插入测试数据")
-                }
-                
                 ForEach(instruments.pCM.models) { chartModel in
                     Chart()
                         .environmentObject(chartModel)
@@ -53,7 +47,6 @@ private struct Chart: View {
             VStack(alignment: .leading) {
                 GroupBox {
                     Text(model.title)
-                    Text("\(model.chartData.dataSets[0].entryCount)")
                 }
                 .offset(x: 10)
                 .padding(.top, 5)

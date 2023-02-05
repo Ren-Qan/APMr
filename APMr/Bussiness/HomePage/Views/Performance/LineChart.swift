@@ -48,9 +48,10 @@ struct LineChart: NSViewRepresentable {
     func updateNSView(_ nsView: Charts.LineChartView, context: Context) {
         let count = chartModel.sets[0].entries.count
         
-        if count >= 100 {
-            nsView.xAxis.axisMinimum = Double(count - 100)
-            nsView.xAxis.axisMaximum = Double(count)
+        if count > 0 {
+            let min = count >= 100 ? count - 100 : 0
+            nsView.xAxis.axisMinimum = Double(min)
+            nsView.xAxis.axisMaximum = Double(min + 100)
         }
         
         nsView.notifyDataSetChanged()
