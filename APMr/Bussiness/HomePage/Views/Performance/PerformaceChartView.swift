@@ -25,20 +25,19 @@ struct PerformaceChartView: View {
         case hover(CGPoint)
         case tap(CGPoint)
     }
-        
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 Button {
-                    instruments.insertTestData(count: 1)
+                    instruments.insertTestData(count: 100)
                 } label: {
                     Text("插入测试数据")
                 }
-
+                
                 ForEach(instruments.pCM.models) { chartModel in
-                    if chartModel.visiable {
-                        Chart().environmentObject(chartModel)
-                    }
+                    Chart()
+                        .environmentObject(chartModel)
                 }
             }
             .padding(.top, 7)
@@ -47,24 +46,26 @@ struct PerformaceChartView: View {
 }
 
 private struct Chart: View {    
-   @EnvironmentObject var model: ChartModel
-    
+    @EnvironmentObject var model: ChartModel
+        
     var body: some View {
-        VStack(alignment: .leading) {
-            GroupBox {
-                Text(model.title)
-                Text("\(model.chartData.dataSets[0].entryCount)")
+        if model.visiable {
+            VStack(alignment: .leading) {
+                GroupBox {
+                    Text(model.title)
+                    Text("\(model.chartData.dataSets[0].entryCount)")
+                }
+                .offset(x: 10)
+                .padding(.top, 5)
+                
+                LineChart()
+                    .environmentObject(model)
+                    .frame(height: 170)
             }
-            .offset(x: 10)
-            .padding(.top, 5)
-                                    
-            LineChart()
-                .environmentObject(model)
-                .frame(height: 170)
+            .background {
+                Color.fabulaBack2
+            }
+            .padding(.bottom, 10)
         }
-        .background {
-            Color.fabulaBack2
-        }
-        .padding(.bottom, 10)
     }
 }

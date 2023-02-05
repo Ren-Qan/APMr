@@ -67,7 +67,7 @@ struct ChartD {
 
 class ChartModel: Identifiable, ObservableObject {
     var id = UUID()
-    var visiable = true
+    @Published var visiable = true
     var title: String
     var type: PerformanceIndicatorType
     var sets: [LineChartDataSet]

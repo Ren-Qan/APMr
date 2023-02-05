@@ -14,7 +14,7 @@ struct LineChart: NSViewRepresentable {
     typealias NSViewType = LineChartView
         
     @EnvironmentObject var chartModel: ChartModel
-    
+        
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
@@ -24,13 +24,16 @@ struct LineChart: NSViewRepresentable {
         view.delegate = context.coordinator
         view.data = chartModel.chartData
         view.doubleTapToZoomEnabled = false
-        view.xAxis.labelCount = 20
         view.dragYEnabled = false
-        view.dragXEnabled = true
+        view.dragXEnabled = false
         view.scaleYEnabled = false
         view.pinchZoomEnabled = false
+        view.scaleXEnabled = true
+        
         view.xAxis.labelPosition = .bottom
         view.xAxis.drawGridLinesEnabled = false
+        view.xAxis.setLabelCount(10, force: true)
+        
         view.legend.horizontalAlignment = .center
         view.legend.verticalAlignment = .top
         
@@ -39,13 +42,20 @@ struct LineChart: NSViewRepresentable {
         
         view.rightAxis.enabled = false
         view.drawGridBackgroundEnabled = false
-        
         return view
     }
     
     func updateNSView(_ nsView: Charts.LineChartView, context: Context) {
+        let count = chartModel.sets[0].entries.count
+        
+        if count >= 100 {
+            nsView.xAxis.axisMinimum = Double(count - 100)
+            nsView.xAxis.axisMaximum = Double(count)
+        }
+        
         nsView.notifyDataSetChanged()
-        if chartModel.chartData.entryCount > 0 {
+        
+        if count > 0 {
             nsView.setVisibleXRange(minXRange: 100, maxXRange: 100)
         }
     }

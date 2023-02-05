@@ -81,7 +81,7 @@ extension HomepageInstrumentsService {
             }
             
             let old = self.pCM
-            var new = ChartD()
+            let new = ChartD()
             
             (0 ..< old.models.count).forEach { i in
                 new.models[i].visiable = old.models[i].visiable
@@ -140,14 +140,12 @@ extension HomepageInstrumentsService {
     }
     
     public func updateVisiable(type: PerformanceIndicatorType, visiable: Bool) {
-        var old = pCM
-        for i in (0 ..< old.models.count) {
-            if old.models[i].type == type {
-                old.models[i].visiable = visiable
+        for i in (0 ..< pCM.models.count) {
+            if pCM.models[i].type == type {
+                pCM.models[i].visiable = visiable
                 break
             }
         }
-        pCM = old
     }
 }
 
@@ -221,7 +219,6 @@ extension HomepageInstrumentsService {
             
             (0 ..< landmarks.count).forEach { i in
                 model.chartData.appendEntry(landmarks[i], toDataSet: i)
-                
             }
             
             if model.visiable {

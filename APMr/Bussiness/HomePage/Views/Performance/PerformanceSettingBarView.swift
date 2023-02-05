@@ -63,7 +63,14 @@ struct PerformanceSettingBarView: View {
                 )
                 .popover(isPresented: $isShowPerformanceItem,
                          arrowEdge: .bottom) {
-                    PerformanceChartShowSettingPopoverView()
+                    VStack(spacing: 1) {
+                        ForEach(instruments.pCM.models) { chartModel in
+                            PerformanceChartShowSettingPopoverButton()
+                                .environmentObject(chartModel)
+                        }
+                    }
+                    .padding(.top, 3)
+                    
                 }
                 
                 Spacer()
@@ -104,27 +111,23 @@ struct PerformanceSettingBarView: View {
     }
 }
 
-struct PerformanceChartShowSettingPopoverView: View {
-    @EnvironmentObject var instruments: HomepageInstrumentsService
+struct PerformanceChartShowSettingPopoverButton: View {
+    @EnvironmentObject var chartModel: ChartModel
     
     var body: some View {
         VStack(spacing: 1) {
-            ForEach(instruments.pCM.models) { chartModel in
-                Button {
-                    var item = chartModel
-                    item.visiable.toggle()
-                    instruments.updateVisiable(type: item.type, visiable: item.visiable)
-                } label: {
-                    HStack {
-                        Image(systemName: chartModel.visiable ? "checkmark.square.fill" : "square")
-                            .padding(.trailing, 5)
-                        Text(chartModel.title)
-                    }
-                    .frame(minHeight: 30)
-                    .frame(minWidth: 150, alignment: .leading)
+            Button {
+                chartModel.visiable.toggle()
+            } label: {
+                HStack {
+                    Image(systemName: chartModel.visiable ? "checkmark.square.fill" : "square")
+                        .padding(.trailing, 5)
+                    Text(chartModel.title)
                 }
-                .common(backColor: .fabulaBar2)
+                .frame(minHeight: 30)
+                .frame(minWidth: 150, alignment: .leading)
             }
+            .common(backColor: .fabulaBar2)
         }
         .padding(.top, 3)
     }
