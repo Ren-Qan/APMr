@@ -30,6 +30,10 @@ struct LineChart: NSViewRepresentable {
         view.pinchZoomEnabled = false
         view.scaleXEnabled = true
         
+        view.highlightPerDragEnabled = false
+        view.highlightPerTapEnabled = false
+        view.drawGridBackgroundEnabled = false
+        
         view.xAxis.labelPosition = .bottom
         view.xAxis.drawGridLinesEnabled = false
         view.xAxis.setLabelCount(10, force: true)
@@ -41,7 +45,6 @@ struct LineChart: NSViewRepresentable {
         view.leftAxis.drawGridLinesEnabled = false
         
         view.rightAxis.enabled = false
-        view.drawGridBackgroundEnabled = false
         return view
     }
     

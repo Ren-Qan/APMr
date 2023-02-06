@@ -22,6 +22,7 @@ struct ChartD {
             set.highlightLineDashLengths = [1, 2]
             set.colors = [NSColor(color)]
             set.label = title
+            set.drawHorizontalHighlightIndicatorEnabled = false
             return set
         }
         

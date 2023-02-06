@@ -74,7 +74,7 @@ struct PerformanceSettingBarView: View {
                 }
                 
                 Button {
-                    instruments.insertTestData(count: .random(in: 0 ... 100))
+                    instruments.insertTestData(count: .random(in: 1 ... 2))
                 } label: {
                     Text("插入测试数据")
                 }

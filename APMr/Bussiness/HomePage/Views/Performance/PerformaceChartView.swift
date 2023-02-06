@@ -16,9 +16,7 @@ struct PerformaceChartView: View {
     
     // MARK: - Private -
     @State private var mouseState = MouseState.none
-    
-    @State private var highLightX: Double = 0
-    
+        
     private enum MouseState {
         case none
         case drag(CGPoint, CGSize)
@@ -50,7 +48,7 @@ private struct Chart: View {
                 }
                 .offset(x: 10)
                 .padding(.top, 5)
-                
+                                
                 LineChart()
                     .environmentObject(model)
                     .frame(height: 170)
