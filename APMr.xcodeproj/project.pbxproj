@@ -54,7 +54,6 @@
 		C7719B42298664A100DC6044 /* HomepageInstrumentsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */; };
 		C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7719B432987B5D700DC6044 /* IDiagnosticsRelay.swift */; };
 		C7764FDE29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */; };
-		C77A981F298CF7F000009C3C /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77A981E298CF7F000009C3C /* LineChart.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* IInstrumentsOpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */; };
 		C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */; };
@@ -156,7 +155,6 @@
 		C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageInstrumentsModels.swift; sourceTree = "<group>"; };
 		C7719B432987B5D700DC6044 /* IDiagnosticsRelay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDiagnosticsRelay.swift; sourceTree = "<group>"; };
 		C7764FDD29652D3000D4A6C6 /* IInstrumentsEnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsEnergyModels.swift; sourceTree = "<group>"; };
-		C77A981E298CF7F000009C3C /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* IInstrumentsOpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpenglModels.swift; sourceTree = "<group>"; };
 		C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonStyle.swift; sourceTree = "<group>"; };
@@ -600,10 +598,9 @@
 			isa = PBXGroup;
 			children = (
 				C754F0E2296D33360053DBA3 /* PerformanceView.swift */,
-				C7B5B94329767921009A88D7 /* PerformaceChartView.swift */,
 				C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */,
+				C7B5B94329767921009A88D7 /* PerformaceChartView.swift */,
 				C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */,
-				C77A981E298CF7F000009C3C /* LineChart.swift */,
 			);
 			path = Performance;
 			sourceTree = "<group>";
@@ -739,7 +736,6 @@
 				C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */,
 				C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
-				C77A981F298CF7F000009C3C /* LineChart.swift in Sources */,
 				C7AC9895295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7AC98812956EB1D00A6580B /* IInstrumentsNetworking.swift in Sources */,

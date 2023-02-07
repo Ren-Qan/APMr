@@ -24,6 +24,5 @@ struct PerformanceSummaryView: View {
         ScrollView {
             Text("In Progress")
         }
-        .frame(maxWidth: 350)
     }
 }

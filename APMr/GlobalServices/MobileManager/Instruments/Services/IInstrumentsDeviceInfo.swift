@@ -21,7 +21,7 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
 
     func response(_ response: DTXReceiveObject?) {
-   
+        print(response?.object)
     }
 }
 

@@ -23,6 +23,7 @@ struct ChartD {
             set.colors = [NSColor(color)]
             set.label = title
             set.drawHorizontalHighlightIndicatorEnabled = false
+            set.drawValuesEnabled = false
             return set
         }
         
@@ -69,6 +70,7 @@ struct ChartD {
 class ChartModel: Identifiable, ObservableObject {
     var id = UUID()
     @Published var visiable = true
+    var updateState: UpdateState = .none
     var title: String
     var type: PerformanceIndicatorType
     var sets: [LineChartDataSet]
@@ -85,5 +87,12 @@ class ChartModel: Identifiable, ObservableObject {
         self.type = type
         self.sets = sets
         self.chartData = LineChartData(dataSets: sets)
+    }
+    
+    enum UpdateState {
+        case none
+        case view
+        case hightlight(CGPoint)
+        case unHighlight
     }
 }

@@ -70,7 +70,6 @@ struct PerformanceSettingBarView: View {
                         }
                     }
                     .padding(.top, 3)
-                    
                 }
                 
                 Button {
@@ -123,6 +122,7 @@ struct PerformanceChartShowSettingPopoverButton: View {
     var body: some View {
         VStack(spacing: 1) {
             Button {
+                chartModel.updateState = .view
                 chartModel.visiable.toggle()
             } label: {
                 HStack {

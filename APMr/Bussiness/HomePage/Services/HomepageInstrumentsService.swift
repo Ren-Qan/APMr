@@ -33,6 +33,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
             .opengl,
             .processcontrol,
             .networkStatistics,
+            .deviceinfo,
         ])
         return group
     }()
@@ -46,6 +47,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     private var cSPI = PerformanceIndicator()
     
     private var lockdown: ILockdown? = nil
+    
     private var diagnostics: IDiagnosticsRelay? = nil
     
     deinit {
@@ -114,7 +116,7 @@ extension HomepageInstrumentsService {
                 }
                 
                 if count % cycle == cycle - 1 {
-                    self?.dataRecord()
+                    self?.record()
                 }
                 
                 count += 1
@@ -172,7 +174,7 @@ extension HomepageInstrumentsService {
         }
     }
     
-    private func dataRecord() {
+    private func record() {
         debugPrint("第\(currentSeconds)秒-数据同步")
         
         let x = currentSeconds
@@ -183,6 +185,7 @@ extension HomepageInstrumentsService {
         
         for (index, item) in pCM.models.enumerated() {
             let model = pCM.models[index]
+            model.updateState = .none
             var landmarks: [ChartDataEntry] = []
             switch item.type {
                 case .cpu:
@@ -222,6 +225,7 @@ extension HomepageInstrumentsService {
             }
             
             if model.visiable {
+                model.updateState = .view
                 model.objectWillChange.send()
             }
         }
@@ -383,7 +387,7 @@ extension HomepageInstrumentsService {
         DispatchQueue.global().async {
             (0 ..< count).forEach { _ in
                 randomCPCM()
-                self.dataRecord()
+                self.record()
             }
         }
     }
