@@ -66,6 +66,10 @@ struct PerformanceSettingBarView: View {
                     PerformanceChartShowSettingPopoverView()
                 }
                 
+                Button("插入随机数据") {
+                    instruments.insertTestData(count: 100)
+                }
+                
                 Spacer()
                 
                 // MARK: - 设置按钮 -

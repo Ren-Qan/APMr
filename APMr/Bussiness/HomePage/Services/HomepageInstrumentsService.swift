@@ -342,3 +342,42 @@ extension HomepageInstrumentsService {
         cSPI.diagnostic = item
     }
 }
+
+
+// MARK: - TEST FUNC
+extension HomepageInstrumentsService {
+    func insertTestData(count: Int) {
+        func randomCPCM() {
+            cSPI.cpu.process = .random(in:  0 ... 100)
+            cSPI.cpu.total = .random(in: 0 ... 100)
+            
+            cSPI.gpu.renderer = .random(in: 0 ... 100)
+            cSPI.gpu.device = .random(in: 0 ... 100)
+            cSPI.gpu.tiler = .random(in: 0 ... 100)
+            
+            cSPI.fps.fps = .random(in: 0 ... 120)
+            
+            cSPI.io.readDelta = .random(in: 0 ... 40)
+            cSPI.io.writeDelta = .random(in: 0 ... 40)
+            
+            cSPI.network.downDelta = .random(in: 0 ... 100)
+            cSPI.network.upDelta = .random(in: 0 ... 100)
+            
+            cSPI.diagnostic.amperage = .random(in:  0 ... 40)
+            cSPI.diagnostic.battery = .random(in: 0 ... 100)
+            cSPI.diagnostic.voltage = .random(in: 0 ... 20)
+            cSPI.diagnostic.temperature = .random(in:  10 ... 44)
+            
+            cSPI.memory.memory = .random(in: 0 ... 500)
+            cSPI.memory.resident = .random(in: 0 ... 500)
+            cSPI.memory.vm = .random(in: 0 ... 500)
+        }
+        
+        DispatchQueue.global().async {
+            (0 ..< count).forEach { _ in
+                randomCPCM()
+                self.dataRecord()
+            }
+        }
+    }
+}
