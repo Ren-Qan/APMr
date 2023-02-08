@@ -17,35 +17,39 @@ enum PerformanceIndicatorType {
     case diagnostic
 }
 
+class PerformanceIndicator {
+    var seconds: CGFloat = 0
+    let cpu = PCPUIndicator()
+    let gpu = PGPUIndicator()
+    let fps = PFPSIndicator()
+    let memory = PMemoryIndicator()
+    let network = PNetworkIndicator()
+    let io = PIOIndicator()
+    let diagnostic = PDiagnosticIndicator()    
+}
+
 protocol PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { get }
 }
 
-struct PerformanceIndicator {
-    var seconds: CGFloat = 0
-    var cpu = PCPUIndicator()
-    var gpu = PGPUIndicator()
-    var fps = PFPSIndicator()
-    var memory = PMemoryIndicator()
-    var network = PNetworkIndicator()
-    var io = PIOIndicator()
-    var diagnostic = PDiagnosticIndicator()
+class PBaseIndicator {
+
 }
 
-struct PCPUIndicator: PerformanceIndicatorProtocol {
+class PCPUIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .cpu }
     var process: CGFloat = 0 // 0 - 100
     var total: CGFloat = 0 // 0 - 100
 }
 
-struct PMemoryIndicator: PerformanceIndicatorProtocol {
+class PMemoryIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .memory }
     var resident: CGFloat = 0 // MB
     var memory: CGFloat = 0 // MB
     var vm: CGFloat = 0 // GB
 }
 
-struct PFPSIndicator: PerformanceIndicatorProtocol {
+class PFPSIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .fps }
     var fps: CGFloat = 0
     var jank: Int = 0
@@ -53,20 +57,20 @@ struct PFPSIndicator: PerformanceIndicatorProtocol {
     var stutter: CGFloat = 0
 }
 
-struct PGPUIndicator: PerformanceIndicatorProtocol {
+class PGPUIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .gpu }
     var device: CGFloat = 0 // 0 - 100
     var renderer: CGFloat = 0 // 0 - 100
     var tiler: CGFloat = 0 // 0 - 100
 }
 
-struct PNetworkIndicator: PerformanceIndicatorProtocol {
+class PNetworkIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .network }
     var downDelta: CGFloat = 0 //KB/s
     var upDelta: CGFloat = 0 // KB/s
 }
 
-struct PIOIndicator: PerformanceIndicatorProtocol {
+class PIOIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .io }
     var read: CGFloat = 0 // KB
     var write: CGFloat = 0 // KB
@@ -74,7 +78,7 @@ struct PIOIndicator: PerformanceIndicatorProtocol {
     var writeDelta: CGFloat = 0 // KB/s
 }
 
-struct PDiagnosticIndicator: PerformanceIndicatorProtocol {
+class PDiagnosticIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .diagnostic }
     var amperage: CGFloat = 0 // mA
     var voltage: CGFloat = 0 // V

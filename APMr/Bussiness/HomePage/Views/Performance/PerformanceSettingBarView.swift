@@ -63,11 +63,17 @@ struct PerformanceSettingBarView: View {
                 )
                 .popover(isPresented: $isShowPerformanceItem,
                          arrowEdge: .bottom) {
-                    PerformanceChartShowSettingPopoverView()
+                    VStack(spacing: 1) {
+                        ForEach(instruments.pCM.models) { chartModel in
+                            PerformanceChartShowSettingPopoverButtonView()
+                                .environmentObject(chartModel)
+                        }
+                    }
+                    .padding(.top, 3)
                 }
                 
                 Button("插入随机数据") {
-                    instruments.insertTestData(count: 100)
+                    instruments.insertTestData(count: .random(in: 1 ... 3))
                 }
                 
                 Spacer()
@@ -108,29 +114,22 @@ struct PerformanceSettingBarView: View {
     }
 }
 
-struct PerformanceChartShowSettingPopoverView: View {
-    @EnvironmentObject var instruments: HomepageInstrumentsService
+struct PerformanceChartShowSettingPopoverButtonView: View {
+    @EnvironmentObject var chartModel: ChartModel
     
     var body: some View {
-        VStack(spacing: 1) {
-            ForEach(instruments.pCM.models) { chartModel in
-                Button {
-                    var item = chartModel
-                    item.visiable.toggle()
-                    instruments.updateVisiable(type: item.type, visiable: item.visiable)
-                } label: {
-                    HStack {
-                        Image(systemName: chartModel.visiable ? "checkmark.square.fill" : "square")
-                            .padding(.trailing, 5)
-                        Text(chartModel.title)
-                    }
-                    .frame(minHeight: 30)
-                    .frame(minWidth: 150, alignment: .leading)
-                }
-                .common(backColor: .fabulaBar2)
+        Button {
+            chartModel.visiable.toggle()
+        } label: {
+            HStack {
+                Image(systemName: chartModel.visiable ? "checkmark.square.fill" : "square")
+                    .padding(.trailing, 5)
+                Text(chartModel.title)
             }
+            .frame(minHeight: 30)
+            .frame(minWidth: 150, alignment: .leading)
         }
-        .padding(.top, 3)
+        .common(backColor: .fabulaBar2)
     }
 }
 

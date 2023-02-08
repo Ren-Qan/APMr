@@ -8,8 +8,8 @@
 import Cocoa
 import SwiftUI
 
-struct PerformanceChartModel {
-    var models: [ChartModel]
+class PerformanceChartModel: ObservableObject {
+    @Published var models: [ChartModel]
     
     init() {
         models = [.init(title: "CPU",
@@ -55,21 +55,58 @@ struct PerformanceChartModel {
     }
 }
 
-struct ChartModel: Identifiable {
+class ChartModel: Identifiable, ObservableObject {
     var id = UUID()
-    var title: String
+    var title: String = ""
     var type: PerformanceIndicatorType
-    var series: [ChartSeriesItem]
-    var yRange: ClosedRange<Int> = 0 ... Int.max
-    var visiable = true
+    var series: [ChartSeriesItem] = []
+    var yAxis = Axis()
+    var xAxis = Axis()
+    @Published var visiable = true
+    
+    init(id: UUID = UUID(),
+         title: String,
+         type: PerformanceIndicatorType,
+         series: [ChartSeriesItem],
+         visiable: Bool = true) {
+        self.id = id
+        self.title = title
+        self.type = type
+        self.series = series
+        self.visiable = visiable
+    }
+    
+    var chartShowSeries: [ChartSeriesItem] {
+        return series.filter { item in
+            return item.visiable
+        }
+    }
 }
 
-struct ChartSeriesItem: Identifiable {
+class ChartSeriesItem: Identifiable, ObservableObject {
     var id = UUID()
-    var value: String
+    var value: String = ""
     var visiable: Bool = true
     var style: Color = .random
-    var landmarks: [ChartLandmarkItem] = []
+    var landmarks: [ChartLandmarkItem]
+    
+    init(id: UUID = UUID(),
+         value: String,
+         visiable: Bool = true,
+         style: Color = .random,
+         landmarks: [ChartLandmarkItem] = []) {
+        self.id = id
+        self.value = value
+        self.visiable = visiable
+        self.style = style
+        self.landmarks = landmarks
+    }
+    
+    func chartLandMarks(axis: Axis) -> [ChartLandmarkItem] {
+        let count = landmarks.count
+        let x = axis.start
+        return Array(landmarks[x ..< count])
+    }
 }
 
 struct ChartLandmarkItem: Identifiable {
@@ -77,4 +114,9 @@ struct ChartLandmarkItem: Identifiable {
     var x: Int
     var y: Int
     var visiable = true
+}
+
+class Axis {
+    var start: Int = 0
+    var end: Int = 0
 }

@@ -25,7 +25,7 @@ struct PerformanceView: View {
             if service.isShowPerformanceSummary {
                 PerformanceSummaryView()
                     .padding(.leading, 5)
-                    .frame(minWidth: 200)
+                    .frame(width: 250)
                     .background {
                         Color.fabulaBack1
                     }

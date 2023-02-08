@@ -440,8 +440,8 @@
 			isa = PBXGroup;
 			children = (
 				C76E7B5729517CC3004F009B /* HomepageModels.swift */,
-				C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */,
 				C7CCDA96298A176900948BA3 /* HomepageChartModels.swift */,
+				C7719B41298664A100DC6044 /* HomepageInstrumentsModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
