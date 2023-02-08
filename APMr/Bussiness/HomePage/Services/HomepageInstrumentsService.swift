@@ -18,7 +18,13 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     @Published private(set) var monitorPid: UInt32 = 0
     
-    public let pCM: PerformanceChartModel = .init()
+    public var pCM = PerformanceChartModel()
+    
+    private lazy var operationQ = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
@@ -36,11 +42,12 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     private var receiceSeriesNilCount = 0
     
-    private var currentSeconds = 0
+    private var currentSeconds: Double = 0
     
     private var cSPI = PerformanceIndicator()
     
     private var lockdown: ILockdown? = nil
+    
     private var diagnostics: IDiagnosticsRelay? = nil
     
     deinit {
@@ -74,7 +81,15 @@ extension HomepageInstrumentsService {
                     self.diagnostics = IDiagnosticsRelay(iDevice, lockdown)
                 }
             }
+
+            let old = self.pCM
+            let new = PerformanceChartModel()
             
+            (0 ..< old.models.count).forEach { i in
+                new.models[i].visiable = old.models[i].visiable
+            }
+            
+            self.pCM = new
             self.cSPI = PerformanceIndicator()
             complete?(success, self)
         }
@@ -94,16 +109,18 @@ extension HomepageInstrumentsService {
         timer = Timer(timeInterval: sampleTimer,
                       repeats: true,
                       block: { [weak self] _ in
-            self?.request()
-            if count % cycle == 0 {
-                self?.send()
-            }
-            
-            if count % cycle == cycle - 1 {
-                self?.record()
-            }
-            
-            count += 1
+            self?.operationQ.addOperation({
+                self?.request()
+                if count % cycle == 0 {
+                    self?.send()
+                }
+                
+                if count % cycle == cycle - 1 {
+                    self?.record()
+                }
+                
+                count += 1
+            })
         })
         
         timer?.fire()
@@ -121,6 +138,7 @@ extension HomepageInstrumentsService {
         isMonitoringPerformance = false
         diagnostics = nil
         lockdown = nil
+        operationQ.cancelAllOperations()
     }
 }
 
@@ -193,7 +211,7 @@ extension HomepageInstrumentsService {
                                  lm(Int(cSPI.diagnostic.temperature))]
             }
             
-            var xStart = count - xAxisPageCount 
+            var xStart = count - xAxisPageCount
             if xStart < 0 {
                 xStart = 0
             }
@@ -202,7 +220,7 @@ extension HomepageInstrumentsService {
             model.xAxis.start = xStart
             model.xAxis.end = xEnd
             
-            var yMax = 0
+            var yMax = 10
             
             (0 ..< model.series.count).forEach { i in
                 if landmarks[i].y > yMax {
@@ -221,7 +239,6 @@ extension HomepageInstrumentsService {
                 model.objectWillChange.send()
             }
         }
-                
         currentSeconds += 1
         cSPI.seconds = CGFloat(currentSeconds)
     }
@@ -329,7 +346,7 @@ extension HomepageInstrumentsService {
         item.voltage = (dic["Voltage"] as? CGFloat ?? 0) / 1000
         item.battery = (dic["CurrentCapacity"] as? CGFloat ?? 0)
         item.temperature = (dic["Temperature"] as? CGFloat ?? 0) / 100
-        if let amperage = dic["InstantAmperage"] as? UInt64 {
+        if let amperage = dic["InstantAmperage"] as? UInt64, (amperage >> 63) == 0x1 {
             // 参考 https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py
             item.amperage = CGFloat(UInt64.max - amperage) + 1
         }

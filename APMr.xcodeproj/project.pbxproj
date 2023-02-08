@@ -501,8 +501,8 @@
 		C780D10C29418B4800EF5633 /* Bussiness */ = {
 			isa = PBXGroup;
 			children = (
-				C780D11029418BB400EF5633 /* HomePage */,
 				C7719B3E298530F400DC6044 /* User */,
+				C780D11029418BB400EF5633 /* HomePage */,
 			);
 			path = Bussiness;
 			sourceTree = "<group>";
@@ -598,8 +598,8 @@
 			isa = PBXGroup;
 			children = (
 				C754F0E2296D33360053DBA3 /* PerformanceView.swift */,
-				C7B5B94329767921009A88D7 /* PerformaceChartView.swift */,
 				C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */,
+				C7B5B94329767921009A88D7 /* PerformaceChartView.swift */,
 				C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */,
 			);
 			path = Performance;
