@@ -10,19 +10,9 @@ import SwiftUI
 struct PerformanceSummaryView: View {
     @EnvironmentObject var service: HomepageService
     
-    let testColumns: [GridItem] = {
-        var items = [GridItem]()
-        
-        (0 ..< 100).forEach { i in
-            let item = GridItem(.fixed(100), spacing: 5)
-            items.append(item)
-        }
-        return items
-    }()
-    
+    @EnvironmentObject var summary: HomepageInstrumentsService.Summary
+            
     var body: some View {
-        ScrollView {
-            Text("In Progress")
-        }
+        Text("\(summary.highlightState.x ?? 0)")
     }
 }

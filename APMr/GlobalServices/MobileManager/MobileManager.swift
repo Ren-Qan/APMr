@@ -25,7 +25,7 @@ class MobileManager: NSObject {
     }
 }
 
-// MARK: - Public -
+// MARK: - Public 
 extension MobileManager {
     func refreshDeviceList() {
         var devices = [DeviceItem]()
@@ -57,7 +57,7 @@ extension MobileManager {
     }
 }
 
-// MARK: - Notification Name -
+// MARK: - Notification Name
 extension MobileManager {
     public static let subscribeChangedNotification = NSNotification.Name("Mobile_Subscribe_Changed_Notification")
 }

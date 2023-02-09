@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - 侧边功能按钮模型 -
+// MARK: - 侧边功能按钮模型 
 struct ApplicationSider: Identifiable, Hashable, Codable {
     var state: HomepageServiceType
     

@@ -26,10 +26,10 @@ class HomepageService: ObservableObject {
                                 ApplicationSider(state: .lag, title: "卡顿分析"),
                                 ApplicationSider(state: .crash, title: "崩溃分析")]
         
-    // MARK: - Navigation Bar -
+    // MARK: - Navigation Bar
     @Published var selectDevice: DeviceItem? = nil
     @Published var selectApp: IInstproxyAppInfo? = nil
 
-    // MARK: - Performance Summary -
+    // MARK: - Performance Summary 
     @Published public var isShowPerformanceSummary = false
 }

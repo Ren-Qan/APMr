@@ -18,7 +18,7 @@ struct PerformanceSettingBarView: View {
     var body: some View {
         VStack {
             HStack {
-                // MARK: - 启动/停止按钮 -
+                // MARK: - 启动/停止按钮 
                 Button {
                     if instruments.isMonitoringPerformance {
                         instruments.stopService()
@@ -50,7 +50,7 @@ struct PerformanceSettingBarView: View {
                     enable: service.selectDevice != nil && service.selectApp != nil && !instruments.isLaunchingApp
                 )
                 
-                // MARK: - 选择指标按钮 -
+                // MARK: - 选择指标按钮
                 Button {
                     isShowPerformanceItem.toggle()
                 } label: {
@@ -73,12 +73,12 @@ struct PerformanceSettingBarView: View {
                 }
                 
                 Button("插入随机数据") {
-                    instruments.insertTestData(count: .random(in: 1 ... 3))
+                    instruments.insertTestData(count: .random(in: 40 ... 80))
                 }
                 
                 Spacer()
                 
-                // MARK: - 设置按钮 -
+                // MARK: - 设置按钮
                 Button {
                     isShowPerformanceSetting.toggle()
                 } label: {
@@ -94,7 +94,7 @@ struct PerformanceSettingBarView: View {
                     PerformanceTimeRecordSettingView()
                 }
                 
-                // MARK: - 报告按钮 -
+                // MARK: - 报告按钮
                 Button {
                     service.isShowPerformanceSummary.toggle()
                 } label: {

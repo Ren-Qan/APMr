@@ -34,6 +34,8 @@ struct PerformanceView: View {
                             edge: .trailing
                         )
                     )
+                    .environmentObject(service)
+                    .environmentObject(instruments.summary)
             }
         }
         .animation(.default, value: service.isShowPerformanceSummary)

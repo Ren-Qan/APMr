@@ -59,7 +59,7 @@ class IDevice: NSObject {
     }
 }
 
-// MARK: - Public -
+// MARK: - Public 
 extension IDevice {
     func reset(_ udid: String, _ type: DeviceConnectType) {
         reset(.init(udid: udid, type: type))

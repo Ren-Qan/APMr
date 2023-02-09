@@ -10,7 +10,7 @@ import Charts
 
 
 struct PerformaceChartView: View {
-    // MARK: - Public -
+    // MARK: - Public 
     @EnvironmentObject var service: HomepageService
     
     @EnvironmentObject var instruments: HomepageInstrumentsService
@@ -23,6 +23,7 @@ struct PerformaceChartView: View {
                         ForEach(instruments.pCM.models) { chartModel in
                             LineChartGroup()
                                 .environmentObject(chartModel)
+                                .environmentObject(instruments)
                         }
                     }
                     .padding(.top, 7)
@@ -34,6 +35,7 @@ struct PerformaceChartView: View {
 
 extension PerformaceChartView {
     private struct LineChartGroup: View {
+        @EnvironmentObject var instruments: HomepageInstrumentsService
         @EnvironmentObject var model: ChartModel
         
         var body: some View {
@@ -45,11 +47,17 @@ extension PerformaceChartView {
                         }
                         
                         HStack {
-                            ForEach(model.chartShowSeries) { series in
-                                Rectangle()
-                                    .fill(series.style)
-                                    .frame(width: 9, height: 2)
-                                Text(series.value)
+                            ForEach(model.series) { series in
+                                HStack {
+                                    Rectangle()
+                                        .fill(series.style)
+                                        .frame(width: 9, height: 2)
+                                    Text(series.value)
+                                }
+                                .onTapGesture {
+                                    series.visiable.toggle()
+                                    model.objectWillChange.send()
+                                }
                             }
                         }
                         .padding(.leading, 120)
@@ -58,7 +66,7 @@ extension PerformaceChartView {
                     .padding(.top, 5)
                     
                     Chart {
-                        ForEach(model.series) { series in
+                        ForEach(model.chartShowSeries) { series in
                             ForEach(series.chartLandMarks(axis: model.xAxis)) { landmark in
                                 LineMark(x: .value("time", landmark.x),
                                          y: .value("value", landmark.y),
@@ -68,22 +76,24 @@ extension PerformaceChartView {
                             }
                         }
                     }
+                    .animation(.default, value: true)
                     .chartXScale(domain: model.xAxis.start ... model.xAxis.end)
                     .chartYScale(domain: model.yAxis.start ... model.yAxis.end)
                     .padding(.trailing, 20)
                     .padding(.vertical, 10)
                     .chartXAxis {
-                        AxisMarks { value in
+                        AxisMarks(values: .automatic(desiredCount: model.xAxis.len)) { value in
                             if let rawValue = value.as(Int.self) {
                                 if rawValue == model.xAxis.start {
                                     AxisGridLine(stroke: .init(lineWidth: 1))
-                                } else {
+                                }
+                                
+                                if rawValue != 0,
+                                   (rawValue - model.xAxis.start) % 10 == 0 {
                                     AxisValueLabel {
                                         Text("\(rawValue)")
                                     }
-                                    
                                     AxisTick(stroke: .init(lineWidth: 1))
-                                        .foregroundStyle(.gray)
                                 }
                             }
                         }
@@ -93,6 +103,7 @@ extension PerformaceChartView {
                             if let rawValue = value.as(Int.self) {
                                 if rawValue == model.yAxis.start {
                                     AxisGridLine()
+                                    AxisTick(stroke: .init(lineWidth: 1))
                                 }
                                 AxisValueLabel {
                                     Text("\(rawValue)")
@@ -101,6 +112,27 @@ extension PerformaceChartView {
                             }
                         }
                     }
+                    
+                    .chartOverlay { proxy in
+                        GeometryReader { geometry in
+                            Rectangle()
+                                .fill(.clear)
+                                .contentShape(Rectangle())
+                                .gesture(
+                                    SpatialTapGesture()
+                                        .onEnded { value in
+                                            signElement(value.location, proxy, geometry)
+                                        }
+                                        .exclusively(
+                                            before: DragGesture()
+                                                .onChanged { value in
+                                                    signElement(value.location, proxy, geometry)
+                                                }
+                                        )
+                                )
+                        }
+                            
+                    }
                 }
                 .background {
                     Color.fabulaBack2
@@ -108,5 +140,14 @@ extension PerformaceChartView {
                 .padding(.bottom, 10)
             }
         }
-    }
+        
+        private func signElement(_ location: CGPoint,
+                                 _ proxy: ChartProxy,
+                                 _ geometry: GeometryProxy) {
+            let locationX = location.x - geometry[proxy.plotAreaFrame].origin.x
+            if let x: Int = proxy.value(atX: locationX) {
+                instruments.highlightSelect(x: x)
+            }
+        }
+    }	
 }

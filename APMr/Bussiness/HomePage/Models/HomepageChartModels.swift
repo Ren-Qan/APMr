@@ -119,4 +119,7 @@ struct ChartLandmarkItem: Identifiable {
 class Axis {
     var start: Int = 0
     var end: Int = 0
+    var len: Int {
+        return end - start
+    }
 }

@@ -10,16 +10,21 @@ import Combine
 import LibMobileDevice
 
 class HomepageInstrumentsService: NSObject, ObservableObject {
+    //MARK: - Public
+    
+    @Published private(set) var summary = Summary()
+    
+    @Published private(set) var monitorPid: UInt32 = 0
+    
     @Published var isMonitoringPerformance = false
     
     @Published var isLaunchingApp = false
     
     @Published var xAxisPageCount = 100
     
-    @Published private(set) var monitorPid: UInt32 = 0
-    
     public var pCM = PerformanceChartModel()
     
+    //MARK: - Private
     private lazy var operationQ = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
@@ -49,6 +54,8 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     private var lockdown: ILockdown? = nil
     
     private var diagnostics: IDiagnosticsRelay? = nil
+        
+    private var temHightlightX: Int = 0
     
     deinit {
         timer?.invalidate()
@@ -56,7 +63,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     }
 }
 
-// MARK: - Public API -
+// MARK: - Public API
 extension HomepageInstrumentsService {
     public func launch(app: IInstproxyAppInfo) {
         isLaunchingApp = true
@@ -68,7 +75,7 @@ extension HomepageInstrumentsService {
     }
 }
 
-// MARK: - Public Service Setup Functions -
+// MARK: - Public Service Setup Functions 
 extension HomepageInstrumentsService {
     public func start(_ device: DeviceItem,
                       _ complete: ((Bool, HomepageInstrumentsService) -> Void)? = nil) {
@@ -140,7 +147,13 @@ extension HomepageInstrumentsService {
         lockdown = nil
         operationQ.cancelAllOperations()
     }
+    
+    public func highlightSelect(x: Int) {
+        summary.set(temX: x)
+    }
 }
+
+// MARK: - Private
 
 extension HomepageInstrumentsService {
     private func register() {
@@ -174,7 +187,7 @@ extension HomepageInstrumentsService {
         func lm(_ y: Int) -> ChartLandmarkItem {
             ChartLandmarkItem(x: x, y: y)
         }
-        
+                
         pCM.models.forEach { model in
             var landmarks: [ChartLandmarkItem] = []
         
@@ -234,17 +247,22 @@ extension HomepageInstrumentsService {
             if model.yAxis.end < yMax {
                 model.yAxis.end = yMax
             }
-            
-            if model.visiable {
-                model.objectWillChange.send()
-            }
         }
+        
         currentSeconds += 1
         cSPI.seconds = CGFloat(currentSeconds)
+
+        DispatchQueue.main.async {
+            self.pCM.models.forEach { model in
+                if model.visiable {
+                    model.objectWillChange.send()
+                }
+            }
+        }
     }
 }
 
-// MARK: - IInstrumentsServiceGroupDelegate -
+// MARK: - IInstrumentsServiceGroupDelegate
 extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
     func receive(response: DTXReceiveObject?) {
         if response == nil {
@@ -292,7 +310,7 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
     }
 }
 
-// 模型解析
+// MARK: - 模型解析
 extension HomepageInstrumentsService {
     private func cCPU(_ sysmotapInfo: IInstrumentsSysmotapInfo,
                       _ process: IInstrumentsSysmotapSystemProcessesModel) {
@@ -354,6 +372,69 @@ extension HomepageInstrumentsService {
 }
 
 
+// MARK: - Helper Child Service
+extension HomepageInstrumentsService {
+    class Summary: NSObject, ObservableObject {
+        public enum HighlightState {
+            case select(xAxis: Int)
+            case none
+            
+            var x: Int? {
+                switch self {
+                    case .select(let x):
+                        return x
+                    default: return nil
+                }
+            }
+        }
+        
+        @Published private(set) var highlightState: HighlightState = .none
+        
+        private var timer: Timer?
+        private var tempHighlightX = 0
+        
+        deinit {
+            stopSet()
+        }
+        
+        private func start() {
+            stopSet()
+            
+            let timer = Timer(timeInterval: 0.1, repeats: true) { [weak self] _ in
+                
+                
+                if let x = self?.tempHighlightX {
+                    if let currentX = self?.highlightState.x {
+                        if currentX != x {
+                            self?.highlightState = .select(xAxis: x)
+                        }
+                    } else {
+                        self?.highlightState = .select(xAxis: x)
+                    }
+                }
+            }
+            timer.fire()
+            self.timer = timer
+            RunLoop.main.add(timer, forMode: .common)
+        }
+        
+        fileprivate func set(temX: Int) {
+            tempHighlightX = temX
+            if timer == nil {
+                start()
+            }
+            
+            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(stopSet), object: nil)
+            perform(#selector(stopSet), with: nil, afterDelay: 0.1)
+        }
+        
+        @objc private func stopSet() {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+}
+
 // MARK: - TEST FUNC
 extension HomepageInstrumentsService {
     func insertTestData(count: Int) {
@@ -385,11 +466,15 @@ extension HomepageInstrumentsService {
         
         DispatchQueue.global().async {
             let time = Date().timeIntervalSince1970
-            (0 ..< count).forEach { _ in
-                randomCPCM()
-                self.record()
+            (0 ..< count).forEach { i in
+                self.operationQ.addOperation { [weak self] in
+                    randomCPCM()
+                    self?.record()
+                    if (i == count - 1) {
+                        print("插入\(count)条数据 耗时: \(Date().timeIntervalSince1970 - time)")
+                    }
+                }
             }
-            print("插入\(count)条数据 耗时: \(Date().timeIntervalSince1970 - time)")
         }
     }
 }

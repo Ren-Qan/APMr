@@ -58,7 +58,7 @@ protocol IInstrumentsServiceProtocol: NSObjectProtocol {
     
     func response(_ response: DTXReceiveObject?)
     
-    // MARK: - optional -
+    // MARK: - optional
     
     var instrument: IInstruments? { get }
     

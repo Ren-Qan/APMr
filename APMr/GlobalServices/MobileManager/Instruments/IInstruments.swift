@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 
 class IInstruments: NSObject {
-    // MARK: - Private -
+    // MARK: - Private
     private lazy var dtxService: DTXMessageHandle = {
         let server = DTXMessageHandle()
         server.delegate = self
@@ -31,11 +31,11 @@ class IInstruments: NSObject {
     private var identifier: UInt32 = 0
     private var channel_tag: UInt32 = 0
     
-    // MARK: - Public Getter -
+    // MARK: - Public Getter
     public private(set) var isConnected = false
 }
 
-// MARK: - Private -
+// MARK: - Private
 
 private extension IInstruments {
     var nextIdentifier: UInt32 {
