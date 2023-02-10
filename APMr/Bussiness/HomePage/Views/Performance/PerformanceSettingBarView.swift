@@ -76,6 +76,10 @@ struct PerformanceSettingBarView: View {
                     instruments.insertTestData(count: .random(in: 40 ... 80))
                 }
                 
+                Button("reset") {
+                    instruments.resetData()
+                }
+                
                 Spacer()
                 
                 // MARK: - 设置按钮
@@ -124,7 +128,7 @@ struct PerformanceChartShowSettingPopoverButtonView: View {
             HStack {
                 Image(systemName: chartModel.visiable ? "checkmark.square.fill" : "square")
                     .padding(.trailing, 5)
-                Text(chartModel.title)
+                Text(chartModel.type.name)
             }
             .frame(minHeight: 30)
             .frame(minWidth: 150, alignment: .leading)

@@ -43,7 +43,7 @@ extension PerformaceChartView {
                 VStack(alignment: .leading) {
                     ZStack(alignment: .leading) {
                         GroupBox {
-                            Text(model.title)
+                            Text(model.type.name)
                         }
                         
                         HStack {
@@ -121,12 +121,19 @@ extension PerformaceChartView {
                                 .gesture(
                                     SpatialTapGesture()
                                         .onEnded { value in
-                                            signElement(value.location, proxy, geometry)
+                                            findElement(value.location,
+                                                        .zero,
+                                                        proxy,
+                                                        geometry)
                                         }
                                         .exclusively(
                                             before: DragGesture()
                                                 .onChanged { value in
-                                                    signElement(value.location, proxy, geometry)
+                                                    findElement(value.startLocation,
+                                                                value.location,
+                                                                proxy,
+                                                                geometry,
+                                                                true)
                                                 }
                                         )
                                 )
@@ -141,13 +148,27 @@ extension PerformaceChartView {
             }
         }
         
-        private func signElement(_ location: CGPoint,
+        private func findElement(_ location: CGPoint,
+                                 _ endLocation: CGPoint,
                                  _ proxy: ChartProxy,
-                                 _ geometry: GeometryProxy) {
-            let locationX = location.x - geometry[proxy.plotAreaFrame].origin.x
-            if let x: Int = proxy.value(atX: locationX) {
-                instruments.highlightSelect(x: x)
+                                 _ geometry: GeometryProxy,
+                                 _ isDraging: Bool = false) {
+            let offsetX = geometry[proxy.plotAreaFrame].origin.x
+            let locationX = location.x - offsetX
+            guard let startX: Int = proxy.value(atX: locationX) else {
+                return
             }
+            
+            let s = startX
+            var e = 0
+            
+            if isDraging {
+                guard let endX: Int = proxy.value(atX: endLocation.x - offsetX) else {
+                    return
+                }
+                e = endX
+            }
+            instruments.highlight(start: s, end: e, isDragging: isDraging)
         }
     }	
 }

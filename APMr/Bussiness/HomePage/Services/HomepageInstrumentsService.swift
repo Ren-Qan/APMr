@@ -22,7 +22,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     
     @Published var xAxisPageCount = 100
     
-    public var pCM = PerformanceChartModel()
+    public let pCM = PerformanceChartModel()
     
     //MARK: - Private
     private lazy var operationQ = {
@@ -54,9 +54,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
     private var lockdown: ILockdown? = nil
     
     private var diagnostics: IDiagnosticsRelay? = nil
-        
-    private var temHightlightX: Int = 0
-    
+            
     deinit {
         timer?.invalidate()
         timer = nil
@@ -81,6 +79,7 @@ extension HomepageInstrumentsService {
                       _ complete: ((Bool, HomepageInstrumentsService) -> Void)? = nil) {
         DispatchQueue.global().async {
             var success = false
+            
             if let iDevice = IDevice(device) {
                 success = self.serviceGroup.start(iDevice)
                 if let lockdown = ILockdown(iDevice) {
@@ -88,16 +87,7 @@ extension HomepageInstrumentsService {
                     self.diagnostics = IDiagnosticsRelay(iDevice, lockdown)
                 }
             }
-
-            let old = self.pCM
-            let new = PerformanceChartModel()
-            
-            (0 ..< old.models.count).forEach { i in
-                new.models[i].visiable = old.models[i].visiable
-            }
-            
-            self.pCM = new
-            self.cSPI = PerformanceIndicator()
+            self.resetData()
             complete?(success, self)
         }
     }
@@ -147,9 +137,38 @@ extension HomepageInstrumentsService {
         lockdown = nil
         operationQ.cancelAllOperations()
     }
-    
-    public func highlightSelect(x: Int) {
-        summary.set(temX: x)
+        
+    public func highlight(start: Int, end: Int, isDragging: Bool) {
+        let count = pCM.count
+        if isDragging {
+            func correct(_ x: Int) -> Int {
+                let baseX = count - xAxisPageCount < 0 ? 0 : count - xAxisPageCount
+                if x < baseX {
+                    return baseX
+                }
+                
+                if x >= count - 1 {
+                    return count - 1
+                }
+                
+                return x
+            }
+            
+            let s = correct(start)
+            let e = correct(end)
+            
+            if summary.highlightState.start != s || summary.highlightState.end != e {
+                summary.set(startX: s, endX: e)
+            }
+        } else {
+            if start < 0 {
+                return
+            }
+            let s = start >= count ? count - 1 : start
+            if summary.highlightState.start != s || summary.highlightState.end != s {
+                summary.set(startX: s, endX: s)
+            }
+        }
     }
 }
 
@@ -178,81 +197,29 @@ extension HomepageInstrumentsService {
         }
     }
     
+    func resetData() {
+        cSPI.seconds = 0
+        currentSeconds = 0
+        pCM.reset()
+        summary.reset()
+    }
+    
     private func record() {
         debugPrint("第\(currentSeconds)秒-数据同步")
         
-        let x = Int(currentSeconds)
-        let count = x + 1
+        let beforeModelCount = pCM.models.count
         
-        func lm(_ y: Int) -> ChartLandmarkItem {
-            ChartLandmarkItem(x: x, y: y)
-        }
-                
-        pCM.models.forEach { model in
-            var landmarks: [ChartLandmarkItem] = []
-        
-            switch model.type {
-                case .cpu:
-                    landmarks = [lm(Int(cSPI.cpu.process)),
-                                 lm(Int(cSPI.cpu.total))]
-                case .gpu:
-                    landmarks = [lm(Int(cSPI.gpu.device)),
-                                 lm(Int(cSPI.gpu.renderer)),
-                                 lm(Int(cSPI.gpu.tiler))]
-                case .fps:
-                    landmarks = [lm(Int(cSPI.fps.fps)),
-                                 lm(Int(cSPI.fps.jank)),
-                                 lm(Int(cSPI.fps.bigJank)),
-                                 lm(Int(cSPI.fps.stutter))]
-                case .memory:
-                    landmarks = [lm(Int(cSPI.memory.memory)),
-                                 lm(Int(cSPI.memory.resident)),
-                                 lm(Int(cSPI.memory.vm))]
-                    
-                case .network:
-                    landmarks = [lm(Int(cSPI.network.upDelta)),
-                                 lm(Int(cSPI.network.downDelta))]
-                    
-                case .io:
-                    landmarks = [lm(Int(cSPI.io.readDelta)),
-                                 lm(Int(cSPI.io.writeDelta))]
-                    
-                case .diagnostic:
-                    landmarks = [lm(Int(cSPI.diagnostic.amperage)),
-                                 lm(Int(cSPI.diagnostic.voltage)),
-                                 lm(Int(cSPI.diagnostic.battery)),
-                                 lm(Int(cSPI.diagnostic.temperature))]
-            }
-            
-            var xStart = count - xAxisPageCount
-            if xStart < 0 {
-                xStart = 0
-            }
-            let xEnd = xStart + 100
-            
-            model.xAxis.start = xStart
-            model.xAxis.end = xEnd
-            
-            var yMax = 10
-            
-            (0 ..< model.series.count).forEach { i in
-                if landmarks[i].y > yMax {
-                    yMax = landmarks[i].y
-                }
-                model.series[i].landmarks.append(landmarks[i])
-            }
-            
-            yMax = Int(CGFloat(yMax) / 0.8)
-                       
-            if model.yAxis.end < yMax {
-                model.yAxis.end = yMax
-            }
-        }
-        
+        summary.add(cSPI)
+        pCM.add(cSPI, xAxisPageCount)
+
         currentSeconds += 1
         cSPI.seconds = CGFloat(currentSeconds)
 
         DispatchQueue.main.async {
+            if beforeModelCount != self.pCM.count {
+                self.objectWillChange.send()
+            }
+            
             self.pCM.models.forEach { model in
                 if model.visiable {
                     model.objectWillChange.send()
@@ -355,6 +322,8 @@ extension HomepageInstrumentsService {
     
     private func cNetwork(_ info: IInstrumentsNetworkStatisticsModel) {
         let item = cSPI.network
+        item.down = info.net_rx_bytes.KB
+        item.up = info.net_tx_bytes.KB
         item.downDelta = info.net_rx_bytes_delta.KB
         item.upDelta = info.net_tx_bytes_delta.KB
     }
@@ -371,69 +340,6 @@ extension HomepageInstrumentsService {
     }
 }
 
-
-// MARK: - Helper Child Service
-extension HomepageInstrumentsService {
-    class Summary: NSObject, ObservableObject {
-        public enum HighlightState {
-            case select(xAxis: Int)
-            case none
-            
-            var x: Int? {
-                switch self {
-                    case .select(let x):
-                        return x
-                    default: return nil
-                }
-            }
-        }
-        
-        @Published private(set) var highlightState: HighlightState = .none
-        
-        private var timer: Timer?
-        private var tempHighlightX = 0
-        
-        deinit {
-            stopSet()
-        }
-        
-        private func start() {
-            stopSet()
-            
-            let timer = Timer(timeInterval: 0.1, repeats: true) { [weak self] _ in
-                
-                
-                if let x = self?.tempHighlightX {
-                    if let currentX = self?.highlightState.x {
-                        if currentX != x {
-                            self?.highlightState = .select(xAxis: x)
-                        }
-                    } else {
-                        self?.highlightState = .select(xAxis: x)
-                    }
-                }
-            }
-            timer.fire()
-            self.timer = timer
-            RunLoop.main.add(timer, forMode: .common)
-        }
-        
-        fileprivate func set(temX: Int) {
-            tempHighlightX = temX
-            if timer == nil {
-                start()
-            }
-            
-            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(stopSet), object: nil)
-            perform(#selector(stopSet), with: nil, afterDelay: 0.1)
-        }
-        
-        @objc private func stopSet() {
-            timer?.invalidate()
-            timer = nil
-        }
-    }
-}
 
 // MARK: - TEST FUNC
 extension HomepageInstrumentsService {
@@ -471,7 +377,7 @@ extension HomepageInstrumentsService {
                     randomCPCM()
                     self?.record()
                     if (i == count - 1) {
-                        print("插入\(count)条数据 耗时: \(Date().timeIntervalSince1970 - time)")
+                        debugPrint("插入\(count)条数据 耗时: \(Date().timeIntervalSince1970 - time)")
                     }
                 }
             }

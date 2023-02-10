@@ -8,56 +8,84 @@
 import Cocoa
 import SwiftUI
 
-class PerformanceChartModel: ObservableObject {
-    @Published var models: [ChartModel]
+class PerformanceChartModel {
+    var models: [ChartModel] = []
+    var count: Int = 0
     
-    init() {
-        models = [.init(title: "CPU",
-                        type: .cpu,
-                        series: [.init(value: "process"),
-                                 .init(value: "total")]),
-                  
-                  .init(title: "GPU",
-                        type: .gpu,
-                        series: [.init(value: "device"),
-                                 .init(value: "renderer"),
-                                 .init(value: "tiler")]),
-                  
-                  .init(title: "Memory",
-                        type: .memory,
-                        series: [.init(value: "memory"),
-                                 .init(value: "resident"),
-                                 .init(value: "vm")]),
-                  
-                  .init(title: "Network",
-                        type: .network,
-                        series: [.init(value: "up"),
-                                 .init(value: "down")]),
-                  
-                  .init(title: "FPS",
-                        type: .fps,
-                        series: [.init(value: "fps"),
-                                 .init(value: "jank"),
-                                 .init(value: "bigJank"),
-                                 .init(value: "stutter")]),
-                  
-                  .init(title: "I/O",
-                        type: .io,
-                        series: [.init(value: "read"),
-                                 .init(value: "write")]),
-                  
-                  .init(title: "Diagnostic",
-                        type: .diagnostic,
-                        series: [.init(value: "amperage"),
-                                 .init(value: "voltage"),
-                                 .init(value: "battery"),
-                                 .init(value: "temperature")])]
+    private func reset(_ i: PerformanceIndicatorInterface) {
+        var models = [ChartModel]()
+        
+        i.indicators.forEach { indicator in
+            let series = indicator.values.compactMap { value in
+                if value.chartEnable {
+                    return ChartSeriesItem(value: value.name)
+                }
+                return nil
+            }
+            let model = ChartModel(type: indicator.type, series: series)
+            models.append(model)
+        }
+        self.models = models
+    }
+    
+    func add(_ i: PerformanceIndicatorInterface, _ xAxisMaxCount: Int) {
+        if i.indicators.count != models.count {
+            reset(i)
+        }
+        
+        let count = models.count
+        let dataCount = i.recordSecond.intValue + 1
+        (0 ..< count).forEach { index in
+            let model = models[index]
+            let indicator = i.indicators[index]
+            let len = indicator.values.count
+            
+            var xStart = dataCount - xAxisMaxCount
+            if xStart < 0 {
+                xStart = 0
+            }
+            let xEnd = xStart + xAxisMaxCount
+            model.xAxis.start = xStart
+            model.xAxis.end = xEnd
+            
+            var yMax = 10
+            
+            var offsetI = 0
+            (0 ..< len).forEach { j in
+                let value = indicator.values[j]
+                if value.chartEnable {
+                    let item = ChartLandmarkItem(x: i.recordSecond.intValue, y: value.value.intValue)
+                    model.series[offsetI].landmarks.append(item)
+                    if item.y > yMax {
+                        yMax = item.y
+                    }
+                    offsetI += 1
+                }
+            }
+            
+            yMax = Int(CGFloat(yMax) / 0.8)
+            if model.yAxis.end < yMax {
+                model.yAxis.end = yMax
+            }
+        }
+        
+        self.count += 1
+    }
+    
+    func reset() {
+        count = 0
+        models.forEach { model in
+            model.series.forEach { series in
+                series.landmarks = []
+            }
+            model.xAxis.reset()
+            model.yAxis.reset()
+        }
     }
 }
 
 class ChartModel: Identifiable, ObservableObject {
     var id = UUID()
-    var title: String = ""
     var type: PerformanceIndicatorType
     var series: [ChartSeriesItem] = []
     var yAxis = Axis()
@@ -65,12 +93,10 @@ class ChartModel: Identifiable, ObservableObject {
     @Published var visiable = true
     
     init(id: UUID = UUID(),
-         title: String,
          type: PerformanceIndicatorType,
          series: [ChartSeriesItem],
          visiable: Bool = true) {
         self.id = id
-        self.title = title
         self.type = type
         self.series = series
         self.visiable = visiable
@@ -121,5 +147,10 @@ class Axis {
     var end: Int = 0
     var len: Int {
         return end - start
+    }
+    
+    func reset() {
+        start = 0
+        end = 0
     }
 }

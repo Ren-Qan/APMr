@@ -13,6 +13,6 @@ struct PerformanceSummaryView: View {
     @EnvironmentObject var summary: HomepageInstrumentsService.Summary
             
     var body: some View {
-        Text("\(summary.highlightState.x ?? 0)")
+        Text("\(summary.highlightState.start) ---- \(summary.highlightState.end)")
     }
 }
