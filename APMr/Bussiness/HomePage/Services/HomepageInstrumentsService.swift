@@ -198,7 +198,7 @@ extension HomepageInstrumentsService {
     }
     
     func resetData() {
-        cSPI.seconds = 0
+        cSPI = PerformanceIndicator()
         currentSeconds = 0
         pCM.reset()
         summary.reset()
