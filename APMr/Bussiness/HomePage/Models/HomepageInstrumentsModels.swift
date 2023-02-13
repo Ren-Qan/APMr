@@ -17,7 +17,18 @@ enum PerformanceIndicatorType {
     case diagnostic
     
     var name: String {
-        return "\(self)".capitalized
+        switch self {
+            case .memory:
+                return "Memory"
+            case .network:
+                return "Network"
+            case .io:
+                return "I/O"
+            case .diagnostic:
+                return "Diagnostic"
+            default:
+                return "\(self)".uppercased()
+        }
     }
 }
 
