@@ -22,6 +22,7 @@ struct PerformaceChartView: View {
                     VStack(spacing: 10) {
                         ForEach(instruments.pCM.models) { chartModel in
                             LineChartGroup()
+                                .environmentObject(service)
                                 .environmentObject(chartModel)
                                 .environmentObject(instruments)
                         }
@@ -35,6 +36,7 @@ struct PerformaceChartView: View {
 
 extension PerformaceChartView {
     private struct LineChartGroup: View {
+        @EnvironmentObject var service: HomepageService
         @EnvironmentObject var instruments: HomepageInstrumentsService
         @EnvironmentObject var model: ChartModel
         
@@ -112,7 +114,6 @@ extension PerformaceChartView {
                             }
                         }
                     }
-                    
                     .chartOverlay { proxy in
                         GeometryReader { geometry in
                             Rectangle()
@@ -167,6 +168,9 @@ extension PerformaceChartView {
                     return
                 }
                 e = endX
+            }
+            if !service.isShowPerformanceSummary {
+                service.isShowPerformanceSummary = true
             }
             instruments.highlight(start: s, end: e, isDragging: isDraging)
         }

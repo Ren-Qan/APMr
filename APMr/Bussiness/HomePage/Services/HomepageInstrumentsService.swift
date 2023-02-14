@@ -309,8 +309,8 @@ extension HomepageInstrumentsService {
         let item = cSPI.io
         let lastR = cSPI.io.read
         let lastW = cSPI.io.write
-        item.read = process.diskBytesRead.KB
-        item.write = process.diskBytesWritten.KB
+        item.read = process.diskBytesRead.MB
+        item.write = process.diskBytesWritten.MB
         item.readDelta = item.read - lastR
         item.writeDelta = item.write - lastW
     }
@@ -322,10 +322,10 @@ extension HomepageInstrumentsService {
     
     private func cNetwork(_ info: IInstrumentsNetworkStatisticsModel) {
         let item = cSPI.network
-        item.down = info.net_rx_bytes.KB
-        item.up = info.net_tx_bytes.KB
-        item.downDelta = info.net_rx_bytes_delta.KB
-        item.upDelta = info.net_tx_bytes_delta.KB
+        item.down = info.net_rx_bytes.MB
+        item.up = info.net_tx_bytes.MB
+        item.downDelta = info.net_rx_bytes_delta.MB
+        item.upDelta = info.net_tx_bytes_delta.MB
     }
     
     private func cDiagnostic(_ dic: [String : Any]) {

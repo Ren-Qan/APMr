@@ -40,5 +40,14 @@ extension HomepageInstrumentsService {
         var id = UUID()
         var name: String
         var value: CGFloat
+        var unit: String = ""
+        
+        var formateValue: String {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .none
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 2
+            return formatter.string(from: NSNumber(value: Double(value))) ?? "\(value)"
+        }
     }
 }

@@ -61,6 +61,7 @@ class PBaseIndicator {
         var value: CGFloat
         var name: String
         var chartEnable: Bool = true
+        var unit: String = ""
         
         fileprivate func chart(_ enable: Bool) -> Self {
             if self.chartEnable == enable {
@@ -69,6 +70,16 @@ class PBaseIndicator {
             
             var item = self
             item.chartEnable = enable
+            return item
+        }
+        
+        fileprivate func unit(_ res: String) -> Self {
+            if self.unit == res {
+                return self
+            }
+            
+            var item = self
+            item.unit = res
             return item
         }
     }
@@ -87,8 +98,8 @@ class PCPUIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            total.creat("total"),
-            process.creat("process"),
+            total.creat("total").unit("%"),
+            process.creat("process").unit("%"),
         ]
     }
 }
@@ -101,9 +112,9 @@ class PMemoryIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            resident.creat("resident"),
-            memory.creat("memory"),
-            vm.creat("vm"),
+            resident.creat("resident").unit("MB"),
+            memory.creat("memory").unit("MB"),
+            vm.creat("vm").unit("GB"),
         ]
     }
 }
@@ -117,10 +128,10 @@ class PFPSIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            fps.creat("fps"),
-            CGFloat(jank).creat("jank"),
-            CGFloat(bigJank).creat("bigJank"),
-            stutter.creat("stutter"),
+            fps.creat("fps").unit("frame"),
+            CGFloat(jank).creat("jank").unit("%"),
+            CGFloat(bigJank).creat("bigJank").unit("%"),
+            stutter.creat("stutter").unit("%"),
         ]
     }
 }
@@ -133,9 +144,9 @@ class PGPUIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            device.creat("device"),
-            renderer.creat("renderer"),
-            tiler.creat("tiler"),
+            device.creat("device").unit("%"),
+            renderer.creat("renderer").unit("%"),
+            tiler.creat("tiler").unit("%"),
         ]
     }
 }
@@ -144,32 +155,32 @@ class PNetworkIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .network }
     var down: CGFloat = 0
     var up: CGFloat = 0
-    var downDelta: CGFloat = 0 // KB/s
-    var upDelta: CGFloat = 0 // KB/s
+    var downDelta: CGFloat = 0 // MB/s
+    var upDelta: CGFloat = 0 // MB/s
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            down.creat("down").chart(false),
-            up.creat("up").chart(false),
-            downDelta.creat("downDelta"),
-            upDelta.creat("upDelta"),
+            down.creat("down").chart(false).unit("MB"),
+            up.creat("up").chart(false).unit("MB"),
+            downDelta.creat("downD").unit("MB/s"),
+            upDelta.creat("upD").unit("MB/s"),
         ]
     }
 }
 
 class PIOIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     var type: PerformanceIndicatorType { .io }
-    var read: CGFloat = 0 // KB
-    var write: CGFloat = 0 // KB
-    var readDelta: CGFloat = 0 // KB/s
-    var writeDelta: CGFloat = 0 // KB/s
+    var read: CGFloat = 0 // MB
+    var write: CGFloat = 0 // MB
+    var readDelta: CGFloat = 0 // MB/s
+    var writeDelta: CGFloat = 0 // MB/s
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            read.creat("read").chart(false),
-            write.creat("write").chart(false),
-            readDelta.creat("readDelta"),
-            writeDelta.creat("writeDelta"),
+            read.creat("read").chart(false).unit("MB"),
+            write.creat("write").chart(false).unit("MB"),
+            readDelta.creat("readD").unit("MB/s"),
+            writeDelta.creat("writeD").unit("MB/s"),
         ]
     }
 }
@@ -183,10 +194,10 @@ class PDiagnosticIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            amperage.creat("amperage"),
-            voltage.creat("voltage"),
-            battery.creat("battery"),
-            temperature.creat("temperature"),
+            amperage.creat("amperage").unit("mA"),
+            voltage.creat("voltage").unit("V"),
+            battery.creat("battery").unit("%"),
+            temperature.creat("temp").unit("°C"),
         ]
     }
 }

@@ -78,7 +78,7 @@ extension HomepageInstrumentsService {
         public func add(_ i: PerformanceIndicator) {            
             let infos = i.indicators.compactMap { indicator in
                 let values = indicator.values.compactMap { value in
-                    return SummaryItemValue(name: value.name, value: value.value)
+                    return SummaryItemValue(name: value.name, value: value.value, unit: value.unit)
                 }
                 let info = SummaryItemInfo()
                 info.title = indicator.type.name

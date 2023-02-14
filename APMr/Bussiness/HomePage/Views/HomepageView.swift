@@ -57,9 +57,14 @@ struct HomepageView: View {
                     }
                 } label: {
                     if let device = service.selectDevice {
-                        Label(device.deviceName,
-                              systemImage: device.type == .usb ? "bolt.square" : "wifi.square")
-                            .labelStyle(.titleAndIcon)
+                        Text("device.deviceName")
+                        Image(systemName: device.type == .usb ? "cable.connector.horizontal" : "wifi")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 15)
+//                        Label(device.deviceName,
+//                              systemImage: )
+//                            .labelStyle(.titleAndIcon)
                     } else {
                         Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
                     }

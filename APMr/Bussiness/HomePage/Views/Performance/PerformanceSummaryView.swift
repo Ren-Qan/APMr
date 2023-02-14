@@ -15,7 +15,7 @@ struct PerformanceSummaryView: View {
     var body: some View {
         ScrollView {
             ForEach(summary.highlightDatas) { item in
-                Cell()
+                Cell(forceOpen: summary.highlightDatas.count == 1)
                     .environmentObject(item)
             }
         }
@@ -25,29 +25,35 @@ struct PerformanceSummaryView: View {
 extension PerformanceSummaryView {
     struct Cell: View {
         @EnvironmentObject var item: HomepageInstrumentsService.SummaryItem
+        var forceOpen: Bool
         
         var body: some View {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(item.isOpen ? 90 : 0))
+                        .rotationEffect(.degrees((item.isOpen || forceOpen) ? 90 : 0))
                         .padding(.leading, 5)
                     Text("第\(item.time)秒报告")
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
                 }
+                .background {
+                    Color.clear
+                }
                 .onTapGesture {
-                    withAnimation(.easeIn(duration: 0.15)) {
-                        item.isOpen.toggle()
+                    if !forceOpen {
+                        withAnimation(.easeIn(duration: 0.15)) {
+                            item.isOpen.toggle()
+                        }
                     }
                 }
                 
-                if item.isOpen {
+                if item.isOpen || forceOpen {
                     HStack {
-                        Color.random
+                        Color.fabulaFore2
                             .frame(width: 1)
                             .padding(.leading, 9)
-                                                    
+                                                
                         VStack(alignment: .leading) {
                             ForEach(item.values) { value in
                                 CD()
@@ -57,6 +63,8 @@ extension PerformanceSummaryView {
                         }
                         .padding(.leading, 6)
                     }
+                } else {
+                    Divider()
                 }
             }
             .padding(.top, 1)
@@ -70,18 +78,62 @@ extension PerformanceSummaryView {
                 
         var body: some View {
             VStack(alignment: .leading) {
-                Text("\(info.title)使用报告")
-  
+                Text("\(info.title) 报告")
+                    .font(.subheadline)
+                    .padding(.bottom, 2)
+                
+                ZStack(alignment: .leading) {
+                    Text(" 指标")
+                    Text("值")
+                        .offset(x: 90)
+                    Text("单位")
+                        .offset(x: 150)
+                }
+                .frame(maxWidth: .infinity,
+                       alignment: .leading)
+                .padding(.bottom, 1.5)
+                
                 ForEach(info.values) { value in
                     ZStack(alignment: .leading) {
-                        Text("\(value.name)")
-                            .offset(x: 6)
-                        Text("\(value.value)")
-                            .offset(x: 110)
+                        V(value: value)
                     }
                 }
+                
+                Divider()
+                    .background {
+                        Color.fabulaBack2
+                    }
             }
-            
+        }
+    }
+}
+
+extension PerformanceSummaryView {
+    struct V: View {
+        @State private var onHover: Bool = false
+        
+        var value: HomepageInstrumentsService.SummaryItemValue
+        
+        var body: some View {
+            ZStack(alignment: .leading) {
+                Text(" \(value.name):")
+                    .font(.callout)
+                Text("\(value.formateValue)")
+                    .offset(x: 90)
+                Text("\(value.unit)")
+                    .offset(x: 150)
+            }
+            .padding(.bottom, 1)
+            .frame(maxWidth: .infinity,
+                   alignment: .leading)
+            .background {
+                Color.fabulaFore2
+                    .padding(.trailing, 10)
+                    .opacity(onHover ? 1 : 0)
+            }
+            .onHover { on in
+                onHover = on
+            }
         }
     }
 }

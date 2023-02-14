@@ -72,6 +72,7 @@ struct PerformanceSettingBarView: View {
                     .padding(.top, 3)
                 }
                 
+#if DEBUG
                 Button("插入随机数据") {
                     instruments.insertTestData(count: .random(in: 40 ... 80))
                 }
@@ -79,25 +80,10 @@ struct PerformanceSettingBarView: View {
                 Button("reset") {
                     instruments.resetData()
                 }
-                
+#else
+#endif
                 Spacer()
-                
-                // MARK: - 设置按钮
-                Button {
-                    isShowPerformanceSetting.toggle()
-                } label: {
-                    Text("设置")
-                        .frame(minHeight: 25)
-                }
-                .common(
-                    backColor: .fabulaBar1,
-                    enable: !instruments.isMonitoringPerformance
-                )
-                .popover(isPresented: $isShowPerformanceSetting,
-                         arrowEdge: .bottom) {
-                    PerformanceTimeRecordSettingView()
-                }
-                
+                                
                 // MARK: - 报告按钮
                 Button {
                     service.isShowPerformanceSummary.toggle()
@@ -134,17 +120,5 @@ struct PerformanceChartShowSettingPopoverButtonView: View {
             .frame(minWidth: 150, alignment: .leading)
         }
         .common(backColor: .fabulaBar2)
-    }
-}
-
-struct PerformanceTimeRecordSettingView: View {
-    @EnvironmentObject var service: HomepageService
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("In Progress")
-        }
-        .padding()
-        .frame(minWidth: 200)
     }
 }
