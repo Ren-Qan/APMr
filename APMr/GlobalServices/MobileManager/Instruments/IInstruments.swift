@@ -27,21 +27,9 @@ class IInstruments: NSObject {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-    
-    private var identifier: UInt32 = 0
-    private var channel_tag: UInt32 = 0
-    
+        
     // MARK: - Public Getter
     public private(set) var isConnected = false
-}
-
-// MARK: - Private
-
-private extension IInstruments {
-    var nextIdentifier: UInt32 {
-        identifier += 1
-        return identifier
-    }
 }
 
 extension IInstruments {
@@ -79,7 +67,7 @@ extension IInstruments {
         arg.append(service.server.rawValue)
         
         dtxService.send(withChannel: 0,
-                        identifier: nextIdentifier,
+                        identifier: service.server.channel,
                         selector: "_requestChannelWithCode:identifier:",
                         args: arg,
                         expectsReply: true)

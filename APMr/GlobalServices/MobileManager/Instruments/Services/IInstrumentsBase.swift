@@ -8,7 +8,5 @@
 import Foundation
 
 class IInstrumentsBase {    
-    public weak var instrument: IInstruments? = nil
-    
-    public var identifierMap: [String : UInt32] = [:]
+    public weak var instrument: IInstruments? = nil    
 }

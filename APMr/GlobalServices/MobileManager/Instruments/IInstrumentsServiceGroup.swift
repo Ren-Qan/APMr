@@ -10,64 +10,34 @@ import LibMobileDevice
 
 protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
     func receive(response: DTXReceiveObject?)
-    
-    func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo)
-    
-    func opengl(info: IInstrumentsOpenglInfo)
-    
-    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel])
-    
-    func energy(info: [Int64 : IInstrumentsEnergyModel])
-    
-    func deviceNetworking(info: IInstrumentsNetworkingCallback)
-    
-    func launch(pid: UInt32)
 }
 
-extension IInstrumentsServiceGroupDelegate {
-    func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo, processInfo: IInstrumentsSysmotapProcessesInfo) { }
-    
-    func opengl(info: IInstrumentsOpenglInfo) { }
-    
-    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel]) { }
-    
-    func energy(info: [Int64 : IInstrumentsEnergyModel]) { }
-    
-    func deviceNetworking(info: IInstrumentsNetworkingCallback) { }
-    
-    func launch(pid: UInt32) { }
-}
-
-class IInstrumentsServiceGroup: NSObject {
-    typealias Service = (IInstrumentsServiceProtocol)
-
-    public lazy var instruments = IInstruments()
-    
+class IInstrumentsServiceGroup {
     public weak var delegate: IInstrumentsServiceGroupDelegate? = nil
+    
+    public lazy var instruments = IInstruments()
     
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
 }
 
 extension IInstrumentsServiceGroup {
-    func config(_ types: [IInstrumentsServiceName]) {
-        types.forEach { type in
-            config(type)
+    typealias Service = IInstrumentsServiceProtocol
+    
+    func config<T>(_ clients: [T]) where T : Service {
+        clients.forEach { client in
+            config(client)
         }
     }
     
-    func config(_ type: IInstrumentsServiceName) {
-        if let _ = serviceDic[type] {
-            return
-        }
-        
-        addInstance(type: type)
+    func config<T>(_ client: T) where T : Service {
+        serviceDic[client.server] = client
     }
    
     @discardableResult
     func start(_ device: IDevice) -> Bool {
         if instruments.start(device) {
             serviceDic.forEach { item in
-                item.value.set(instruments)
+                item.value.setup(instruments)
             }
             return true
         }
@@ -112,74 +82,6 @@ extension IInstrumentsServiceGroup {
         
         if let client = client as? T {
             block(client)
-        }
-    }
-}
-
-extension IInstrumentsServiceGroup {
-    private func addInstance(type: IInstrumentsServiceName) {
-        var service: (any Service)? = nil
-        
-        switch type {
-            case .sysmontap:
-                let sysmotap = IInstrumentsSysmontap()
-                sysmotap.callBack = { [weak self] sysmotapInfo, processInfo in
-                    self?.delegate?.sysmontap(sysmotapInfo: sysmotapInfo, processInfo: processInfo)
-                }
-                service = sysmotap
-                
-            case .deviceinfo:
-                let deviceInfo = IInstrumentsDeviceInfo()
-                
-                service = deviceInfo
-                
-            case .opengl:
-                let opengl = IInstrumentsOpengl()
-                opengl.callBack = { [weak self] openglInfo in
-                    self?.delegate?.opengl(info: openglInfo)
-                }
-                service = opengl
-                
-            case .processcontrol:
-                let processControl = IInstrumentsProcesscontrol()
-                processControl.callback = { [weak self] pid in
-                    self?.delegate?.launch(pid: pid)
-                }
-                service = processControl
-            
-            case .gpu:
-                let gpu = IInstrumentsGPU()
-                
-                service = gpu
-            
-            case.networkStatistics:
-                let networkStatic = IInstrumentsNetworkStatistics()
-                networkStatic.callback = { [weak self] response in
-                    self?.delegate?.networkStatistics(info: response)
-                }
-                service = networkStatic
-            
-            case .networking:
-                let networking = IInstrumentsNetworking()
-                networking.callback = { [weak self] response in
-                    self?.delegate?.deviceNetworking(info: response)
-                }
-                service = networking
-            
-            case .energy:
-                let energy = IInstrumentsEnergy()
-                energy.callback = { [weak self] response in
-                    self?.delegate?.energy(info: response)
-                }
-                service = energy
-                
-            case .objectalloc:
-                let objectAlloc = IInstrumentsObjectAlloc()
-                service = objectAlloc
-        }
-        
-        if let service = service {
-            serviceDic[type] = service
         }
     }
 }

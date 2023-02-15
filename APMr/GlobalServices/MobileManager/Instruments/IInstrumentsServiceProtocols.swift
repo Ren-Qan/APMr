@@ -52,11 +52,12 @@ enum IInstrumentsServiceName: String, CaseIterable {
 }
 
 protocol IInstrumentRequestArgsProtocol {
+    var identifier: UInt32 { get }
+    
     var selector: String { get }
     
     var dtxArg: DTXArguments? { get }
 }
-
 
 protocol IInstrumentsServiceProtocol {
     associatedtype Arg : IInstrumentRequestArgsProtocol
@@ -65,21 +66,15 @@ protocol IInstrumentsServiceProtocol {
     
     var instrument: IInstruments? { get }
     
-    func response(_ response: DTXReceiveObject?)
+    func response(_ response: DTXReceiveObject)
     
     // MARK: - optional
     
     var expectsReply: Bool { get }
-            
-    func register(_ arg: Arg)
+                
+    func setup(_ insturments: IInstruments)
     
     func send(_ arg: Arg)
-    
-    func set(_ insturments: IInstruments)
-    
-    func identifier(_ arg: Arg) -> UInt32
-    
-    func arg(_ identifier: UInt32) -> Arg?
 }
 
 extension IInstrumentsServiceProtocol {
@@ -87,29 +82,17 @@ extension IInstrumentsServiceProtocol {
         return true
     }
         
-    func set(_ insturments: IInstruments) {
+    func setup(_ insturments: IInstruments) {
         if let service = self as? IInstrumentsBase {
             service.instrument = insturments
         }
         insturments.setup(service: self)
     }
     
-    func identifier(_ arg: Arg) -> UInt32 {
-        return .max
-    }
-    
-    func arg(_ identifier: UInt32) -> Arg? {
-        return nil
-    }
-    
-    func register(_ arg: Arg) {
-        send(arg)
-    }
-    
     func send(_ arg: Arg) {
         let channel = server.channel        
         instrument?.send(channel: channel,
-                         identifier: identifier(arg),
+                         identifier: arg.identifier,
                          selector: arg.selector,
                          dtxArg: arg.dtxArg,
                          expectsReply: expectsReply)
