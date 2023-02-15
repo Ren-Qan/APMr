@@ -10,7 +10,7 @@ import SwiftUI
 struct PerformanceSummaryView: View {
     @EnvironmentObject var service: HomepageService
     
-    @EnvironmentObject var summary: HomepageInstrumentsService.Summary
+    @EnvironmentObject var summary: PerformanceInstrumentsService.Summary
             
     var body: some View {
         ScrollView {
@@ -24,7 +24,7 @@ struct PerformanceSummaryView: View {
 
 extension PerformanceSummaryView {
     struct Cell: View {
-        @EnvironmentObject var item: HomepageInstrumentsService.SummaryItem
+        @EnvironmentObject var item: PerformanceInstrumentsService.SummaryItem
         var forceOpen: Bool
         
         var body: some View {
@@ -74,7 +74,7 @@ extension PerformanceSummaryView {
 
 extension PerformanceSummaryView {
     struct CD: View {
-        @EnvironmentObject var info: HomepageInstrumentsService.SummaryItemInfo
+        @EnvironmentObject var info: PerformanceInstrumentsService.SummaryItemInfo
                 
         var body: some View {
             VStack(alignment: .leading) {
@@ -112,7 +112,7 @@ extension PerformanceSummaryView {
     struct V: View {
         @State private var onHover: Bool = false
         
-        var value: HomepageInstrumentsService.SummaryItemValue
+        var value: PerformanceInstrumentsService.SummaryItemValue
         
         var body: some View {
             ZStack(alignment: .leading) {

@@ -1,5 +1,5 @@
 //
-//  HomepageInstrumentsModels.swift
+//  PeformanceInstrumentsModels.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/1/29.
@@ -98,8 +98,8 @@ class PCPUIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            total.creat("total").unit("%"),
-            process.creat("process").unit("%"),
+            total.create("total").unit("%"),
+            process.create("process").unit("%"),
         ]
     }
 }
@@ -112,9 +112,9 @@ class PMemoryIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            resident.creat("resident").unit("MB"),
-            memory.creat("memory").unit("MB"),
-            vm.creat("vm").unit("GB"),
+            resident.create("resident").unit("MB"),
+            memory.create("memory").unit("MB"),
+            vm.create("vm").unit("GB"),
         ]
     }
 }
@@ -128,10 +128,10 @@ class PFPSIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            fps.creat("fps").unit("frame"),
-            CGFloat(jank).creat("jank").unit("%"),
-            CGFloat(bigJank).creat("bigJank").unit("%"),
-            stutter.creat("stutter").unit("%"),
+            fps.create("fps").unit("frame"),
+            CGFloat(jank).create("jank").unit("%"),
+            CGFloat(bigJank).create("bigJank").unit("%"),
+            stutter.create("stutter").unit("%"),
         ]
     }
 }
@@ -144,9 +144,9 @@ class PGPUIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            device.creat("device").unit("%"),
-            renderer.creat("renderer").unit("%"),
-            tiler.creat("tiler").unit("%"),
+            device.create("device").unit("%"),
+            renderer.create("renderer").unit("%"),
+            tiler.create("tiler").unit("%"),
         ]
     }
 }
@@ -160,10 +160,10 @@ class PNetworkIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            down.creat("down").chart(false).unit("MB"),
-            up.creat("up").chart(false).unit("MB"),
-            downDelta.creat("downD").unit("MB/s"),
-            upDelta.creat("upD").unit("MB/s"),
+            down.create("down").chart(false).unit("MB"),
+            up.create("up").chart(false).unit("MB"),
+            downDelta.create("downD").unit("MB/s"),
+            upDelta.create("upD").unit("MB/s"),
         ]
     }
 }
@@ -177,10 +177,10 @@ class PIOIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            read.creat("read").chart(false).unit("MB"),
-            write.creat("write").chart(false).unit("MB"),
-            readDelta.creat("readD").unit("MB/s"),
-            writeDelta.creat("writeD").unit("MB/s"),
+            read.create("read").chart(false).unit("MB"),
+            write.create("write").chart(false).unit("MB"),
+            readDelta.create("readD").unit("MB/s"),
+            writeDelta.create("writeD").unit("MB/s"),
         ]
     }
 }
@@ -194,16 +194,16 @@ class PDiagnosticIndicator: PBaseIndicator, PerformanceIndicatorProtocol {
     
     var values: [PBaseIndicator.Indicator] {
         return [
-            amperage.creat("amperage").unit("mA"),
-            voltage.creat("voltage").unit("V"),
-            battery.creat("battery").unit("%"),
-            temperature.creat("temp").unit("°C"),
+            amperage.create("amperage").unit("mA"),
+            voltage.create("voltage").unit("V"),
+            battery.create("battery").unit("%"),
+            temperature.create("temp").unit("°C"),
         ]
     }
 }
 
 private extension CGFloat {
-    func creat(_ name: String) -> PBaseIndicator.Indicator {
+    func create(_ name: String) -> PBaseIndicator.Indicator {
         return .init(value: self, name: name)
     }
 }

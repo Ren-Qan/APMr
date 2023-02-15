@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     public enum HighlightState {
         case show(Int, Int)
         case none
@@ -33,7 +33,7 @@ extension HomepageInstrumentsService {
     }
 }
 
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     class Summary: NSObject, ObservableObject {
         @Published private(set) var highlightState: HighlightState = .none
         
@@ -65,7 +65,6 @@ extension HomepageInstrumentsService {
         }
         
         public func set(startX: Int, endX: Int) {
-            debugPrint("\(startX) ---- \(endX)")
             temState = .show(startX, endX)
             if timer == nil {
                 start()

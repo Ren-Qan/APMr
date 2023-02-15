@@ -12,8 +12,10 @@ struct HomepageView: View {
     
     @StateObject private var deviceService = HomepageDeviceService()
     
-    @StateObject private var instrumentService = HomepageInstrumentsService()
-            
+    @StateObject private var instrumentService = PerformanceInstrumentsService()
+    
+//    @StateObject private var 
+    
     var body: some View {
         NavigationSplitView {
             List(selection: $service.selectionSider) {
@@ -25,14 +27,20 @@ struct HomepageView: View {
             }
         } detail: {
             switch service.selectionSider.state {
-            case .performance:
-                PerformanceView()
+                case .performance:
+                    PerformanceView()
                         .environmentObject(service)
                         .environmentObject(instrumentService)
                         .padding(.all, 5)
-                        
-            default:
-                Text(service.selectionSider.title + " In Progress")
+                    
+                case .launch:
+                    LaunchView()
+                        .environmentObject(service)
+                        .environmentObject(instrumentService)
+                        .padding(.all, 5)
+                    
+                default:
+                    Text(service.selectionSider.title + " In Progress")
             }
         }
         .navigationTitle(
@@ -59,7 +67,7 @@ struct HomepageView: View {
                     if let device = service.selectDevice {
                         Text("\(device.deviceName)")
                         Image(systemName: device.type == .usb ? "cable.connector.horizontal" : "wifi")
-
+                        
                     } else {
                         Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
                     }

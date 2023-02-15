@@ -8,7 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-class IInstrumentsProcesscontrol: IInstrumentsBaseService {
+class IInstrumentsProcesscontrol: IInstrumentsBase {
     var callback: ((UInt32) -> Void)? = nil
 }
 
@@ -42,7 +42,7 @@ enum IInstrumentsProcesscontrolArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         switch self {
             case .launch(let bundleId):
                 let arg = DTXArguments()

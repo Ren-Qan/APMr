@@ -9,7 +9,7 @@ import Foundation
 import LibMobileDevice
 import ObjectMapper
 
-class IInstrumentsEnergy: IInstrumentsBaseService {
+class IInstrumentsEnergy: IInstrumentsBase {
     var callback: (([Int64 : IInstrumentsEnergyModel]) -> Void)? = nil
 }
 
@@ -48,7 +48,7 @@ enum IInstrumentsEnergyArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         switch self {
             case .start(let pids):
                 let arg = DTXArguments()

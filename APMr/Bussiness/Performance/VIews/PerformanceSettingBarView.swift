@@ -10,7 +10,7 @@ import SwiftUI
 struct PerformanceSettingBarView: View {
     
     @EnvironmentObject var service: HomepageService
-    @EnvironmentObject var instruments: HomepageInstrumentsService
+    @EnvironmentObject var instruments: PerformanceInstrumentsService
     
     @State private var isShowPerformanceItem = false
     @State private var isShowPerformanceSetting = false
@@ -29,7 +29,7 @@ struct PerformanceSettingBarView: View {
                             instruments.start(device) { success, server in
                                 if success {
                                     server.launch(app: app)
-                                    server.autoRequest()
+                                    server.autoReceive()
                                 } else {
                                     server.stopService()
                                 }
@@ -77,8 +77,12 @@ struct PerformanceSettingBarView: View {
                     instruments.insertTestData(count: .random(in: 40 ... 80))
                 }
                 
-                Button("reset") {
-                    instruments.resetData()
+                Button("start") {
+                    instruments.deviceInfoTest()
+                }
+                
+                Button("stop") {
+                    instruments.deviceInfoTest()
                 }
 #else
 #endif

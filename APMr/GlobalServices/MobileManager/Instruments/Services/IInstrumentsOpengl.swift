@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
-class IInstrumentsOpengl: IInstrumentsBaseService {
+class IInstrumentsOpengl: IInstrumentsBase {
     public var callBack: ((IInstrumentsOpenglInfo) -> Void)? = nil
 }
 
@@ -43,7 +43,7 @@ enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         switch self {
             case .setSamplingRate:
                 let arg = DTXArguments()

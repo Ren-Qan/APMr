@@ -39,14 +39,13 @@ extension IInstrumentsServiceGroupDelegate {
 }
 
 class IInstrumentsServiceGroup: NSObject {
-    typealias Service = (IInstrumentsServiceProtocol & IInstrumentsBaseService)
+    typealias Service = (IInstrumentsServiceProtocol)
 
     public lazy var instruments = IInstruments()
     
     public weak var delegate: IInstrumentsServiceGroupDelegate? = nil
     
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
-
 }
 
 extension IInstrumentsServiceGroup {
@@ -68,7 +67,7 @@ extension IInstrumentsServiceGroup {
     func start(_ device: IDevice) -> Bool {
         if instruments.start(device) {
             serviceDic.forEach { item in
-                item.value.setup(instruments)
+                item.value.set(instruments)
             }
             return true
         }
@@ -86,7 +85,7 @@ extension IInstrumentsServiceGroup {
     }
     
     /// 此处的request 相当于从 socket通道拿数据
-    func request() {
+    func receive() {
         instruments.receive { [weak self] response in
             self?.delegate?.receive(response: response)
             
@@ -95,7 +94,6 @@ extension IInstrumentsServiceGroup {
                   let service = self?.serviceDic[name] else {
                 return
             }
-            
             service.response(response)
         }
     }
@@ -174,6 +172,10 @@ extension IInstrumentsServiceGroup {
                     self?.delegate?.energy(info: response)
                 }
                 service = energy
+                
+            case .objectalloc:
+                let objectAlloc = IInstrumentsObjectAlloc()
+                service = objectAlloc
         }
         
         if let service = service {

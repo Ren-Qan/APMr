@@ -8,29 +8,7 @@
 
 ### Features
 
-- Client
-  - UI
-    - [x] homepage
-    - [ ] homepage2.0 rebuild (Doing) 
-
-  - Service
-    - [x] deviceList
-    - [x] appList
-    - [x] launchApp
-    - [x] cpu
-    - [x] gpu 
-    - [x] 内存
-    - [x] network
-    - [x] 耗电
-    - [x] I/O
-  
-- Learn
-  - [x] swiftUI 关键字(@state @ObservedObject 等)底层、对于更新UI的性能影响
-  - [x] 类与结构体对于UI更新的影响
-
-- Optimize
-  - [ ] 渲染时机优化 (Doing)
-  - [ ] 展示效果优化 (Doing)
+- Client (Doing)
 
 ### Chat
 

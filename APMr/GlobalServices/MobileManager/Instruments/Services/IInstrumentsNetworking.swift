@@ -15,7 +15,7 @@ enum IInstrumentsNetworkingCallback {
     case connectionUpdate(IInstrumentsNetworkingConnectionUpdateModel)
 }
 
-class IInstrumentsNetworking: IInstrumentsBaseService {
+class IInstrumentsNetworking: IInstrumentsBase {
     var callback: ((IInstrumentsNetworkingCallback) -> Void)? = nil
 }
 
@@ -166,7 +166,7 @@ enum IInstrumentsNetworkingArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         return nil
     }
 }

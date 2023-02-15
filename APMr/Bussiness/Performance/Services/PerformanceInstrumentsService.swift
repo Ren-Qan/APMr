@@ -1,5 +1,5 @@
 //
-//  HomepageInstrumentsService.swift
+//  PerformanceInstrumentsService.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/9.
@@ -9,7 +9,7 @@ import Cocoa
 import Combine
 import LibMobileDevice
 
-class HomepageInstrumentsService: NSObject, ObservableObject {
+class PerformanceInstrumentsService: NSObject, ObservableObject {
     //MARK: - Public
     
     @Published private(set) var summary = Summary()
@@ -39,6 +39,7 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
             .opengl,
             .processcontrol,
             .networkStatistics,
+            .objectalloc,
         ])
         return group
     }()
@@ -62,21 +63,24 @@ class HomepageInstrumentsService: NSObject, ObservableObject {
 }
 
 // MARK: - Public API
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     public func launch(app: IInstproxyAppInfo) {
         isLaunchingApp = true
         guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
             isLaunchingApp = false
             return
         }
+        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
+            client.send(.parpareForLaunch)
+        }
         processControl.send(.launch(bundleId: app.bundleId))
     }
 }
 
 // MARK: - Public Service Setup Functions 
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     public func start(_ device: DeviceItem,
-                      _ complete: ((Bool, HomepageInstrumentsService) -> Void)? = nil) {
+                      _ complete: ((Bool, PerformanceInstrumentsService) -> Void)? = nil) {
         DispatchQueue.global().async {
             var success = false
             
@@ -92,11 +96,11 @@ extension HomepageInstrumentsService {
         }
     }
     
-    public func request() {
-        serviceGroup.request()
+    public func receive() {
+        serviceGroup.receive()
     }
     
-    public func autoRequest() {
+    public func autoReceive() {
         timer?.invalidate()
         timer = nil
         
@@ -107,7 +111,7 @@ extension HomepageInstrumentsService {
                       repeats: true,
                       block: { [weak self] _ in
             self?.operationQ.addOperation({
-                self?.request()
+                self?.receive()
                 if count % cycle == 0 {
                     self?.send()
                 }
@@ -174,7 +178,7 @@ extension HomepageInstrumentsService {
 
 // MARK: - Private
 
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     private func register() {
         if let sysmontap: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
             sysmontap.register(.setConfig)
@@ -188,7 +192,7 @@ extension HomepageInstrumentsService {
     
     private func send() {
         if let network: IInstrumentsNetworkStatistics = serviceGroup.client(.networkStatistics) {
-            network.send(.start(pids: [monitorPid]))
+//            network.send(.start(pids: [monitorPid]))
             network.send(.sample(pids: [monitorPid]))
         }
         
@@ -230,7 +234,7 @@ extension HomepageInstrumentsService {
 }
 
 // MARK: - IInstrumentsServiceGroupDelegate
-extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
+extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
     func receive(response: DTXReceiveObject?) {
         if response == nil {
             receiceSeriesNilCount += 1
@@ -278,7 +282,7 @@ extension HomepageInstrumentsService: IInstrumentsServiceGroupDelegate {
 }
 
 // MARK: - 模型解析
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     private func cCPU(_ sysmotapInfo: IInstrumentsSysmotapInfo,
                       _ process: IInstrumentsSysmotapSystemProcessesModel) {
         var totalUsage: CGFloat = 0
@@ -342,7 +346,19 @@ extension HomepageInstrumentsService {
 
 
 // MARK: - TEST FUNC
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
+    func deviceInfoTest() {
+        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
+            client.send(.collection(pid: monitorPid))
+        }
+    }
+    
+    func deviceInfoStopTest() {
+        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
+            client.send(.stopCollection)
+        }
+    }
+    
     func insertTestData(count: Int) {
         func randomCPCM() {
             cSPI.cpu.process = .random(in:  0 ... 100)

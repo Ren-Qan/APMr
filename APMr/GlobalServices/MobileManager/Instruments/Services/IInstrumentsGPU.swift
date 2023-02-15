@@ -10,8 +10,8 @@ import LibMobileDevice
 
 // FIXME: - 暂时没研究明白怎么用，configure()之后的流程一直走不通，资料较少 查查在补充上去 -
 
-class IInstrumentsGPU: IInstrumentsBaseService {
-
+class IInstrumentsGPU: IInstrumentsBase {
+    
 }
 
 extension IInstrumentsGPU: IInstrumentsServiceProtocol {
@@ -52,7 +52,7 @@ enum IInstrumentsGPUArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         switch self {
             case .configure(let pid):
                 let arg = DTXArguments()

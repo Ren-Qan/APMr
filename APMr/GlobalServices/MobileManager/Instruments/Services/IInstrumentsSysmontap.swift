@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
-class IInstrumentsSysmontap: IInstrumentsBaseService  {
+class IInstrumentsSysmontap: IInstrumentsBase {    
     public var callBack: ((IInstrumentsSysmotapInfo, IInstrumentsSysmotapProcessesInfo) -> Void)? = nil
     
     public static let procAttrs = [
@@ -77,7 +77,7 @@ enum IInstrumentsSysmontapArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         if self == .setConfig {
             let config: [String : Any] = [
                 "bm": 0,

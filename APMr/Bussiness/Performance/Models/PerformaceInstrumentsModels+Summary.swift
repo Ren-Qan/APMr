@@ -1,5 +1,5 @@
 //
-//  HomepageInstrumentsModels+Summary.swift
+//  PerformaceInstrumentsModels+Summary.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/2/10.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension HomepageInstrumentsService {
+extension PerformanceInstrumentsService {
     class SummaryModel {
         var items: [SummaryItem] = []
     }

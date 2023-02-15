@@ -13,7 +13,7 @@ struct PerformaceChartView: View {
     // MARK: - Public 
     @EnvironmentObject var service: HomepageService
     
-    @EnvironmentObject var instruments: HomepageInstrumentsService
+    @EnvironmentObject var instruments: PerformanceInstrumentsService
     
     var body: some View {
         GeometryReader { proxy in
@@ -37,7 +37,7 @@ struct PerformaceChartView: View {
 extension PerformaceChartView {
     private struct LineChartGroup: View {
         @EnvironmentObject var service: HomepageService
-        @EnvironmentObject var instruments: HomepageInstrumentsService
+        @EnvironmentObject var instruments: PerformanceInstrumentsService
         @EnvironmentObject var model: ChartModel
         
         var body: some View {

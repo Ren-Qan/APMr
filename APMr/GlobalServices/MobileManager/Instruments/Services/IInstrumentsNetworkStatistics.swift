@@ -9,11 +9,11 @@ import Foundation
 import LibMobileDevice
 import ObjectMapper
 
-class IInstrumentsNetworkStatistics: IInstrumentsBaseService {
+class IInstrumentsNetworkStatistics: IInstrumentsBase {
     var callback: (([Int64 : IInstrumentsNetworkStatisticsModel]) -> Void)? = nil
 }
 
-extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
+extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {    
     typealias Arg = IInstrumentsNetworkStatisticsArgs
     
     var server: IInstrumentsServiceName {
@@ -52,7 +52,7 @@ enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
         }
     }
     
-    var args: DTXArguments? {
+    var dtxArg: DTXArguments? {
         switch self {
             case .start(let pids):
                 let arg = DTXArguments()

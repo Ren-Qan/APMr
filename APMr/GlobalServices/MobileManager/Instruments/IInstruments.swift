@@ -90,18 +90,18 @@ extension IInstruments {
     ///   - channel: 对应的服务id
     ///   - identifier: 发送消息的id
     ///   - selector: 对应服务响应的selector 例：响应"com.apple.instruments.server.services.deviceinfo" 对应的 "runningProcesses"
-    ///   - args: 响应服务所需的参数
+    ///   - dtxArg: 响应服务所需的参数
     ///   - expectsReply: expectsReply
     public func send(channel: UInt32,
                      identifier: UInt32,
                      selector: String,
-                     args: DTXArguments?,
+                     dtxArg: DTXArguments?,
                      expectsReply: Bool) {
         sendQ.addOperation { [weak self] in
             self?.dtxService.send(withChannel: channel,
                                   identifier: identifier,
                                   selector: selector,
-                                  args: args,
+                                  args: dtxArg,
                                   expectsReply: expectsReply)
         }
     }

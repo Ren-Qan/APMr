@@ -8,12 +8,6 @@
 import Cocoa
 import LibMobileDevice
 
-protocol IInstrumentRequestArgsProtocol {
-    var selector: String { get }
-    
-    var args: DTXArguments? { get }
-}
-
 enum IInstrumentsServiceName: String, CaseIterable {
     case sysmontap = "com.apple.instruments.server.services.sysmontap"
     
@@ -30,7 +24,13 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case networking = "com.apple.instruments.server.services.networking"
     
     case energy = "com.apple.xcode.debug-gauge-data-providers.Energy"
-        
+    
+    case objectalloc = "com.apple.instruments.server.services.objectalloc"
+    
+//    case dyld = "com.apple.instruments.server.services.processcontrolbydictionary"
+//
+//    case notifications = "com.apple.instruments.server.services.mobilenotifications"
+    
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
     }
@@ -51,67 +51,68 @@ enum IInstrumentsServiceName: String, CaseIterable {
     }
 }
 
-protocol IInstrumentsServiceProtocol: NSObjectProtocol {
+protocol IInstrumentRequestArgsProtocol {
+    var selector: String { get }
+    
+    var dtxArg: DTXArguments? { get }
+}
+
+
+protocol IInstrumentsServiceProtocol {
     associatedtype Arg : IInstrumentRequestArgsProtocol
     
     var server: IInstrumentsServiceName { get }
+    
+    var instrument: IInstruments? { get }
     
     func response(_ response: DTXReceiveObject?)
     
     // MARK: - optional
     
-    var instrument: IInstruments? { get }
-    
-    var identifier: UInt32 { get }
-    
     var expectsReply: Bool { get }
-    
+            
     func register(_ arg: Arg)
     
     func send(_ arg: Arg)
     
-    func setup(_ handle: IInstruments)
+    func set(_ insturments: IInstruments)
+    
+    func identifier(_ arg: Arg) -> UInt32
+    
+    func arg(_ identifier: UInt32) -> Arg?
 }
 
 extension IInstrumentsServiceProtocol {
-    var instrument: IInstruments? {
-        if let service = self as? IInstrumentsBaseService {
-            return service.instrumentHandle
-        }
-        return nil
-    }
-    
-    var identifier: UInt32 {
-        guard let service = self as? IInstrumentsBaseService else {
-            return 0
-        }
-        return service.nextIdentifier
-    }
-    
     var expectsReply: Bool {
         return true
     }
         
+    func set(_ insturments: IInstruments) {
+        if let service = self as? IInstrumentsBase {
+            service.instrument = insturments
+        }
+        insturments.setup(service: self)
+    }
+    
+    func identifier(_ arg: Arg) -> UInt32 {
+        return .max
+    }
+    
+    func arg(_ identifier: UInt32) -> Arg? {
+        return nil
+    }
+    
     func register(_ arg: Arg) {
         send(arg)
     }
     
     func send(_ arg: Arg) {
-        let args = arg.args
-        let channel = server.channel
-        
+        let channel = server.channel        
         instrument?.send(channel: channel,
-                         identifier: identifier,
+                         identifier: identifier(arg),
                          selector: arg.selector,
-                         args: args,
+                         dtxArg: arg.dtxArg,
                          expectsReply: expectsReply)
-    }
-    
-    func setup(_ handle: IInstruments) {
-        if let service = self as? IInstrumentsBaseService {
-            service.instrumentHandle = handle
-        }
-        handle.setup(service: self)
     }
 }
 

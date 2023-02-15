@@ -8,8 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-class IInstrumentsDeviceInfo: IInstrumentsBaseService {
-
+class IInstrumentsDeviceInfo: IInstrumentsBase {
 }
 
 extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
@@ -21,14 +20,17 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
 
     func response(_ response: DTXReceiveObject?) {
-        debugPrint(response?.object)
+
     }
 }
 
 enum IInstrumentsDeviceInfoArgs: IInstrumentRequestArgsProtocol {
+    
     case runningProcesses
         
     case machTimeInfo
+    
+    case execname(UInt32)
     
     var selector: String {
         switch self {
@@ -37,10 +39,19 @@ enum IInstrumentsDeviceInfoArgs: IInstrumentRequestArgsProtocol {
                 
             case .machTimeInfo:
                 return "machTimeInfo"
+                
+            case .execname(_):
+                return "execnameForPid:"
         }
     }
     
-    var args: DTXArguments? {
-        return nil
+    var dtxArg: DTXArguments? {
+        switch self {
+            case .execname(let pid):
+                let arg = DTXArguments()
+                arg.append(pid)
+                return arg
+            default: return nil
+        }
     }
 }

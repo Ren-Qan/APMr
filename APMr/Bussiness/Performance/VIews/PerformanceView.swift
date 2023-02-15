@@ -11,7 +11,7 @@ struct PerformanceView: View {
     
     @EnvironmentObject var service: HomepageService
     
-    @EnvironmentObject var instruments: HomepageInstrumentsService
+    @EnvironmentObject var instruments: PerformanceInstrumentsService
     
     var body: some View {
         HStack {
