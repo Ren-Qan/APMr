@@ -85,7 +85,7 @@ protocol IInstrumentsServiceProtocol {
     
     var expectsReply: Bool { get }
                 
-    func setup(_ insturments: IInstrumentRequestArgsProtocol)
+    func setup(_ insturments: IInstruments)
     
     func send(_ arg: IInstrumentRequestArgsProtocol)
 }
