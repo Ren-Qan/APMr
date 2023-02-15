@@ -59,9 +59,22 @@ protocol IInstrumentRequestArgsProtocol {
     var dtxArg: DTXArguments? { get }
 }
 
-protocol IInstrumentsServiceProtocol {
-    associatedtype Arg : IInstrumentRequestArgsProtocol
+struct IInstrumentArgs: IInstrumentRequestArgsProtocol {
+    var identifier: UInt32
+    var selector: String
+    var dtxArg: DTXArguments? = nil
     
+    init( _ identifier: UInt32,
+          _ selector: String,
+          _ dtxArg: DTXArguments? = nil) {
+        
+        self.identifier = identifier
+        self.selector = selector
+        self.dtxArg = dtxArg
+    }
+}
+
+protocol IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName { get }
     
     var instrument: IInstruments? { get }
@@ -72,9 +85,9 @@ protocol IInstrumentsServiceProtocol {
     
     var expectsReply: Bool { get }
                 
-    func setup(_ insturments: IInstruments)
+    func setup(_ insturments: IInstrumentRequestArgsProtocol)
     
-    func send(_ arg: Arg)
+    func send(_ arg: IInstrumentRequestArgsProtocol)
 }
 
 extension IInstrumentsServiceProtocol {
@@ -89,7 +102,7 @@ extension IInstrumentsServiceProtocol {
         insturments.setup(service: self)
     }
     
-    func send(_ arg: Arg) {
+    func send(_ arg: IInstrumentRequestArgsProtocol) {
         let channel = server.channel        
         instrument?.send(channel: channel,
                          identifier: arg.identifier,

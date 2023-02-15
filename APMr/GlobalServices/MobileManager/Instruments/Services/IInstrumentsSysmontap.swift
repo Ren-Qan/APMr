@@ -10,8 +10,8 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsSysmontapDelegate: NSObjectProtocol {
-    func sysmotap(info: IInstrumentsSysmotapInfo, arg: IInstrumentsSysmontap.A)
-    func process(info: IInstrumentsSysmotapProcessesInfo, arg: IInstrumentsSysmontap.A)
+    func sysmotap(info: IInstrumentsSysmotapInfo, arg: IInstrumentRequestArgsProtocol)
+    func process(info: IInstrumentsSysmotapProcessesInfo, arg: IInstrumentRequestArgsProtocol)
 }
 
 class IInstrumentsSysmontap: IInstrumentsBase {
@@ -25,10 +25,10 @@ extension IInstrumentsSysmontap {
         case start
         case set(sampleInterval: Int)
         
-        var arg: A {
+        var arg: IInstrumentArgs {
             switch self {
             case .start:
-                return A(.max - 1, "start")
+                return IInstrumentArgs(.max - 1, "start")
             case .set(let sampleInterval):
                 let config: [String : Any] = [
                     "bm": 0,
@@ -41,7 +41,7 @@ extension IInstrumentsSysmontap {
                 
                 let args = DTXArguments()
                 args.append(config)
-                return A(.max - 2, "setConfig:", args)
+                return IInstrumentArgs(.max - 2, "setConfig:", args)
             }
         }
     }
@@ -57,8 +57,6 @@ extension IInstrumentsSysmontap {
 }
 
 extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsSysmontap.A
-    
     var server: IInstrumentsServiceName {
         return .sysmontap
     }
@@ -89,23 +87,23 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
         }
     }
 }
-
-extension IInstrumentsSysmontap {
-    struct A: IInstrumentRequestArgsProtocol {
-        var identifier: UInt32
-        var selector: String
-        var dtxArg: DTXArguments? = nil
-        
-        init( _ identifier: UInt32,
-              _ selector: String,
-              _ dtxArg: DTXArguments? = nil) {
-            
-            self.identifier = identifier
-            self.selector = selector
-            self.dtxArg = dtxArg
-        }
-    }
-}
+//
+//extension IInstrumentsSysmontap {
+//    struct A: IInstrumentRequestArgsProtocol {
+//        var identifier: UInt32
+//        var selector: String
+//        var dtxArg: DTXArguments? = nil
+//
+//        init( _ identifier: UInt32,
+//              _ selector: String,
+//              _ dtxArg: DTXArguments? = nil) {
+//
+//            self.identifier = identifier
+//            self.selector = selector
+//            self.dtxArg = dtxArg
+//        }
+//    }
+//}
 
 extension IInstrumentsSysmontap {
     public static let procAttrs = [

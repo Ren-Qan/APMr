@@ -180,9 +180,9 @@ extension PerformanceInstrumentsService {
 
 extension PerformanceInstrumentsService {
     private func register() {
-        if let sysmontap: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
-            sysmontap.register(.setConfig)
-            sysmontap.register(.start)
+        if let client: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
+            client.setConfig()
+            client.start()
         }
         
         if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
