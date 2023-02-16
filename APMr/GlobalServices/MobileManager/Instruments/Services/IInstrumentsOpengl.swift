@@ -9,51 +9,63 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
+protocol IInstrumentsOpenglDelegate: NSObjectProtocol {
+    func sampling(model: IInstrumentsOpenglModel, arg: IInstrumentRequestArgsProtocol)
+}
+
 class IInstrumentsOpengl: IInstrumentsBase {
-    public var callBack: ((IInstrumentsOpenglInfo) -> Void)? = nil
+    public weak var delegate: IInstrumentsOpenglDelegate? = nil
+    
+    private var rateSampling: Int = 0
+    private var startInterval: Int = 0
+}
+
+extension IInstrumentsOpengl {
+    func set(rate: Int = 5) {
+        self.rateSampling = rate
+        send(P.rate(sampling: rate).arg)
+    }
+    
+    func start(interval: Int = 0) {
+        self.startInterval = interval
+        send(P.start(interval: interval).arg)
+    }
 }
 
 extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsOpenglArgs
-    
     var server: IInstrumentsServiceName {
         return .opengl
     }
 
-    func response(_ response: DTXReceiveObject?) {
-        if let obj = response?.object as? [String : Any],
-           let model = Mapper<IInstrumentsOpenglInfo>().map(JSON: obj) {            
-           callBack?(model)
+    func response(_ response: DTXReceiveObject) {        
+        if let obj = response.object as? [String : Any],
+           let model = Mapper<IInstrumentsOpenglModel>().map(JSON: obj) {
+            let arg = P.start(interval: startInterval).arg
+            self.delegate?.sampling(model: model, arg: arg)
         }
     }
 }
 
-enum IInstrumentsOpenglArgs: IInstrumentRequestArgsProtocol {
-    case setSamplingRate
-    
-    case startSampling
-    
-    var selector: String {
-        switch self {
-            case .setSamplingRate:
-                return "setSamplingRate:"
-                
-            case .startSampling:
-                return "startSamplingAtTimeInterval:"
-        }
-    }
-    
-    var dtxArg: DTXArguments? {
-        switch self {
-            case .setSamplingRate:
-                let arg = DTXArguments()
-                arg.appendUInt32Num(5)
-                return arg
-                
-            case .startSampling:
-                let arg = DTXArguments()
-                arg.appendUInt32Num(0)
-                return arg
+extension IInstrumentsOpengl {
+    enum P {
+        case rate(sampling: Int)
+        case start(interval: Int)
+        
+        var arg: IInstrumentArgs {
+            switch self {
+                case .rate(let sampling):
+                    let dtx = DTXArguments()
+                    dtx.append(sampling)
+                    return IInstrumentArgs(padding: 1,
+                                           selector: "setSamplingRate:",
+                                           dtxArg: dtx)
+                case .start(let interval):
+                    let dtx = DTXArguments()
+                    dtx.append(interval)
+                    return IInstrumentArgs(padding: 2,
+                                           selector: "startSamplingAtTimeInterval:",
+                                           dtxArg: dtx)
+            }
         }
     }
 }

@@ -8,7 +8,7 @@
 import Cocoa
 import ObjectMapper
 
-struct IInstrumentsSysmotapProcessesInfo: Mappable {
+struct IInstrumentsSysmotapProcessesModel: Mappable {
     var Processes: [Int64 : Any] = [:]
     var StartMachAbsTime: Int64 = 0
     var EndMachAbsTime: Int64 = 0
@@ -23,7 +23,7 @@ struct IInstrumentsSysmotapProcessesInfo: Mappable {
         type   <- map["Type"]
     }
     
-    func processInfo(pid: Int64) -> IInstrumentsSysmotapSystemProcessesModel? {
+    func processModel(pid: Int64) -> IInstrumentsSysmotapSystemProcessesModel? {
         guard let datas = Processes[pid] as? [Any],
               datas.count == IInstrumentsSysmontap.procAttrs.count else {
             return nil
@@ -46,7 +46,7 @@ struct IInstrumentsSysmotapProcessesInfo: Mappable {
     }
 }
 
-struct IInstrumentsSysmotapInfo: Mappable {
+struct IInstrumentsSysmotapModel: Mappable {
     var CPUCount: Int = 0
     var EnabledCPUs: Int = 0
     var EndMachAbsTime: Int = 0

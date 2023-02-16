@@ -17,6 +17,7 @@ struct IInstproxyAppInfo: Mappable, Identifiable {
     
     var id: String { bundleId }
     
+    var path: String = ""
     var name: String = ""
     var bundleId: String = ""
     var container: String?
@@ -47,5 +48,6 @@ struct IInstproxyAppInfo: Mappable, Identifiable {
         container <- map["Container"]
         signerIdentity <- map["SignerIdentity"]
         applicationType <- map["ApplicationType"]
+        path <- map["BundlePath"]
     }
 }

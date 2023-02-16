@@ -10,8 +10,8 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsSysmontapDelegate: NSObjectProtocol {
-    func sysmotap(info: IInstrumentsSysmotapInfo, arg: IInstrumentRequestArgsProtocol)
-    func process(info: IInstrumentsSysmotapProcessesInfo, arg: IInstrumentRequestArgsProtocol)
+    func sysmotap(model: IInstrumentsSysmotapModel, arg: IInstrumentRequestArgsProtocol)
+    func process(model: IInstrumentsSysmotapProcessesModel, arg: IInstrumentRequestArgsProtocol)
 }
 
 class IInstrumentsSysmontap: IInstrumentsBase {
@@ -21,31 +21,6 @@ class IInstrumentsSysmontap: IInstrumentsBase {
 }
 
 extension IInstrumentsSysmontap {
-    enum P {
-        case start
-        case set(sampleInterval: Int)
-        
-        var arg: IInstrumentArgs {
-            switch self {
-            case .start:
-                return IInstrumentArgs(.max - 1, "start")
-            case .set(let sampleInterval):
-                let config: [String : Any] = [
-                    "bm": 0,
-                    "ur": 1000,
-                    "cpuUsage": true,
-                    "sampleInterval": sampleInterval,
-                    "sysAttrs": IInstrumentsSysmontap.sysAttrs,
-                    "procAttrs": IInstrumentsSysmontap.procAttrs,
-                ]
-                
-                let args = DTXArguments()
-                args.append(config)
-                return IInstrumentArgs(.max - 2, "setConfig:", args)
-            }
-        }
-    }
-    
     func start() {
         send(P.start.arg)
     }
@@ -62,10 +37,6 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-        if response.identifier == P.start.arg.identifier {
-            return
-        }
-        
         if let result = response.object as? [[String : Any]], result.count >= 2 {
             var sysI = 0
             var proI = 1
@@ -78,34 +49,42 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
                 }
             }
             
-            if let sysmotapInfo = Mapper<IInstrumentsSysmotapInfo>().map(JSON: result[sysI]),
-               let processInfo = Mapper<IInstrumentsSysmotapProcessesInfo>().map(JSON: result[proI]) {
+            if let sysmotap = Mapper<IInstrumentsSysmotapModel>().map(JSON: result[sysI]),
+               let process = Mapper<IInstrumentsSysmotapProcessesModel>().map(JSON: result[proI]) {
                 let arg = P.set(sampleInterval: sampleInterval).arg
-                delegate?.sysmotap(info: sysmotapInfo, arg: arg)
-                delegate?.process(info: processInfo, arg: arg)
+                delegate?.sysmotap(model: sysmotap, arg: arg)
+                delegate?.process(model: process, arg: arg)
             }
         }
     }
 }
-//
-//extension IInstrumentsSysmontap {
-//    struct A: IInstrumentRequestArgsProtocol {
-//        var identifier: UInt32
-//        var selector: String
-//        var dtxArg: DTXArguments? = nil
-//
-//        init( _ identifier: UInt32,
-//              _ selector: String,
-//              _ dtxArg: DTXArguments? = nil) {
-//
-//            self.identifier = identifier
-//            self.selector = selector
-//            self.dtxArg = dtxArg
-//        }
-//    }
-//}
 
 extension IInstrumentsSysmontap {
+    enum P {
+        case start
+        case set(sampleInterval: Int)
+        
+        var arg: IInstrumentArgs {
+            switch self {
+                case .start:
+                    return IInstrumentArgs(padding: 1, selector: "start")
+                case .set(let sampleInterval):
+                    let config: [String : Any] = [
+                        "bm": 0,
+                        "ur": 1000,
+                        "cpuUsage": true,
+                        "sampleInterval": sampleInterval,
+                        "sysAttrs": IInstrumentsSysmontap.sysAttrs,
+                        "procAttrs": IInstrumentsSysmontap.procAttrs,
+                    ]
+                    
+                    let args = DTXArguments()
+                    args.append(config)
+                    return IInstrumentArgs(padding: 2, selector: "setConfig:", dtxArg: args)
+            }
+        }
+    }
+    
     public static let procAttrs = [
         "cpuUsage",
         "ctxSwitch",

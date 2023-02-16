@@ -8,26 +8,41 @@
 import Foundation
 import LibMobileDevice
 
-enum IInstrumentsNetworkingCallback {
-    case interfaceDetection(IInstrumentsNetworkingInterfaceDetectionModel)
-    case connectionDetectedV4(IInstrumentsNetworkingConnectionDetectedModelV4)
-    case connectionDetectedV6(IInstrumentsNetworkingConnectionDetectedModelV6)
-    case connectionUpdate(IInstrumentsNetworkingConnectionUpdateModel)
+protocol IInstrumentsNetworkingDelegate: NSObjectProtocol {
+    func interfaceDetection(model: IInstrumentsNetworkingInterfaceDetectionModel, arg: IInstrumentRequestArgsProtocol)
+    
+    func connectionDetectedV4(model: IInstrumentsNetworkingConnectionDetectedModelV4, arg: IInstrumentRequestArgsProtocol)
+    
+    func connectionDetectedV6(model: IInstrumentsNetworkingConnectionDetectedModelV6, arg: IInstrumentRequestArgsProtocol)
+    
+    func connectionUpdate(model: IInstrumentsNetworkingConnectionUpdateModel, arg: IInstrumentRequestArgsProtocol)
 }
 
 class IInstrumentsNetworking: IInstrumentsBase {
-    var callback: ((IInstrumentsNetworkingCallback) -> Void)? = nil
+    public weak var delegate: IInstrumentsNetworkingDelegate? = nil
+}
+
+extension IInstrumentsNetworking {
+    func replay() {
+        send(P.replay.arg)
+    }
+    
+    func start() {
+        send(P.start.arg)
+    }
+    
+    func stop() {
+        send(P.stop.arg)
+    }
 }
 
 extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsNetworkingArgs
-    
     var server: IInstrumentsServiceName {
         return .networking
     }
     
-    func response(_ response: DTXReceiveObject?) {
-        guard let datas = response?.object as? [Any],
+    func response(_ response: DTXReceiveObject) {
+        guard let datas = response.object as? [Any],
               datas.count == 2,
               let modelDatas = datas[1] as? [Any],
               let typeNumber = datas[0] as? Int64,
@@ -35,23 +50,24 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
             return
         }
         
+        let arg = P.start.arg
         switch type {
             case .interfaceDetection:
                 if let model = interfaceDetection(datas: modelDatas) {
-                    callback?(.interfaceDetection(model))
+                    self.delegate?.interfaceDetection(model: model, arg: arg)
                 }
                 
             case .connectionDetected:
                 if let addData = modelDatas.first as? Data {
                     if addData.count == 16, let model = connectionDetectedV4(datas: modelDatas) {
-                        callback?(.connectionDetectedV4(model))
+                        self.delegate?.connectionDetectedV4(model: model, arg: arg)
                     } else if addData.count == 28, let model = connectionDetectedV6(datas: modelDatas) {
-                        callback?(.connectionDetectedV6(model))
+                        self.delegate?.connectionDetectedV6(model: model, arg: arg)
                     }
                 }
             case .connectionUpdate:
                 if let model = connectionUpdate(datas: modelDatas) {
-                    callback?(.connectionUpdate(model))
+                    self.delegate?.connectionUpdate(model: model, arg: arg)
                 }
         }
     }
@@ -148,25 +164,18 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
     }
 }
 
-enum IInstrumentsNetworkingArgs: IInstrumentRequestArgsProtocol {
-    case replayLastRecordedSession
-    
-    case startMonitoring
-    
-    case stopMonitoring
-    
-    var selector: String {
-        switch self {
-            case .replayLastRecordedSession:
-                return "replayLastRecordedSession"
-            case .startMonitoring:
-                return "startMonitoring"
-            case .stopMonitoring:
-                return "stopMonitoring"
+extension IInstrumentsNetworking {
+    enum P {
+        case replay
+        case start
+        case stop
+        
+        var arg: IInstrumentArgs {
+            switch self {
+                case .replay: return IInstrumentArgs(padding: 1, selector: "replayLastRecordedSession")
+                case .start: return IInstrumentArgs(padding: 2, selector: "startMonitoring")
+                case .stop: return IInstrumentArgs(padding: 3, selector: "stopMonitoring")
+            }
         }
-    }
-    
-    var dtxArg: DTXArguments? {
-        return nil
     }
 }

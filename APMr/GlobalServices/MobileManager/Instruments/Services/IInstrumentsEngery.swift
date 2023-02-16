@@ -9,19 +9,39 @@ import Foundation
 import LibMobileDevice
 import ObjectMapper
 
+protocol IInstrumentsEnergyDelegate: NSObjectProtocol {
+    
+}
+
 class IInstrumentsEnergy: IInstrumentsBase {
-    var callback: (([Int64 : IInstrumentsEnergyModel]) -> Void)? = nil
+    public weak var delegate: IInstrumentsEnergyDelegate? = nil
+    
+    private var startPids: [UInt32] = []
+    
+    private var sampleAttributes: [String : Any] = [:]
+    private var samplePids: [UInt32] = []
+}
+
+extension IInstrumentsEnergy {
+    func start(pids: [UInt32]) {
+        startPids = pids
+        send(P.start(pids: pids).arg)
+    }
+    
+    func sample(attributes: [String : Any] = [:], pids: [UInt32]) {
+        sampleAttributes = attributes
+        samplePids = pids
+        send(P.sample(attributes: attributes, pids: pids).arg)
+    }
 }
 
 extension IInstrumentsEnergy: IInstrumentsServiceProtocol {
-    typealias Arg = IInstrumentsEnergyArgs
-    
     var server: IInstrumentsServiceName {
         return .energy
     }
     
-    func response(_ response: DTXReceiveObject?) {
-        if let response = response?.object as? [Int64 : [String : Any]] {
+    func response(_ response: DTXReceiveObject) {
+        if let response = response.object as? [Int64 : [String : Any]] {
             var result = [Int64 : IInstrumentsEnergyModel]()
             let mapper = Mapper<IInstrumentsEnergyModel>()
             response.forEach { item in
@@ -29,36 +49,32 @@ extension IInstrumentsEnergy: IInstrumentsServiceProtocol {
                     result[item.key] = model
                 }
             }
-            callback?(result)
         }
     }
 }
 
-enum IInstrumentsEnergyArgs: IInstrumentRequestArgsProtocol {
-    case start(pids: [UInt32])
-    
-    case sample(pids: [UInt32])
-    
-    var selector: String {
-        switch self {
-            case .start(_):
-                return "startSamplingForPIDs:"
-            case .sample(_):
-                return "sampleAttributes:forPIDs:"
-        }
-    }
-    
-    var dtxArg: DTXArguments? {
-        switch self {
-            case .start(let pids):
-                let arg = DTXArguments()
-                arg.append(pids)
-                return arg
-            case .sample(let pids):
-                let arg = DTXArguments()
-                arg.append(Dictionary<String, Any>())
-                arg.append(pids)
-                return arg
+extension IInstrumentsEnergy {
+    enum P {
+        case start(pids: [UInt32])
+        case sample(attributes: [String : Any], pids: [UInt32])
+        
+        var arg: IInstrumentArgs {
+            switch self {
+                case .start(let pids):
+                    let arg = DTXArguments()
+                    arg.append(pids)
+                    return IInstrumentArgs(padding: 1,
+                                           selector: "startSamplingForPIDs:",
+                                           dtxArg: arg)
+                    
+                case .sample(let att, let pids):
+                    let arg = DTXArguments()
+                    arg.append(att)
+                    arg.append(pids)
+                    return IInstrumentArgs(padding: 2,
+                                           selector: "sampleAttributes:forPIDs:",
+                                           dtxArg: arg)
+            }
         }
     }
 }

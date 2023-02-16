@@ -8,5 +8,5 @@
 import Foundation
 
 class IInstrumentsBase {    
-    public weak var instrument: IInstruments? = nil    
+    public weak var instrument: IInstruments? = nil
 }

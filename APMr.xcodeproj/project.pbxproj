@@ -73,6 +73,7 @@
 		C7E137CB299C9C92000CD484 /* IInstrumentsObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* IInstrumentsObjectAlloc.swift */; };
 		C7E137CD299CB52A000CD484 /* IInstrumentsBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CC299CB52A000CD484 /* IInstrumentsBase.swift */; };
 		C7F5DA892946EF94005C6F7D /* IInstrumentsGPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */; };
+		C7FA2E50299E036A00FE78F2 /* IInstrumentsProcessControlByDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA2E4F299E036A00FE78F2 /* IInstrumentsProcessControlByDictionary.swift */; };
 		E2EEEE13B7F1A6303EF4CE35 /* Pods_APMr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */; };
 /* End PBXBuildFile section */
 
@@ -180,6 +181,7 @@
 		C7E137CA299C9C92000CD484 /* IInstrumentsObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsObjectAlloc.swift; sourceTree = "<group>"; };
 		C7E137CC299CB52A000CD484 /* IInstrumentsBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsBase.swift; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsGPU.swift; sourceTree = "<group>"; };
+		C7FA2E4F299E036A00FE78F2 /* IInstrumentsProcessControlByDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsProcessControlByDictionary.swift; sourceTree = "<group>"; };
 		CF29673E9DD30442430F30F3 /* Pods-APMr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.debug.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.debug.xcconfig"; sourceTree = "<group>"; };
 		DADA9EDEA0F1466ED00BCE2D /* Pods_APMr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APMr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -332,6 +334,7 @@
 				C7AC987E2956E0C200A6580B /* IInstrumentsNetworkStatistics.swift */,
 				C7F5DA882946EF94005C6F7D /* IInstrumentsGPU.swift */,
 				C7E137CA299C9C92000CD484 /* IInstrumentsObjectAlloc.swift */,
+				C7FA2E4F299E036A00FE78F2 /* IInstrumentsProcessControlByDictionary.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -805,6 +808,7 @@
 				C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */,
 				C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */,
 				C75750F7293DA1980074E707 /* IInstrumentsSysmotapModels.swift in Sources */,
+				C7FA2E50299E036A00FE78F2 /* IInstrumentsProcessControlByDictionary.swift in Sources */,
 				C7AC9895295C816500A6580B /* IInstrumentsNetworkStatisticsModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7AC98812956EB1D00A6580B /* IInstrumentsNetworking.swift in Sources */,
@@ -974,8 +978,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -1011,8 +1015,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

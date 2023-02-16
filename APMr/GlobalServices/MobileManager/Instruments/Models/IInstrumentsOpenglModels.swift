@@ -8,7 +8,7 @@
 import Cocoa
 import ObjectMapper
 
-struct IInstrumentsOpenglInfo: Mappable {
+struct IInstrumentsOpenglModel: Mappable {
     var AllocatedPBSize: Int = 0
     var Allocsystemmemory: Int = 0
     var CoreAnimationFramesPerSecond: CGFloat = 0

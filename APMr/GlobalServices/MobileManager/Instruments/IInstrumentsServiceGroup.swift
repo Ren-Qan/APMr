@@ -23,13 +23,13 @@ class IInstrumentsServiceGroup {
 extension IInstrumentsServiceGroup {
     typealias Service = IInstrumentsServiceProtocol
     
-    func config<T>(_ clients: [T]) where T : Service {
+    func config(_ clients: [Service]) {
         clients.forEach { client in
             config(client)
         }
     }
     
-    func config<T>(_ client: T) where T : Service {
+    func config(_ client: Service) {
         serviceDic[client.server] = client
     }
    

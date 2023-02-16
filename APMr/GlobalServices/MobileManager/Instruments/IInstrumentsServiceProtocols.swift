@@ -27,7 +27,7 @@ enum IInstrumentsServiceName: String, CaseIterable {
     
     case objectalloc = "com.apple.instruments.server.services.objectalloc"
     
-//    case dyld = "com.apple.instruments.server.services.processcontrolbydictionary"
+    case pcbd = "com.apple.instruments.server.services.processcontrolbydictionary"
 //
 //    case notifications = "com.apple.instruments.server.services.mobilenotifications"
     
@@ -69,6 +69,14 @@ struct IInstrumentArgs: IInstrumentRequestArgsProtocol {
           _ dtxArg: DTXArguments? = nil) {
         
         self.identifier = identifier
+        self.selector = selector
+        self.dtxArg = dtxArg
+    }
+    
+    init(padding: UInt32,
+         selector: String,
+         dtxArg: DTXArguments? = nil) {
+        self.identifier = .max - padding
         self.selector = selector
         self.dtxArg = dtxArg
     }

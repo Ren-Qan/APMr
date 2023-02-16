@@ -10,7 +10,7 @@ import Combine
 import LibMobileDevice
 
 class PerformanceInstrumentsService: NSObject, ObservableObject {
-    //MARK: - Public
+    // MARK: - Public
     
     @Published private(set) var summary = Summary()
     
@@ -24,7 +24,8 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     
     public let pCM = PerformanceChartModel()
     
-    //MARK: - Private
+    // MARK: - Private
+    
     private lazy var operationQ = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
@@ -34,17 +35,24 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
         group.delegate = self
-        group.config([
-            .sysmontap,
-            .opengl,
-            .processcontrol,
-            .networkStatistics,
-            .objectalloc,
-        ])
+        
+        let sysmontap = IInstrumentsSysmontap()
+        sysmontap.delegate = self
+        
+        let opengl = IInstrumentsOpengl()
+        opengl.delegate = self
+        
+        let process = IInstrumentsProcesscontrol()
+        process.delegate = self
+        
+        let net = IInstrumentsNetworkStatistics()
+        net.delegate = self
+        
+        group.config([sysmontap, opengl, process, net])
         return group
     }()
     
-    private var timer: Timer? = nil
+    private var timer: Timer?
     
     private var receiceSeriesNilCount = 0
     
@@ -52,10 +60,10 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     
     private var cSPI = PerformanceIndicator()
     
-    private var lockdown: ILockdown? = nil
+    private var lockdown: ILockdown?
     
-    private var diagnostics: IDiagnosticsRelay? = nil
-            
+    private var diagnostics: IDiagnosticsRelay?
+    
     deinit {
         timer?.invalidate()
         timer = nil
@@ -63,6 +71,7 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
 }
 
 // MARK: - Public API
+
 extension PerformanceInstrumentsService {
     public func launch(app: IInstproxyAppInfo) {
         isLaunchingApp = true
@@ -70,14 +79,12 @@ extension PerformanceInstrumentsService {
             isLaunchingApp = false
             return
         }
-        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
-            client.send(.parpareForLaunch)
-        }
-        processControl.send(.launch(bundleId: app.bundleId))
+        processControl.launch(bundle: app.bundleId)
     }
 }
 
-// MARK: - Public Service Setup Functions 
+// MARK: - Public Service Setup Functions
+
 extension PerformanceInstrumentsService {
     public func start(_ device: DeviceItem,
                       _ complete: ((Bool, PerformanceInstrumentsService) -> Void)? = nil) {
@@ -110,7 +117,7 @@ extension PerformanceInstrumentsService {
         timer = Timer(timeInterval: sampleTimer,
                       repeats: true,
                       block: { [weak self] _ in
-            self?.operationQ.addOperation({
+            self?.operationQ.addOperation {
                 self?.receive()
                 if count % cycle == 0 {
                     self?.send()
@@ -121,7 +128,7 @@ extension PerformanceInstrumentsService {
                 }
                 
                 count += 1
-            })
+            }
         })
         
         timer?.fire()
@@ -141,7 +148,7 @@ extension PerformanceInstrumentsService {
         lockdown = nil
         operationQ.cancelAllOperations()
     }
-        
+    
     public func highlight(start: Int, end: Int, isDragging: Bool) {
         let count = pCM.count
         if isDragging {
@@ -186,14 +193,13 @@ extension PerformanceInstrumentsService {
         }
         
         if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
-            opengl.register(.startSampling)
+            opengl.start()
         }
     }
     
     private func send() {
         if let network: IInstrumentsNetworkStatistics = serviceGroup.client(.networkStatistics) {
-//            network.send(.start(pids: [monitorPid]))
-            network.send(.sample(pids: [monitorPid]))
+            network.sample(pids: [monitorPid])
         }
         
         if let diagnostics = diagnostics?.analysis {
@@ -215,10 +221,10 @@ extension PerformanceInstrumentsService {
         
         summary.add(cSPI)
         pCM.add(cSPI, xAxisPageCount)
-
+        
         currentSeconds += 1
         cSPI.seconds = CGFloat(currentSeconds)
-
+        
         DispatchQueue.main.async {
             if beforeModelCount != self.pCM.count {
                 self.objectWillChange.send()
@@ -234,6 +240,7 @@ extension PerformanceInstrumentsService {
 }
 
 // MARK: - IInstrumentsServiceGroupDelegate
+
 extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
     func receive(response: DTXReceiveObject?) {
         if response == nil {
@@ -247,8 +254,10 @@ extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
             stopService()
         }
     }
-    
-    func launch(pid: UInt32) {
+}
+
+extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
+    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
         monitorPid = pid
         if pid != 0 {
             isMonitoringPerformance = true
@@ -256,25 +265,33 @@ extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
             register()
         }
     }
+}
+
+extension PerformanceInstrumentsService: IInstrumentsSysmontapDelegate {
+    func sysmotap(model: IInstrumentsSysmotapModel, arg: IInstrumentRequestArgsProtocol) {
+        cTotalCPU(model)
+    }
     
-    func sysmontap(sysmotapInfo: IInstrumentsSysmotapInfo,
-                   processInfo: IInstrumentsSysmotapProcessesInfo) {
-        guard let process = processInfo.processInfo(pid: Int64(monitorPid)) else {
+    func process(model: IInstrumentsSysmotapProcessesModel, arg: IInstrumentRequestArgsProtocol) {
+        guard let process = model.processModel(pid: Int64(monitorPid)) else {
             return
         }
-        
-        cCPU(sysmotapInfo, process)
+        cProcessCPU(process)
         cMemory(process)
         cIO(process)
     }
-    
-    func opengl(info: IInstrumentsOpenglInfo) {
-        cGPU(info)
-        cFPS(info)
+}
+
+extension PerformanceInstrumentsService: IInstrumentsOpenglDelegate {
+    func sampling(model: IInstrumentsOpenglModel, arg: IInstrumentRequestArgsProtocol) {
+        cGPU(model)
+        cFPS(model)
     }
-    
-    func networkStatistics(info: [Int64 : IInstrumentsNetworkStatisticsModel]) {
-        guard monitorPid != 0, let model = info[Int64(monitorPid)] else {
+}
+
+extension PerformanceInstrumentsService: IInstrumentsNetworkStatisticsDelegate {
+    func process(modelMap: [UInt32: IInstrumentsNetworkStatisticsModel], arg: IInstrumentRequestArgsProtocol) {
+        guard monitorPid != 0, let model = modelMap[monitorPid] else {
             return
         }
         cNetwork(model)
@@ -282,20 +299,22 @@ extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
 }
 
 // MARK: - 模型解析
+
 extension PerformanceInstrumentsService {
-    private func cCPU(_ sysmotapInfo: IInstrumentsSysmotapInfo,
-                      _ process: IInstrumentsSysmotapSystemProcessesModel) {
+    private func cTotalCPU(_ sysmotapInfo: IInstrumentsSysmotapModel) {
         var totalUsage: CGFloat = 0
         if let system = sysmotapInfo.SystemCPUUsage {
             // mark Usage = SystemCPUUsage.CPU_TotalLoad / EnabledCPUs - https://github.com/dkw72n/idb
             totalUsage = CGFloat(system.CPU_TotalLoad) / CGFloat(sysmotapInfo.CPUCount)
         }
-        
-        cSPI.cpu.process = process.cpuUsage
         cSPI.cpu.total = totalUsage
     }
     
-    private func cGPU(_ info: IInstrumentsOpenglInfo) {
+    private func cProcessCPU(_ process: IInstrumentsSysmotapSystemProcessesModel) {
+        cSPI.cpu.process = process.cpuUsage
+    }
+    
+    private func cGPU(_ info: IInstrumentsOpenglModel) {
         let item = cSPI.gpu
         item.device = CGFloat(info.DeviceUtilization)
         item.renderer = CGFloat(info.RendererUtilization)
@@ -319,7 +338,7 @@ extension PerformanceInstrumentsService {
         item.writeDelta = item.write - lastW
     }
     
-    private func cFPS(_ info: IInstrumentsOpenglInfo) {
+    private func cFPS(_ info: IInstrumentsOpenglModel) {
         let item = cSPI.fps
         item.fps = info.CoreAnimationFramesPerSecond
     }
@@ -332,7 +351,7 @@ extension PerformanceInstrumentsService {
         item.upDelta = info.net_tx_bytes_delta.MB
     }
     
-    private func cDiagnostic(_ dic: [String : Any]) {
+    private func cDiagnostic(_ dic: [String: Any]) {
         let item = cSPI.diagnostic
         item.voltage = (dic["Voltage"] as? CGFloat ?? 0) / 1000
         item.battery = (dic["CurrentCapacity"] as? CGFloat ?? 0)
@@ -344,24 +363,12 @@ extension PerformanceInstrumentsService {
     }
 }
 
-
 // MARK: - TEST FUNC
+
 extension PerformanceInstrumentsService {
-    func deviceInfoTest() {
-        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
-            client.send(.collection(pid: monitorPid))
-        }
-    }
-    
-    func deviceInfoStopTest() {
-        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
-            client.send(.stopCollection)
-        }
-    }
-    
     func insertTestData(count: Int) {
         func randomCPCM() {
-            cSPI.cpu.process = .random(in:  0 ... 100)
+            cSPI.cpu.process = .random(in: 0 ... 100)
             cSPI.cpu.total = .random(in: 0 ... 100)
             
             cSPI.gpu.renderer = .random(in: 0 ... 100)
@@ -376,10 +383,10 @@ extension PerformanceInstrumentsService {
             cSPI.network.downDelta = .random(in: 0 ... 100)
             cSPI.network.upDelta = .random(in: 0 ... 100)
             
-            cSPI.diagnostic.amperage = .random(in:  0 ... 40)
+            cSPI.diagnostic.amperage = .random(in: 0 ... 40)
             cSPI.diagnostic.battery = .random(in: 0 ... 100)
             cSPI.diagnostic.voltage = .random(in: 0 ... 20)
-            cSPI.diagnostic.temperature = .random(in:  10 ... 44)
+            cSPI.diagnostic.temperature = .random(in: 10 ... 44)
             
             cSPI.memory.memory = .random(in: 0 ... 500)
             cSPI.memory.resident = .random(in: 0 ... 500)
@@ -392,7 +399,7 @@ extension PerformanceInstrumentsService {
                 self.operationQ.addOperation { [weak self] in
                     randomCPCM()
                     self?.record()
-                    if (i == count - 1) {
+                    if i == count - 1 {
                         debugPrint("插入\(count)条数据 耗时: \(Date().timeIntervalSince1970 - time)")
                     }
                 }

@@ -9,76 +9,106 @@ import Foundation
 import LibMobileDevice
 import ObjectMapper
 
+protocol IInstrumentsNetworkStatisticsDelegate: NSObjectProtocol {
+    func process(modelMap: [UInt32 : IInstrumentsNetworkStatisticsModel], arg: IInstrumentRequestArgsProtocol)
+}
+
 class IInstrumentsNetworkStatistics: IInstrumentsBase {
-    var callback: (([Int64 : IInstrumentsNetworkStatisticsModel]) -> Void)? = nil
+    public weak var delegate: IInstrumentsNetworkStatisticsDelegate? = nil
+    
+    private var startPids: [UInt32] = []
+    private var stopPids: [UInt32] = []
+    
+    private var sampleConfig: SampleConfig? = nil
+}
+
+extension IInstrumentsNetworkStatistics {
+    func start(pids: [UInt32]) {
+        self.startPids = pids
+        send(P.start(pids: pids).arg)
+    }
+    
+    func stop(pids: [UInt32]) {
+        self.stopPids = pids
+        send(P.stop(pids: pids).arg)
+    }
+    
+    func sample(pids: [UInt32]) {
+        let config = SampleConfig.common(pids: pids)
+        sample(config: config)
+    }
+    
+    func sample(config: SampleConfig) {
+        self.sampleConfig = config
+        send(P.sample(config: config).arg)
+    }
 }
 
 extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {    
-    typealias Arg = IInstrumentsNetworkStatisticsArgs
-    
     var server: IInstrumentsServiceName {
         return .networkStatistics
     }
     
-    func response(_ response: DTXReceiveObject?) {
-        if let response = response?.object as? [Int64 : [String : Any]] {
-            var result = [Int64 : IInstrumentsNetworkStatisticsModel]()
+    func response(_ response: DTXReceiveObject) {
+        
+        if  let config = self.sampleConfig,
+            let response = response.object as? [UInt32 : [String : Any]] {
+            var result = [UInt32 : IInstrumentsNetworkStatisticsModel]()
             let mapper = Mapper<IInstrumentsNetworkStatisticsModel>()
             response.forEach { item in
                 if let model = mapper.map(JSON: item.value) {
                     result[item.key] = model
                 }
             }
-            callback?(result)
+            self.delegate?.process(modelMap: result, arg: P.sample(config: config).arg)
         }
     }
 }
 
-enum IInstrumentsNetworkStatisticsArgs: IInstrumentRequestArgsProtocol {
-    case start(pids: [UInt32])
-    
-    case stop(pids: [UInt32])
-    
-    case sample(pids: [UInt32])
-    
-    var selector: String {
-        switch self {
-            case .start(_):
-                return "startSamplingForPIDs:"
-            case .stop(_):
-                return "stopSamplingForPIDs:"
-            case .sample(_):
-                return "sampleAttributes:forPIDs:"
+extension IInstrumentsNetworkStatistics {
+    struct SampleConfig {
+        var attributes: [String]
+        var pids: [UInt32]
+        
+        static func common(pids: [UInt32]) -> SampleConfig {
+            let att = ["net.bytes",
+                       "net.bytes.delta",
+                       "net.connections[]",
+                       "net.packets",
+                       "net.packets.delta",
+                       "net.rx.bytes",
+                       "net.rx.bytes.delta",
+                       "net.rx.packets",
+                       "net.rx.packets.delta",
+                       "net.tx.bytes",
+                       "net.tx.bytes.delta",
+                       "net.tx.packets",
+                       "net.tx.packets.delta"]
+            return SampleConfig(attributes: att, pids: pids)
         }
     }
     
-    var dtxArg: DTXArguments? {
-        switch self {
-            case .start(let pids):
-                let arg = DTXArguments()
-                arg.append(pids)
-                return arg
-            case .stop(let pids):
-                let arg = DTXArguments()
-                arg.append(pids)
-                return arg
-            case .sample(let pids):
-                let arg = DTXArguments()
-                arg.append(["net.bytes",
-                            "net.bytes.delta",
-                            "net.connections[]",
-                            "net.packets",
-                            "net.packets.delta",
-                            "net.rx.bytes",
-                            "net.rx.bytes.delta",
-                            "net.rx.packets",
-                            "net.rx.packets.delta",
-                            "net.tx.bytes",
-                            "net.tx.bytes.delta",
-                            "net.tx.packets",
-                            "net.tx.packets.delta"])
-                arg.append(pids)
-                return arg
+    enum P {
+        case start(pids: [UInt32])
+        case stop(pids: [UInt32])
+        case sample(config: SampleConfig)
+        
+        var arg: IInstrumentArgs {
+            switch self {
+                case .start(let pids):
+                    let arg = DTXArguments()
+                    arg.append(pids)
+                    return IInstrumentArgs(padding: 1, selector: "startSamplingForPIDs:", dtxArg: arg)
+                case .stop(let pids):
+                    let arg = DTXArguments()
+                    arg.append(pids)
+                    return IInstrumentArgs(padding: 1, selector: "stopSamplingForPIDs:", dtxArg: arg)
+                case .sample(let config):
+                    let arg = DTXArguments()
+                    arg.append(config.attributes)
+                    arg.append(config.pids)
+                    return IInstrumentArgs(padding: 1, selector: "sampleAttributes:forPIDs:", dtxArg: arg)
+            }
         }
     }
 }

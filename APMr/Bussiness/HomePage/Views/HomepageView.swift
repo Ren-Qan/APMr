@@ -13,8 +13,8 @@ struct HomepageView: View {
     @StateObject private var deviceService = HomepageDeviceService()
     
     @StateObject private var instrumentService = PerformanceInstrumentsService()
-    
-//    @StateObject private var 
+        
+    @StateObject private var launchService = LaunchInstrumentsService()
     
     var body: some View {
         NavigationSplitView {
@@ -36,7 +36,7 @@ struct HomepageView: View {
                 case .launch:
                     LaunchView()
                         .environmentObject(service)
-                        .environmentObject(instrumentService)
+                        .environmentObject(launchService)
                         .padding(.all, 5)
                     
                 default:

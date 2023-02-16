@@ -8,8 +8,28 @@
 import SwiftUI
 
 struct LaunchView: View {
+    
+    @EnvironmentObject var service: HomepageService
+    
+    @EnvironmentObject var launchService: LaunchInstrumentsService
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Button("test") {
+                guard let device = service.selectDevice,
+                      let app = service.selectApp else {
+                    return
+                }
+                launchService.start(device) { success, service in
+                    service.autoReceive()
+                    service.test(app: app)
+                }
+            }
+            
+            Button("close") {
+                launchService.close()
+            }
+        }
     }
 }
 

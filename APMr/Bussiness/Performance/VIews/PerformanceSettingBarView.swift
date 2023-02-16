@@ -76,14 +76,6 @@ struct PerformanceSettingBarView: View {
                 Button("插入随机数据") {
                     instruments.insertTestData(count: .random(in: 40 ... 80))
                 }
-                
-                Button("start") {
-                    instruments.deviceInfoTest()
-                }
-                
-                Button("stop") {
-                    instruments.deviceInfoTest()
-                }
 #else
 #endif
                 Spacer()
