@@ -28,9 +28,11 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case objectalloc = "com.apple.instruments.server.services.objectalloc"
     
     case pcbd = "com.apple.instruments.server.services.processcontrolbydictionary"
-//
-//    case notifications = "com.apple.instruments.server.services.mobilenotifications"
+
+    case sampling = "com.apple.instruments.server.services.sampling"
     
+    case applifecycle = "com.apple.instruments.server.services.deviceinfo.app-life-cycle"
+        
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
     }

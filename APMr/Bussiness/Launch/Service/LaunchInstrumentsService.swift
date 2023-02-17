@@ -11,21 +11,19 @@ import LibMobileDevice
 class LaunchInstrumentsService: NSObject, ObservableObject {
     
     private var timer: Timer?
+    private var receiceSeriesNilCount = 0
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
         group.delegate = self
         
-        let process = IInstrumentsProcessControlByDictionary()
+        let process = IInstrumentsProcesscontrol()
         process.delegate = self
         
-        let objc = IInstrumentsObjectAlloc()
-        objc.delegate = self
+        let samp = IInstrumentSampling()
+//        samp.delegate = self
         
-        let device = IInstrumentsDeviceInfo()
-        device.delegate = self
-        
-        group.config([process, objc, device])
+        group.config([process, samp])
         return group
     }()
     
@@ -33,6 +31,7 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     var path = ""
     var bundle = ""
     var pid: UInt32 = 0
+    var appName = ""
     
     deinit {
         timer?.invalidate()
@@ -40,33 +39,36 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     }
 }
 
+extension LaunchInstrumentsService {
+    private func stopService() {
+        timer?.invalidate()
+        timer = nil
+        serviceGroup.stop()
+    }
+}
+
 extension LaunchInstrumentsService: IInstrumentsServiceGroupDelegate {
     func receive(response: DTXReceiveObject?) {
+        if response == nil {
+            receiceSeriesNilCount += 1
+        } else {
+            receiceSeriesNilCount = 0
+        }
         
-    }
-}
-
-extension LaunchInstrumentsService: IInstrumentsProcessControlByDictionaryDelegate {
-    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
-        self.pid = pid
-        
-//        if let client: IInstrumentsProcessControlByDictionary = serviceGroup.client(.pcbd) {
-//            client.start(pid: pid)
-
-//            client.resume(pid: pid)
-//        }
-    }
-}
-
-extension LaunchInstrumentsService: IInstrumentsObjectAllocDelegate {
-    func prepared(response: [String : Any], arg: IInstrumentRequestArgsProtocol) {
-        if let client: IInstrumentsProcessControlByDictionary = serviceGroup.client(.pcbd) {
-            client.launch(config: .common(path: path, bundle: bundle, env: response))
+        let MAX_ERROR_COUNT = 10
+        if receiceSeriesNilCount == MAX_ERROR_COUNT {
+            stopService()
         }
     }
 }
 
-extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
+extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
+    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
+        self.pid = pid
+    }
+}
+
+extension LaunchInstrumentsService: IInstrumentSamplingDelegate {
     
 }
 
@@ -86,12 +88,8 @@ extension LaunchInstrumentsService {
         timer?.invalidate()
         timer = nil
         
-        let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
+        let timer = Timer(timeInterval: 0.2, repeats: true) { [weak self] _ in
             self?.serviceGroup.receive()
-            
-            if let clinet: IInstrumentsObjectAlloc = self?.serviceGroup.client(.objectalloc), let pid = self?.pid, pid > 0 {
-                clinet.collection(pid: pid)
-            }
         }
         RunLoop.main.add(timer, forMode: .common)
         timer.fire()
@@ -103,19 +101,35 @@ extension LaunchInstrumentsService {
     public func test(app: IInstproxyAppInfo) {
         bundle = app.bundleId
         path = app.path
+        appName = app.name
         
-        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
-            client.parpare()
+        if let client: IInstrumentSampling = serviceGroup.client(.sampling) {
+            client.send(IInstrumentArgs(padding: 6, selector: "sampleInterval"))
+            
+            let arg1 = DTXArguments()
+            arg1.append(100)
+            client.send(IInstrumentArgs(padding: 5, selector: "setOutputRate:", dtxArg: arg1))
+            
+            let arg = DTXArguments()
+            arg.append(100)
+            client.send(IInstrumentArgs(padding: 4, selector: "setSamplingRate:", dtxArg: arg))
+                
+            client.start()
+  
+            
+        }
+        
+        if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
+            client.launch(bundle: bundle)
         }
     }
     
     public func close() {
-        if let client: IInstrumentsObjectAlloc = serviceGroup.client(.objectalloc) {
+        if let client: IInstrumentSampling = serviceGroup.client(.sampling) {
+
+            
             client.stop()
+//            client.samples()
         }
-        
-//        if let client: IInstrumentsProcessControlByDictionary = serviceGroup.client(.pcbd) {
-//            client.stop(pid: self.pid)
-//        }
     }
 }
