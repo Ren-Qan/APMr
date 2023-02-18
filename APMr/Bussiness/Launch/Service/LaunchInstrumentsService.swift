@@ -22,8 +22,9 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         
         let samp = IInstrumentSampling()
 //        samp.delegate = self
+        let test = TESTClinet()
         
-        group.config([process, samp])
+        group.config([process, samp, test])
         return group
     }()
     
@@ -65,6 +66,12 @@ extension LaunchInstrumentsService: IInstrumentsServiceGroupDelegate {
 extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
         self.pid = pid
+        if let client: IInstrumentSampling = serviceGroup.client(.sampling) {
+            
+            let dtx = DTXArguments()
+            dtx.append(pid)
+            client.send(IInstrumentArgs(padding: 5, selector: "setTargetPid:", dtxArg: dtx))
+        }
     }
 }
 
@@ -103,33 +110,43 @@ extension LaunchInstrumentsService {
         path = app.path
         appName = app.name
         
-        if let client: IInstrumentSampling = serviceGroup.client(.sampling) {
-            client.send(IInstrumentArgs(padding: 6, selector: "sampleInterval"))
-            
-            let arg1 = DTXArguments()
-            arg1.append(100)
-            client.send(IInstrumentArgs(padding: 5, selector: "setOutputRate:", dtxArg: arg1))
-            
-            let arg = DTXArguments()
-            arg.append(100)
-            client.send(IInstrumentArgs(padding: 4, selector: "setSamplingRate:", dtxArg: arg))
-                
-            client.start()
+//        if let client: IInstrumentsAppLifeCycle = serviceGroup.client(.applifecycle) {
+//            client.start()
+//        }
+        
+//        if let client: IInstrumentSampling = serviceGroup.client(.sampling) {
+//            let arg = DTXArguments()
+//            arg.append(1)
+//            client.send(IInstrumentArgs(padding: 10, selector: "setOutputRate:", dtxArg: arg))
+//            client.start()
+//        }
   
-            
+        if let client: TESTClinet = serviceGroup.client(.applifecycle) {
+            client.send(IInstrumentArgs(padding: 1, selector: "recordWithBundleIdentifier:"))
         }
         
-        if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
-            client.launch(bundle: bundle)
-        }
+//        if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
+//            client.launch(bundle: bundle)
+//        }
     }
     
     public func close() {
         if let client: IInstrumentSampling = serviceGroup.client(.sampling) {
-
-            
             client.stop()
 //            client.samples()
         }
     }
+}
+
+class TESTClinet: IInstrumentsBase, IInstrumentsServiceProtocol {
+    var server: IInstrumentsServiceName {
+        .applifecycle
+    }
+    
+    func response(_ response: DTXReceiveObject) {
+        print("[Test] [Arr] ---- \(response.array)")
+        print("[Test] [obj] ---- \(response.object)")
+    }
+    
+    
 }
