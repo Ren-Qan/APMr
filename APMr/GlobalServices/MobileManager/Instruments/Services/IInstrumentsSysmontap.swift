@@ -96,7 +96,12 @@ extension IInstrumentsSysmontap {
         "pid",
         "name",
         "diskBytesWritten",
-        "diskBytesRead"
+        "diskBytesRead",
+        "uid",
+        "cid",
+        "responsiblePID",
+        "ppid",
+        "pgid",
     ]
     
     public static let sysAttrs = [
@@ -106,16 +111,17 @@ extension IInstrumentsSysmontap {
         "vmSpeculativeCount",
         "physMemSize"
     ]
+    
+    public static let coalAttrs = [
+        "bundleID",
+        "cpuTime",
+        "timeNonEmpty",
+        "tasksExited",
+        "platIdleWakeups",
+        "intWakeups",
+        "bytesRead",
+        "bytesWritten",
+        "launchdJobName",
+        "tasksStarted",
+    ]
 }
-
-//'procAttrs': ['memVirtualSize', 'cpuUsage', 'procStatus', 'appSleep', 'uid', 'vmPageIns', 'memRShrd',
-//              'ctxSwitch', 'memCompressed', 'intWakeups', 'cpuTotalSystem', 'responsiblePID', 'physFootprint',
-//              'cpuTotalUser', 'sysCallsUnix', 'memResidentSize', 'sysCallsMach', 'memPurgeable',
-//              'diskBytesRead', 'machPortCount', '__suddenTerm', '__arch', 'memRPrvt', 'msgSent', 'ppid',
-//              'threadCount', 'memAnon', 'diskBytesWritten', 'pgid', 'faults', 'msgRecv', '__restricted', 'pid',
-//              '__sandbox']
-
-//'sysAttrs': ['diskWriteOps', 'diskBytesRead', 'diskBytesWritten', 'threadCount', 'vmCompressorPageCount',
-//             'vmExtPageCount', 'vmFreeCount', 'vmIntPageCount', 'vmPurgeableCount', 'netPacketsIn',
-//             'vmWireCount', 'netBytesIn', 'netPacketsOut', 'diskReadOps', 'vmUsedCount', '__vmSwapUsage',
-//             'netBytesOut']

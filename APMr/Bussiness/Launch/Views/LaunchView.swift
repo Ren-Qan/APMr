@@ -13,21 +13,30 @@ struct LaunchView: View {
     
     @EnvironmentObject var launchService: LaunchInstrumentsService
     
+    @State var serviceT: String = ""
+    
     var body: some View {
         VStack {
+            TextField("test", text: $serviceT)
+            
             Button("test") {
                 guard let device = service.selectDevice,
                       let app = service.selectApp else {
                     return
                 }
+                
                 launchService.start(device) { success, service in
                     service.autoReceive()
-                    service.test(app: app)
+                    service.test(app: app, service: serviceT)
                 }
             }
             
             Button("close") {
                 launchService.close()
+            }
+            
+            Button("Stop") {
+                launchService.stopService()
             }
         }
     }

@@ -47,7 +47,7 @@ extension IInstrumentsProcessControlByDictionary: IInstrumentsServiceProtocol {
         .pcbd
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: DTXReceiveObject) {        
         if let config = self.launchConfig {
             let launchArg = P.launch(config: config).arg
             if response.identifier == launchArg.identifier {

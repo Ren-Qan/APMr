@@ -59,12 +59,15 @@ extension IInstrumentsProcesscontrol {
         var devicePath = ""
         var bundle: String
         var environment: [String : Any] = [:]
-        var arguments: [Any] = []
+        var arguments: [String : Any] = [:]
         var options: [String : Any] = [:]
         
-        static func common(bundle: String) -> LaunchConfig {
-            return LaunchConfig(bundle: bundle,
-                                options: ["StartSuspendedKey": 0, "KillExisting": true])
+        static func common(_ path: String = "",
+                           _ container: String = "",
+                           bundle: String) -> LaunchConfig {
+            let item = LaunchConfig(bundle: bundle,
+                                    options: ["StartSuspendedKey": 0, "KillExisting": true])
+            return item
         }
     }
     

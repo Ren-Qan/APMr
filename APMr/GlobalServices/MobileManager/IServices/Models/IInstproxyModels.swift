@@ -20,7 +20,7 @@ struct IInstproxyAppInfo: Mappable, Identifiable {
     var path: String = ""
     var name: String = ""
     var bundleId: String = ""
-    var container: String?
+    var container: String = ""
     var signerIdentity: String?
     var applicationType: AppType = .other
     

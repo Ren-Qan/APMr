@@ -88,9 +88,10 @@
         item = [self unarchiveWithBytes:data.bytes + off len:length];
         
         if ( item == NULL ) {
-            return;
+            item = @"null";
         }
         [array addObject:item];
+        
         off += length;
     }
     
