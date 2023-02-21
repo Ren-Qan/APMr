@@ -38,18 +38,20 @@ extension ILockdown {
             return nil
         }
         
+        var info: ILockdownDeivceInfo? = nil
         var result: plist_t? = nil
         lockdownd_get_value(lockdown_t, nil, nil, &result)
         
-        guard let result = result else {
-            return nil
-        }
         
         if let json = plist_to_nsobject(result) as? [String : Any] {
-            return Mapper<ILockdownDeivceInfo>().map(JSON: json)
+            info = Mapper<ILockdownDeivceInfo>().map(JSON: json)
         }
         
-        return nil
+        if let result = result {
+            plist_free(result)
+        }
+        
+        return info
     }
     
     public func service_t(_ name: String) -> lockdownd_service_descriptor_t? {

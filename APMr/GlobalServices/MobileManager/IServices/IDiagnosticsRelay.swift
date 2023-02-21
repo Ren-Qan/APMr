@@ -49,10 +49,17 @@ extension IDiagnosticsRelay {
         // name = ["AppleSmartBattery" >= 13.0 , "AppleARMPMUCharger" < 13.0] by https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py
         diagnostics_relay_query_ioregistry_entry(client_t, "AppleSmartBattery", "", &result)
         
+        var resDic: [String : Any]? = nil
+        
         if let result = result,
            let dic = plist_to_nsobject(result) as? [String : Any] {
-            return dic["IORegistry"] as? [String : Any]
+            resDic = dic
         }
-        return nil
+        
+        if let result = result {
+            plist_free(result)
+        }
+        
+        return resDic
     }
 }

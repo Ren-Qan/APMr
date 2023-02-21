@@ -13,13 +13,14 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     private var timer: Timer?
     private var receiceSeriesNilCount = 0
     
+    private var readSource: DispatchSourceRead?
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
         group.delegate = self
         
         let process = IInstrumentsProcesscontrol()
-//        process.delegate = self
-
+        process.delegate = self
+        
         let sys = TESTClinet()
         
         group.config([process, sys])
@@ -43,6 +44,8 @@ extension LaunchInstrumentsService {
         timer?.invalidate()
         timer = nil
         serviceGroup.stop()
+        readSource?.cancel()
+        readSource = nil
     }
 }
 
@@ -53,27 +56,20 @@ extension LaunchInstrumentsService {
             var success = false
             if let iDevice = IDevice(device) {
                 success = self.serviceGroup.start(iDevice)
+                if let fd = self.serviceGroup.fd {
+                    self.setupReadSource(fd: fd)
+                }
             }
             complete(success, self)
         }
     }
     
-    public func autoReceive() {
-        timer?.invalidate()
-        timer = nil
-        
-//        DispatchQueue.global().async {
-//            while(true) {
-//                self.serviceGroup.receive()
-//            }
-//        }
-        
-        let timer = Timer(timeInterval: 0.1, repeats: true) { [weak self] _ in
+    public func setupReadSource(fd: Int32) {
+        self.readSource = DispatchSource.makeReadSource(fileDescriptor: fd, queue: .global())
+        self.readSource?.setEventHandler { [weak self] in
             self?.serviceGroup.receive()
         }
-        RunLoop.main.add(timer, forMode: .common)
-        timer.fire()
-        self.timer = timer
+        self.readSource?.resume()
     }
 }
 
@@ -84,11 +80,6 @@ extension LaunchInstrumentsService: IInstrumentsServiceGroupDelegate {
         } else {
             receiceSeriesNilCount = 0
         }
-        
-        let MAX_ERROR_COUNT = 10
-        if receiceSeriesNilCount == MAX_ERROR_COUNT {
-            stopService()
-        }
     }
 }
 
@@ -96,6 +87,24 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
         self.pid = pid
         print("=========\(pid)")
+        
+        if let client: TESTClinet = serviceGroup.client(.sysmontap) {
+            client.pid = pid
+            let config: [String : Any] = [
+                "bm": 0,
+                "ur": 1000,
+//                "cpuUsage": true,
+                "sampleInterval": 1000000000,
+//                "procAttrs": IInstrumentsSysmontap.procAttrs,
+//                "sysAttrs": IInstrumentsSysmontap.sysAttrs,
+//                "coalAttrs" : IInstrumentsSysmontap.coalAttrs
+            ]
+
+            let args = DTXArguments()
+            args.append(config)
+            client.send(IInstrumentArgs(padding: 2, selector: "setConfig:", dtxArg: args))
+            client.send(IInstrumentArgs(padding: 1, selector: "start"))
+        }
     }
 }
 
@@ -112,20 +121,12 @@ extension LaunchInstrumentsService {
         if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
             client.launch(bundle: bundle)
         }
-    
-        if let client: TESTClinet = serviceGroup.client(.applifecycle) {
-            let arg = DTXArguments()
-            arg.append(path)
-            client.send(IInstrumentArgs(padding: 3, selector: service, dtxArg: arg))
-//            client.send(IInstrumentArgs(padding: 2, selector: "startSampling"))
-        }
-        
     }
     
     public func close() {
-//        if let client: TESTClinet = serviceGroup.client(.sampling) {
-//            client.send(IInstrumentArgs(padding: 1, selector: "stopSampling"))
-//        }
+        //        if let client: TESTClinet = serviceGroup.client(.sampling) {
+        //            client.send(IInstrumentArgs(padding: 1, selector: "stopSampling"))
+        //        }
     }
 }
 
@@ -133,11 +134,10 @@ class TESTClinet: IInstrumentsBase, IInstrumentsServiceProtocol {
     var pid: UInt32 = 0
     
     var server: IInstrumentsServiceName {
-        .applifecycle
+        .sysmontap
     }
     
     func response(_ response: DTXReceiveObject) {
-        print(response.array)
-        print(response.object)
+
     }
 }

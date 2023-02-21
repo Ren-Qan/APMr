@@ -52,10 +52,10 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
         return group
     }()
     
+    private var read: DispatchSourceRead? = nil
+    
     private var timer: Timer?
-    
-    private var receiceSeriesNilCount = 0
-    
+        
     private var currentSeconds: Double = 0
     
     private var cSPI = PerformanceIndicator()
@@ -97,56 +97,34 @@ extension PerformanceInstrumentsService {
                     self.lockdown = lockdown
                     self.diagnostics = IDiagnosticsRelay(iDevice, lockdown)
                 }
+                
+                if let fd = self.serviceGroup.fd {
+                    let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: .global())
+                    read.setEventHandler { [weak self] in
+                        self?.serviceGroup.receive()
+                    }
+                    read.resume()
+                    self.read = read
+                }
             }
             self.resetData()
             complete?(success, self)
         }
     }
-    
-    public func receive() {
-        serviceGroup.receive()
-    }
-    
-    public func autoReceive() {
-        timer?.invalidate()
-        timer = nil
         
-        var count = 0
-        let sampleTimer = 0.125
-        let cycle = Int(1 / sampleTimer)
-        timer = Timer(timeInterval: sampleTimer,
-                      repeats: true,
-                      block: { [weak self] _ in
-            self?.operationQ.addOperation {
-                self?.receive()
-                if count % cycle == 0 {
-                    self?.send()
-                }
-                
-                if count % cycle == cycle - 1 {
-                    self?.record()
-                }
-                
-                count += 1
-            }
-        })
-        
-        timer?.fire()
-        RunLoop.main.add(timer!, forMode: .common)
-    }
-    
     public func stopService() {
         timer?.invalidate()
         timer = nil
         serviceGroup.stop()
         monitorPid = 0
         currentSeconds = 0
-        receiceSeriesNilCount = 0
         isLaunchingApp = false
         isMonitoringPerformance = false
         diagnostics = nil
         lockdown = nil
         operationQ.cancelAllOperations()
+        read?.cancel()
+        read = nil
     }
     
     public func highlight(start: Int, end: Int, isDragging: Bool) {
@@ -243,16 +221,7 @@ extension PerformanceInstrumentsService {
 
 extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
     func receive(response: DTXReceiveObject?) {
-        if response == nil {
-            receiceSeriesNilCount += 1
-        } else {
-            receiceSeriesNilCount = 0
-        }
-        
-        let MAX_ERROR_COUNT = 10
-        if receiceSeriesNilCount == MAX_ERROR_COUNT {
-            stopService()
-        }
+
     }
 }
 
@@ -263,6 +232,23 @@ extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
             isMonitoringPerformance = true
             isLaunchingApp = false
             register()
+            
+            timer?.invalidate()
+            timer = nil
+            timer = Timer(timeInterval: 1,
+                          repeats: true,
+                          block: { [weak self] _ in
+                self?.sample()
+            })
+            timer?.fire()
+            RunLoop.main.add(timer!, forMode: .common)
+        }
+    }
+    
+    private func sample() {
+        self.operationQ.addOperation { [weak self] in
+            self?.send()
+            self?.record()
         }
     }
 }

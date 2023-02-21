@@ -26,7 +26,6 @@ struct LaunchView: View {
                 }
                 
                 launchService.start(device) { success, service in
-                    service.autoReceive()
                     service.test(app: app, service: serviceT)
                 }
             }

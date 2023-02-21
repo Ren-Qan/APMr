@@ -29,7 +29,6 @@ struct PerformanceSettingBarView: View {
                             instruments.start(device) { success, server in
                                 if success {
                                     server.launch(app: app)
-                                    server.autoReceive()
                                 } else {
                                     server.stopService()
                                 }

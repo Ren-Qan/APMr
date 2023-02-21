@@ -73,6 +73,8 @@ typedef NS_ENUM(NSUInteger, DTXMessageProgressState) {
 
 - (DTXReceiveObject * _Nullable)receive;
 
+- (NSNumber * _Nullable)fd;
+
 @end
 
 NS_ASSUME_NONNULL_END

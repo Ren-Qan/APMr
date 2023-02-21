@@ -347,6 +347,19 @@ struct DTXMessagePayloadHeader {
     return result;
 }
 
+- (NSNumber * _Nullable)fd {
+    if (!_connection) {
+        return NULL;
+    }
+    
+    int fd = -1;
+    if (idevice_connection_get_fd(_connection, &fd) == IDEVICE_E_SUCCESS && fd != -1) {
+        return [NSNumber.alloc initWithInt:fd];
+    }
+    return NULL;
+}
+
+
 // MARK: - C Func -
 
 ssize_t upload_mounter_callback(void* buffer, size_t length, void *user_data) {
@@ -376,7 +389,7 @@ int32_t constructor_remote_service(idevice_t device,
     if (service -> ssl_enabled) {
         idevice_connection_enable_ssl(connection);
     }
-    
+        
     (*conn) = connection;
     return SERVICE_E_SUCCESS;
 }

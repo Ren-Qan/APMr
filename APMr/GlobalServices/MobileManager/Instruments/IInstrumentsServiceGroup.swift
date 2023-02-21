@@ -16,12 +16,18 @@ class IInstrumentsServiceGroup {
     public weak var delegate: IInstrumentsServiceGroupDelegate? = nil
     
     public lazy var instruments = IInstruments()
-    
+        
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
 }
 
 extension IInstrumentsServiceGroup {
     typealias Service = IInstrumentsServiceProtocol
+}
+
+extension IInstrumentsServiceGroup {
+    public var fd: Int32? {
+        return instruments.fd
+    }
     
     func config(_ clients: [Service]) {
         clients.forEach { client in

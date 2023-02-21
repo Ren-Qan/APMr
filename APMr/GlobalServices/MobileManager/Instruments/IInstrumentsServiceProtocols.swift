@@ -113,7 +113,7 @@ extension IInstrumentsServiceProtocol {
     }
     
     func send(_ arg: IInstrumentRequestArgsProtocol) {
-        let channel = server.channel        
+        let channel = server.channel
         instrument?.send(channel: channel,
                          identifier: arg.identifier,
                          selector: arg.selector,

@@ -44,13 +44,10 @@ extension IInstrumentsProcesscontrol: IInstrumentsServiceProtocol {
     func response(_ response: DTXReceiveObject) {
         if let config = self.launchConfig {
             let arg = P.launch(config: config)
-            if response.identifier == arg.arg.identifier {
-                if let pid = response.object as? UInt32 {
-                    delegate?.launch(pid: pid, arg: arg.arg)
-                }
+            if let pid = response.object as? UInt32 {
+                delegate?.launch(pid: pid, arg: arg.arg)
             }
         }
-        
     }
 }
 
@@ -59,14 +56,14 @@ extension IInstrumentsProcesscontrol {
         var devicePath = ""
         var bundle: String
         var environment: [String : Any] = [:]
-        var arguments: [String : Any] = [:]
+        var arguments: [Any] = []
         var options: [String : Any] = [:]
         
         static func common(_ path: String = "",
                            _ container: String = "",
                            bundle: String) -> LaunchConfig {
             let item = LaunchConfig(bundle: bundle,
-                                    options: ["StartSuspendedKey": 0, "KillExisting": true])
+                                    options: ["StartSuspendedKey": false, "KillExisting": true])
             return item
         }
     }

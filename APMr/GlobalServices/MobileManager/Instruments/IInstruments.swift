@@ -33,6 +33,13 @@ class IInstruments: NSObject {
 }
 
 extension IInstruments {
+    public var fd: Int32? {
+        if let fd = dtxService.fd() as? Int32 {
+            return fd
+        }
+        return nil
+    }
+    
     public func stop() {
         isConnected = false
         dtxService.stopService()

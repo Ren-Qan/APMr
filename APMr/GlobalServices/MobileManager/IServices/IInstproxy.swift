@@ -49,17 +49,19 @@ extension IInstproxy {
         let filter = plist_new_dict()
         plist_dict_set_item(filter, "ApplicationType", plist_new_string("Any"))
         
-        let state = instproxy_browse(client_t, filter, &result)
-        
-        guard state.rawValue == 0,
-              let result = result else {
-            return []
-        }
-        
-        if let arr = plist_to_nsobject(result) as? [[String : Any]] {
+        instproxy_browse(client_t, filter, &result)
+        var resultArr: [IInstproxyAppInfo] = []
+                
+        if  let result = result,
+            let arr = plist_to_nsobject(result) as? [[String : Any]] {
             let objects = Mapper<IInstproxyAppInfo>().mapArray(JSONObject: arr) ?? []
-            return objects
+            resultArr = objects
         }
-        return []
+        
+        if let result = result {
+            plist_free(result)
+        }
+        
+        return resultArr
     }
 }

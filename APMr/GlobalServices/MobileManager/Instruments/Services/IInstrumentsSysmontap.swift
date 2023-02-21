@@ -97,11 +97,6 @@ extension IInstrumentsSysmontap {
         "name",
         "diskBytesWritten",
         "diskBytesRead",
-        "uid",
-        "cid",
-        "responsiblePID",
-        "ppid",
-        "pgid",
     ]
     
     public static let sysAttrs = [
