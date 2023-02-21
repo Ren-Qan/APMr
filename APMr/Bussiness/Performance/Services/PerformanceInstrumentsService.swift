@@ -226,6 +226,10 @@ extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
 }
 
 extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
+    func outputReceived(_ msg: String) {
+        print(msg)
+    }
+    
     func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
         monitorPid = pid
         if pid != 0 {

@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		C704D0102963EC600065004D /* IInstrumentsNetworkingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C704D00F2963EC600065004D /* IInstrumentsNetworkingModels.swift */; };
 		C70F8FA8293850F400E8DCE1 /* IInstrumentsOpengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */; };
+		C73AA96429A4FA8000F0A324 /* string.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73AA96329A4FA8000F0A324 /* string.txt */; };
+		C73AA96629A5080A00F0A324 /* string1.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73AA96529A5080A00F0A324 /* string1.txt */; };
+		C73AA96829A508DE00F0A324 /* string2.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73AA96729A508DE00F0A324 /* string2.txt */; };
+		C73AA96A29A5096200F0A324 /* string3.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73AA96929A5096200F0A324 /* string3.txt */; };
+		C73AA96E29A50A7400F0A324 /* string4.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73AA96D29A50A7400F0A324 /* string4.txt */; };
 		C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0A2942E25100472A75 /* ILockdown.swift */; };
 		C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0D2942E84D00472A75 /* IInstproxy.swift */; };
 		C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB102942FBE700472A75 /* IInstproxyModels.swift */; };
@@ -83,6 +88,11 @@
 		ACD59CADAF1357C5444C9979 /* Pods-APMr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APMr.release.xcconfig"; path = "Target Support Files/Pods-APMr/Pods-APMr.release.xcconfig"; sourceTree = "<group>"; };
 		C704D00F2963EC600065004D /* IInstrumentsNetworkingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsNetworkingModels.swift; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* IInstrumentsOpengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsOpengl.swift; sourceTree = "<group>"; };
+		C73AA96329A4FA8000F0A324 /* string.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = string.txt; sourceTree = "<group>"; };
+		C73AA96529A5080A00F0A324 /* string1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = string1.txt; sourceTree = "<group>"; };
+		C73AA96729A508DE00F0A324 /* string2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = string2.txt; sourceTree = "<group>"; };
+		C73AA96929A5096200F0A324 /* string3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = string3.txt; sourceTree = "<group>"; };
+		C73AA96D29A50A7400F0A324 /* string4.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = string4.txt; sourceTree = "<group>"; };
 		C73BBB0A2942E25100472A75 /* ILockdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdown.swift; sourceTree = "<group>"; };
 		C73BBB0D2942E84D00472A75 /* IInstproxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxy.swift; sourceTree = "<group>"; };
 		C73BBB102942FBE700472A75 /* IInstproxyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxyModels.swift; sourceTree = "<group>"; };
@@ -273,6 +283,11 @@
 		C7483B9229373A0400F32BE0 /* APMr */ = {
 			isa = PBXGroup;
 			children = (
+				C73AA96329A4FA8000F0A324 /* string.txt */,
+				C73AA96529A5080A00F0A324 /* string1.txt */,
+				C73AA96729A508DE00F0A324 /* string2.txt */,
+				C73AA96929A5096200F0A324 /* string3.txt */,
+				C73AA96D29A50A7400F0A324 /* string4.txt */,
 				C76E7B592951BA36004F009B /* ProjectConfigs */,
 				C779C6B2296BDE9A00F710D4 /* Application */,
 				C780D10C29418B4800EF5633 /* Bussiness */,
@@ -747,7 +762,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73AA96429A4FA8000F0A324 /* string.txt in Resources */,
 				C76E7B5D2951BBB3004F009B /* Colors.xcassets in Resources */,
+				C73AA96A29A5096200F0A324 /* string3.txt in Resources */,
+				C73AA96829A508DE00F0A324 /* string2.txt in Resources */,
+				C73AA96E29A50A7400F0A324 /* string4.txt in Resources */,
+				C73AA96629A5080A00F0A324 /* string1.txt in Resources */,
 				C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */,
 				C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */,
 			);
@@ -986,8 +1006,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;
@@ -1023,8 +1043,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/arm64",
+					"$(PROJECT_DIR)/APMr/FoundationServices/LibIMobileDevice/Libraries/x86",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = RYQ.LibIMobileDevice.APMr;

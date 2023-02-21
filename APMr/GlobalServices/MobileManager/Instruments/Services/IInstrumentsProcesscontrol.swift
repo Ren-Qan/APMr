@@ -10,6 +10,8 @@ import LibMobileDevice
 
 protocol IInstrumentsProcesscontrolDelegate: NSObjectProtocol {
     func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol)
+    
+    func outputReceived(_ msg: String)
 }
 
 class IInstrumentsProcesscontrol: IInstrumentsBase {
@@ -42,6 +44,11 @@ extension IInstrumentsProcesscontrol: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
+        if response.flag == 2,
+           let message = response.array?.first as? String {
+            delegate?.outputReceived(message)
+        }
+        
         if let config = self.launchConfig {
             let arg = P.launch(config: config)
             if let pid = response.object as? UInt32 {
@@ -99,4 +106,8 @@ extension IInstrumentsProcesscontrol {
             }
         }
     }
+}
+
+extension IInstrumentsProcesscontrolDelegate {
+    func outputReceived(_ msg: String) { }
 }

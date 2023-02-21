@@ -1,0 +1,905 @@
+偏移	大小	类型	字符串
+00000028	0a	A	__PAGEZERO
+00000070	06	A	__TEXT
+000000b0	06	A	__text
+000000c0	06	A	__TEXT
+00000100	07	A	__stubs
+00000110	06	A	__TEXT
+00000150	0d	A	__stub_helper
+00000160	06	A	__TEXT
+000001a0	07	A	__const
+000001b0	06	A	__TEXT
+000001f0	16	A	__gcc_except_tab__TEXT
+00000240	0f	A	__objc_methname
+00000250	06	A	__TEXT
+00000290	09	A	__cstring
+000002a0	06	A	__TEXT
+000002e0	0d	A	__oslogstring
+000002f0	06	A	__TEXT
+00000330	16	A	__objc_classname__TEXT
+00000380	0f	A	__objc_methtype
+00000390	06	A	__TEXT
+000003d0	0d	A	__unwind_info
+000003e0	06	A	__TEXT
+00000428	0c	A	__DATA_CONST
+00000468	05	A	__got
+00000478	0c	A	__DATA_CONST
+000004b8	07	A	__const
+000004c8	0c	A	__DATA_CONST
+00000508	0a	A	__cfstring
+00000518	0c	A	__DATA_CONST
+00000558	1c	A	__objc_classlist__DATA_CONST
+000005a8	1c	A	__objc_protolist__DATA_CONST
+000005f8	1c	A	__objc_imageinfo__DATA_CONST
+00000648	0d	A	__objc_intobj
+00000658	0c	A	__DATA_CONST
+00000698	1c	A	__objc_doubleobj__DATA_CONST
+000006e8	1c	A	__objc_arraydata__DATA_CONST
+00000738	0f	A	__objc_arrayobj
+00000748	0c	A	__DATA_CONST
+00000790	06	A	__DATA
+000007d0	0f	A	__la_symbol_ptr
+000007e0	06	A	__DATA
+00000820	0c	A	__objc_const
+00000830	06	A	__DATA
+00000870	0e	A	__objc_selrefs
+00000880	06	A	__DATA
+000008c0	16	A	__objc_classrefs__DATA
+00000910	16	A	__objc_superrefs__DATA
+00000960	0b	A	__objc_ivar
+00000970	06	A	__DATA
+000009b0	0b	A	__objc_data
+000009c0	06	A	__DATA
+00000a00	06	A	__data
+00000a10	06	A	__DATA
+00000a50	05	A	__bss
+00000a60	06	A	__DATA
+00000aa8	0a	A	__LINKEDIT
+00000b8c	0d	A	/usr/lib/dyld
+00000c18	53	A	/System/Library/Frameworks/UserNotifications.framework/Versions/A/UserNotifications
+00000c88	4b	A	@rpath/DVTInstrumentsUtilities.framework/Versions/A/DVTInstrumentsUtilities
+00000cf0	4d	A	@rpath/DVTInstrumentsFoundation.framework/Versions/A/DVTInstrumentsFoundation
+00000d58	3b	A	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+00000db0	3d	A	@rpath/InstrumentsTrace.framework/Versions/A/InstrumentsTrace
+00000e08	39	A	@rpath/InstrumentsKit.framework/Versions/A/InstrumentsKit
+00000e60	3f	A	@rpath/InstrumentsPlugIn.framework/Versions/A/InstrumentsPlugIn
+00000eb8	31	A	@rpath/DTGraphKit.framework/Versions/A/DTGraphKit
+00000f08	39	A	@rpath/DTInstrumentsX.framework/Versions/A/DTInstrumentsX
+00000f60	37	A	@rpath/DVTFoundation.framework/Versions/A/DVTFoundation
+00000fb0	45	A	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+00001010	18	A	/usr/lib/libobjc.A.dylib
+00001048	1a	A	/usr/lib/libSystem.B.dylib
+00001080	3d	A	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+000010d8	4d	A	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+00001140	49	A	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0000119c	1e	A	@executable_path/../Frameworks
+000011cc	2d	A	@executable_path/../../../../SharedFrameworks
+0000120c	20	A	@executable_path/../Independence
+00004bc4	0a	A	AWAVAUATSH
+00004e2d	0b	A	([A\A]A^A_]
+00004e3e	0a	A	AWAVAUATSH
+000051d7	0a	A	[A\A]A^A_]
+000051eb	0a	A	AWAVAUATSH
+00005316	0b	A	[A\A]A^A_]
+00005326	08	A	AWAVATSH
+00005488	08	A	[A\A^A_]
+0000549e	07	A	AWAVSPH
+00005503	06	A	[A^A_]
+0000550f	06	A	AWAVSH
+00005584	07	A	8[A^A_]
+0000560f	0a	A	AWAVAUATSH
+00005739	0a	A	[A\A]A^A_]
+000057ee	07	A	AWAVSPH
+0000582a	06	A	[A^A_]
+00005873	0a	A	AWAVAUATSH
+000063cf	0a	A	[A\A]A^A_]
+00006439	0a	A	AWAVAUATSH
+000065b9	0b	A	H[A\A]A^A_]
+000065fb	0a	A	AWAVAUATSH
+000067e9	0b	A	X[A\A]A^A_]
+000067fd	0a	A	AWAVAUATSH
+00006c16	0a	A	[A\A]A^A_]
+00006ce3	0a	A	AWAVAUATSH
+00006fa3	0a	A	[A\A]A^A_]
+00006fb7	08	A	AWAVATSH
+0000706d	08	A	[A\A^A_]
+000070df	08	A	AWAVATSI
+00007135	08	A	[A\A^A_]
+00007147	0b	A	AWAVAUATSPH
+0000720e	0a	A	[A\A]A^A_]
+0000721e	08	A	AWAVATSH
+000072a1	08	A	[A\A^A_]
+00007393	0b	A	AWAVAUATSPI
+00007427	0a	A	[A\A]A^A_]
+00007445	0a	A	AWAVAUATSH
+000078a4	0a	A	[A\A]A^A_]
+000078de	0a	A	AWAVAUATSH
+00007a20	0b	A	[A\A]A^A_]
+00007a8a	0a	A	AWAVAUATSH
+00007b81	0b	A	[A\A]A^A_]
+00007b91	06	A	AWAVSH
+00007bfa	07	A	[A^A_]
+00007c06	0b	A	AWAVAUATSPH
+00007cd2	0a	A	[A\A]A^A_]
+00007ce2	0a	A	AWAVAUATSH
+00007ddb	0b	A	([A\A]A^A_]
+00007f41	05	A	 [A^]
+00007f64	06	A	AWAVSH
+00008015	07	A	([A^A_]
+000080ba	0a	A	AWAVAUATSH
+00008283	0b	A	h[A\A]A^A_]
+000082b6	08	A	AWAVATSH
+000082d1	08	A	[A\A^A_]
+0000838c	08	A	[A\A^A_]
+0000839a	0b	A	AWAVAUATSPH
+00008494	0a	A	[A\A]A^A_]
+000084a4	0a	A	[A\A]A^A_]
+000084b3	0a	A	AWAVAUATSH
+000087e9	0b	A	X[A\A]A^A_]
+0000885a	0b	A	AWAVAUATSPI
+000088d4	0a	A	[A\A]A^A_]
+00008942	0b	A	AWAVAUATSPH
+00008a6b	0a	A	[A\A]A^A_]
+00008a7b	0a	A	AWAVAUATSH
+00009166	0a	A	[A\A]A^A_]
+0000917a	06	A	AWAVSH
+00009226	07	A	([A^A_]
+00009233	08	A	AWAVATSH
+00009302	09	A	0[A\A^A_]
+00009640	35	A	@(#)PROGRAM:Instruments  PROJECT:Instruments-64556.12
+0000973c	18	A	sharedDocumentController
+00009755	20	A	invokeImportFileToTemplateAction
+00009776	13	A	sharedPluginManager
+0000978a	14	A	sharedContextManager
+0000979f	16	A	registerPluginHandler:
+000097b6	08	A	mainMenu
+000097bf	09	A	itemArray
+000097c9	15	A	indexOfItemWithTitle:
+000097df	19	A	objectAtIndexedSubscript:
+000097f9	07	A	submenu
+00009801	15	A	actionsForObjectType:
+00009817	0d	A	numberOfItems
+00009825	06	A	action
+0000982c	10	A	_dispatchAction:
+0000983d	11	A	representedObject
+0000984f	14	A	validateWithContext:
+00009864	09	A	setState:
+0000986e	11	A	importToTemplate:
+00009880	11	A	validateMenuItem:
+00009892	12	A	invokeWithContext:
+000098a5	0a	A	sendEvent:
+000098b0	2f	A	nextEventMatchingMask:untilDate:inMode:dequeue:
+000098e0	19	A	currentNotificationCenter
+000098fa	0c	A	setDelegate:
+00009907	16	A	initWithNextResponder:
+0000991e	1e	A	getIssuesAsXML:afterSignature:
+0000993d	09	A	conflicts
+00009947	1e	A	initWithConflicts:otherIssues:
+00009966	0f	A	setMessageText:
+0000997b	11	A	setAccessoryView:
+0000998d	0e	A	setAlertStyle:
+0000999c	13	A	addButtonWithTitle:
+000099b0	08	A	runModal
+000099b9	0a	A	terminate:
+000099c4	3b	A	setupIconAndTemporaryPackagesIfRequestedWithIssueResponder:
+00009a00	12	A	defaultCoordinator
+00009a13	0f	A	finishLaunching
+00009a23	16	A	disableRelaunchOnLogin
+00009a3a	10	A	performSelector:
+00009a4b	14	A	setupDocumentActions
+00009a60	16	A	sharedPreferencesModel
+00009a77	16	A	instantiatePreferences
+00009a8e	0d	A	defaultCenter
+00009a9c	10	A	toggleRecording:
+00009aad	21	A	addObserver:selector:name:object:
+00009acf	14	A	setServicesProvider:
+00009ae4	10	A	sharedSpinTracer
+00009af5	0d	A	nextResponder
+00009b03	11	A	setNextResponder:
+00009b15	22	A	showModernizationWindowIfNecessary
+00009b38	19	A	sharedToolchainDylibCache
+00009b52	0a	A	refreshNow
+00009b5d	0e	A	dvt_isNonEmpty
+00009b6c	2a	A	countByEnumeratingWithState:objects:count:
+00009b97	10	A	packageToInstall
+00009ba8	0f	A	distributionURL
+00009bb8	21	A	xr_isUserInstalledDistributionURL
+00009bda	0a	A	addObject:
+00009be5	05	A	count
+00009beb	19	A	temporarilyLoadedPackages
+00009c05	11	A	stringWithFormat:
+00009c17	13	A	setInformativeText:
+00009c2b	1f	A	xr_deleteInstalledDistribution:
+00009c4b	20	A	checkSecureCodingOfLoadedClasses
+00009c6c	13	A	showTemplateChooser
+00009c80	0c	A	notification
+00009c8d	07	A	request
+00009c95	07	A	content
+00009c9d	08	A	userInfo
+00009ca6	18	A	objectForKeyedSubscript:
+00009cbf	0e	A	URLWithString:
+00009cce	38	A	openDocumentWithContentsOfURL:display:completionHandler:
+00009d07	0b	A	processInfo
+00009d13	09	A	arguments
+00009d1d	0e	A	defaultManager
+00009d2c	10	A	isEqualToString:
+00009d3d	0d	A	pathExtension
+00009d4b	1d	A	fileExistsAtPath:isDirectory:
+00009d69	14	A	standardUserDefaults
+00009d7e	0b	A	boolForKey:
+00009d8a	0b	A	imageNamed:
+00009d96	18	A	setApplicationIconImage:
+00009db4	20	A	dvt_deriveSubsidiaryImageOfSize:
+00009dd5	0f	A	isAppleInternal
+00009de5	0c	A	buildVersion
+00009df2	16	A	whitespaceCharacterSet
+00009e09	25	A	componentsSeparatedByCharactersInSet:
+00009e2f	0b	A	firstObject
+00009e3b	24	A	adjustApplicationIconWithAppVersion:
+00009e60	10	A	fileURLWithPath:
+00009e71	29	A	loadTemporaryPackageAtURL:issueResponder:
+00009e9b	20	A	setAllowsAutomaticWindowTabbing:
+00009ebc	0e	A	sharedInstance
+00009ecb	23	A	enableLoadSensingDynamicFrameRates:
+00009eef	14	A	showPreferencesPanel
+00009f04	09	A	documents
+00009f0e	09	A	isRunning
+00009f18	11	A	endRunWithReason:
+00009f2a	0a	A	mainWindow
+00009f35	0d	A	attachedSheet
+00009f43	09	A	endSheet:
+00009f4d	1c	A	postNotificationName:object:
+00009f6a	15	A	dropTemporaryPackages
+00009f80	0f	A	initWithString:
+00009f90	1c	A	URLByAppendingPathComponent:
+00009fad	0f	A	sharedWorkspace
+00009fbd	08	A	openURL:
+00009fc6	12	A	mostRecentDocument
+00009fde	08	A	loadView
+00009fec	09	A	isEnabled
+00009ff6	13	A	elementWithEnabled:
+0000a00a	08	A	setSpin:
+0000a013	08	A	traceURL
+0000a021	0d	A	presentError:
+0000a02f	08	A	isEqual:
+0000a038	05	A	class
+0000a043	1b	A	performSelector:withObject:
+0000a05f	26	A	performSelector:withObject:withObject:
+0000a086	07	A	isProxy
+0000a08e	0e	A	isKindOfClass:
+0000a09d	10	A	isMemberOfClass:
+0000a0ae	13	A	conformsToProtocol:
+0000a0c2	13	A	respondsToSelector:
+0000a0d6	06	A	retain
+0000a0dd	07	A	release
+0000a0e5	0b	A	autorelease
+0000a0f1	0b	A	retainCount
+0000a107	0a	A	superclass
+0000a112	0b	A	description
+0000a11e	10	A	debugDescription
+0000a139	10	A	T@"NSString",R,C
+0000a14a	45	A	userNotificationCenter:willPresentNotification:withCompletionHandler:
+0000a190	4c	A	userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:
+0000a1dd	33	A	userNotificationCenter:openSettingsForNotification:
+0000a211	1b	A	applicationShouldTerminate:
+0000a22d	15	A	application:openURLs:
+0000a243	15	A	application:openFile:
+0000a259	16	A	application:openFiles:
+0000a270	19	A	application:openTempFile:
+0000a28a	22	A	applicationShouldOpenUntitledFile:
+0000a2ad	1c	A	applicationOpenUntitledFile:
+0000a2ca	1e	A	application:openFileWithoutUI:
+0000a2e9	16	A	application:printFile:
+0000a300	34	A	application:printFiles:withSettings:showPrintPanels:
+0000a335	30	A	applicationShouldTerminateAfterLastWindowClosed:
+0000a366	30	A	applicationShouldHandleReopen:hasVisibleWindows:
+0000a397	14	A	applicationDockMenu:
+0000a3ac	1d	A	application:willPresentError:
+0000a3ca	3d	A	application:didRegisterForRemoteNotificationsWithDeviceToken:
+0000a408	3d	A	application:didFailToRegisterForRemoteNotificationsWithError:
+0000a446	29	A	application:didReceiveRemoteNotification:
+0000a470	29	A	applicationSupportsSecureRestorableState:
+0000a49a	1d	A	application:handlerForIntent:
+0000a4b8	26	A	application:willEncodeRestorableState:
+0000a4df	25	A	application:didDecodeRestorableState:
+0000a505	2d	A	application:willContinueUserActivityWithType:
+0000a533	34	A	application:continueUserActivity:restorationHandler:
+0000a568	38	A	application:didFailToContinueUserActivityWithType:error:
+0000a5a1	22	A	application:didUpdateUserActivity:
+0000a5c4	33	A	application:userDidAcceptCloudKitShareWithMetadata:
+0000a5f8	1f	A	application:delegateHandlesKey:
+0000a618	35	A	applicationShouldAutomaticallyLocalizeKeyEquivalents:
+0000a64e	1f	A	applicationWillFinishLaunching:
+0000a66e	1e	A	applicationDidFinishLaunching:
+0000a68d	14	A	applicationWillHide:
+0000a6a2	13	A	applicationDidHide:
+0000a6b6	16	A	applicationWillUnhide:
+0000a6cd	15	A	applicationDidUnhide:
+0000a6e3	1c	A	applicationWillBecomeActive:
+0000a700	1b	A	applicationDidBecomeActive:
+0000a71c	1c	A	applicationWillResignActive:
+0000a739	1b	A	applicationDidResignActive:
+0000a755	16	A	applicationWillUpdate:
+0000a76c	15	A	applicationDidUpdate:
+0000a782	19	A	applicationWillTerminate:
+0000a79c	25	A	applicationDidChangeScreenParameters:
+0000a7c2	23	A	applicationDidChangeOcclusionState:
+0000a7e6	2e	A	applicationProtectedDataWillBecomeUnavailable:
+0000a815	2b	A	applicationProtectedDataDidBecomeAvailable:
+0000a841	15	A	showPreferencesPanel:
+0000a857	0c	A	newDocument:
+0000a864	12	A	showDeveloperHelp:
+0000a877	14	A	toggleSpinProfiling:
+0000a88c	19	A	importPerformanceSession:
+0000a8a6	0d	A	.cxx_destruct
+0000a8b4	0b	A	_spinTracer
+0000a8c0	13	A	_dockMenuController
+0000a8d4	10	A	_serviceProvider
+0000a8e5	0d	A	separatorItem
+0000a8f3	13	A	insertItem:atIndex:
+0000a907	17	A	displayNameWithContext:
+0000a91f	17	A	caseInsensitiveCompare:
+0000a937	1b	A	sortedArrayUsingComparator:
+0000a953	31	A	insertItemWithTitle:action:keyEquivalent:atIndex:
+0000a985	1b	A	setAccessibilityIdentifier:
+0000a9a1	0a	A	setTarget:
+0000a9ac	15	A	setRepresentedObject:
+0000a9c2	0f	A	currentDocument
+0000a9d2	0c	A	setDocument:
+0000a9df	08	A	document
+0000a9e8	11	A	selectedRunNumber
+0000a9fa	0d	A	setRunNumber:
+0000aa08	17	A	arrayWithObjects:count:
+0000aa20	0b	A	setTargets:
+0000aa2c	14	A	defaultTemplatePaths
+0000aa41	0e	A	rangeOfString:
+0000aa50	14	A	frontmostApplication
+0000aa65	12	A	currentApplication
+0000aa78	0c	A	sharedDevice
+0000aa85	0d	A	localizedName
+0000aa93	11	A	processIdentifier
+0000aaa5	18	A	initWithDevice:path:pid:
+0000aabe	1a	A	setTargetsExistingProcess:
+0000aad9	11	A	setTargetsDevice:
+0000aaeb	16	A	setTargetsAllProcesses
+0000ab02	20	A	recordTraceAfterCommandPreflight
+0000ab23	2a	A	targetFrontAppWithTemplate:userData:error:
+0000ab53	11	A	turnOnSpinTracing
+0000ab65	35	A	performSelectorOnMainThread:withObject:waitUntilDone:
+0000ab9b	12	A	addChangeObserver:
+0000abae	15	A	removeChangeObserver:
+0000abc4	07	A	dealloc
+0000abcc	06	A	object
+0000abd3	12	A	turnOffSpinTracing
+0000abe6	06	A	update
+0000abed	15	A	afterOperation:block:
+0000ac03	19	A	currentTimeProfileRequest
+0000ac1d	0f	A	modelDidChange:
+0000ac2d	1d	A	setCurrentTimeProfileRequest:
+0000ac4b	08	A	_enabled
+0000ac54	1a	A	_currentTimeProfileRequest
+0000ac6f	3f	A	T@"XRTimeProfileRequestElement",&,N,V_currentTimeProfileRequest
+0000acaf	0e	A	numberWithInt:
+0000acbe	24	A	dictionaryWithObjects:forKeys:count:
+0000ace3	18	A	pasteboardWithUniqueName
+0000acfc	13	A	declareTypes:owner:
+0000ad10	18	A	setPropertyList:forType:
+0000ad29	13	A	canBecomeMainWindow
+0000ad3d	12	A	canBecomeKeyWindow
+0000ad50	1b	A	isMovableByWindowBackground
+0000ad6c	0d	A	objectForKey:
+0000ad7a	11	A	registerDefaults:
+0000ad8c	23	A	symbolicationModernizationNecessary
+0000adb0	16	A	initWithWindowNibName:
+0000adc7	06	A	window
+0000adce	1a	A	dvt_centerOnMainMenuScreen
+0000ade9	12	A	runModalForWindow:
+0000adfc	0a	A	setWindow:
+0000ae07	11	A	fileExistsAtPath:
+0000ae19	0e	A	setIdentifier:
+0000ae28	0e	A	setRestorable:
+0000ae37	09	A	stopModal
+0000ae41	05	A	close
+0000ae47	22	A	enumerateKeysAndObjectsUsingBlock:
+0000ae6a	41	A	launchedTaskWithExecutableURL:arguments:error:terminationHandler:
+0000aeac	0d	A	waitUntilExit
+0000aeba	11	A	terminationStatus
+0000aecc	1e	A	errorWithDomain:code:userInfo:
+0000aeeb	14	A	localizedDescription
+0000af00	0a	A	initialize
+0000af0b	0d	A	windowDidLoad
+0000af19	10	A	windowWillClose:
+0000af2a	0d	A	ignoreUpdate:
+0000af38	0e	A	performUpdate:
+0000af47	11	A	setObject:forKey:
+0000af59	13	A	removeObjectForKey:
+0000af72	05	A	v8@?0
+0000af78	1f	A	Fatal errors preventing launch.
+0000af98	05	A	Close
+0000af9e	29	A	com.apple.dt.instruments.toggle.recording
+0000afc8	28	A	Some errors were detected during launch.
+0000aff1	13	A	Remove %d Package%s
+0000b008	21	A	-[PFTApplication finishLaunching]
+0000b02a	10	A	PFTApplication.m
+0000b03b	14	A	needsUninstallOption
+0000b050	2c	A	%d package%s will be permanently uninstalled
+0000b07d	68	A	Removed distributions will need to be reinstalled by opening them in Instruments and choosing "Install".
+0000b0e6	06	A	Remove
+0000b0ed	06	A	Cancel
+0000b0f9	23	A	v28@?0@"NSDocument"8c16@"NSError"20
+0000b11d	13	A	-DTTemporaryPackage
+0000b131	08	A	instrdst
+0000b13a	18	A	MustShowDistributionIcon
+0000b153	0b	A	Instruments
+0000b15f	12	A	DisableIconBadging
+0000b172	1b	A	https://apdreview.apple.com
+0000b18e	16	A	https://help.apple.com
+0000b1a5	22	A	instruments/developer/mac/current/
+0000b1c8	12	A	Internal Error: %@
+0000b1db	23	A	q24@?0@"<XRAction>"8@"<XRAction>"16
+0000b1ff	43	A	-[XRInstrumentsServices targetFrontAppWithTemplate:userData:error:]
+0000b243	05	A	Leaks
+0000b249	13	A	Leaks.tracetemplate
+0000b25d	4f	A	Profiling Instruments from Instruments could deadlock, setting to All Processes
+0000b2ad	2a	A	-[XRAutomaticSpinTracer turnOnSpinTracing]
+0000b2d8	2b	A	-[XRAutomaticSpinTracer turnOffSpinTracing]
+0000b304	07	A	_enable
+0000b30c	22	A	CGSRegisterNotifyProc returned %d.
+0000b330	3c	A	CGSEventSetAppIsUnresponsiveNotificationTimeout returned %d.
+0000b36e	14	A	Spin tracing enabled
+0000b383	05	A	start
+0000b38d	07	A	purpose
+0000b395	08	A	duration
+0000b3a0	06	A	period
+0000b3ab	07	A	command
+0000b3b3	1e	A	com.apple.dt.instruments.bgcmd
+0000b3d2	1c	A	Toggle Instruments Recording
+0000b3ef	15	A	Spin tracing disabled
+0000b405	20	A	XRSymbolicationModernizationSkip
+0000b426	1a	A	/usr/local/bin/dsymForUUID
+0000b441	14	A	XRDSYMScriptLocation
+0000b456	11	A	XRDSYMScriptUsage
+0000b468	32	A	DontAskMeSymbolicationModernization_DomainDefaults
+0000b49b	34	A	DontAskMeSymbolicationModernization_SetupInvocations
+0000b4d0	0e	A	DomainDefaults
+0000b4df	10	A	SetupInvocations
+0000b4f0	18	A	com.apple.dt.Instruments
+0000b509	1a	A	SymbolicationModernization
+0000b524	20	A	symbolicationModernizationWindow
+0000b545	22	A	XRSymbolicationModernizationWindow
+0000b568	14	A	Don't Download dSYMs
+0000b57d	19	A	v32@?0@"NSString"8@16^c24
+0000b597	23	A	v32@?0@"NSString"8@"NSString"16^c24
+0000b5bb	10	A	v16@?0@"NSTask"8
+0000b5cc	30	A	command '%@ %@' exited with non-zero status (%d)
+0000b5fd	1a	A	Symbolication Update Error
+0000b620	2e	A	Could not set RLIMIT_NOFILE to 10000, errno %d
+0000b650	2f	A	Modernization check skipped due to user default
+0000b680	3d	A	Modernization check skipped due to missing lookup binary '%@'
+0000b6c0	4a	A	Modernization needed due to new domain defaults settings in embedded plist
+0000b710	4f	A	Modernization needed due to new dsymForUUID setup invocations in embedded plist
+0000b760	42	A	Writing preference in domain '%{public}@': %{public}@ = %{public}@
+0000b7b0	20	A	Invoking `%{public}@ %{public}@`
+0000b7d1	0e	A	PFTApplication
+0000b7e0	20	A	UNUserNotificationCenterDelegate
+0000b801	08	A	NSObject
+0000b80a	14	A	NSMenuItemValidation
+0000b81f	15	A	NSApplicationDelegate
+0000b837	15	A	XRInstrumentsServices
+0000b84d	15	A	XRAutomaticSpinTracer
+0000b863	16	A	XRTimeProfileRequestor
+0000b87a	17	A	XRUIModelChangeObserver
+0000b894	22	A	XRSymbolicationModernizationWindow
+0000b8b7	2c	A	XRSymbolicationModernizationWindowController
+0000b8e4	0a	A	c24@0:8@16
+0000b8ef	07	A	#16@0:8
+0000b8f7	07	A	@16@0:8
+0000b8ff	0a	A	@24@0:8:16
+0000b90a	0d	A	@32@0:8:16@24
+0000b918	10	A	@40@0:8:16@24@32
+0000b929	07	A	c16@0:8
+0000b931	0a	A	c24@0:8#16
+0000b93c	0a	A	c24@0:8:16
+0000b947	08	A	Vv16@0:8
+0000b950	07	A	Q16@0:8
+0000b958	11	A	^{_NSZone=}16@0:8
+0000b96a	14	A	c24@0:8@"Protocol"16
+0000b97f	11	A	@"NSString"16@0:8
+0000b991	11	A	v40@0:8@16@24@?32
+0000b9a3	0d	A	v32@0:8@16@24
+0000b9b1	41	A	v40@0:8@"UNUserNotificationCenter"16@"UNNotification"24@?<v@?Q>32
+0000b9f3	48	A	v40@0:8@"UNUserNotificationCenter"16@"UNNotificationResponse"24@?<v@?>32
+0000ba3c	37	A	v32@0:8@"UNUserNotificationCenter"16@"UNNotification"24
+0000ba74	16	A	c24@0:8@"NSMenuItem"16
+0000ba8b	0a	A	Q24@0:8@16
+0000ba96	0d	A	c32@0:8@16@24
+0000baa4	13	A	Q44@0:8@16@24@32c40
+0000bab8	0d	A	c28@0:8@16c24
+0000bac6	0a	A	@24@0:8@16
+0000bad1	0d	A	@32@0:8@16@24
+0000badf	11	A	c40@0:8@16@24@?32
+0000baf1	10	A	v40@0:8@16@24@32
+0000bb02	0a	A	v24@0:8@16
+0000bb0d	19	A	Q24@0:8@"NSApplication"16
+0000bb27	25	A	v32@0:8@"NSApplication"16@"NSArray"24
+0000bb4d	26	A	c32@0:8@"NSApplication"16@"NSString"24
+0000bb74	19	A	c24@0:8@"NSApplication"16
+0000bb8e	17	A	c32@0:8@16@"NSString"24
+0000bba6	39	A	Q44@0:8@"NSApplication"16@"NSArray"24@"NSDictionary"32c40
+0000bbe0	1c	A	c28@0:8@"NSApplication"16c24
+0000bbfd	21	A	@"NSMenu"24@0:8@"NSApplication"16
+0000bc1f	2e	A	@"NSError"32@0:8@"NSApplication"16@"NSError"24
+0000bc4e	24	A	v32@0:8@"NSApplication"16@"NSData"24
+0000bc73	25	A	v32@0:8@"NSApplication"16@"NSError"24
+0000bc99	2a	A	v32@0:8@"NSApplication"16@"NSDictionary"24
+0000bcc4	26	A	@32@0:8@"NSApplication"16@"INIntent"24
+0000bceb	25	A	v32@0:8@"NSApplication"16@"NSCoder"24
+0000bd11	3f	A	c40@0:8@"NSApplication"16@"NSUserActivity"24@?<v@?@"NSArray">32
+0000bd51	32	A	v40@0:8@"NSApplication"16@"NSString"24@"NSError"32
+0000bd84	2c	A	v32@0:8@"NSApplication"16@"NSUserActivity"24
+0000bdb1	2d	A	v32@0:8@"NSApplication"16@"CKShareMetadata"24
+0000bddf	1a	A	v24@0:8@"NSNotification"16
+0000bdfa	07	A	v16@0:8
+0000be02	13	A	@44@0:8Q16@24@32c40
+0000be16	18	A	@"XRAutomaticSpinTracer"
+0000be2f	1b	A	@"XRDockMenuViewController"
+0000be4b	18	A	@"XRInstrumentsServices"
+0000be64	11	A	v40@0:8@16@24^@32
+0000be76	24	A	@"XRTimeProfileRequestElement"16@0:8
+0000be9d	1e	A	@"XRTimeProfileRequestElement"
+00014001	1c	A	"pSCSCSCSCSCpRBSCpRBSCpRB
+00014022	05	A	[Bpp
+0001402b	2f	A	`)ARARARARARARARARARARARARARARARARARARARBRB`Ap
+0001405b	09	A	RARARASAp
+0001406b	60	A	RARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARARA`-ASDp
+000140cc	1a	A	p `BASASASBXBUApp0SCRESAp
+000140ef	20	A	RDSD`ASASBZBUApp0YCREYCRE\CRD`
+00014111	05	A	DpPS0
+00014118	17	A	REpp p RCRCp p RCRCp p
+00014133	17	A	pRBppSEpRBppSEpp
+00014151	27	A	@_OBJC_CLASS_$_UNUserNotificationCenter
+0001417f	2a	A	@_OBJC_CLASS_$_XRInternalizedSettingsStore
+000141ae	25	A	@_OBJC_CLASS_$_PFTDocumentController
+000141e0	1f	A	@_OBJC_CLASS_$_PFTTraceDocument
+00014203	1e	A	@_OBJC_CLASS_$_XRActionContext
+00014226	25	A	@_OBJC_CLASS_$_XRActionContextManager
+00014258	2b	A	@_OBJC_CLASS_$_XRLaunchIssuesViewController
+00014287	26	A	@_OBJC_CLASS_$_XRPreferencesController
+000142b1	1a	A	@_OBJC_CLASS_$_PFTProcess
+000142d0	1a	A	@_OBJC_CLASS_$_XRAnalytics
+000142f7	28	A	@_OBJC_CLASS_$_XRDSYMDownloadCoordinator
+0001432c	1e	A	@_OBJC_CLASS_$_XRKeyedArchiver
+0001434e	1c	A	@_OBJC_CLASS_$_XRLocalDevice
+0001436f	30	A	@_OBJC_CLASS_$_XRPackageConflictErrorAccumulator
+000143ac	1e	A	@_OBJC_CLASS_$_XRPluginManager
+000143d7	16	A	@_OBJC_CLASS_$_XRTheme
+000143f2	24	A	@_OBJC_CLASS_$_XRToolchainDylibCache
+00014423	16	A	@_OBJC_CLASS_$_XRTrace
+0001443e	27	A	@_OBJC_CLASS_$_XRUniqueIssueAccumulator
+00014472	21	A	@_XRUserInitiatedQuitNotification
+00014497	25	A	@_OBJC_CLASS_$_DTResponsiveUIManager
+000144c1	24	A	@_OBJC_CLASS_$_XRAuthorizationModel
+000144e9	27	A	@_OBJC_CLASS_$_XRDockMenuViewController
+0001451d	21	A	@_OBJC_CLASS_$_XRPreferencesModel
+00014540	18	A	@_OBJC_CLASS_$_XRUISpace
+0001455d	1c	A	@_NSLocalizedDescriptionKey
+0001457d	1d	A	@_OBJC_CLASS_$_NSCharacterSet
+0001459f	25	A	@_OBJC_CLASS_$_NSConstantDoubleNumber
+000145c9	26	A	@_OBJC_CLASS_$_NSConstantIntegerNumber
+000145fc	2e	A	@_OBJC_CLASS_$_NSDistributedNotificationCenter
+0001462f	16	A	@_OBJC_CLASS_$_NSError
+0001464a	1c	A	@_OBJC_CLASS_$_NSFileManager
+00014673	23	A	@_OBJC_CLASS_$_NSNotificationCenter
+0001469a	17	A	@_OBJC_CLASS_$_NSNumber
+000146b5	1c	A	@_OBJC_CLASS_$_NSProcessInfo
+000146de	17	A	@_OBJC_CLASS_$_NSString
+00014702	15	A	@_OBJC_CLASS_$_NSTask
+0001471c	18	A	@_OBJC_CLASS_$_NSObject
+00014739	1b	A	@_OBJC_METACLASS_$_NSObject
+00014766	17	A	@___objc_personality_v0
+00014781	13	A	@__objc_empty_cache
+0001479c	0e	A	@_objc_msgSend
+000147ae	0e	A	@_objc_release
+000147be	0d	A	@_objc_retain
+000147cd	19	A	@__NSConcreteGlobalBlock
+000147ee	17	A	@__NSConcreteStackBlock
+00014812	13	A	@___stack_chk_guard
+00014829	11	A	@__os_log_default
+0001483c	11	A	@dyld_stub_binder
+00014851	08	A	@_NSApp
+00014866	16	A	@_OBJC_CLASS_$_NSAlert
+00014881	1c	A	@_OBJC_CLASS_$_NSApplication
+000148a5	23	A	@_OBJC_CLASS_$_NSDocumentController
+000148d5	19	A	@_OBJC_CLASS_$_NSMenuItem
+000148f2	1b	A	@_OBJC_CLASS_$_NSPasteboard
+00014911	1a	A	@_OBJC_CLASS_$_NSResponder
+00014930	23	A	@_OBJC_CLASS_$_NSRunningApplication
+00014960	17	A	@_OBJC_CLASS_$_NSWindow
+00014987	21	A	@_OBJC_CLASS_$_NSWindowController
+000149ac	1a	A	@_OBJC_CLASS_$_NSWorkspace
+000149d3	20	A	@_OBJC_METACLASS_$_NSApplication
+000149f8	1e	A	@_OBJC_METACLASS_$_NSResponder
+00014a1b	1b	A	@_OBJC_METACLASS_$_NSWindow
+00014a3a	25	A	@_OBJC_METACLASS_$_NSWindowController
+00014a63	17	A	@_OBJC_CLASS_$_NSArray
+00014a87	1e	A	@_OBJC_CLASS_$_NSConstantArray
+00014aaa	1b	A	@_OBJC_CLASS_$_NSDictionary
+00014aca	22	A	@_OBJC_CLASS_$_NSMutableOrderedSet
+00014af9	1b	A	@_OBJC_CLASS_$_NSMutableSet
+00014b18	14	A	@_OBJC_CLASS_$_NSURL
+00014b39	1d	A	@_OBJC_CLASS_$_NSUserDefaults
+00014b5a	22	A	@___CFConstantStringClassReference
+00014b84	14	A	@___NSArray0__struct
+00014baa	1b	A	@_CFPreferencesSetAppValue
+00014bcc	31	A	@_CGSEventSetAppIsUnresponsiveNotificationTimeout
+00014c04	15	A	@_CGSMainConnectionID
+00014c20	17	A	@_CGSRegisterNotifyProc
+00014c3e	15	A	@_CGSRemoveNotifyProc
+00014c56	16	A	s(@_DTIXAssertRecover
+00014c6f	2d	A	s0@_DVTCheckForUndeallocatedObjectsWithBlock
+00014c9f	16	A	s8@_NSApplicationMain
+00014cb8	0a	A	s@@_NSLog
+00014cc5	15	A	sH@_NSPerformService
+00014cdd	22	A	sP@_PFTInitializeSharedFrameworks
+00014d02	16	A	sX@_PFTPackageManager
+00014d1b	19	A	s`@__Block_object_assign
+00014d37	1a	A	sh@__Block_object_dispose
+00014d54	13	A	sp@__Unwind_Resume
+00014d6a	11	A	sx@___assert_rtn
+00014d81	0a	A	@___error
+00014d91	13	A	@___stack_chk_fail
+00014daa	15	A	@__os_log_error_impl
+00014dc5	0f	A	@__os_log_impl
+00014dda	08	A	@_abort
+00014de8	10	A	@_dispatch_once
+00014dfe	09	A	@_getpid
+00014e0d	0d	A	@_objc_alloc
+00014e20	12	A	@_objc_alloc_init
+00014e38	1a	A	@_objc_autoreleasePoolPop
+00014e58	1b	A	@_objc_autoreleasePoolPush
+00014e79	1e	A	@_objc_autoreleaseReturnValue
+00014e9d	1b	A	@_objc_enumerationMutation
+00014ebe	15	A	@_objc_msgSendSuper2
+00014ed9	11	A	@_objc_opt_class
+00014ef0	19	A	@_objc_opt_isKindOfClass
+00014f0f	0f	A	@_objc_opt_new
+00014f24	24	A	@_objc_retainAutoreleaseReturnValue
+00014f4e	25	A	@_objc_retainAutoreleasedReturnValue
+00014f79	13	A	@_objc_storeStrong
+00014f92	2a	A	@_objc_unsafeClaimAutoreleasedReturnValue
+00014fc2	10	A	@_os_log_create
+00014fd8	16	A	@_os_log_type_enabled
+00014ff4	0e	A	@_sel_isEqual
+00015008	0c	A	@_setrlimit
+0001501a	13	A	__mh_execute_header
+0001595c	13	A	__mh_execute_header
+00015970	19	A	_CFPreferencesSetAppValue
+0001598a	30	A	_CGSEventSetAppIsUnresponsiveNotificationTimeout
+000159bb	14	A	_CGSMainConnectionID
+000159d0	16	A	_CGSRegisterNotifyProc
+000159e7	14	A	_CGSRemoveNotifyProc
+000159fc	12	A	_DTIXAssertRecover
+00015a0f	29	A	_DVTCheckForUndeallocatedObjectsWithBlock
+00015a39	06	A	_NSApp
+00015a40	12	A	_NSApplicationMain
+00015a53	1a	A	_NSLocalizedDescriptionKey
+00015a6e	06	A	_NSLog
+00015a75	11	A	_NSPerformService
+00015a87	23	A	_OBJC_CLASS_$_DTResponsiveUIManager
+00015aab	15	A	_OBJC_CLASS_$_NSAlert
+00015ac1	1b	A	_OBJC_CLASS_$_NSApplication
+00015add	15	A	_OBJC_CLASS_$_NSArray
+00015af3	1c	A	_OBJC_CLASS_$_NSCharacterSet
+00015b10	1d	A	_OBJC_CLASS_$_NSConstantArray
+00015b2e	24	A	_OBJC_CLASS_$_NSConstantDoubleNumber
+00015b53	25	A	_OBJC_CLASS_$_NSConstantIntegerNumber
+00015b79	1a	A	_OBJC_CLASS_$_NSDictionary
+00015b94	2d	A	_OBJC_CLASS_$_NSDistributedNotificationCenter
+00015bc2	22	A	_OBJC_CLASS_$_NSDocumentController
+00015be5	15	A	_OBJC_CLASS_$_NSError
+00015bfb	1b	A	_OBJC_CLASS_$_NSFileManager
+00015c17	18	A	_OBJC_CLASS_$_NSMenuItem
+00015c30	21	A	_OBJC_CLASS_$_NSMutableOrderedSet
+00015c52	1a	A	_OBJC_CLASS_$_NSMutableSet
+00015c6d	22	A	_OBJC_CLASS_$_NSNotificationCenter
+00015c90	16	A	_OBJC_CLASS_$_NSNumber
+00015ca7	16	A	_OBJC_CLASS_$_NSObject
+00015cbe	1a	A	_OBJC_CLASS_$_NSPasteboard
+00015cd9	1b	A	_OBJC_CLASS_$_NSProcessInfo
+00015cf5	19	A	_OBJC_CLASS_$_NSResponder
+00015d0f	22	A	_OBJC_CLASS_$_NSRunningApplication
+00015d32	16	A	_OBJC_CLASS_$_NSString
+00015d49	14	A	_OBJC_CLASS_$_NSTask
+00015d5e	13	A	_OBJC_CLASS_$_NSURL
+00015d72	1c	A	_OBJC_CLASS_$_NSUserDefaults
+00015d8f	16	A	_OBJC_CLASS_$_NSWindow
+00015da6	20	A	_OBJC_CLASS_$_NSWindowController
+00015dc7	19	A	_OBJC_CLASS_$_NSWorkspace
+00015de1	23	A	_OBJC_CLASS_$_PFTDocumentController
+00015e05	18	A	_OBJC_CLASS_$_PFTProcess
+00015e1e	1e	A	_OBJC_CLASS_$_PFTTraceDocument
+00015e3d	26	A	_OBJC_CLASS_$_UNUserNotificationCenter
+00015e64	1d	A	_OBJC_CLASS_$_XRActionContext
+00015e82	24	A	_OBJC_CLASS_$_XRActionContextManager
+00015ea7	19	A	_OBJC_CLASS_$_XRAnalytics
+00015ec1	22	A	_OBJC_CLASS_$_XRAuthorizationModel
+00015ee4	27	A	_OBJC_CLASS_$_XRDSYMDownloadCoordinator
+00015f0c	26	A	_OBJC_CLASS_$_XRDockMenuViewController
+00015f33	29	A	_OBJC_CLASS_$_XRInternalizedSettingsStore
+00015f5d	1d	A	_OBJC_CLASS_$_XRKeyedArchiver
+00015f7b	2a	A	_OBJC_CLASS_$_XRLaunchIssuesViewController
+00015fa6	1b	A	_OBJC_CLASS_$_XRLocalDevice
+00015fc2	2f	A	_OBJC_CLASS_$_XRPackageConflictErrorAccumulator
+00015ff2	1d	A	_OBJC_CLASS_$_XRPluginManager
+00016010	25	A	_OBJC_CLASS_$_XRPreferencesController
+00016036	20	A	_OBJC_CLASS_$_XRPreferencesModel
+00016057	15	A	_OBJC_CLASS_$_XRTheme
+0001606d	23	A	_OBJC_CLASS_$_XRToolchainDylibCache
+00016091	15	A	_OBJC_CLASS_$_XRTrace
+000160a7	17	A	_OBJC_CLASS_$_XRUISpace
+000160bf	26	A	_OBJC_CLASS_$_XRUniqueIssueAccumulator
+000160e6	1f	A	_OBJC_METACLASS_$_NSApplication
+00016106	1a	A	_OBJC_METACLASS_$_NSObject
+00016121	1d	A	_OBJC_METACLASS_$_NSResponder
+0001613f	1a	A	_OBJC_METACLASS_$_NSWindow
+0001615a	24	A	_OBJC_METACLASS_$_NSWindowController
+0001617f	1e	A	_PFTInitializeSharedFrameworks
+0001619e	12	A	_PFTPackageManager
+000161b1	20	A	_XRUserInitiatedQuitNotification
+000161d2	15	A	__Block_object_assign
+000161e8	16	A	__Block_object_dispose
+000161ff	17	A	__NSConcreteGlobalBlock
+00016217	16	A	__NSConcreteStackBlock
+0001622e	0f	A	__Unwind_Resume
+0001623e	21	A	___CFConstantStringClassReference
+00016260	13	A	___NSArray0__struct
+00016274	0d	A	___assert_rtn
+00016282	08	A	___error
+0001628b	16	A	___objc_personality_v0
+000162a2	11	A	___stack_chk_fail
+000162b4	12	A	___stack_chk_guard
+000162c7	12	A	__objc_empty_cache
+000162da	10	A	__os_log_default
+000162eb	13	A	__os_log_error_impl
+000162ff	0d	A	__os_log_impl
+0001630d	06	A	_abort
+00016314	0e	A	_dispatch_once
+00016323	07	A	_getpid
+0001632b	0b	A	_objc_alloc
+00016337	10	A	_objc_alloc_init
+00016348	18	A	_objc_autoreleasePoolPop
+00016361	19	A	_objc_autoreleasePoolPush
+0001637b	1c	A	_objc_autoreleaseReturnValue
+00016398	19	A	_objc_enumerationMutation
+000163b2	0d	A	_objc_msgSend
+000163c0	13	A	_objc_msgSendSuper2
+000163d4	0f	A	_objc_opt_class
+000163e4	17	A	_objc_opt_isKindOfClass
+000163fc	0d	A	_objc_opt_new
+0001640a	0d	A	_objc_release
+00016418	0c	A	_objc_retain
+00016425	22	A	_objc_retainAutoreleaseReturnValue
+00016448	23	A	_objc_retainAutoreleasedReturnValue
+0001646c	11	A	_objc_storeStrong
+0001647e	28	A	_objc_unsafeClaimAutoreleasedReturnValue
+000164a7	0e	A	_os_log_create
+000164b6	14	A	_os_log_type_enabled
+000164cb	0c	A	_sel_isEqual
+000164d8	0a	A	_setrlimit
+000164e3	10	A	dyld_stub_binder
+000164f4	0e	A	radr://5614542
+0001659c	18	A	com.apple.dt.Instruments
+000165b5	0a	A	59GAB85EFG
+0001667c	05	A	m-_+
+00016747	05	A	P(:|}
+00016786	05	A	/xzE
+00016793	07	A	cXno
+000167fd	06	A	aRv%)
+000168c2	05	A	K]V"@
+00016966	05	A	BrZ{4
+000169ab	19	A	com.apple.dt.Instruments
+000169cf	27	A	b<?xml version="1.0" encoding="UTF-8"?>
+000169f7	66	A	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+00016a5e	15	A	<plist version="1.0">
+00016a74	06	A	<dict>
+00016a7c	28	A	<key>com.apple.PairingManager.Read</key>
+00016aa6	07	A	<true/>
+00016aaf	2e	A	<key>com.apple.PairingManager.RemovePeer</key>
+00016adf	07	A	<true/>
+00016ae8	29	A	<key>com.apple.PairingManager.Write</key>
+00016b13	07	A	<true/>
+00016b1c	31	A	<key>com.apple.private.CoreSimulator.client</key>
+00016b4f	07	A	<true/>
+00016b58	36	A	<key>com.apple.private.dt.instrumentsxpc.allowed</key>
+00016b90	07	A	<true/>
+00016b99	2a	A	<key>com.apple.private.logging.admin</key>
+00016bc5	07	A	<true/>
+00016bce	2f	A	<key>com.apple.private.logging.diagnostic</key>
+00016bff	07	A	<true/>
+00016c08	2b	A	<key>com.apple.private.logging.stream</key>
+00016c35	07	A	<true/>
+00016c3e	3d	A	<key>com.apple.private.mobile_storage.remote.allowedSPI</key>
+00016c7d	07	A	<true/>
+00016c86	2e	A	<key>com.apple.private.pluginkit.manager</key>
+00016cb6	07	A	<true/>
+00016cbf	26	A	<key>com.apple.private.tcc.allow</key>
+00016ce7	07	A	<array>
+00016cf1	38	A	<string>kTCCServiceSystemPolicyRemovableVolumes</string>
+00016d2c	36	A	<string>kTCCServiceSystemPolicyNetworkVolumes</string>
+00016d65	35	A	<string>kTCCServiceSystemPolicyDesktopFolder</string>
+00016d9d	37	A	<string>kTCCServiceSystemPolicyDownloadsFolder</string>
+00016dd7	37	A	<string>kTCCServiceSystemPolicyDocumentsFolder</string>
+00016e10	08	A	</array>
+00016e19	07	A	</dict>
+00016e21	08	A	</plist>
+00016e39	1e	A	com.apple.PairingManager.Read
+00016e5d	1f	A	com.apple.PairingManager.Write
+00016e82	20	A	com.apple.private.logging.admin
+00016ea8	21	A	 com.apple.private.logging.stream
+00016ecf	24	A	#com.apple.PairingManager.RemovePeer
+00016ef9	24	A	#com.apple.private.pluginkit.manager
+00016f23	25	A	$com.apple.private.logging.diagnostic
+00016f4e	27	A	&com.apple.private.CoreSimulator.client
+00016f7b	2c	A	+com.apple.private.dt.instrumentsxpc.allowed
+00016fad	33	A	2com.apple.private.mobile_storage.remote.allowedSPI
+00016fe7	1d	A	com.apple.private.tcc.allow0
+00017007	28	A	'kTCCServiceSystemPolicyRemovableVolumes
+00017030	26	A	%kTCCServiceSystemPolicyNetworkVolumes
+00017057	25	A	$kTCCServiceSystemPolicyDesktopFolder
+0001707d	27	A	&kTCCServiceSystemPolicyDownloadsFolder
+000170a5	27	A	&kTCCServiceSystemPolicyDocumentsFolder
+00017145	0e	A	Apple Inc.1&0$
+00017159	22	A	Apple Certification Authority10
+00017182	10	A	Apple Root CA0
+00017193	0e	A	111024173941Z
+000171a2	10	A	261024173941Z01
+000171c9	0e	A	Apple Inc.1&0$
+000171dd	22	A	Apple Certification Authority1301
+00017205	2c	A	*Apple Code Signing Certification Authority0
+00017297	07	A	drm|iGa
+0001731b	07	A	YN]e3'
+000173da	05	A	/0-0+
+000173e4	27	A	%http://www.apple.com/appleca/root.crl0
+000174c7	06	A	;Qb;"
+0001755e	0e	A	Apple Inc.1&0$
+00017572	22	A	Apple Certification Authority1301
+0001759a	2e	A	*Apple Code Signing Certification Authority0
+000175c9	0e	A	201029183238Z
+000175d8	10	A	261024173941Z0V1
+000175ff	0e	A	Apple Inc.10
+00017614	12	A	Apple Software10
+0001762d	11	A	Software Signing0
+00017745	07	A	Ztd9?Yn
+000177c7	6e	A	kThis certificate is to be used exclusively for functions internal to Apple Products and/or Apple processes.0
+00017853	05	A	.0,0*
+0001785d	27	A	$http://crl.apple.com/codesigning.crl0
+000178fa	06	A	nJfW?U
+00017a0f	0e	A	Apple Inc.1&0$
+00017a23	22	A	Apple Certification Authority10
+00017a4c	10	A	Apple Root CA0
+00017a5d	0e	A	060425214036Z
+00017a6c	10	A	350209214036Z0b1
+00017a93	0e	A	Apple Inc.1&0$
+00017aa7	22	A	Apple Certification Authority10
+00017ad0	0e	A	Apple Root CA0
+00017b66	08	A	d5#KY
+00017bc9	07	A	LE~LkP
+00017c9b	21	A	https://www.apple.com/appleca/0
+00017cce	b4	A	Reliance on this certificate by any party assumes acceptance of the then applicable standard terms and conditions of use, certificate policy and certification practice statements.0
+00017ebd	0e	A	Apple Inc.1&0$
+00017ed1	22	A	Apple Certification Authority1301
+00017ef9	2b	A	*Apple Code Signing Certification Authority
+00017fe0	27	A	<?xml version="1.0" encoding="UTF-8"?>
+00018008	66	A	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+0001806f	15	A	<plist version="1.0">
+00018085	06	A	<dict>
+0001808d	13	A	<key>cdhashes</key>
+000180a2	07	A	<array>
+000180ac	06	A	<data>
+000180b5	1c	A	6yV2m+vg83Pnsv5NHlaCkWC9tgg=
+000180d4	07	A	</data>
+000180dd	08	A	</array>
+000180e6	07	A	</dict>
+000180ee	08	A	</plist>
+00018163	06	A	uYnQ-
+00018190	05	A	}15h1
