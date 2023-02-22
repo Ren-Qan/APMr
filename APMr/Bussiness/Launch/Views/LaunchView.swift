@@ -18,24 +18,24 @@ struct LaunchView: View {
     var body: some View {
         VStack {
             Button("start") {
-                guard let device = service.selectDevice,
-                      let app = service.selectApp else {
+                guard let device = service.selectDevice else {
                     return
                 }
                 
                 launchService.start(device) { success, service in
-                    service.test(app: app)
+
                 }
             }
             
-            TextField("test", text: $serviceT)
-            
             Button("test") {
-                launchService.send(str: serviceT)
+                launchService.test()
             }
             
-            Button("Stop") {
-                launchService.stop()
+            Button("test2") {
+                guard let app = service.selectApp else {
+                    return
+                }
+                launchService.core(app: app)
             }
         }
     }

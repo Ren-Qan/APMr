@@ -102,12 +102,12 @@ extension IInstrumentsNetworkStatistics {
                 case .stop(let pids):
                     let arg = DTXArguments()
                     arg.append(pids)
-                    return IInstrumentArgs(padding: 1, selector: "stopSamplingForPIDs:", dtxArg: arg)
+                    return IInstrumentArgs(padding: 2, selector: "stopSamplingForPIDs:", dtxArg: arg)
                 case .sample(let config):
                     let arg = DTXArguments()
                     arg.append(config.attributes)
                     arg.append(config.pids)
-                    return IInstrumentArgs(padding: 1, selector: "sampleAttributes:forPIDs:", dtxArg: arg)
+                    return IInstrumentArgs(padding: 3, selector: "sampleAttributes:forPIDs:", dtxArg: arg)
             }
         }
     }

@@ -7,6 +7,8 @@
 
 #import "DTXReceiveObject.h"
 
+
+
 @interface DTSysmonTapMessage : NSObject<NSSecureCoding>
 
 @property (nonatomic, strong) NSObject * dic;
@@ -30,6 +32,11 @@
     return self;
 }
 
+@end
+
+@interface DTKTraceTapMessage : DTSysmonTapMessage
+@end
+@implementation DTKTraceTapMessage
 @end
 
 // MARK: --------------------------------------------------------------------------------
@@ -104,6 +111,7 @@
     if (data == NULL) {
         return;
     }
+    
     _object = [self unarchiverData:data];
 }
 
@@ -119,8 +127,13 @@
     if (!data) {
         return NULL;
     }
+    
     NSError *error;
     NSObject *object = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:&error];
+    
+    if ([object isKindOfClass:[DTKTraceTapMessage class]]) {
+        return [(DTKTraceTapMessage *)object dic];
+    }
     
     if ([object isKindOfClass:[DTSysmonTapMessage class]]) {
         return [(DTSysmonTapMessage *)object dic];

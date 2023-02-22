@@ -22,8 +22,7 @@ extension IInstrumentSampling: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-        print("Sam [Arr]==== \(response.array)")
-        print("Sam [Objc]==== \(response.object)")
+
     }
 }
 
@@ -35,10 +34,6 @@ extension IInstrumentSampling {
     func stop() {
         send(P.stop.arg)
     }
-    
-    func samples() {
-        send(P.samples.arg)
-    }
 }
 
 extension IInstrumentSampling {
@@ -46,11 +41,9 @@ extension IInstrumentSampling {
     enum P {
         case start
         case stop
-        case samples
         
         var arg: IInstrumentArgs {
             switch self {
-                case .samples: return IInstrumentArgs(padding: 1, selector: "samples") // 待测试
                 case .start: return IInstrumentArgs(padding: 2, selector: "startSampling")
                 case .stop: return IInstrumentArgs(padding: 3, selector: "stopSampling")
             }

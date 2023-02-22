@@ -265,7 +265,7 @@ struct DTXMessagePayloadHeader {
             return NULL;
         }
         
-        if ( mheader.magic != 0x1F3D5B79 ) {
+        if (mheader.magic != 0x1F3D5B79) {
             [self error:DTXMessageErrorCodeBadHeaderMagic
                 message:[NSString stringWithFormat:@"bad header magic: %x", mheader.magic]];
             return NULL;
@@ -277,11 +277,10 @@ struct DTXMessagePayloadHeader {
             return NULL;
         }
         
-        if ( mheader.fragmentId == 0 ) {
+        if (mheader.fragmentId == 0) {
             identifier = mheader.identifier;
             channelCode = mheader.channelCode;
-            if ( mheader.fragmentCount > 1 )
-                continue;
+            if (mheader.fragmentCount > 1) continue;
         }
         
         DTXArguments *frag = [[DTXArguments alloc] init];
@@ -293,17 +292,17 @@ struct DTXMessagePayloadHeader {
             size_t curlen = mheader.length - nbytes;
             idevice_connection_receive(_connection, (char *)curptr, (uint32_t)curlen, &nrecv);
                     
-            if ( nrecv <= 0 ) {
-                [self error:DTXMessageErrorCodeReadingFromSocketFailed
-                    message:[NSString stringWithFormat:@"failed reading from socket: %s", strerror(errno)]];
-                free(fragData);
-                return NULL;
+//            if (nrecv <= 0) {
+//                [self error:DTXMessageErrorCodeReadingFromSocketFailed
+//                    message:[NSString stringWithFormat:@"failed reading from socket: %s", strerror(errno)]];
+//                free(fragData);
+//                return NULL;
+//            }
+            if (nrecv > 0) {
+                NSData *temData = [NSData dataWithBytes:curptr length:nrecv];
+                [frag.bytes appendData:temData];
+                nbytes += nrecv;
             }
-            
-            NSData *temData = [NSData dataWithBytes:curptr length:nrecv];
-            [frag.bytes appendData:temData];
-            
-            nbytes += nrecv;
         }
 
         free(fragData);
@@ -327,7 +326,14 @@ struct DTXMessagePayloadHeader {
     
     // archived payload object appears after the auxiliary array
     const uint8_t *objptr = auxptr + auxlen;
-    uint64_t objlen = pheader->totalLength - auxlen;
+    uint64_t objlen = 0;
+    if (pheader->totalLength > auxlen) {
+        objlen = pheader->totalLength - auxlen;
+    }
+        
+    if ((objlen + auxlen + 16) != payload.bytes.length) {
+        
+    }
     
     DTXReceiveObject *result = [[DTXReceiveObject alloc] init];
     

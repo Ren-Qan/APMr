@@ -63,7 +63,7 @@ extension IInstrumentsProcesscontrol {
         var devicePath = ""
         var bundle: String
         var environment: [String : Any] = [:]
-        var arguments: [Any] = []
+        var arguments: [String : Any] = [:]
         var options: [String : Any] = [:]
         
         static func common(_ path: String = "",

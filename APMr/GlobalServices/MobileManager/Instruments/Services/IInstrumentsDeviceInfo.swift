@@ -9,7 +9,9 @@ import Cocoa
 import LibMobileDevice
 
 protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
+    func trace(codes: [Int64 : String])
     
+    func machTime(info: [Any])
 }
 
 class IInstrumentsDeviceInfo: IInstrumentsBase {
@@ -22,6 +24,10 @@ class IInstrumentsDeviceInfo: IInstrumentsBase {
 extension IInstrumentsDeviceInfo {
     func machTime() {
         send(P.machTimeInfo.arg)
+    }
+    
+    func traceCodes() {
+        send(P.traceCodesFile.arg)
     }
     
     func runningProcess() {
@@ -45,7 +51,22 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-        print("[DeviceInfo] --- \(response.object)")
+        if response.identifier == P.machTimeInfo.arg.identifier,
+            let arr = response.object as? [Any]  {
+            delegate?.machTime(info: arr)
+        } else if response.identifier == P.traceCodesFile.arg.identifier,
+                  let codes = response.object as? String {
+            let result = codes.split(separator: "\n").reduce(into: [Int64: String]()) { (dict, line) in
+                let parts = line.split(separator: "\t")
+                if parts.count == 2 {
+                    let scanner = Scanner(string: String(parts[0]))
+                    var keyValue: Int64 = 0
+                    scanner.scanHexInt64(&keyValue)
+                    dict[keyValue] = String(parts[1])
+                }
+            }
+            delegate?.trace(codes: result)
+        }
     }
 }
 
@@ -64,6 +85,8 @@ extension IInstrumentsDeviceInfo {
         
         case machTimeInfo
         
+        case traceCodesFile
+        
         case execname(pid: UInt32)
         
         case symbolicator(config: SymbolicatorConfig)
@@ -72,6 +95,10 @@ extension IInstrumentsDeviceInfo {
             switch self {
                 case.machTimeInfo:
                     return IInstrumentArgs(padding: 1, selector: "machTimeInfo")
+                    
+                case .traceCodesFile:
+                    return IInstrumentArgs(padding: 5, selector: "traceCodesFile")
+                    
                 case .runningProcesses:
                     return IInstrumentArgs(padding: 2, selector: "runningProcesses")
                 case .execname(let pid):
