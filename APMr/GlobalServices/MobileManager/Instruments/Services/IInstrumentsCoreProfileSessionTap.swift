@@ -53,32 +53,32 @@ extension IInstrumentsCoreProfileSessionTap {
         
         var arg: IInstrumentArgs {
             switch self {
-                case .start: return IInstrumentArgs("start")
-                case .stop: return IInstrumentArgs("stop")
-                case .setConfig:
-                    let config: [String: Any] = [
-                        "rp": 100,
-                        "bm": 1,
-                        "tc": [
-                            [
-                                "kdf2": Set([735576064, 19202048, 67895296, 835321856, 735838208,
-                                             554762240, 730267648, 520552448, 117440512, 19922944,
-                                             17563648, 17104896, 17367040, 771686400, 520617984, 20971520, 520421376]),
-                                "csd": 128,
-                                "tk": 3,
-                                "ta": [
-                                    [3],
-                                    [0],
-                                    [2],
-                                    [1, 1, 0]
-                                ],
-                                "uuid": UUID().uuidString.uppercased(),
+            case .start: return IInstrumentArgs("start")
+            case .stop: return IInstrumentArgs("stop")
+            case .setConfig:
+                let config: [String: Any] = [
+                    "rp": 100,
+                    "bm": 1,
+                    "tc": [
+                        [
+                            "kdf2": Set([735576064, 19202048, 67895296, 835321856, 735838208,
+                                         554762240, 730267648, 520552448, 117440512, 19922944,
+                                         17563648, 17104896, 17367040, 771686400, 520617984, 20971520, 520421376]),
+                            "csd": 128,
+                            "tk": 3,
+                            "ta": [
+                                [3],
+                                [0],
+                                [2],
+                                [1, 1, 0]
                             ],
+                            "uuid": UUID().uuidString.uppercased(),
                         ],
-                    ]
-                    let arg = DTXArguments()
-                    arg.append(config)
-                    return IInstrumentArgs("setConfig:", dtxArg: arg)
+                    ],
+                ]
+                let arg = DTXArguments()
+                arg.append(config)
+                return IInstrumentArgs("setConfig:", dtxArg: arg)
             }
         }
     }
@@ -113,10 +113,7 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         
     }
     
-    
-    
     func p3(_ data: Data) {
-        
         let input = InputStream(data: data)
         input.open()
         
@@ -148,7 +145,7 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
             pointer.deallocate()
             
             print(packData)
-                        
+            
             guard let tag = Tag(rawValue: pack.tag) else {
                 break
             }
@@ -158,18 +155,12 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
                 case .v3NullChunk: continue
                 case .config:
                     print("config")
-
                     do {
                         let dic = try PropertyListSerialization.propertyList(from: packData,
                                                                              options: .mutableContainersAndLeaves,
                                                                              format: nil)
-                        
                         print(dic)
-                        
-                    } catch {
-                        
-                    }
-                    
+                    } catch { }
                     readEmpty()
                 case .sshot:
                     print("sshot")
@@ -182,15 +173,8 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
                         let dic = try PropertyListSerialization.propertyList(from: packData,
                                                                              options: .mutableContainersAndLeaves,
                                                                              format: nil)
-                        
                         print(dic)
-                        
-                    } catch {
-                        
-                    }
-                    
-            
-                    
+                    } catch { }
                     
                     readEmpty()
                 case .v3CpuHeaderTag:

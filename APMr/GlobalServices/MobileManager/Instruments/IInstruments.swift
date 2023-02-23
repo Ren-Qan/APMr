@@ -41,6 +41,8 @@ extension IInstruments {
     }
     
     public func stop() {
+        sendQ.cancelAllOperations()
+        receiveQ.cancelAllOperations()
         isConnected = false
         dtxService.stopService()
     }

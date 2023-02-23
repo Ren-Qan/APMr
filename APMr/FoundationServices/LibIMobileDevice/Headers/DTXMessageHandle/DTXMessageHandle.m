@@ -35,6 +35,20 @@ struct DTXMessagePayloadHeader {
     uint64_t totalLength;
 };
 
+@interface DTXPayload : NSObject
+
+@property (nonatomic, assign) NSUInteger identifier;
+
+@property (nonatomic, strong, readonly) NSMutableArray<NSData *> *payloads;
+
+- (instancetype)initWithCapacity:(NSInteger)capacity;
+
+- (void)addData:(NSData *)data index:(NSInteger)index;
+
+- (NSData *)data;
+
+@end
+
 @interface DTXMessageHandle()
 
 @end
@@ -44,7 +58,7 @@ struct DTXMessagePayloadHeader {
     mobile_image_mounter_client_t _mounter_client;
         
     NSDictionary *_server_dic;
-    NSMutableDictionary <NSNumber *, NSMutableData *> *_receive_map;
+    NSMutableDictionary <NSNumber *, DTXPayload *> *_receive_map;
 }
 
 - (void)dealloc {
@@ -165,7 +179,7 @@ struct DTXMessagePayloadHeader {
     if (string && serverDic) {
         if ([string isKindOfClass:[NSString class]] && [string isEqualToString:@"_notifyOfPublishedCapabilities:"] && [serverDic isKindOfClass:[NSDictionary class]]) {
             _server_dic = serverDic;
-            _receive_map = [NSMutableDictionary.alloc init];
+            _receive_map = [NSMutableDictionary dictionary];
             success = YES;
         }
     }
@@ -195,7 +209,7 @@ struct DTXMessagePayloadHeader {
     _connection = NULL;
     _mounter_client = NULL;
     _server_dic = NULL;
-    [_receive_map removeAllObjects];
+    _receive_map = NULL;
 }
 
 - (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device {
@@ -255,7 +269,7 @@ struct DTXMessagePayloadHeader {
 - (DTXReceiveObject * _Nullable)receive {
     uint32_t channelCode = 0;
     uint32_t identifier = 0;
-    NSMutableData *payload = NULL;
+    NSData *payload = NULL;
     
     while (true) {
         struct DTXMessageHeader mheader;
@@ -286,7 +300,7 @@ struct DTXMessagePayloadHeader {
             if (mheader.fragmentCount > 1) continue;
         }
         
-        NSMutableData *frag = [NSMutableData.alloc init];
+        NSMutableData *frag = [NSMutableData data];
         uint32_t nbytes = 0;
         uint8_t *fragData = (uint8_t *)malloc(sizeof(uint8_t) * mheader.length);
         while (nbytes < mheader.length) {
@@ -302,23 +316,26 @@ struct DTXMessagePayloadHeader {
         }
 
         NSNumber *key = [NSNumber.alloc initWithUnsignedInt:mheader.identifier];
-        
+        BOOL loadFinish = NO;
         if (mheader.fragmentCount == 1) {
-            payload = [NSMutableData.alloc init];
+            payload = frag;
+            loadFinish = YES;
         } else {
-            NSMutableData *local = _receive_map[key];
-            if (local) {
-                payload = local;
-            } else {
-                payload = [NSMutableData.alloc init];
-                _receive_map[key] = payload;
+            DTXPayload *localPayload = _receive_map[key];
+            if (!localPayload) {
+                localPayload = [DTXPayload.alloc initWithCapacity:mheader.fragmentCount];
+                localPayload.identifier = mheader.identifier;
+                _receive_map[key] = localPayload;
+            }
+            
+            [localPayload addData:frag index:mheader.fragmentId];
+            if (mheader.fragmentId == mheader.fragmentCount - 1) {
+                payload = [localPayload data];
+                loadFinish = YES;
             }
         }
         
-        free(fragData);
-        [payload appendData:frag];
-
-        if (mheader.fragmentId == mheader.fragmentCount - 1) {
+        if (loadFinish) {
             if (mheader.fragmentCount > 1) {
                 _receive_map[key] = NULL;
             }
@@ -443,6 +460,40 @@ char * find_image_path(idevice_t device) {
     strcat(result, fileName);
     
     return result;
+}
+@end
+
+
+@implementation DTXPayload {
+    NSInteger _count;
+    NSInteger _capacity;
+}
+
+- (instancetype)initWithCapacity:(NSInteger)capacity {
+    if (self = [super init]) {
+        _payloads = [NSMutableArray arrayWithCapacity:capacity];
+        for (int i = 0; i < capacity; i++) {
+            [_payloads addObject:[NSData data]];
+        }
+        _capacity = capacity;
+        _count = 0;
+    }
+    return self;
+}
+
+- (void)addData:(NSData *)data index:(NSInteger)index {
+    if (index < _capacity) {
+        _payloads[index] = data;
+        _count += 1;
+    }
+}
+
+- (NSData *)data {
+    NSMutableData *data = [NSMutableData data];
+    [_payloads enumerateObjectsUsingBlock:^(NSData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [data appendData:obj];
+    }];
+    return data;
 }
 
 @end

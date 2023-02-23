@@ -53,7 +53,7 @@ extension IDiagnosticsRelay {
         
         if let result = result,
            let dic = plist_to_nsobject(result) as? [String : Any] {
-            resDic = dic
+            resDic = dic["IORegistry"] as? [String : Any]
         }
         
         if let result = result {
