@@ -113,15 +113,112 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         
     }
     
+    
+    
     func p3(_ data: Data) {
         
+        let input = InputStream(data: data)
+        input.open()
         
+        var offset = 0
+        var header = KDHeaderV3()
+        offset += input.read(&header, maxLength: MemoryLayout<KDHeaderV3>.size)
+        
+        func readEmpty() {
+            var empty: UInt8 = 0
+            while (offset < data.count && empty == 0) {
+                empty = UInt8(data[offset])
+                if empty == 0 {
+                    offset += input.read(&empty, maxLength: 1)
+                }
+            }
+        }
+        
+        while input.hasBytesAvailable {
+            print("===========")
+            var pack = KTracePack()
+            offset += input.read(&pack, maxLength: MemoryLayout<KTracePack>.size)
+            
+            print(pack)
+            
+            let len = Int(pack.length)
+            var pointer = UnsafeMutablePointer<UInt8>.allocate(capacity: len)
+            offset += input.read(pointer, maxLength: len)
+            let packData = Data(bytes: pointer, count: len)
+            pointer.deallocate()
+            
+            print(packData)
+                        
+            guard let tag = Tag(rawValue: pack.tag) else {
+                break
+            }
+            
+            switch tag {
+                case .cpuEventsNull: continue
+                case .v3NullChunk: continue
+                case .config:
+                    print("config")
+
+                    do {
+                        let dic = try PropertyListSerialization.propertyList(from: packData,
+                                                                             options: .mutableContainersAndLeaves,
+                                                                             format: nil)
+                        
+                        print(dic)
+                        
+                    } catch {
+                        
+                    }
+                    
+                    readEmpty()
+                case .sshot:
+                    print("sshot")
+                case .kernel:
+                    print("kernel")
+                    readEmpty()
+                case .machine:
+                    print("machine")
+                    do {
+                        let dic = try PropertyListSerialization.propertyList(from: packData,
+                                                                             options: .mutableContainersAndLeaves,
+                                                                             format: nil)
+                        
+                        print(dic)
+                        
+                    } catch {
+                        
+                    }
+                    
+            
+                    
+                    
+                    readEmpty()
+                case .v3CpuHeaderTag:
+                    let len = Int(pack.length) - MemoryLayout<KDCpuMapHeader>.size
+                    var i = 0
+                    
+                    while i < len {
+                        var cpuInfo = KDCpuMap()
+                        print(cpuInfo)
+                        i += input.read(&cpuInfo, maxLength: MemoryLayout<KDCpuMap>.size)
+                    }
+                    offset += len
+                    print("v3CpuHeaderTag")
+                case .v3ThreadMap:
+                    print("setThread")
+                case .v3RawEvents:
+                    print("setThread")
+                default: continue
+            }
+        }
+        
+        
+        input.close()
     }
     
     func p4(_ data: Data) {
         
     }
-    
 }
 
 extension IInstrumentsCoreProfileSessionTap.Parser {
@@ -164,13 +261,20 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         var major: UInt16 = 0
         var minor: UInt16 = 0
         var length: UInt64 = 0
-        var data: Data? = nil
     }
     
     struct KDCpuMapHeader {
         var version: UInt32 = 0
         var count: UInt32 = 0
     }
+    
+    struct KDCpuMap {
+        var cpuId: UInt32 = 0
+        var flags: UInt32 = 0
+        var name = Data(capacity: 8)
+        var args = Array<UInt32>(repeating: 0, count: 6)
+    }
 }
+
 
 
