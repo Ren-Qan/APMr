@@ -9,13 +9,13 @@ import Foundation
 import LibMobileDevice
 
 protocol IInstrumentsNetworkingDelegate: NSObjectProtocol {
-    func interfaceDetection(model: IInstrumentsNetworkingInterfaceDetectionModel, arg: IInstrumentRequestArgsProtocol)
+    func interfaceDetection(model: IInstrumentsNetworkingInterfaceDetectionModel)
     
-    func connectionDetectedV4(model: IInstrumentsNetworkingConnectionDetectedModelV4, arg: IInstrumentRequestArgsProtocol)
+    func connectionDetectedV4(model: IInstrumentsNetworkingConnectionDetectedModelV4)
     
-    func connectionDetectedV6(model: IInstrumentsNetworkingConnectionDetectedModelV6, arg: IInstrumentRequestArgsProtocol)
+    func connectionDetectedV6(model: IInstrumentsNetworkingConnectionDetectedModelV6)
     
-    func connectionUpdate(model: IInstrumentsNetworkingConnectionUpdateModel, arg: IInstrumentRequestArgsProtocol)
+    func connectionUpdate(model: IInstrumentsNetworkingConnectionUpdateModel)
 }
 
 class IInstrumentsNetworking: IInstrumentsBase {
@@ -50,24 +50,23 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
             return
         }
         
-        let arg = P.start.arg
         switch type {
             case .interfaceDetection:
                 if let model = interfaceDetection(datas: modelDatas) {
-                    self.delegate?.interfaceDetection(model: model, arg: arg)
+                    self.delegate?.interfaceDetection(model: model)
                 }
                 
             case .connectionDetected:
                 if let addData = modelDatas.first as? Data {
                     if addData.count == 16, let model = connectionDetectedV4(datas: modelDatas) {
-                        self.delegate?.connectionDetectedV4(model: model, arg: arg)
+                        self.delegate?.connectionDetectedV4(model: model)
                     } else if addData.count == 28, let model = connectionDetectedV6(datas: modelDatas) {
-                        self.delegate?.connectionDetectedV6(model: model, arg: arg)
+                        self.delegate?.connectionDetectedV6(model: model)
                     }
                 }
             case .connectionUpdate:
                 if let model = connectionUpdate(datas: modelDatas) {
-                    self.delegate?.connectionUpdate(model: model, arg: arg)
+                    self.delegate?.connectionUpdate(model: model)
                 }
         }
     }
@@ -172,9 +171,9 @@ extension IInstrumentsNetworking {
         
         var arg: IInstrumentArgs {
             switch self {
-                case .replay: return IInstrumentArgs(padding: 1, selector: "replayLastRecordedSession")
-                case .start: return IInstrumentArgs(padding: 2, selector: "startMonitoring")
-                case .stop: return IInstrumentArgs(padding: 3, selector: "stopMonitoring")
+                case .replay: return IInstrumentArgs("replayLastRecordedSession")
+                case .start: return IInstrumentArgs("startMonitoring")
+                case .stop: return IInstrumentArgs("stopMonitoring")
             }
         }
     }

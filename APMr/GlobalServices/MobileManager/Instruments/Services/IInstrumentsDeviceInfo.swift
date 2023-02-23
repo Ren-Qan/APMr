@@ -51,11 +51,9 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-        if response.identifier == P.machTimeInfo.arg.identifier,
-            let arr = response.object as? [Any]  {
+        if let arr = response.object as? [Any]  {
             delegate?.machTime(info: arr)
-        } else if response.identifier == P.traceCodesFile.arg.identifier,
-                  let codes = response.object as? String {
+        } else if let codes = response.object as? String {
             let result = codes.split(separator: "\n").reduce(into: [Int64: String]()) { (dict, line) in
                 let parts = line.split(separator: "\t")
                 if parts.count == 2 {
@@ -94,22 +92,22 @@ extension IInstrumentsDeviceInfo {
         var arg: IInstrumentArgs {
             switch self {
                 case.machTimeInfo:
-                    return IInstrumentArgs(padding: 1, selector: "machTimeInfo")
+                    return IInstrumentArgs("machTimeInfo")
                     
                 case .traceCodesFile:
-                    return IInstrumentArgs(padding: 5, selector: "traceCodesFile")
+                    return IInstrumentArgs("traceCodesFile")
                     
                 case .runningProcesses:
-                    return IInstrumentArgs(padding: 2, selector: "runningProcesses")
+                    return IInstrumentArgs("runningProcesses")
                 case .execname(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
-                    return IInstrumentArgs(padding: 3, selector: "execnameForPid:", dtxArg: arg)
+                    return IInstrumentArgs("execnameForPid:", dtxArg: arg)
                 case .symbolicator(let config):
                     let arg = DTXArguments()
                     arg.append(config.pid)
                     arg.append(config.selector)
-                    return IInstrumentArgs(padding: 4, selector: "symbolicatorSignatureForPid:trackingSelector:", dtxArg: arg)
+                    return IInstrumentArgs("symbolicatorSignatureForPid:trackingSelector:", dtxArg: arg)
             }
         }
     }

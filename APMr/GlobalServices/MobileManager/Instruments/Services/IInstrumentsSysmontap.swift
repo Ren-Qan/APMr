@@ -10,8 +10,8 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsSysmontapDelegate: NSObjectProtocol {
-    func sysmotap(model: IInstrumentsSysmotapModel, arg: IInstrumentRequestArgsProtocol)
-    func process(model: IInstrumentsSysmotapProcessesModel, arg: IInstrumentRequestArgsProtocol)
+    func sysmotap(model: IInstrumentsSysmotapModel)
+    func process(model: IInstrumentsSysmotapProcessesModel)
 }
 
 class IInstrumentsSysmontap: IInstrumentsBase {
@@ -51,9 +51,8 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
             
             if let sysmotap = Mapper<IInstrumentsSysmotapModel>().map(JSON: result[sysI]),
                let process = Mapper<IInstrumentsSysmotapProcessesModel>().map(JSON: result[proI]) {
-                let arg = P.set(sampleInterval: sampleInterval).arg
-                delegate?.sysmotap(model: sysmotap, arg: arg)
-                delegate?.process(model: process, arg: arg)
+                delegate?.sysmotap(model: sysmotap)
+                delegate?.process(model: process)
             }
         }
     }
@@ -67,7 +66,7 @@ extension IInstrumentsSysmontap {
         var arg: IInstrumentArgs {
             switch self {
                 case .start:
-                    return IInstrumentArgs(padding: 1, selector: "start")
+                    return IInstrumentArgs("start")
                 case .set(let sampleInterval):
                     let config: [String : Any] = [
                         "bm": 0,
@@ -80,7 +79,7 @@ extension IInstrumentsSysmontap {
                     
                     let args = DTXArguments()
                     args.append(config)
-                    return IInstrumentArgs(padding: 2, selector: "setConfig:", dtxArg: args)
+                    return IInstrumentArgs("setConfig:", dtxArg: args)
             }
         }
     }

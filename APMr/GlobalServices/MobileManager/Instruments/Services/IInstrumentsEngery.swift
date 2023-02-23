@@ -63,16 +63,14 @@ extension IInstrumentsEnergy {
                 case .start(let pids):
                     let arg = DTXArguments()
                     arg.append(pids)
-                    return IInstrumentArgs(padding: 1,
-                                           selector: "startSamplingForPIDs:",
+                    return IInstrumentArgs("startSamplingForPIDs:",
                                            dtxArg: arg)
                     
                 case .sample(let att, let pids):
                     let arg = DTXArguments()
                     arg.append(att)
                     arg.append(pids)
-                    return IInstrumentArgs(padding: 2,
-                                           selector: "sampleAttributes:forPIDs:",
+                    return IInstrumentArgs("sampleAttributes:forPIDs:",
                                            dtxArg: arg)
             }
         }

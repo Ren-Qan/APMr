@@ -230,7 +230,7 @@ extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
         print(msg)
     }
     
-    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
+    func launch(pid: UInt32) {
         monitorPid = pid
         if pid != 0 {
             isMonitoringPerformance = true
@@ -258,11 +258,11 @@ extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension PerformanceInstrumentsService: IInstrumentsSysmontapDelegate {
-    func sysmotap(model: IInstrumentsSysmotapModel, arg: IInstrumentRequestArgsProtocol) {
+    func sysmotap(model: IInstrumentsSysmotapModel) {
         cTotalCPU(model)
     }
     
-    func process(model: IInstrumentsSysmotapProcessesModel, arg: IInstrumentRequestArgsProtocol) {
+    func process(model: IInstrumentsSysmotapProcessesModel) {
         guard let process = model.processModel(pid: Int64(monitorPid)) else {
             return
         }
@@ -273,14 +273,14 @@ extension PerformanceInstrumentsService: IInstrumentsSysmontapDelegate {
 }
 
 extension PerformanceInstrumentsService: IInstrumentsOpenglDelegate {
-    func sampling(model: IInstrumentsOpenglModel, arg: IInstrumentRequestArgsProtocol) {
+    func sampling(model: IInstrumentsOpenglModel) {
         cGPU(model)
         cFPS(model)
     }
 }
 
 extension PerformanceInstrumentsService: IInstrumentsNetworkStatisticsDelegate {
-    func process(modelMap: [UInt32: IInstrumentsNetworkStatisticsModel], arg: IInstrumentRequestArgsProtocol) {
+    func process(modelMap: [UInt32: IInstrumentsNetworkStatisticsModel]) {
         guard monitorPid != 0, let model = modelMap[monitorPid] else {
             return
         }

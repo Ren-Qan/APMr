@@ -10,7 +10,7 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsOpenglDelegate: NSObjectProtocol {
-    func sampling(model: IInstrumentsOpenglModel, arg: IInstrumentRequestArgsProtocol)
+    func sampling(model: IInstrumentsOpenglModel)
 }
 
 class IInstrumentsOpengl: IInstrumentsBase {
@@ -40,8 +40,7 @@ extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
     func response(_ response: DTXReceiveObject) {        
         if let obj = response.object as? [String : Any],
            let model = Mapper<IInstrumentsOpenglModel>().map(JSON: obj) {
-            let arg = P.start(interval: startInterval).arg
-            self.delegate?.sampling(model: model, arg: arg)
+            self.delegate?.sampling(model: model)
         }
     }
 }
@@ -56,14 +55,12 @@ extension IInstrumentsOpengl {
                 case .rate(let sampling):
                     let dtx = DTXArguments()
                     dtx.append(sampling)
-                    return IInstrumentArgs(padding: 1,
-                                           selector: "setSamplingRate:",
+                    return IInstrumentArgs("setSamplingRate:",
                                            dtxArg: dtx)
                 case .start(let interval):
                     let dtx = DTXArguments()
                     dtx.append(interval)
-                    return IInstrumentArgs(padding: 2,
-                                           selector: "startSamplingAtTimeInterval:",
+                    return IInstrumentArgs("startSamplingAtTimeInterval:",
                                            dtxArg: dtx)
             }
         }

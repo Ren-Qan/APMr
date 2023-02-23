@@ -28,13 +28,13 @@ enum IInstrumentsServiceName: String, CaseIterable {
     case objectalloc = "com.apple.instruments.server.services.objectalloc"
     
     case pcbd = "com.apple.instruments.server.services.processcontrolbydictionary"
-
+    
     case sampling = "com.apple.instruments.server.services.sampling"
     
     case notification = "com.apple.instruments.server.services.mobilenotifications"
     
     case coreprofilesessiontap = "com.apple.instruments.server.services.coreprofilesessiontap"
-        
+    
     var channel: UInt32 {
         return UInt32(IInstrumentsServiceName.allCases.firstIndex(of: self)! + 10)
     }
@@ -56,31 +56,17 @@ enum IInstrumentsServiceName: String, CaseIterable {
 }
 
 protocol IInstrumentRequestArgsProtocol {
-    var identifier: UInt32 { get }
-    
     var selector: String { get }
     
     var dtxArg: DTXArguments? { get }
 }
 
 struct IInstrumentArgs: IInstrumentRequestArgsProtocol {
-    var identifier: UInt32
     var selector: String
     var dtxArg: DTXArguments? = nil
     
-    init( _ identifier: UInt32,
-          _ selector: String,
-          _ dtxArg: DTXArguments? = nil) {
-        
-        self.identifier = identifier
-        self.selector = selector
-        self.dtxArg = dtxArg
-    }
-    
-    init(padding: UInt32,
-         selector: String,
+    init(_ selector: String,
          dtxArg: DTXArguments? = nil) {
-        self.identifier = .max - padding
         self.selector = selector
         self.dtxArg = dtxArg
     }
@@ -96,7 +82,7 @@ protocol IInstrumentsServiceProtocol {
     // MARK: - optional
     
     var expectsReply: Bool { get }
-                
+    
     func setup(_ insturments: IInstruments)
     
     func send(_ arg: IInstrumentRequestArgsProtocol)
@@ -106,7 +92,7 @@ extension IInstrumentsServiceProtocol {
     var expectsReply: Bool {
         return true
     }
-        
+    
     func setup(_ insturments: IInstruments) {
         if let service = self as? IInstrumentsBase {
             service.instrument = insturments
@@ -116,8 +102,9 @@ extension IInstrumentsServiceProtocol {
     
     func send(_ arg: IInstrumentRequestArgsProtocol) {
         let channel = server.channel
+        let identifier = (self as? IInstrumentsBase)?.nextIndentifier ?? .max
         instrument?.send(channel: channel,
-                         identifier: arg.identifier,
+                         identifier: identifier,
                          selector: arg.selector,
                          dtxArg: arg.dtxArg,
                          expectsReply: expectsReply)

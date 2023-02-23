@@ -44,6 +44,7 @@ struct DTXMessagePayloadHeader {
     mobile_image_mounter_client_t _mounter_client;
         
     NSDictionary *_server_dic;
+    NSMutableDictionary <NSNumber *, NSMutableData *> *_receive_map;
 }
 
 - (void)dealloc {
@@ -164,6 +165,7 @@ struct DTXMessagePayloadHeader {
     if (string && serverDic) {
         if ([string isKindOfClass:[NSString class]] && [string isEqualToString:@"_notifyOfPublishedCapabilities:"] && [serverDic isKindOfClass:[NSDictionary class]]) {
             _server_dic = serverDic;
+            _receive_map = [NSMutableDictionary.alloc init];
             success = YES;
         }
     }
@@ -193,6 +195,7 @@ struct DTXMessagePayloadHeader {
     _connection = NULL;
     _mounter_client = NULL;
     _server_dic = NULL;
+    [_receive_map removeAllObjects];
 }
 
 - (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device {
@@ -252,7 +255,7 @@ struct DTXMessagePayloadHeader {
 - (DTXReceiveObject * _Nullable)receive {
     uint32_t channelCode = 0;
     uint32_t identifier = 0;
-    DTXArguments *payload = [[DTXArguments alloc] init];
+    NSMutableData *payload = NULL;
     
     while (true) {
         struct DTXMessageHeader mheader;
@@ -283,58 +286,61 @@ struct DTXMessagePayloadHeader {
             if (mheader.fragmentCount > 1) continue;
         }
         
-        DTXArguments *frag = [[DTXArguments alloc] init];
+        NSMutableData *frag = [NSMutableData.alloc init];
         uint32_t nbytes = 0;
         uint8_t *fragData = (uint8_t *)malloc(sizeof(uint8_t) * mheader.length);
-        
         while (nbytes < mheader.length) {
             uint8_t *curptr = fragData + nbytes;
             size_t curlen = mheader.length - nbytes;
             idevice_connection_receive(_connection, (char *)curptr, (uint32_t)curlen, &nrecv);
-                    
-//            if (nrecv <= 0) {
-//                [self error:DTXMessageErrorCodeReadingFromSocketFailed
-//                    message:[NSString stringWithFormat:@"failed reading from socket: %s", strerror(errno)]];
-//                free(fragData);
-//                return NULL;
-//            }
+                                
             if (nrecv > 0) {
                 NSData *temData = [NSData dataWithBytes:curptr length:nrecv];
-                [frag.bytes appendData:temData];
+                [frag appendData:temData];
                 nbytes += nrecv;
             }
         }
 
-        free(fragData);
+        NSNumber *key = [NSNumber.alloc initWithUnsignedInt:mheader.identifier];
         
-        [payload append_v:frag.bytes.bytes len:frag.bytes.length];
+        if (mheader.fragmentCount == 1) {
+            payload = [NSMutableData.alloc init];
+        } else {
+            NSMutableData *local = _receive_map[key];
+            if (local) {
+                payload = local;
+            } else {
+                payload = [NSMutableData.alloc init];
+                _receive_map[key] = payload;
+            }
+        }
+        
+        free(fragData);
+        [payload appendData:frag];
+
         if (mheader.fragmentId == mheader.fragmentCount - 1) {
+            if (mheader.fragmentCount > 1) {
+                _receive_map[key] = NULL;
+            }
             break;
         }
     }
     
-    struct DTXMessagePayloadHeader *pheader = (struct DTXMessagePayloadHeader *)(payload.bytes.bytes);
+    struct DTXMessagePayloadHeader *pheader = (struct DTXMessagePayloadHeader *)(payload.bytes);
     
-    uint8_t compression = (pheader->flags & 0xFF000) >> 12;
-    if (compression != 0) {
+    if (pheader -> totalLength + sizeof(struct DTXMessagePayloadHeader) != payload.length) {
+        NSString *errorMsg = [NSString.alloc initWithFormat:@"DataLen: %@, \nPayloadHeader.flag: %@, \nPayloadHeader.auxiliaryLength: %@, \nPayloadHeader.totalLength: %@", @(payload.length), @(pheader->flags), @(pheader->auxiliaryLength), @(pheader->totalLength)];
+        [self error:DTXMessageErrorCodePayLoadParseFailed message:errorMsg];
         return NULL;
     }
     
-    // serialized object array is located just after payload header
-    const uint8_t *auxptr = payload.bytes.bytes + sizeof(struct DTXMessagePayloadHeader);
+    const uint8_t *auxptr = payload.bytes + sizeof(struct DTXMessagePayloadHeader);
     uint32_t auxlen = pheader->auxiliaryLength;
     
-    // archived payload object appears after the auxiliary array
     const uint8_t *objptr = auxptr + auxlen;
     uint64_t objlen = 0;
-    if (pheader->totalLength > auxlen) {
-        objlen = pheader->totalLength - auxlen;
-    }
-        
-    if ((objlen + auxlen + 16) != payload.bytes.length) {
-        
-    }
-    
+    objlen = pheader->totalLength - auxlen;
+            
     DTXReceiveObject *result = [[DTXReceiveObject alloc] init];
     
     [result setChannel:channelCode];

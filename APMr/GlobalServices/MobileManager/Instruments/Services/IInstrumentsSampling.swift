@@ -22,7 +22,7 @@ extension IInstrumentSampling: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-
+        
     }
 }
 
@@ -44,8 +44,8 @@ extension IInstrumentSampling {
         
         var arg: IInstrumentArgs {
             switch self {
-                case .start: return IInstrumentArgs(padding: 2, selector: "startSampling")
-                case .stop: return IInstrumentArgs(padding: 3, selector: "stopSampling")
+                case .start: return IInstrumentArgs("startSampling")
+                case .stop: return IInstrumentArgs("stopSampling")
             }
         }
     }

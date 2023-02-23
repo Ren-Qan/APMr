@@ -55,10 +55,10 @@ extension IInstrumentsGPU {
         
         var arg: IInstrumentArgs {
             switch self {
-                case .deviceGPUInfo: return IInstrumentArgs(padding: 1, selector: "requestDeviceGPUInfo")
-                case .startCollecting: return IInstrumentArgs(padding: 2, selector: "startCollectingCounters")
-                case .stopCollecting: return IInstrumentArgs(padding: 3, selector: "stopCollectingCounters")
-                case .flush: return IInstrumentArgs(padding: 4, selector: "flushRemainingData")
+                case .deviceGPUInfo: return IInstrumentArgs("requestDeviceGPUInfo")
+                case .startCollecting: return IInstrumentArgs("startCollectingCounters")
+                case .stopCollecting: return IInstrumentArgs("stopCollectingCounters")
+                case .flush: return IInstrumentArgs("flushRemainingData")
                 case .configure(let config):
                     let selector = "configureCounters:counterProfile:interval:windowLimit:tracingPID:"
                     let arg = DTXArguments()
@@ -67,7 +67,7 @@ extension IInstrumentsGPU {
                     arg.append(config.interval)
                     arg.append(config.limit)
                     arg.append(config.pid)
-                    return IInstrumentArgs(padding: 5, selector: selector, dtxArg: arg)
+                    return IInstrumentArgs(selector, dtxArg: arg)
             }
         }
     }

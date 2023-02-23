@@ -9,7 +9,7 @@ import Foundation
 import LibMobileDevice
 
 protocol IInstrumentsProcessControlByDictionaryDelegate: NSObjectProtocol {
-    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol)
+    func launch(pid: UInt32)
 }
 
 class IInstrumentsProcessControlByDictionary: IInstrumentsBase {
@@ -48,13 +48,8 @@ extension IInstrumentsProcessControlByDictionary: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {        
-        if let config = self.launchConfig {
-            let launchArg = P.launch(config: config).arg
-            if response.identifier == launchArg.identifier {
-                if let pid = response.object as? UInt32 {
-                    delegate?.launch(pid: pid, arg: launchArg)
-                }
-            }
+        if let pid = response.object as? UInt32 {
+            delegate?.launch(pid: pid)
         }
     }
 }
@@ -89,22 +84,22 @@ extension IInstrumentsProcessControlByDictionary {
                     arg.append(config.environment)
                     arg.append(config.args)
                     arg.append(config.options)
-                    return IInstrumentArgs(padding: 1, selector: selector, dtxArg: arg)
-            
+                    return IInstrumentArgs(selector, dtxArg: arg)
+                    
                 case .start(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
-                    return IInstrumentArgs(padding: 2, selector: "startObservingPid:", dtxArg: arg)
+                    return IInstrumentArgs("startObservingPid:", dtxArg: arg)
                     
                 case .resume(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
-                    return IInstrumentArgs(padding: 2, selector: "resumePid:", dtxArg: arg)
+                    return IInstrumentArgs("resumePid:", dtxArg: arg)
                     
                 case .stop(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
-                    return IInstrumentArgs(padding: 3, selector: "stopObservingPid:", dtxArg: arg)
+                    return IInstrumentArgs("stopObservingPid:", dtxArg: arg)
             }
         }
     }

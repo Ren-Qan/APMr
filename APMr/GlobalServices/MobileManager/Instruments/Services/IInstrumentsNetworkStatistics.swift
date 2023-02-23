@@ -10,7 +10,7 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsNetworkStatisticsDelegate: NSObjectProtocol {
-    func process(modelMap: [UInt32 : IInstrumentsNetworkStatisticsModel], arg: IInstrumentRequestArgsProtocol)
+    func process(modelMap: [UInt32 : IInstrumentsNetworkStatisticsModel])
 }
 
 class IInstrumentsNetworkStatistics: IInstrumentsBase {
@@ -51,8 +51,7 @@ extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
     
     func response(_ response: DTXReceiveObject) {
         
-        if  let config = self.sampleConfig,
-            let response = response.object as? [UInt32 : [String : Any]] {
+        if let response = response.object as? [UInt32 : [String : Any]] {
             var result = [UInt32 : IInstrumentsNetworkStatisticsModel]()
             let mapper = Mapper<IInstrumentsNetworkStatisticsModel>()
             response.forEach { item in
@@ -60,7 +59,7 @@ extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
                     result[item.key] = model
                 }
             }
-            self.delegate?.process(modelMap: result, arg: P.sample(config: config).arg)
+            self.delegate?.process(modelMap: result)
         }
     }
 }
@@ -98,16 +97,16 @@ extension IInstrumentsNetworkStatistics {
                 case .start(let pids):
                     let arg = DTXArguments()
                     arg.append(pids)
-                    return IInstrumentArgs(padding: 1, selector: "startSamplingForPIDs:", dtxArg: arg)
+                    return IInstrumentArgs("startSamplingForPIDs:", dtxArg: arg)
                 case .stop(let pids):
                     let arg = DTXArguments()
                     arg.append(pids)
-                    return IInstrumentArgs(padding: 2, selector: "stopSamplingForPIDs:", dtxArg: arg)
+                    return IInstrumentArgs("stopSamplingForPIDs:", dtxArg: arg)
                 case .sample(let config):
                     let arg = DTXArguments()
                     arg.append(config.attributes)
                     arg.append(config.pids)
-                    return IInstrumentArgs(padding: 3, selector: "sampleAttributes:forPIDs:", dtxArg: arg)
+                    return IInstrumentArgs("sampleAttributes:forPIDs:", dtxArg: arg)
             }
         }
     }

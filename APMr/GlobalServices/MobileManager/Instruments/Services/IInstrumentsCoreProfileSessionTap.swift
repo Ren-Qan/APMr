@@ -53,8 +53,8 @@ extension IInstrumentsCoreProfileSessionTap {
         
         var arg: IInstrumentArgs {
             switch self {
-                case .start: return IInstrumentArgs(padding: 1, selector: "start")
-                case .stop: return IInstrumentArgs(padding: 2, selector: "stop")
+                case .start: return IInstrumentArgs("start")
+                case .stop: return IInstrumentArgs("stop")
                 case .setConfig:
                     let config: [String: Any] = [
                         "rp": 100,
@@ -78,7 +78,7 @@ extension IInstrumentsCoreProfileSessionTap {
                     ]
                     let arg = DTXArguments()
                     arg.append(config)
-                    return IInstrumentArgs(padding: 3, selector: "setConfig:", dtxArg: arg)
+                    return IInstrumentArgs("setConfig:", dtxArg: arg)
             }
         }
     }
@@ -90,7 +90,7 @@ extension IInstrumentsCoreProfileSessionTap {
         
         func parse(data: Data) {
             let version = Data(data.prefix(4))
-
+            
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
                 p1(data)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
@@ -114,17 +114,38 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
     }
     
     func p3(_ data: Data) {
-        let header = KDHeaderV3(data: data)
-        print(data)
+        
+        
     }
     
     func p4(_ data: Data) {
         
     }
+    
 }
 
 extension IInstrumentsCoreProfileSessionTap.Parser {
-    struct KDHeaderV3: Codable {
+    enum Tag: UInt32 {
+        case sshot = 0x8002
+        case images = 0x8004
+        case kernelExtensions = 0x8005
+        case config = 0x8006
+        case kernel = 0x8008
+        case machine = 0x8c00
+        case cpuEvents = 0x8c01
+        case cpuEvents2 = 0x8013
+        case cpuEventsNull = 0x800e
+        case rawVersion3 = 0x00001000
+        case v3NullChunk = 0x00002000
+        case v3Config = 0x00001b00
+        case v3CpuHeaderTag = 0x00001c00
+        case v3ThreadMap = 0x00001d00
+        case v3RawEvents = 0x00001e00
+    }
+}
+
+extension IInstrumentsCoreProfileSessionTap.Parser {
+    struct KDHeaderV3 {
         var tag: UInt32 = 0
         var sub_tag: UInt32 = 0
         var length: UInt64 = 0
@@ -136,22 +157,20 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         var timezone_minuteswest: UInt32 = 0
         var timezone_dst: UInt32 = 0
         var flags: UInt32 = 0
-        
-        init?(data: Data) {
-            let count = MemoryLayout<KDHeaderV3>.size
-            let result = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> Bool in
-                guard bytes.count >= count else {
-                    return false
-                }
-                let rawPointer = bytes.baseAddress!
-                let typedPointer = rawPointer.assumingMemoryBound(to: KDHeaderV3.self)
-                self = typedPointer.pointee
-                return true
-            }
-            
-            if !result {
-                return nil
-            }
-        }
+    }
+    
+    struct KTracePack {
+        var tag: UInt32 = 0
+        var major: UInt16 = 0
+        var minor: UInt16 = 0
+        var length: UInt64 = 0
+        var data: Data? = nil
+    }
+    
+    struct KDCpuMapHeader {
+        var version: UInt32 = 0
+        var count: UInt32 = 0
     }
 }
+
+

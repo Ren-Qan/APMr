@@ -9,7 +9,7 @@ import Foundation
 import LibMobileDevice
 
 protocol IInstrumentsObjectAllocDelegate: NSObjectProtocol {
-    func prepared(response: [String : Any], arg: IInstrumentRequestArgsProtocol)
+    func prepared(response: [String : Any])
 }
 
 class IInstrumentsObjectAlloc: IInstrumentsBase {
@@ -41,11 +41,8 @@ extension IInstrumentsObjectAlloc: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-        if let config = self.config,
-           response.identifier == P.parpare(config: config).arg.identifier {
-            if let response = response.object as? [String : Any]  {
-                self.delegate?.prepared(response: response, arg: P.parpare(config: config).arg)
-            }
+        if let response = response.object as? [String : Any]  {
+            self.delegate?.prepared(response: response)
         }
     }
 }
@@ -72,14 +69,14 @@ extension IInstrumentsObjectAlloc {
                     let arg = DTXArguments()
                     arg.append(config.launch)
                     arg.append(config.mask)
-                    return IInstrumentArgs(padding: 1, selector: selector, dtxArg: arg)
+                    return IInstrumentArgs(selector, dtxArg: arg)
                     
                 case .collection(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
-                    return IInstrumentArgs(padding: 2, selector: "startCollectionWithPid:", dtxArg: arg)
+                    return IInstrumentArgs("startCollectionWithPid:", dtxArg: arg)
                     
-                case .stop: return IInstrumentArgs(padding: 3, selector: "stopCollection")
+                case .stop: return IInstrumentArgs("stopCollection")
             }
         }
     }

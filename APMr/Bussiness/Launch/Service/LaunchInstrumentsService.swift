@@ -102,7 +102,7 @@ extension LaunchInstrumentsService: IInstrumentsServiceGroupDelegate {
 }
 
 extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
-    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol) {
+    func launch(pid: UInt32) {
         self.monitorPid = pid
     }
 }

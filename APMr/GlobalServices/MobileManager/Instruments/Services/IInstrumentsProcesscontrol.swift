@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 
 protocol IInstrumentsProcesscontrolDelegate: NSObjectProtocol {
-    func launch(pid: UInt32, arg: IInstrumentRequestArgsProtocol)
+    func launch(pid: UInt32)
     
     func outputReceived(_ msg: String)
 }
@@ -47,13 +47,8 @@ extension IInstrumentsProcesscontrol: IInstrumentsServiceProtocol {
         if response.flag == 2,
            let message = response.array?.first as? String {
             delegate?.outputReceived(message)
-        }
-        
-        if let config = self.launchConfig {
-            let arg = P.launch(config: config)
-            if let pid = response.object as? UInt32 {
-                delegate?.launch(pid: pid, arg: arg.arg)
-            }
+        } else if let pid = response.object as? UInt32 {
+            delegate?.launch(pid: pid)
         }
     }
 }
@@ -91,8 +86,7 @@ extension IInstrumentsProcesscontrol {
                     dtx.append(config.arguments)
                     dtx.append(config.options)
                     
-                    let arg = IInstrumentArgs(padding: 1,
-                                              selector: selector,
+                    let arg = IInstrumentArgs(selector,
                                               dtxArg: dtx)
                     
                     return arg
@@ -100,8 +94,7 @@ extension IInstrumentsProcesscontrol {
                 case .kill(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
-                    return IInstrumentArgs(padding: 2,
-                                           selector: "killPid:",
+                    return IInstrumentArgs("killPid:",
                                            dtxArg: arg)
             }
         }

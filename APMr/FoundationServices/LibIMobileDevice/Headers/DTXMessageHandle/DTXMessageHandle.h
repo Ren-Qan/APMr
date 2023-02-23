@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, DTXMessageErrorCode) {
     DTXMessageErrorCodeBadHeaderMagic,
     DTXMessageErrorCodeInvalidConversationIndex,
     DTXMessageErrorCodeReadingFromSocketFailed,
+    DTXMessageErrorCodePayLoadParseFailed,
 };
 
 typedef NS_ENUM(NSUInteger, DTXMessageProgressState) {

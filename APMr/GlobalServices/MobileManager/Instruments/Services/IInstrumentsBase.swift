@@ -9,4 +9,9 @@ import Foundation
 
 class IInstrumentsBase {    
     public weak var instrument: IInstruments? = nil
+    public var identifier: UInt32 = 0
+    public var nextIndentifier: UInt32 {
+        identifier += 1
+        return identifier
+    }
 }
