@@ -139,6 +139,10 @@
         return [(DTSysmonTapMessage *)object dic];
     }
     
+    if (error != NULL) {
+        object = data;
+    }
+    
     return object;
 }
 

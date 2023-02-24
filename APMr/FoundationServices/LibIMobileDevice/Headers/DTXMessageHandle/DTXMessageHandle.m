@@ -58,7 +58,7 @@ struct DTXMessagePayloadHeader {
     mobile_image_mounter_client_t _mounter_client;
         
     NSDictionary *_server_dic;
-    NSMutableDictionary <NSNumber *, DTXPayload *> *_receive_map;
+    NSMutableDictionary <NSString *, DTXPayload *> *_receive_map;
 }
 
 - (void)dealloc {
@@ -303,6 +303,7 @@ struct DTXMessagePayloadHeader {
         NSMutableData *frag = [NSMutableData data];
         uint32_t nbytes = 0;
         uint8_t *fragData = (uint8_t *)malloc(sizeof(uint8_t) * mheader.length);
+                
         while (nbytes < mheader.length) {
             uint8_t *curptr = fragData + nbytes;
             size_t curlen = mheader.length - nbytes;
@@ -314,8 +315,9 @@ struct DTXMessagePayloadHeader {
                 nbytes += nrecv;
             }
         }
-
-        NSNumber *key = [NSNumber.alloc initWithUnsignedInt:mheader.identifier];
+        free(fragData);
+        
+        NSString *key = [NSString stringWithFormat:@"%@-%@", @(mheader.channelCode), @(mheader.identifier)];
         BOOL loadFinish = NO;
         if (mheader.fragmentCount == 1) {
             payload = frag;
@@ -348,7 +350,6 @@ struct DTXMessagePayloadHeader {
     if (pheader -> totalLength + sizeof(struct DTXMessagePayloadHeader) != payload.length) {
         NSString *errorMsg = [NSString.alloc initWithFormat:@"DataLen: %@, \nPayloadHeader.flag: %@, \nPayloadHeader.auxiliaryLength: %@, \nPayloadHeader.totalLength: %@", @(payload.length), @(pheader->flags), @(pheader->auxiliaryLength), @(pheader->totalLength)];
         [self error:DTXMessageErrorCodePayLoadParseFailed message:errorMsg];
-        return NULL;
     }
     
     const uint8_t *auxptr = payload.bytes + sizeof(struct DTXMessagePayloadHeader);

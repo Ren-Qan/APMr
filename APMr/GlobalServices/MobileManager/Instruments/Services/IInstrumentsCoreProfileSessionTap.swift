@@ -17,6 +17,12 @@ class IInstrumentsCoreProfileSessionTap: IInstrumentsBase {
     private lazy var parser = Parser()
 }
 
+extension IInstrumentsCoreProfileSessionTap {
+    func set(traceCodes: [Int64 : String]) {
+        parser.traceCodes = traceCodes
+    }
+}
+
 extension IInstrumentsCoreProfileSessionTap: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         .coreprofilesessiontap
@@ -27,6 +33,8 @@ extension IInstrumentsCoreProfileSessionTap: IInstrumentsServiceProtocol {
             if let data = (dic["sm"] as? [String : Any])?["ktrace"] as? Data {
                 parser.parse(data: data)
             }
+        } else if let data = response.object as? Data {
+            parser.parse(data: data)
         }
     }
 }
@@ -53,32 +61,26 @@ extension IInstrumentsCoreProfileSessionTap {
         
         var arg: IInstrumentArgs {
             switch self {
-            case .start: return IInstrumentArgs("start")
-            case .stop: return IInstrumentArgs("stop")
-            case .setConfig:
-                let config: [String: Any] = [
-                    "rp": 100,
-                    "bm": 1,
-                    "tc": [
-                        [
-                            "kdf2": Set([735576064, 19202048, 67895296, 835321856, 735838208,
+                case .start: return IInstrumentArgs("start")
+                case .stop: return IInstrumentArgs("stop")
+                case .setConfig:
+                    let config: [String: Any] = [
+                        "rp": 100,
+                        "bm": 1,
+                        "tc": [[
+                                "kdf2": [735576064, 19202048, 67895296, 835321856, 735838208,
                                          554762240, 730267648, 520552448, 117440512, 19922944,
-                                         17563648, 17104896, 17367040, 771686400, 520617984, 20971520, 520421376]),
-                            "csd": 128,
-                            "tk": 3,
-                            "ta": [
-                                [3],
-                                [0],
-                                [2],
-                                [1, 1, 0]
+                                         17563648, 17104896, 17367040, 771686400, 520617984, 20971520, 520421376],
+                                "csd": 128,
+                                "tk": 3,
+                                "ta": [[3], [0], [2], [1, 1, 0]],
+                                "uuid": UUID().uuidString.uppercased(),
                             ],
-                            "uuid": UUID().uuidString.uppercased(),
                         ],
-                    ],
-                ]
-                let arg = DTXArguments()
-                arg.append(config)
-                return IInstrumentArgs("setConfig:", dtxArg: arg)
+                    ]
+                    let arg = DTXArguments()
+                    arg.append(config)
+                    return IInstrumentArgs("setConfig:", dtxArg: arg)
             }
         }
     }
@@ -86,7 +88,7 @@ extension IInstrumentsCoreProfileSessionTap {
 
 extension IInstrumentsCoreProfileSessionTap {
     fileprivate class Parser {
-        private var traces: [Any] = []
+        var traceCodes: [Int64 : String] = [:]
         
         func parse(data: Data) {
             let version = Data(data.prefix(4))
@@ -105,6 +107,10 @@ extension IInstrumentsCoreProfileSessionTap {
 }
 
 extension IInstrumentsCoreProfileSessionTap.Parser {
+    private func loadEmptyBytes() {
+        
+    }
+    
     func p1(_ data: Data) {
         
     }
@@ -114,96 +120,15 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
     }
     
     func p3(_ data: Data) {
-        let input = InputStream(data: data)
-        input.open()
         
-        var offset = 0
-        var header = KDHeaderV3()
-        offset += input.read(&header, maxLength: MemoryLayout<KDHeaderV3>.size)
-        
-        func readEmpty() {
-            var empty: UInt8 = 0
-            while (offset < data.count && empty == 0) {
-                empty = UInt8(data[offset])
-                if empty == 0 {
-                    offset += input.read(&empty, maxLength: 1)
-                }
-            }
-        }
-        
-        while input.hasBytesAvailable {
-            print("===========")
-            var pack = KTracePack()
-            offset += input.read(&pack, maxLength: MemoryLayout<KTracePack>.size)
-            
-            print(pack)
-            
-            let len = Int(pack.length)
-            var pointer = UnsafeMutablePointer<UInt8>.allocate(capacity: len)
-            offset += input.read(pointer, maxLength: len)
-            let packData = Data(bytes: pointer, count: len)
-            pointer.deallocate()
-            
-            print(packData)
-            
-            guard let tag = Tag(rawValue: pack.tag) else {
-                break
-            }
-            
-            switch tag {
-                case .cpuEventsNull: continue
-                case .v3NullChunk: continue
-                case .config:
-                    print("config")
-                    do {
-                        let dic = try PropertyListSerialization.propertyList(from: packData,
-                                                                             options: .mutableContainersAndLeaves,
-                                                                             format: nil)
-                        print(dic)
-                    } catch { }
-                    readEmpty()
-                case .sshot:
-                    print("sshot")
-                case .kernel:
-                    print("kernel")
-                    readEmpty()
-                case .machine:
-                    print("machine")
-                    do {
-                        let dic = try PropertyListSerialization.propertyList(from: packData,
-                                                                             options: .mutableContainersAndLeaves,
-                                                                             format: nil)
-                        print(dic)
-                    } catch { }
-                    
-                    readEmpty()
-                case .v3CpuHeaderTag:
-                    let len = Int(pack.length) - MemoryLayout<KDCpuMapHeader>.size
-                    var i = 0
-                    
-                    while i < len {
-                        var cpuInfo = KDCpuMap()
-                        print(cpuInfo)
-                        i += input.read(&cpuInfo, maxLength: MemoryLayout<KDCpuMap>.size)
-                    }
-                    offset += len
-                    print("v3CpuHeaderTag")
-                case .v3ThreadMap:
-                    print("setThread")
-                case .v3RawEvents:
-                    print("setThread")
-                default: continue
-            }
-        }
-        
-        
-        input.close()
     }
     
     func p4(_ data: Data) {
         
     }
 }
+
+
 
 extension IInstrumentsCoreProfileSessionTap.Parser {
     enum Tag: UInt32 {
@@ -238,6 +163,12 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         var timezone_minuteswest: UInt32 = 0
         var timezone_dst: UInt32 = 0
         var flags: UInt32 = 0
+    }
+    
+    struct KDSubHeaderV3 {
+        var tag: UInt32 = 0
+        var sub_tag: UInt32 = 0
+        var length: UInt64 = 0
     }
     
     struct KTracePack {

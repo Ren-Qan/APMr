@@ -48,7 +48,9 @@ extension LaunchInstrumentsService {
             client.setConfig()
             client.start()
             
-            launch(app: app)
+            DispatchQueue.global().asyncAfter(deadline: .now() + 4) {
+                self.launch(app: app)
+            }
         }
     }
     
@@ -110,6 +112,9 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     func trace(codes: [Int64 : String]) {
         self.codes = codes
+        if let client: IInstrumentsCoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
+            client.set(traceCodes: codes)
+        }
     }
     
     func machTime(info: [Any]) {

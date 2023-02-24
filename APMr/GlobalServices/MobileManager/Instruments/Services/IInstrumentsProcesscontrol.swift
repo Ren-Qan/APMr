@@ -63,7 +63,8 @@ extension IInstrumentsProcesscontrol {
         
         static func common(_ path: String = "",
                            _ container: String = "",
-                           bundle: String) -> LaunchConfig {
+                           bundle: String,
+                           killExisting: Bool = true) -> LaunchConfig {
             let item = LaunchConfig(bundle: bundle,
                                     options: ["StartSuspendedKey": false, "KillExisting": true])
             return item
