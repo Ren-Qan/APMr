@@ -86,71 +86,88 @@ struct DTXMessagePayloadHeader {
         return NO;
     }
     
+    BOOL state = YES;
+    
+    plist_t mounter_lookup_result = NULL;
+    char *signature_string = NULL;
+    uint64_t signture_length = 0;
+    char * image_path = NULL;
+    plist_t mount_image_result = NULL;
+    
+    
     [self progress:DTXMessageProgressStateMonterStartService message:@"mobile_image_mounter_start_service"];
-    int error = mobile_image_mounter_start_service(device, &_mounter_client, "INSTRUMENTS");
-    if (error != 0) {
+    if (mobile_image_mounter_start_service(device, &_mounter_client, "INSTRUMENTS") != 0) {
         [self error:DTXMessageErrorCodeMounterStartFailed message:@"mounter_start_service_failed"];
-        return NO;
+        state = NO;
     }
     
-    plist_t mounter_lookup_result;
-    [self progress:DTXMessageProgressStateMonterLookupImage message:@"mobile_image_mounter_lookup_image"];
-    if (mobile_image_mounter_lookup_image(_mounter_client, "Developer", &mounter_lookup_result) != 0) {
-        [self error:DTXMessageErrorCodeMounterLookupImageFailed message:@"mounter_lookup_image_failed"];
-        return NO;
+    if (state) {
+        [self progress:DTXMessageProgressStateMonterLookupImage message:@"mobile_image_mounter_lookup_image"];
+        if (mobile_image_mounter_lookup_image(_mounter_client, "Developer", &mounter_lookup_result) != 0) {
+            [self error:DTXMessageErrorCodeMounterLookupImageFailed message:@"mounter_lookup_image_failed"];
+            state = NO;
+        }
     }
-    
-    [self progress:DTXMessageProgressStateFindSignature message:@"finding ImageSignature"];
-    plist_t signatureDic = plist_dict_get_item(mounter_lookup_result, "ImageSignature");
-    plist_t signatureArr = plist_array_get_item(signatureDic, 0);
+
+    if (state) {
+        [self progress:DTXMessageProgressStateFindSignature message:@"finding ImageSignature"];
+        plist_t signature_map = plist_dict_get_item(mounter_lookup_result, "ImageSignature");
+        plist_t signature_arr = plist_array_get_item(signature_map, 0);
+                
+        plist_get_data_val(signature_arr, &signature_string, &signture_length);
         
-    char *signatureString;
-    uint64_t signtureLen;
-    plist_get_data_val(signatureArr, &signatureString, &signtureLen);
-    
-    plist_free(signatureDic);
-    if (signtureLen <= 0 || signatureString == NULL) {
-        [self error:DTXMessageErrorCodeNotFoundSignature message:@"not found signature"];
-        return NO;
+        if (signture_length <= 0 || signature_string == NULL) {
+            [self error:DTXMessageErrorCodeNotFoundSignature message:@"not found signature"];
+            state = NO;
+        }
     }
     
-    // upload image
-    [self progress:DTXMessageProgressStateMonterUploadImage message:@"mobile_image_mounter_upload_image"];
-    if (mobile_image_mounter_upload_image(_mounter_client, "Developer", 9, signatureString, (uint16_t)signtureLen, upload_mounter_callback, NULL) != 0) {
-        [self error:DTXMessageErrorCodeUploadImageFailed message:@"upload image error"];
-        return NO;
+    if (state) {
+        [self progress:DTXMessageProgressStateMonterUploadImage message:@"mobile_image_mounter_upload_image"];
+        if (mobile_image_mounter_upload_image(_mounter_client, "Developer", 9, signature_string, (uint16_t)signture_length, upload_mounter_callback, NULL) != 0) {
+            [self error:DTXMessageErrorCodeUploadImageFailed message:@"upload image error"];
+            state = NO;
+        }
     }
     
-    // get imagePath
-    [self progress:DTXMessageProgressStateFindImagePath message:@"find_image_path"];
-    char * image_path = find_image_path(device);
-    if (image_path == NULL) {
-        [self error:DTXMessageErrorCodeNotFoundImagePath message:@"not found imagePath"];
-        return NO;
+    if (state) {
+        [self progress:DTXMessageProgressStateFindImagePath message:@"find_image_path"];
+        image_path = find_image_path(device);
+        if (image_path == NULL) {
+            [self error:DTXMessageErrorCodeNotFoundImagePath message:@"not found imagePath"];
+            state = NO;
+        }
+    }
+
+    if (state) {
+        [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
+        if (mobile_image_mounter_mount_image(_mounter_client, image_path, signature_string, signture_length, "Developer", &mount_image_result) != 0) {
+            [self error:DTXMessageErrorCodeMonterMountImageFailed message:@"mount image failed"];
+            state = NO;
+        }
     }
     
-    plist_t result = NULL;
-    [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
-    if (mobile_image_mounter_mount_image(_mounter_client, image_path, signatureString, signtureLen, "Developer", &result) != 0) {
-        [self error:DTXMessageErrorCodeMonterMountImageFailed message:@"mount image failed"];
-        free(image_path);
-        return NO;
+    if (state) {
+        [self progress:DTXMessageProgressStateStartInstrumentsService message:@"service_client_factory_start_service"];
+        if (service_client_factory_start_service(device, REMOTESERVER_SERVICE_NAME, (void **)(&_connection), "Remote", SERVICE_CONSTRUCTOR(constructor_remote_service), NULL) != 0) {
+            [self error:DTXMessageErrorCodeStartInstrumentsServiceFailed message:@"strat instruments service failed"];
+            state = NO;
+        }
     }
     
-    free(image_path);
+    if (state) {
+        if (_connection) {
+            state = [self instrumentsShakeHand];
+        }
+    }
         
-    // service start
-    [self progress:DTXMessageProgressStateStartInstrumentsService message:@"service_client_factory_start_service"];
-    if (service_client_factory_start_service(device, REMOTESERVER_SERVICE_NAME, (void **)(&_connection), "Remote", SERVICE_CONSTRUCTOR(constructor_remote_service), NULL) != 0) {
-        [self error:DTXMessageErrorCodeStartInstrumentsServiceFailed message:@"strat instruments service failed"];
-        return NO;
-    }
     
-    if (_connection) {
-        return [self instrumentsShakeHand];
-    }
+    if (image_path) free(image_path);
+    if (signature_string) free(signature_string);
+    if (mount_image_result) plist_free(mount_image_result);
+    if (mounter_lookup_result) plist_free(mounter_lookup_result);
     
-    return NO;
+    return state;
 }
 
 - (BOOL)instrumentsShakeHand {
@@ -430,12 +447,12 @@ char * idevice_get_version(idevice_t device) {
     }
     
     char *s_version = NULL;
-    
     lockdownd_client_t client_loc = NULL;
+    plist_t p_version = NULL;
+    
     lockdownd_client_new(device, &client_loc, "getVersion");
     
-    plist_t p_version = NULL;
-    if (lockdownd_get_value(client_loc, NULL, "ProductVersion", &p_version) == LOCKDOWN_E_SUCCESS) {
+    if (lockdownd_get_value(client_loc, NULL, "ProductVersion", &p_version) == 0) {
         plist_get_string_val(p_version, &s_version);
     }
     

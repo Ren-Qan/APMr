@@ -107,12 +107,22 @@ extension IInstrumentsCoreProfileSessionTap {
 }
 
 extension IInstrumentsCoreProfileSessionTap.Parser {
-    private func loadEmptyBytes() {
+    private func readdEmptyBytes(_ data: Data, stream: InputStream, offset: Int) -> Int {
+        var empty: UInt8 = 0
+        var index = offset
         
+        while (index < data.count && empty == 0) {
+            empty = UInt8(data[offset])
+            if empty == 0 {
+                index += stream.read(&empty, maxLength: 1)
+            }
+        }
+
+        return index - offset
     }
     
     func p1(_ data: Data) {
-        
+
     }
     
     func p2(_ data: Data) {
@@ -120,7 +130,46 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
     }
     
     func p3(_ data: Data) {
+        guard data.count > 0 else {
+            return
+        }
         
+        var offset = 0
+        let stream = InputStream(data: data)
+        stream.open()
+        
+        let header = UnsafeMutablePointer<KDHeaderV3>.allocate(capacity: 1)
+        offset += stream.read(header, maxLength: MemoryLayout<KDHeaderV3>.size)
+        
+        while (stream.hasBytesAvailable) {
+            let subheader = UnsafeMutablePointer<KDSubHeaderV3>.allocate(capacity: 1)
+            offset += stream.read(subheader, maxLength: MemoryLayout<KDSubHeaderV3>.size)
+            
+            if let tag = Tag(rawValue: subheader.pointee.tag) {
+                let dataLen = Int(subheader.pointee.length)
+                var dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: dataLen)
+                offset += stream.read(dataP, maxLength: dataLen)
+                let subData = Data(bytes: dataP, count: dataLen)
+
+                if let map = try? PropertyListSerialization.propertyList(from: subData, format: nil) as? [String : Any] {
+                    print(map)
+                }
+                
+                if tag == .kernel || tag == .machine || tag == .config {
+                    offset += readdEmptyBytes(data, stream: stream, offset: offset)
+                }
+                
+                dataP.deallocate()
+                
+                if tag == .rawVersion3 || tag == .cpuEventsNull {
+                    continue
+                }
+            }
+            subheader.deallocate()
+        }
+        
+        header.deallocate()
+        stream.close()
     }
     
     func p4(_ data: Data) {
@@ -164,14 +213,8 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         var timezone_dst: UInt32 = 0
         var flags: UInt32 = 0
     }
-    
+        
     struct KDSubHeaderV3 {
-        var tag: UInt32 = 0
-        var sub_tag: UInt32 = 0
-        var length: UInt64 = 0
-    }
-    
-    struct KTracePack {
         var tag: UInt32 = 0
         var major: UInt16 = 0
         var minor: UInt16 = 0

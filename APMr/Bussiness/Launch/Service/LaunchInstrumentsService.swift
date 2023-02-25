@@ -48,7 +48,7 @@ extension LaunchInstrumentsService {
             client.setConfig()
             client.start()
             
-            DispatchQueue.global().asyncAfter(deadline: .now() + 4) {
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
                 self.launch(app: app)
             }
         }
