@@ -91,6 +91,9 @@ extension IInstrumentsCoreProfileSessionTap {
         var traceCodes: [Int64 : String] = [:]
         
         func parse(data: Data) {
+            guard data.count > 0 else {
+                return
+            }
             let version = Data(data.prefix(4))
             
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
@@ -107,73 +110,122 @@ extension IInstrumentsCoreProfileSessionTap {
 }
 
 extension IInstrumentsCoreProfileSessionTap.Parser {
-    private func readdEmptyBytes(_ data: Data, stream: InputStream, offset: Int) -> Int {
-        var empty: UInt8 = 0
-        var index = offset
-        
-        while (index < data.count && empty == 0) {
-            empty = UInt8(data[offset])
-            if empty == 0 {
-                index += stream.read(&empty, maxLength: 1)
-            }
-        }
-
-        return index - offset
-    }
-    
     func p1(_ data: Data) {
 
     }
     
     func p2(_ data: Data) {
-        
-    }
-    
-    func p3(_ data: Data) {
-        guard data.count > 0 else {
-            return
-        }
-        
-        var offset = 0
         let stream = InputStream(data: data)
         stream.open()
         
-        let header = UnsafeMutablePointer<KDHeaderV3>.allocate(capacity: 1)
-        offset += stream.read(header, maxLength: MemoryLayout<KDHeaderV3>.size)
-        
-        while (stream.hasBytesAvailable) {
-            let subheader = UnsafeMutablePointer<KDSubHeaderV3>.allocate(capacity: 1)
-            offset += stream.read(subheader, maxLength: MemoryLayout<KDSubHeaderV3>.size)
-            
-            if let tag = Tag(rawValue: subheader.pointee.tag) {
-                let dataLen = Int(subheader.pointee.length)
-                var dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: dataLen)
-                offset += stream.read(dataP, maxLength: dataLen)
-                let subData = Data(bytes: dataP, count: dataLen)
+        var header = KDHeaderV2()
+        stream.read(&header, maxLength: MemoryLayout<KDHeaderV2>.size)
 
-                if let map = try? PropertyListSerialization.propertyList(from: subData, format: nil) as? [String : Any] {
-                    print(map)
-                }
-                
-                if tag == .kernel || tag == .machine || tag == .config {
-                    offset += readdEmptyBytes(data, stream: stream, offset: offset)
-                }
-                
-                dataP.deallocate()
-                
-                if tag == .rawVersion3 || tag == .cpuEventsNull {
-                    continue
-                }
+        let empty = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x100)
+        stream.read(empty, maxLength: 0x100)
+        empty.deallocate()
+        
+        let mapCount = Int(header.number_of_treads)
+        var threadI = 0
+        
+        var threadMap: [UInt64 : KDThreadMap] = [:]
+        
+        while stream.hasBytesAvailable, threadI < mapCount {
+            var thread = KDThreadMap()
+            
+            stream.read(&thread.thread, maxLength: 8)
+            stream.read(&thread.pid, maxLength: 4)
+            
+
+            let cStringsData = UnsafeMutablePointer<UInt8>.allocate(capacity: 20)
+            stream.read(cStringsData, maxLength: 20)
+            var i = 0
+            var cString = [UInt8]()
+            while i < 20, (cStringsData + i).pointee != 0 {
+                cString.append((cStringsData + i).pointee)
+                i += 1
             }
-            subheader.deallocate()
+            cString.append(0)
+            cStringsData.deallocate()
+            
+            thread.process = String(cString: cString)
+            threadI += 1
+            threadMap[thread.thread] = thread
         }
         
-        header.deallocate()
+        while stream.hasBytesAvailable {
+            let list: [UInt32] = [0x1f, 0x2b, 0x31]
+            var entry = KDEBUGEntry()
+            stream.read(&entry, maxLength: 64)
+            if (list.contains([entry.class_code])) {
+                print("======\(threadMap[entry.thread])")
+            }
+        }
+        
         stream.close()
     }
     
+    func p3(_ data: Data) {
+//        var offset = 0
+//        let stream = InputStream(data: data)
+//        stream.open()
+//
+//        let header = UnsafeMutablePointer<KDHeaderV3>.allocate(capacity: 1)
+//        offset += stream.read(header, maxLength: MemoryLayout<KDHeaderV3>.size)
+//
+//        while (stream.hasBytesAvailable) {
+//            let subheader = UnsafeMutablePointer<KDSubHeaderV3>.allocate(capacity: 1)
+//            offset += stream.read(subheader, maxLength: MemoryLayout<KDSubHeaderV3>.size)
+//
+//            if let tag = Tag(rawValue: subheader.pointee.tag) {
+//                let dataLen = Int(subheader.pointee.length)
+//                let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: dataLen)
+//                offset += stream.read(dataP, maxLength: dataLen)
+//                let subData = Data(bytes: dataP, count: dataLen)
+//
+//                if let map = try? PropertyListSerialization.propertyList(from: subData, format: nil) as? [String : Any] {
+////                    print(map)
+//                }
+//
+//                dataP.deallocate()
+//
+//                if tag == .kernel || tag == .machine || tag == .config {
+//                    var empty: UInt8 = 0
+//                    while (offset < data.count && empty == 0) {
+//                        empty = UInt8(data[offset])
+//                        if empty == 0 {
+//                            offset += stream.read(&empty, maxLength: 1)
+//                        }
+//                    }
+//                }
+//
+//                if tag == .v3RawEvents {
+//
+//                }
+//
+//                if tag == .rawVersion3 || tag == .cpuEventsNull {
+//                    subheader.deallocate()
+//                    continue
+//                }
+//            }
+//            subheader.deallocate()
+//        }
+//
+//        header.deallocate()
+//        stream.close()
+    }
+
     func p4(_ data: Data) {
-        
+        return
+//        let stream = InputStream(data: data)
+//        stream.open()
+//
+//        while stream.hasBytesAvailable {
+//            var entry = KDEBUGEntry()
+//            stream.read(&entry, maxLength: 64)
+//        }
+//
+//        stream.close()
     }
 }
 
@@ -232,7 +284,40 @@ extension IInstrumentsCoreProfileSessionTap.Parser {
         var name = Data(capacity: 8)
         var args = Array<UInt32>(repeating: 0, count: 6)
     }
+    
+    struct KDHeaderV2 {
+        var tag: UInt32 = 0
+        var number_of_treads: UInt32 = 0
+        var arg1: Int32 = 0
+        var arg2: Int32 = 0
+        var arg3: Int32 = 0
+        var is_64bit: UInt32 = 0
+        var tick_frequency: UInt64 = 0
+    }
+    
+    struct KDThreadMap {
+        var thread: UInt64 = 0
+        var pid: UInt32 = 0
+        var process = String()
+    }
+    
+    struct KDEBUGEntry {
+        var timestamp: UInt64 = 0
+        var arg1: UInt64 = 0
+        var arg2: UInt64 = 0
+        var arg3: UInt64 = 0
+        var arg4: UInt64 = 0
+        var thread: UInt64 = 0
+        var debug_id: UInt32 = 0
+        var unused: UInt32 = 0
+        var cpu_id: UInt64 = 0
+        
+        var event_id: UInt32 { debug_id & UInt32(0xfffffffc) }
+        var func_code: UInt32 { debug_id & UInt32(0x00000003) }
+        var class_code: UInt32 { (debug_id & UInt32(0xff000000)) >> 24 }
+        var subclass_code: UInt32 { (debug_id & UInt32(0x00ff0000)) >> 16 }
+        var final_code: UInt32 { (debug_id & UInt32(0x0000fffc)) >> 2 }
+    }
 }
-
 
 

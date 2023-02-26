@@ -37,7 +37,9 @@ struct DTXMessagePayloadHeader {
 
 @interface DTXPayload : NSObject
 
-@property (nonatomic, assign) NSUInteger identifier;
+@property (nonatomic, assign) uint32_t identifier;
+
+@property (nonatomic, assign) uint32_t channel;
 
 @property (nonatomic, strong, readonly) NSMutableArray<NSData *> *payloads;
 
@@ -171,7 +173,7 @@ struct DTXMessagePayloadHeader {
 }
 
 - (BOOL)instrumentsShakeHand {
-    [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instrumentsShakeHand"];
+    [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instruments_shake_and"];
     
     NSDictionary * par = @{
         @"com.apple.private.DTXBlockCompression" : [NSNumber numberWithLongLong:2],
@@ -203,6 +205,8 @@ struct DTXMessagePayloadHeader {
     
     if (!success) {
         [self error:DTXMessageErrorCodeInstrumentsHandShakeFailed message:@"instruments hand shake failed"];
+    } else {
+        [self progress:DTXMessageProgressStateSuccess message:@"success"];
     }
     
     return success;
@@ -344,12 +348,15 @@ struct DTXMessagePayloadHeader {
             if (!localPayload) {
                 localPayload = [DTXPayload.alloc initWithCapacity:mheader.fragmentCount];
                 localPayload.identifier = mheader.identifier;
+                localPayload.channel = mheader.channelCode;
                 _receive_map[key] = localPayload;
             }
             
             [localPayload addData:frag index:mheader.fragmentId];
             if (mheader.fragmentId == mheader.fragmentCount - 1) {
                 payload = [localPayload data];
+                channelCode = localPayload.channel;
+                identifier = localPayload.identifier;
                 loadFinish = YES;
             }
         }

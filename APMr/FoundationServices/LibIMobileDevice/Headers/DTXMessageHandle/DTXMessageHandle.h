@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger, DTXMessageProgressState) {
     DTXMessageProgressStateMonterMountImage,
     DTXMessageProgressStateStartInstrumentsService,
     DTXMessageProgressStateInstrumentsHandShake,
+    DTXMessageProgressStateSuccess,
 };
 
 @protocol DTXMessageHandleDelegate <NSObject>
