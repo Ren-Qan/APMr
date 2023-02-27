@@ -372,7 +372,7 @@ struct DTXMessagePayloadHeader {
     struct DTXMessagePayloadHeader *pheader = (struct DTXMessagePayloadHeader *)(payload.bytes);
     
     if (pheader -> totalLength + sizeof(struct DTXMessagePayloadHeader) != payload.length) {
-        NSString *errorMsg = [NSString.alloc initWithFormat:@"DataLen: %@, \nPayloadHeader.flag: %@, \nPayloadHeader.auxiliaryLength: %@, \nPayloadHeader.totalLength: %@", @(payload.length), @(pheader->flags), @(pheader->auxiliaryLength), @(pheader->totalLength)];
+        NSString *errorMsg = [NSString.alloc initWithFormat:@"\nChannelID: %@, \nDataLen: %@, \nPayloadHeader.flag: %@, \nPayloadHeader.auxiliaryLength: %@, \nPayloadHeader.totalLength: %@", @(channelCode), @(payload.length), @(pheader->flags), @(pheader->auxiliaryLength), @(pheader->totalLength)];
         [self error:DTXMessageErrorCodePayLoadParseFailed message:errorMsg];
     }
     

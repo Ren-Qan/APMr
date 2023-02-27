@@ -11,6 +11,9 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     private var monitorPid: UInt32? = nil
 
     private var readSource: DispatchSourceRead?
+    
+    private lazy var parser = Parser()
+    
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let group = IInstrumentsServiceGroup()
         group.delegate = self
@@ -28,11 +31,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         
         return group
     }()
-    
-    // MARK: - Test
-    private var codes: [Int64 : String] = [:]
-    private var machInfo: [Any] = []
-    private var usecs_since_epoch: TimeInterval = 0
 }
 
 extension LaunchInstrumentsService {
@@ -48,7 +46,7 @@ extension LaunchInstrumentsService {
             client.setConfig()
             client.start()
             
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
                 self.launch(app: app)
             }
         }
@@ -58,9 +56,9 @@ extension LaunchInstrumentsService {
         if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
             var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId)
             config.arguments = [
-                "OS_ACTIVITY_DT_MODE": true,
-                "HIPreventRefEncoding": true,
-                "DYLD_PRINT_TO_STDERR": true,
+                "OS_ACTIVITY_DT_MODE": 1,
+                "HIPreventRefEncoding": 1,
+                "DYLD_PRINT_TO_STDERR": 1,
             ]
             client.launch(config: config)
         }
@@ -111,19 +109,18 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     func trace(codes: [Int64 : String]) {
-        self.codes = codes
-        if let client: IInstrumentsCoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
-            client.set(traceCodes: codes)
-        }
+        parser.traceCodes = codes
     }
     
     func machTime(info: [Any]) {
-        self.machInfo = info
-        usecs_since_epoch = Date().timeIntervalSince1970 * 100000
+        parser.machInfo = info
+        parser.usecs_since_epoch = Date().timeIntervalSince1970 * 1000000
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
-    
+    func launch(data: Data) {
+        parser.parse(data: data)
+    }
 }
 
