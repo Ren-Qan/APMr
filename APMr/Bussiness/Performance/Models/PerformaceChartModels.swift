@@ -12,25 +12,21 @@ class PerformanceChartModel {
     var models: [ChartModel] = []
     var count: Int = 0
     
-    private func reset(_ i: PerformanceIndicatorInterface) {
-        var models = [ChartModel]()
-        
-        i.indicators.forEach { indicator in
+    private func setup(_ i: PerformanceIndicatorInterface) {
+        self.models = i.indicators.compactMap{ indicator in
             let series = indicator.values.compactMap { value in
                 if value.chartEnable {
                     return ChartSeriesItem(value: value.name)
                 }
                 return nil
             }
-            let model = ChartModel(type: indicator.type, series: series)
-            models.append(model)
+            return ChartModel(type: indicator.type, series: series)
         }
-        self.models = models
     }
     
     func add(_ i: PerformanceIndicatorInterface, _ xAxisMaxCount: Int) {
         if i.indicators.count != models.count {
-            reset(i)
+            setup(i)
         }
         
         let count = models.count
@@ -72,8 +68,13 @@ class PerformanceChartModel {
         self.count += 1
     }
     
-    func reset() {
+    func reset(_ i: PerformanceIndicatorInterface) {
         count = 0
+        
+        if i.indicators.count != models.count {
+            setup(i)
+        }
+        
         models.forEach { model in
             model.series.forEach { series in
                 series.landmarks = []

@@ -22,7 +22,11 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     
     @Published var xAxisPageCount = 100
     
-    public let pCM = PerformanceChartModel()
+    public lazy var pCM: PerformanceChartModel = {
+        let model = PerformanceChartModel()
+        model.reset(cSPI)
+        return model
+    }()
     
     // MARK: - Private
     
@@ -56,14 +60,14 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     
     private var timer: Timer?
         
-    private var currentSeconds: Double = 0
+    private var currentSeconds: Double = 1
     
     private var cSPI = PerformanceIndicator()
     
     private var lockdown: ILockdown?
     
     private var diagnostics: IDiagnosticsRelay?
-    
+        
     deinit {
         timer?.invalidate()
         timer = nil
@@ -117,7 +121,7 @@ extension PerformanceInstrumentsService {
         timer = nil
         serviceGroup.stop()
         monitorPid = 0
-        currentSeconds = 0
+        currentSeconds = 1
         isLaunchingApp = false
         isMonitoringPerformance = false
         diagnostics = nil
@@ -187,16 +191,14 @@ extension PerformanceInstrumentsService {
     
     func resetData() {
         cSPI = PerformanceIndicator()
-        currentSeconds = 0
-        pCM.reset()
+        currentSeconds = 1
+        pCM.reset(cSPI)
         summary.reset()
     }
     
     private func record() {
         debugPrint("第\(currentSeconds)秒-数据同步")
-        
-        let beforeModelCount = pCM.models.count
-        
+                
         summary.add(cSPI)
         pCM.add(cSPI, xAxisPageCount)
         
@@ -204,10 +206,6 @@ extension PerformanceInstrumentsService {
         cSPI.seconds = CGFloat(currentSeconds)
         
         DispatchQueue.main.async {
-            if beforeModelCount != self.pCM.count {
-                self.objectWillChange.send()
-            }
-            
             self.pCM.models.forEach { model in
                 if model.visiable {
                     model.objectWillChange.send()

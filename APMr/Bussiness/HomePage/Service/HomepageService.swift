@@ -21,12 +21,21 @@ class HomepageService: ObservableObject {
     
     // MARK: - Sider -
     @Published var selectionSider: ApplicationSider = (siders.first)!
+    
+#if DEBUG
     public static let siders = [
         ApplicationSider(state: .performance, title: "性能测评"),
         ApplicationSider(state: .launch, title: "启动分析"),
         ApplicationSider(state: .lag, title: "卡顿分析"),
         ApplicationSider(state: .crash, title: "崩溃分析"),
     ]
+#elseif RELEASE
+    public static let siders = [
+        ApplicationSider(state: .performance, title: "性能测评"),
+    ]
+#endif
+    
+
     
     // MARK: - Navigation Bar
     @Published var selectDevice: DeviceItem? = nil
