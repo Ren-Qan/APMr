@@ -85,11 +85,11 @@ struct KDEBUGEntry {
     var cpu_id: UInt32 = 0
     var unused: UInt64 = 0
     
-    var event_id: UInt32 { debug_id & UInt32(0xfffffffc) }
-    var func_code: UInt32 { debug_id & UInt32(0x00000003) }
-    var class_code: UInt32 { (debug_id & UInt32(0xff000000)) >> 24 }
-    var subclass_code: UInt32 { (debug_id & UInt32(0x00ff0000)) >> 16 }
-    var final_code: UInt32 { (debug_id & UInt32(0x0000fffc)) >> 2 }
+    var event_id: UInt32 { debug_id & 0xffffffff}
+    var class_code: UInt32 { (event_id >> 24) & 0xff }
+    var subclass_code: UInt32 { (event_id >> 16) & 0xff }
+    var action_code: UInt32 { (event_id >> 2) & 0x3fff }
+    var func_code: UInt32 { event_id & UInt32(0x00000003) }
 }
 
 

@@ -53,8 +53,8 @@ extension IInstproxy {
         instproxy_browse(client_t, filter, &result)
         var resultArr: [IInstproxyAppInfo] = []
         
-        if  let result = result,
-            let arr = plist_to_nsobject(result) as? [[String : Any]] {
+        if let result = result,
+           let arr = plist_to_nsobject(result) as? [[String : Any]] {
             let objects = Mapper<IInstproxyAppInfo>().mapArray(JSONObject: arr) ?? []
             resultArr = objects
         }

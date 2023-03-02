@@ -12,6 +12,8 @@ protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
     func trace(codes: [Int64 : String])
     
     func machTime(info: [Any])
+    
+    func running(process: [[String : Any]])
 }
 
 class IInstrumentsDeviceInfo: IInstrumentsBase {
@@ -51,7 +53,9 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: DTXReceiveObject) {
-        if let arr = response.object as? [Any]  {
+        if let runningProcess = response.object as? [[String : Any]] {
+            self.delegate?.running(process: runningProcess)
+        } else if let arr = response.object as? [Any]  {
             delegate?.machTime(info: arr)
         } else if let codes = response.object as? String {
             let result = codes.split(separator: "\n").reduce(into: [Int64: String]()) { (dict, line) in

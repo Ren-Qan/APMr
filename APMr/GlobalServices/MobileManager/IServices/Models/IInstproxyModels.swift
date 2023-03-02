@@ -23,6 +23,8 @@ struct IInstproxyAppInfo: Mappable, Identifiable {
     var container: String = ""
     var signerIdentity: String?
     var applicationType: AppType = .other
+    var executableName: String = ""
+    
     
     var isDeveloping: Bool {
         guard let signer = signerIdentity else {
@@ -49,5 +51,6 @@ struct IInstproxyAppInfo: Mappable, Identifiable {
         signerIdentity <- map["SignerIdentity"]
         applicationType <- map["ApplicationType"]
         path <- map["BundlePath"]
+        executableName <- map["CFBundleExecutable"]
     }
 }

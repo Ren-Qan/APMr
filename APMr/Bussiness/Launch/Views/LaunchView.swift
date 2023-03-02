@@ -27,11 +27,7 @@ struct LaunchView: View {
                 }
             }
             
-            Button("test") {
-                launchService.test()
-            }
-            
-            Button("test2") {
+            Button("launch") {
                 guard let app = service.selectApp else {
                     return
                 }

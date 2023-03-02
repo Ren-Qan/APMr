@@ -31,36 +31,33 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         
         return group
     }()
+    
+    // MARK: - TEST CODE -
+    var block: (() -> Void)? = nil
+    var killName: String = ""
 }
 
 extension LaunchInstrumentsService {
-    func test() {
+    func core(app: IInstproxyAppInfo) {
+        killName = app.executableName
+        
+        block = { [weak self] in
+            if let client: IInstrumentsProcesscontrol = self?.serviceGroup.client(.processcontrol) {
+                var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId, killExisting: false)
+                config.environment = [
+                    "OS_ACTIVITY_DT_MODE": 1,
+                    "HIPreventRefEncoding": 1,
+                    "DYLD_PRINT_TO_STDERR": 1,
+                    "DYLD_PRINT_ENV" : 1,
+                    "DYLD_PRINT_APIS" : 1,
+                ]
+                client.launch(config: config)
+            }
+        }
+        
         if let client: IInstrumentsDeviceInfo = serviceGroup.client(.deviceinfo) {
             client.machTime()
             client.traceCodes()
-        }
-    }
-    
-    func core(app: IInstproxyAppInfo) {
-        if let client: IInstrumentsCoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
-            client.setConfig()
-            client.start()
-            
-            DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
-                self.launch(app: app)
-            }
-        }
-    }
-    
-    func launch(app: IInstproxyAppInfo) {
-        if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
-            var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId)
-            config.arguments = [
-                "OS_ACTIVITY_DT_MODE": 1,
-                "HIPreventRefEncoding": 1,
-                "DYLD_PRINT_TO_STDERR": 1,
-            ]
-            client.launch(config: config)
         }
     }
 }
@@ -108,8 +105,21 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
+    func running(process: [[String : Any]]) {
+
+    }
+    
     func trace(codes: [Int64 : String]) {
         parser.traceCodes = codes
+        self.block?()
+        self.block = nil
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 4) {
+            if let client: IInstrumentsCoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
+                client.setConfig()
+                client.start()
+            }
+        }
     }
     
     func machTime(info: [Any]) {

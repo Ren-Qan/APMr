@@ -24,24 +24,21 @@ extension LaunchInstrumentsService {
         private var mainUIThread: MainUIThread = .none
         private var threadMap: [UInt64 : KDThreadMap] = [:]
         
-        private var last: Int64 = -1
-        private var start: Int64 = 0
-        
         func parse(data: Data) {
             guard data.count > 0 else {
                 return
             }
             
             let version = Data(data.prefix(4))
-            
+            let parserData = data
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
-//                p1(data)
+                p1(parserData)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
-                p2(data)
+                p2(parserData)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-                // p3(data)
+                p3(data)
             } else {
-//                p4(data)
+                p4(parserData)
             }
         }
     }
@@ -81,134 +78,24 @@ extension LaunchInstrumentsService.Parser {
     }
     
     func decode(_ entry: KDEBUGEntry) {
-        var time: Int64 {
-            guard machInfo.count > 0 else {
-                return -1
-            }
-            let time = Int64(entry.timestamp - UInt64(machInfo[0] as! Int64)) * (machInfo[1] as! Int64) / (machInfo[2] as! Int64)
-            return time
-        }
-        
         let list: [UInt32] = [0x1f, 0x2b, 0x31]
-        if list.contains([entry.class_code]),
-           let process = threadMap[entry.thread] {
-            print("==========")
-            print(process)
-            print(entry)
-//            print(time())
-            if last < 0 {
-                last = time
-                start = last
-            } else {
-                let t = time
-                print("\(t - last) --- \(t - start)")
-                last = t
-            }
-            
-//            decodeAppLifeCycle(entry)
+        if list.contains([entry.class_code]) {
+            decodeAppLifeCycle(entry)
         } else if entry.debug_id == 835321862 {
-            
+
         }
     }
     
     func decodeAppLifeCycle(_ entry: KDEBUGEntry) {
-        func write(_ state: State, _ event: Event, _ scene: String) {
-            print("====\(event.rawValue)====\(scene)====\(state)")
-            record(state, event: event, scene: scene, entry: entry)
+        guard let process = threadMap[entry.thread], process.process != "SpringBoard" else {
+            return
         }
         
-        if entry.class_code == 0x1f { // dyld-init
-            if entry.subclass_code == 0x7,
-               entry.final_code == 13 {
-                write(.begin, .initializing, "System Interface Initialization (Dyld init)")
-            } else if entry.subclass_code == 0x7,
-                      entry.final_code == 1,
-                      entry.func_code == 2 {
-                write(.end, .initializing, "Static Runtime Initialization")
-            }
-        } else if entry.class_code == 0x31 {// AppKit/UIKit common application launch phases
-            if entry.subclass_code == 0xca,
-               entry.final_code == 1,
-               entry.func_code == 2 {
-                write(.end, .launching, "Initial Frame Rendering")
-            }
-        } else if entry.class_code == 0x2b {
-            
-            if entry.subclass_code == 0xd8 { //appkit-init
-                if entry.final_code == 1, entry.func_code == 0 {
-                    if mainUIThread == .none {
-                        write(.begin, .launching, "AppKit Initialization")
-                        mainUIThread = .uikit
-                    } else if mainUIThread == .uikit {
-                        write(.end, .launching, "UIKit Initialization")
-                        write(.begin, .launching, "AppKit Initialization")
-                        mainUIThread = .marzipan
-                    }
-                } else if entry.final_code == 12, entry.func_code == 0 {
-                    write(.end, .launching, "AppKit Initialization")
-                    write(.begin, .launching, "AppKit Scene Creation")
-                } else if entry.final_code == 12, entry.func_code == 1 {
-                    write(.end, .launching, "AppKit Scene Creation")
-                    write(.begin, .launching, "applicationWillFinishLaunching()")
-                } else if entry.final_code == 12, entry.func_code == 2 {
-                    write(.end, .launching, "applicationWillFinishLaunching()")
-                    write(.begin, .launching, "AppKit Scene Creation")
-                } else if entry.final_code == 11, entry.func_code == 1 {
-                    write(.end, .launching, "AppKit Scene Creation")
-                    write(.begin, .launching, "applicationDidFinishLaunching()")
-                } else if entry.final_code == 11, entry.func_code == 2 {
-                    if mainUIThread == .appkit {
-                        write(.end, .launching, "applicationDidFinishLaunching()")
-                        write(.begin, .launching, "Initial Frame Rendering")
-                    } else if mainUIThread == .marzipan {
-                        write(.end, .launching, "applicationDidFinishLaunching()")
-                        write(.begin, .launching, "AppKit Scene Creation")
-                    }
-                }
-            } else if entry.subclass_code == 0x87 { // UIKit application launch phases
-                if entry.final_code == 90, entry.arg1 == 0x32 {
-                    write(.begin, .launching, "UIKit Initialization")
-                    mainUIThread = .uikit
-                } else if entry.final_code == 21 {
-                    if mainUIThread == .uikit {
-                        write(.end, .launching, "UIKit Initialization")
-                        write(.begin, .launching, "UIKit Scene Creation")
-                    } else if mainUIThread == .marzipan {
-                        write(.end, .initializing, "AppKit Scene Creation")
-                        write(.begin, .initializing, "UIKit Scene Creation")
-                    }
-                } else if entry.final_code == 23 {
-                    write(.end, .launching, "UIKit Scene Creation")
-                    write(.begin, .launching, "willFinishLaunchingWithOptions()")
-                } else if entry.final_code == 24 {
-                    write(.end, .launching, "willFinishLaunchingWithOptions()")
-                    write(.begin, .launching, "UIKit Scene Creation")
-                } else if entry.final_code == 25 {
-                    write(.end, .launching, "UIKit Scene Creation")
-                    write(.begin, .launching, "didFinishLaunchingWithOptions()")
-                } else if entry.final_code == 26 {
-                    write(.end, .launching, "didFinishLaunchingWithOptions()")
-                    write(.begin, .launching, "UIKit Scene Creation")
-                } else if entry.final_code == 300 {
-                    write(.end, .launching, "UIKit Scene Creation")
-                    write(.begin, .launching, "sceneWillConnectTo()")
-                } else if entry.final_code == 301 {
-                    write(.end, .launching, "UIKit Scene Creation")
-                    write(.begin, .launching, "sceneWillEnterForeground()")
-                } else if entry.final_code == 313 {
-                    write(.end, .launching, "sceneWillEnterForeground()")
-                    write(.begin, .launching, "UIKit Scene Creation")
-                } else if entry.final_code == 12 {
-                    write(.end, .launching, "UIKit Scene Creation")
-                    write(.begin, .launching, "Initial Frame Rendering")
-                }
-            } else if entry.subclass_code == 0xdc { // appkit-init
-                if entry.final_code == 12,
-                   entry.func_code == 0,
-                   entry.arg1 == 10 {
-                    write(.end, .initializing, "System Interface Initialization (Dyld init)")
-                    write(.begin, .initializing, "Static Runtime Initialization")
-                }
+        print("[\(process.process) ==== \(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
+        
+        if entry.class_code == 31 {
+            if entry.subclass_code == 7 {
+
             }
         }
     }
@@ -255,7 +142,7 @@ extension LaunchInstrumentsService.Parser {
             threadI += 1
             threadMap[thread.thread] = thread
         }
-        
+                
         while stream.hasBytesAvailable {
             var entry = KDEBUGEntry()
             stream.read(&entry, maxLength: 64)
