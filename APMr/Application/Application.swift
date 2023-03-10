@@ -8,16 +8,17 @@
 import SwiftUI
 
 @main
-struct Application: App {    
+struct Application: App {
     var body: some Scene {
         WindowGroup {
             HomepageView()
-                .background {
-                    Color.fabulaBack0
-                }
+                .preferredColorScheme(.dark)
                 .monospaced()
                 .frame(minWidth: 1200)
                 .frame(minHeight: 600)
+                .background {
+                    Color.fabulaBack0
+                }
         }
     }
 }

@@ -30,15 +30,14 @@ extension LaunchInstrumentsService {
             }
             
             let version = Data(data.prefix(4))
-            let parserData = data
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
-                p1(parserData)
+//                p1(parserData)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
-                p2(parserData)
+                p2(data)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-                p3(data)
+//                p3(data)
             } else {
-                p4(parserData)
+                p4(data)
             }
         }
     }
@@ -78,7 +77,7 @@ extension LaunchInstrumentsService.Parser {
     }
     
     func decode(_ entry: KDEBUGEntry) {
-        let list: [UInt32] = [0x1f, 0x2b, 0x31]
+        let list: [UInt32] = [0x1f]
         if list.contains([entry.class_code]) {
             decodeAppLifeCycle(entry)
         } else if entry.debug_id == 835321862 {
@@ -87,11 +86,11 @@ extension LaunchInstrumentsService.Parser {
     }
     
     func decodeAppLifeCycle(_ entry: KDEBUGEntry) {
-        guard let process = threadMap[entry.thread], process.process != "SpringBoard" else {
-            return
-        }
+//        guard let process = threadMap[entry.thread], process.process != "SpringBoard" else {
+//            return
+//        }
         
-        print("[\(process.process) ==== \(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
+        print("[\(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
         
         if entry.class_code == 31 {
             if entry.subclass_code == 7 {
@@ -108,14 +107,16 @@ extension LaunchInstrumentsService.Parser {
     }
     
     func p2(_ data: Data) {
+        var offset = 0
+        
         let stream = InputStream(data: data)
         stream.open()
         
         var header = KDHeaderV2()
-        stream.read(&header, maxLength: MemoryLayout<KDHeaderV2>.size)
+        offset += stream.read(&header, maxLength: MemoryLayout<KDHeaderV2>.size)
         
         let empty = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x100)
-        stream.read(empty, maxLength: 0x100)
+        offset += stream.read(empty, maxLength: 0x100)
         empty.deallocate()
         
         let mapCount = Int(header.number_of_treads)
@@ -124,11 +125,11 @@ extension LaunchInstrumentsService.Parser {
         while stream.hasBytesAvailable, threadI < mapCount {
             var thread = KDThreadMap()
             
-            stream.read(&thread.thread, maxLength: 8)
-            stream.read(&thread.pid, maxLength: 4)
+            offset += stream.read(&thread.thread, maxLength: 8)
+            offset += stream.read(&thread.pid, maxLength: 4)
             
             let cStringsData = UnsafeMutablePointer<UInt8>.allocate(capacity: 20)
-            stream.read(cStringsData, maxLength: 20)
+            offset += stream.read(cStringsData, maxLength: 20)
             var i = 0
             var cString = [UInt8]()
             while i < 20, (cStringsData + i).pointee != 0 {
@@ -143,6 +144,14 @@ extension LaunchInstrumentsService.Parser {
             threadMap[thread.thread] = thread
         }
                 
+        var e: UInt8 = 0
+        while (offset < data.count && e == 0) {
+            e = UInt8(data[offset])
+            if e == 0 {
+                offset += stream.read(&e, maxLength: 1)
+            }
+        }
+        
         while stream.hasBytesAvailable {
             var entry = KDEBUGEntry()
             stream.read(&entry, maxLength: 64)

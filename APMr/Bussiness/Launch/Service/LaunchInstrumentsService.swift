@@ -44,13 +44,6 @@ extension LaunchInstrumentsService {
         block = { [weak self] in
             if let client: IInstrumentsProcesscontrol = self?.serviceGroup.client(.processcontrol) {
                 var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId, killExisting: false)
-                config.environment = [
-                    "OS_ACTIVITY_DT_MODE": 1,
-                    "HIPreventRefEncoding": 1,
-                    "DYLD_PRINT_TO_STDERR": 1,
-                    "DYLD_PRINT_ENV" : 1,
-                    "DYLD_PRINT_APIS" : 1,
-                ]
                 client.launch(config: config)
             }
         }
@@ -111,10 +104,11 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     
     func trace(codes: [Int64 : String]) {
         parser.traceCodes = codes
+        
         self.block?()
         self.block = nil
-
-        DispatchQueue.global().asyncAfter(deadline: .now() + 4) {
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
             if let client: IInstrumentsCoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
                 client.setConfig()
                 client.start()
