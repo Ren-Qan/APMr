@@ -46,12 +46,10 @@
   - `instruments`提供的服务挺多，[参考文章](https://github.com/troybowman/dtxmsg/blob/master/slides.pdf)之后可以尝试一下获取其他`服务`的`selector`。
 
 ### 致谢/参考
-
-- 感谢`字节跳动`的文章[APP性能分析工作台——你的最佳桌面端性能分析助手](https://juejin.cn/post/7052577178587758605).
+- 感谢大佬代码[SYM](https://github.com/zqqf16/SYM)
+- 感谢大佬代码[ios_instruments_client](https://github.com/troybowman/ios_instruments_client)
+- 感谢大佬代码[py-ios-device](https://github.com/YueChen-C/py-ios-device)
+- 感谢大佬代码[taobao-iphone-device](https://github.com/alibaba/taobao-iphone-device)
+- 感谢大佬代码[pymobiledevice3](https://github.com/doronz88/pymobiledevice3)
+- 感谢文章[APP性能分析工作台——你的最佳桌面端性能分析助手](https://juejin.cn/post/7052577178587758605).
   - `libimobiledevice`库调试之后，下一步就是打算接入`Instruments`的服务，幸好有这个文章的`技术说明`,否则花费时间肯定会更多。
-
-- [py-ios-device](https://github.com/YueChen-C/py-ios-device)
-
-- [taobao-iphone-device](https://github.com/alibaba/taobao-iphone-device)
-
-- [pymobiledevice3](https://github.com/doronz88/pymobiledevice3)
