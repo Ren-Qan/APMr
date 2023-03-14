@@ -8,16 +8,25 @@
 import Cocoa
 import LibMobileDevice
 
-protocol IInstrumentsServiceGroupDelegate: NSObjectProtocol {
-    func receive(response: DTXReceiveObject?)
-}
-
-class IInstrumentsServiceGroup {
-    public weak var delegate: IInstrumentsServiceGroupDelegate? = nil
-    
-    public lazy var instruments = IInstruments()
+class IInstrumentsServiceGroup: NSObject {
+    private lazy var instruments: IInstruments = {
+        let instruments = IInstruments()
+        instruments.delegate = self
+        return instruments
+    }()
         
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
+}
+
+extension IInstrumentsServiceGroup: IInstrumentsDelegate {
+    func received(responsed: DTXReceiveObject?) {
+        guard let response = responsed,
+              let name = IInstrumentsServiceName(channel: response.channel),
+              let service = serviceDic[name] else {
+            return
+        }
+        service.response(response)
+    }
 }
 
 extension IInstrumentsServiceGroup {
@@ -59,21 +68,7 @@ extension IInstrumentsServiceGroup {
     func stop() {
         instruments.stop()
     }
-    
-    /// 此处的request 相当于从 socket通道拿数据
-    func receive() {
-        instruments.receive { [weak self] response in
-            self?.delegate?.receive(response: response)
-            
-            guard let response = response,
-                  let name = IInstrumentsServiceName(channel: response.channel),
-                  let service = self?.serviceDic[name] else {
-                return
-            }
-            service.response(response)
-        }
-    }
-    
+        
     func client<T : Service>(_ type: IInstrumentsServiceName) -> T? {
         return serviceDic[type] as? T
     }

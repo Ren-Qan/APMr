@@ -295,7 +295,11 @@ struct DTXMessagePayloadHeader {
     while (true) {
         struct DTXMessageHeader mheader;
         uint32_t nrecv = 0;
-        idevice_connection_receive(_connection, (char *)(&mheader), sizeof(mheader), &nrecv);
+        idevice_error_t error = idevice_connection_receive(_connection, (char *)(&mheader), sizeof(mheader), &nrecv);
+        
+        if (error != 0) {
+            printf("======%d\n", error);
+        }
         
         if (nrecv != sizeof(mheader)) {
             [self error:DTXMessageErrorCodeReadMessageHeaderFailed

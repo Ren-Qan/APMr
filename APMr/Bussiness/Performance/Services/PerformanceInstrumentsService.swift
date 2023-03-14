@@ -37,9 +37,6 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     }()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
-        let group = IInstrumentsServiceGroup()
-        group.delegate = self
-        
         let sysmontap = IInstrumentsSysmontap()
         sysmontap.delegate = self
         
@@ -52,12 +49,11 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
         let net = IInstrumentsNetworkStatistics()
         net.delegate = self
         
+        let group = IInstrumentsServiceGroup()
         group.config([sysmontap, opengl, process, net])
         return group
     }()
-    
-    private var read: DispatchSourceRead? = nil
-    
+        
     private var timer: Timer?
         
     private var currentSeconds: Double = 1
@@ -101,15 +97,6 @@ extension PerformanceInstrumentsService {
                     self.lockdown = lockdown
                     self.diagnostics = IDiagnosticsRelay(iDevice, lockdown)
                 }
-                
-                if let fd = self.serviceGroup.fd {
-                    let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: .global())
-                    read.setEventHandler { [weak self] in
-                        self?.serviceGroup.receive()
-                    }
-                    read.resume()
-                    self.read = read
-                }
             }
             self.resetData()
             complete?(success, self)
@@ -127,8 +114,6 @@ extension PerformanceInstrumentsService {
         diagnostics = nil
         lockdown = nil
         operationQ.cancelAllOperations()
-        read?.cancel()
-        read = nil
     }
     
     public func highlight(start: Int, end: Int, isDragging: Bool) {
@@ -212,14 +197,6 @@ extension PerformanceInstrumentsService {
                 }
             }
         }
-    }
-}
-
-// MARK: - IInstrumentsServiceGroupDelegate
-
-extension PerformanceInstrumentsService: IInstrumentsServiceGroupDelegate {
-    func receive(response: DTXReceiveObject?) {
-
     }
 }
 

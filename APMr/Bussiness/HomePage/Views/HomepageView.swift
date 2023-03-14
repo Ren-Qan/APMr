@@ -96,6 +96,23 @@ struct HomepageView: View {
             }
         }
         .onAppear {
+            deviceService.injectClosure = { device in
+                guard let selectDevice = service.selectDevice else {
+                    return
+                }
+                
+                let item = device.deviceList.first { item in
+                    return item.deviceName == selectDevice.deviceName && item.id == selectDevice.id
+                }
+                
+                if item == nil {
+                    service.selectApp = nil
+                    service.selectDevice = nil
+                    launchService.stopService()
+                    instrumentService.stopService()
+                }
+                
+            }
             deviceService.refreshDeviceList()
         }
     }

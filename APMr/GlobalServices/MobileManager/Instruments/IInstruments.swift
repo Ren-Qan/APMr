@@ -8,6 +8,10 @@
 import Cocoa
 import LibMobileDevice
 
+protocol IInstrumentsDelegate: NSObjectProtocol {
+    func received(responsed: DTXReceiveObject?)
+}
+
 class IInstruments: NSObject {
     // MARK: - Private
     private lazy var dtxService: DTXMessageHandle = {
@@ -27,8 +31,12 @@ class IInstruments: NSObject {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-        
-    // MARK: - Public Getter
+    
+    private var reader: DispatchSourceRead? = nil
+    
+    // MARK: - Public
+    public weak var delegate: IInstrumentsDelegate? = nil
+    
     public private(set) var isConnected = false
 }
 
@@ -43,6 +51,8 @@ extension IInstruments {
     public func stop() {
         sendQ.cancelAllOperations()
         receiveQ.cancelAllOperations()
+        reader?.cancel()
+        reader = nil
         isConnected = false
         dtxService.stopService()
     }
@@ -57,6 +67,18 @@ extension IInstruments {
         }
         
         isConnected = dtxService.connectInstrumentsService(withDevice: device_t)
+        
+        if isConnected, let fd = fd {
+            let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: .global())
+            read.setEventHandler { [weak self] in
+                self?.receiveQ.addOperation {
+                    self?.delegate?.received(responsed: self?.dtxService.receive())
+                }
+            }
+            read.resume()
+            self.reader = read
+        }
+        
         return isConnected
     }
     
@@ -102,15 +124,6 @@ extension IInstruments {
                                   expectsReply: expectsReply)
         }
     }
-    
-    /// 从建立的instruments socket通道取数据
-    /// - Parameter complete: 完成的回调
-    public func receive(_ complete: ((DTXReceiveObject?) -> Void)? = nil) {
-        receiveQ.addOperation { [weak self] in
-            let result = self?.dtxService.receive()
-            complete?(result)
-        }
-    }
 }
 
 
@@ -121,7 +134,7 @@ extension IInstruments: DTXMessageHandleDelegate {
     
     func error(_ error: DTXMessageErrorCode, message: String?, handle: DTXMessageHandle) {
         if error == .payLoadParseFailed, let msg = message {
-            print("[Error] - \(msg)")
+            debugPrint("[Error] - \(msg)")
         }
     }
 }

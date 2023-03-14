@@ -12,6 +12,8 @@ class HomepageDeviceService: NSObject, ObservableObject {
     @Published var userApplist: [IInstproxyAppInfo] = []
     @Published var systemApplist: [IInstproxyAppInfo] = []
         
+    var injectClosure: ((HomepageDeviceService) -> Void)? = nil
+    
     override init() {
         super.init()
         NotificationCenter
@@ -46,6 +48,8 @@ extension HomepageDeviceService {
                 }
                 return result
             }
+            
+            self.injectClosure?(self)
         }
     }
     

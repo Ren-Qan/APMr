@@ -34,9 +34,7 @@ class HomepageService: ObservableObject {
         ApplicationSider(state: .performance, title: "性能测评"),
     ]
 #endif
-    
 
-    
     // MARK: - Navigation Bar
     @Published var selectDevice: DeviceItem? = nil
     @Published var selectApp: IInstproxyAppInfo? = nil

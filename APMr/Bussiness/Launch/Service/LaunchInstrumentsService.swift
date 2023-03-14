@@ -15,9 +15,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     private lazy var parser = Parser()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
-        let group = IInstrumentsServiceGroup()
-        group.delegate = self
-        
         let device = IInstrumentsDeviceInfo()
         device.delegate = self
         
@@ -27,8 +24,8 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         let core = IInstrumentsCoreProfileSessionTap()
         core.delegate = self
 
+        let group = IInstrumentsServiceGroup()
         group.config([device, process, core])
-        
         return group
     }()
     
@@ -68,26 +65,9 @@ extension LaunchInstrumentsService {
             var success = false
             if let iDevice = IDevice(device) {
                 success = self.serviceGroup.start(iDevice)
-                if let fd = self.serviceGroup.fd {
-                    self.setupReadSource(fd: fd)
-                }
             }
             complete(success, self)
         }
-    }
-    
-    private func setupReadSource(fd: Int32) {
-        self.readSource = DispatchSource.makeReadSource(fileDescriptor: fd, queue: .global())
-        self.readSource?.setEventHandler { [weak self] in
-            self?.serviceGroup.receive()
-        }
-        self.readSource?.resume()
-    }
-}
-
-extension LaunchInstrumentsService: IInstrumentsServiceGroupDelegate {
-    func receive(response: DTXReceiveObject?) {
-
     }
 }
 

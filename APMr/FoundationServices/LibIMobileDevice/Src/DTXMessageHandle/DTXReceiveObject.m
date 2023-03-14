@@ -7,8 +7,6 @@
 
 #import "DTXReceiveObject.h"
 
-
-
 @interface DTSysmonTapMessage : NSObject<NSSecureCoding>
 
 @property (nonatomic, strong) NSObject * dic;
