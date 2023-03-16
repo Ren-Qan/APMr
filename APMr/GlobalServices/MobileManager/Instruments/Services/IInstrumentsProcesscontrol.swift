@@ -66,7 +66,7 @@ extension IInstrumentsProcesscontrol {
                            bundle: String,
                            killExisting: Bool = true) -> LaunchConfig {
             let item = LaunchConfig(bundle: bundle,
-                                    options: ["StartSuspendedKey": false, "KillExisting": true])
+                                    options: ["StartSuspendedKey": false, "KillExisting": killExisting])
             return item
         }
     }

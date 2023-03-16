@@ -40,8 +40,7 @@ extension LaunchInstrumentsService {
         
         block = { [weak self] in
             if let client: IInstrumentsProcesscontrol = self?.serviceGroup.client(.processcontrol) {
-                var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId, killExisting: false)
-                client.launch(config: config)
+                client.launch(config: .common(bundle: app.bundleId))
             }
         }
         
