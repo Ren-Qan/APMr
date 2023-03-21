@@ -15,9 +15,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     private lazy var parser = Parser()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
-        let device = IInstrumentsDeviceInfo()
-        device.delegate = self
-        
         let process = IInstrumentsProcesscontrol()
         process.delegate = self
         
@@ -25,28 +22,24 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         core.delegate = self
 
         let group = IInstrumentsServiceGroup()
-        group.config([device, process, core])
+        group.config([process, core])
         return group
     }()
-    
-    // MARK: - TEST CODE -
-    var block: (() -> Void)? = nil
-    var killName: String = ""
 }
 
 extension LaunchInstrumentsService {
-    func core(app: IInstproxyAppInfo) {
-        killName = app.executableName
-        
-        block = { [weak self] in
-            if let client: IInstrumentsProcesscontrol = self?.serviceGroup.client(.processcontrol) {
-                client.launch(config: .common(bundle: app.bundleId))
-            }
+    func launch(app: IApp) {
+        if let client: IInstrumentsCoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
+            client.setConfig()
+            client.start()
         }
         
-        if let client: IInstrumentsDeviceInfo = serviceGroup.client(.deviceinfo) {
-            client.machTime()
-            client.traceCodes()
+        if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
+            var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId)
+            config.environment = ["OS_ACTIVITY_DT_MODE": true,
+                                  "HIPreventRefEncoding": true,
+                                  "DYLD_PRINT_TO_STDERR": true]
+            client.launch(config: config)
         }
     }
 }
@@ -72,32 +65,8 @@ extension LaunchInstrumentsService {
 
 extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32) {
-        self.monitorPid = pid
-    }
-}
-
-extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
-    func running(process: [[String : Any]]) {
-
-    }
-    
-    func trace(codes: [Int64 : String]) {
-        parser.traceCodes = codes
-        
-        self.block?()
-        self.block = nil
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            if let client: IInstrumentsCoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
-                client.setConfig()
-                client.start()
-            }
-        }
-    }
-    
-    func machTime(info: [Any]) {
-        parser.machInfo = info
-        parser.usecs_since_epoch = Date().timeIntervalSince1970 * 1000000
+        parser.tracePid = pid
+        monitorPid = pid
     }
 }
 

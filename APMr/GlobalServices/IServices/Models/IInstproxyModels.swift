@@ -8,7 +8,7 @@
 import Cocoa
 import ObjectMapper
 
-struct IInstproxyAppInfo: Mappable, Identifiable {
+struct IApp: Mappable, Identifiable {
     enum AppType: String {
         case other
         case user = "User"

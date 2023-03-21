@@ -16,9 +16,7 @@ extension LaunchInstrumentsService {
             case appkit
         }
         
-        var traceCodes: [Int64 : String] = [:]
-        var machInfo: [Any] = []
-        var usecs_since_epoch: TimeInterval = 0
+        var tracePid: UInt32 = 0
         
         private var launchDatapool: [String : LaunchModel] = [:]
         private var mainUIThread: MainUIThread = .none
@@ -35,7 +33,7 @@ extension LaunchInstrumentsService {
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
                 p2(data)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-//                p3(data)
+                p2(data)
             } else {
                 p4(data)
             }
@@ -55,29 +53,9 @@ extension LaunchInstrumentsService.Parser {
         case launching
         case initializing
     }
-    
-    func record(_ state: State,
-                event: Event,
-                scene: String,
-                entry: KDEBUGEntry) {
-        let key = event.rawValue + "-" + scene
-        var item = launchDatapool[key]
-        if item == nil {
-            item = LaunchModel()
-            item?.event = event
-            item?.scene = scene
-            launchDatapool[key] = item
-        }
         
-        if state == .begin {
-            item?.begin = entry
-        } else {
-            item?.end = entry
-        }
-    }
-    
     func decode(_ entry: KDEBUGEntry) {
-        let list: [UInt32] = [0x1f]
+        let list: [UInt32] = [0x1f, 0x2b, 0x31]
         if list.contains([entry.class_code]) {
             decodeAppLifeCycle(entry)
         } else if entry.debug_id == 835321862 {
@@ -86,11 +64,11 @@ extension LaunchInstrumentsService.Parser {
     }
     
     func decodeAppLifeCycle(_ entry: KDEBUGEntry) {
-//        guard let process = threadMap[entry.thread], process.process != "SpringBoard" else {
-//            return
-//        }
+        guard let process = threadMap[entry.thread], process.pid == tracePid, tracePid != 0 else {
+            return
+        }
         
-        print("[\(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
+        print("[\(process.process) ==== \(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
         
         if entry.class_code == 31 {
             if entry.subclass_code == 7 {

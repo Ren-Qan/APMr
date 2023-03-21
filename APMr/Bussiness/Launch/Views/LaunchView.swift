@@ -31,7 +31,7 @@ struct LaunchView: View {
                 guard let app = service.selectApp else {
                     return
                 }
-                launchService.core(app: app)
+                launchService.launch(app: app)
             }
         }
     }

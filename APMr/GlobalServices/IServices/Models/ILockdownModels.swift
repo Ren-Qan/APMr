@@ -18,6 +18,4 @@ struct ILockdownDeivceInfo: Mappable {
     mutating func mapping(map: ObjectMapper.Map) {
         deivceName <- map["DeviceName"]
     }
-    
-    
 }

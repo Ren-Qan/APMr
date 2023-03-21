@@ -85,11 +85,7 @@ extension IInstruments {
     /// 设置服务建立频道 channel
     /// - Parameter service: 对应的服务 IInstrumentsServiceName
     public func setup(service: any IInstrumentsServiceProtocol) {
-        if !isConnected {
-            return
-        }
-        
-        if !dtxService.isVaildServer(service.server.rawValue) {
+        guard isConnected, dtxService.isVaildServer(service.server.rawValue) else {
             return
         }
         

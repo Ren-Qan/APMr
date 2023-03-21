@@ -40,7 +40,7 @@ class IInstproxy: NSObject {
 }
 
 extension IInstproxy {
-    public var applist: [IInstproxyAppInfo] {
+    public var applist: [IApp] {
         guard let client_t = client_t else {
             return []
         }
@@ -51,11 +51,11 @@ extension IInstproxy {
         plist_dict_set_item(filter, "ApplicationType", key)
         
         instproxy_browse(client_t, filter, &result)
-        var resultArr: [IInstproxyAppInfo] = []
+        var resultArr: [IApp] = []
         
         if let result = result,
            let arr = plist_to_nsobject(result) as? [[String : Any]] {
-            let objects = Mapper<IInstproxyAppInfo>().mapArray(JSONObject: arr) ?? []
+            let objects = Mapper<IApp>().mapArray(JSONObject: arr) ?? []
             resultArr = objects
         }
         

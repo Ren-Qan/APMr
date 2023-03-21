@@ -163,7 +163,6 @@ struct DTXMessagePayloadHeader {
         }
     }
         
-    
     if (image_path) free(image_path);
     if (signature_string) free(signature_string);
     if (mount_image_result) plist_free(mount_image_result);
@@ -295,11 +294,7 @@ struct DTXMessagePayloadHeader {
     while (true) {
         struct DTXMessageHeader mheader;
         uint32_t nrecv = 0;
-        idevice_error_t error = idevice_connection_receive(_connection, (char *)(&mheader), sizeof(mheader), &nrecv);
-        
-        if (error != 0) {
-            printf("======%d\n", error);
-        }
+        idevice_connection_receive(_connection, (char *)(&mheader), sizeof(mheader), &nrecv);
         
         if (nrecv != sizeof(mheader)) {
             [self error:DTXMessageErrorCodeReadMessageHeaderFailed
@@ -416,7 +411,6 @@ struct DTXMessagePayloadHeader {
     }
     return NULL;
 }
-
 
 // MARK: - C Func -
 

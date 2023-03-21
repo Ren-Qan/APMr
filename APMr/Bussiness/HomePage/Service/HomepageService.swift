@@ -37,7 +37,7 @@ class HomepageService: ObservableObject {
 
     // MARK: - Navigation Bar
     @Published var selectDevice: DeviceItem? = nil
-    @Published var selectApp: IInstproxyAppInfo? = nil
+    @Published var selectApp: IApp? = nil
     
     // MARK: - Performance Summary
     @Published public var isShowPerformanceSummary = false

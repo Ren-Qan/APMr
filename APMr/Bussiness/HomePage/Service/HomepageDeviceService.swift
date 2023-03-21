@@ -9,8 +9,8 @@ import Cocoa
 
 class HomepageDeviceService: NSObject, ObservableObject {    
     @Published var deviceList: [DeviceItem] = []
-    @Published var userApplist: [IInstproxyAppInfo] = []
-    @Published var systemApplist: [IInstproxyAppInfo] = []
+    @Published var userApplist: [IApp] = []
+    @Published var systemApplist: [IApp] = []
         
     var injectClosure: ((HomepageDeviceService) -> Void)? = nil
     
@@ -60,8 +60,8 @@ extension HomepageDeviceService {
                let instproxy = IInstproxy(iDevice, lockdown) {
                 let applist = instproxy.applist
                 
-                var user = [IInstproxyAppInfo]()
-                var system = [IInstproxyAppInfo]()
+                var user = [IApp]()
+                var system = [IApp]()
                 
                 applist.forEach { app in
                     if app.applicationType == .user {

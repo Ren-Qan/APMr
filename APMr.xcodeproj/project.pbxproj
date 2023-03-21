@@ -299,8 +299,6 @@
 			isa = PBXGroup;
 			children = (
 				C7483BA429373ADC00F32BE0 /* MobileManager.swift */,
-				C73BBB0C2942E25700472A75 /* IServices */,
-				C7483BA629373ADC00F32BE0 /* Instruments */,
 			);
 			path = MobileManager;
 			sourceTree = "<group>";
@@ -567,8 +565,10 @@
 		C780D11129418C2E00EF5633 /* GlobalServices */ = {
 			isa = PBXGroup;
 			children = (
-				C76E7B5E2951BC29004F009B /* Extensions */,
+				C73BBB0C2942E25700472A75 /* IServices */,
+				C7483BA629373ADC00F32BE0 /* Instruments */,
 				C7483BA329373ADC00F32BE0 /* MobileManager */,
+				C76E7B5E2951BC29004F009B /* Extensions */,
 			);
 			path = GlobalServices;
 			sourceTree = "<group>";

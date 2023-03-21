@@ -73,7 +73,7 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
 // MARK: - Public API
 
 extension PerformanceInstrumentsService {
-    public func launch(app: IInstproxyAppInfo) {
+    public func launch(app: IApp) {
         isLaunchingApp = true
         guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
             isLaunchingApp = false

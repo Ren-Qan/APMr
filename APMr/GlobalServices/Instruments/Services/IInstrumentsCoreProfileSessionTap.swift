@@ -58,14 +58,25 @@ extension IInstrumentsCoreProfileSessionTap {
                 case .start: return IInstrumentArgs("start")
                 case .stop: return IInstrumentArgs("stop")
                 case .setConfig:
-                    let config: [String: Any] = [
+                    let config: [String: Any] =
+                    [
                         "rp": 100,
-                        "bm": 0,
-                        "tc": [[
-                                "kdf2": [0xffffffff],
+                        "bm": 1,
+                        "tc": [
+                            [
+                                "kdf2": [735576064, 19202048, 67895296, 835321856, 735838208, 554762240,
+                                         730267648, 520552448, 117440512, 19922944, 17563648, 17104896, 17367040,
+                                         771686400, 520617984, 20971520, 520421376],
                                 "csd": 128,
                                 "tk": 3,
                                 "ta": [[3], [0], [2], [1, 1, 0]],
+                                "uuid": UUID().uuidString.uppercased(),
+                            ],
+                            [
+                                "tsf": [65537],
+                                "ta": [[0], [2], [1, 1, 0]],
+                                "si": 5000000,
+                                "tk": 1,
                                 "uuid": UUID().uuidString.uppercased(),
                             ],
                         ],
