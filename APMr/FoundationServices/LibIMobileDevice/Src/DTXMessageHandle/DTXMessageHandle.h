@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, DTXMessageErrorCode) {
     DTXMessageErrorCodeMounterStartFailed = 1,
     DTXMessageErrorCodeMounterLookupImageFailed,
-    DTXMessageErrorCodeNotFoundSignature,
     DTXMessageErrorCodeUploadImageFailed,
     DTXMessageErrorCodeNotFoundImagePath,
     DTXMessageErrorCodeMonterMountImageFailed,

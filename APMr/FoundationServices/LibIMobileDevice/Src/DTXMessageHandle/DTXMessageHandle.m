@@ -84,18 +84,17 @@ struct DTXMessagePayloadHeader {
 // MARK: - Setup -
 
 - (BOOL)setupWithDevice:(idevice_t)device {
-    if (!device) {
-        return NO;
-    }
+    if (!device) { return NO; }
     
     BOOL state = YES;
+    BOOL isNeedMountImage = NO;
     
-    plist_t mounter_lookup_result = NULL;
-    char *signature_string = NULL;
     uint64_t signture_length = 0;
+    char *signature_string = NULL;
     char * image_path = NULL;
+
+    plist_t mounter_lookup_result = NULL;
     plist_t mount_image_result = NULL;
-    
     
     [self progress:DTXMessageProgressStateMonterStartService message:@"mobile_image_mounter_start_service"];
     if (mobile_image_mounter_start_service(device, &_mounter_client, "INSTRUMENTS") != 0) {
@@ -110,7 +109,7 @@ struct DTXMessagePayloadHeader {
             state = NO;
         }
     }
-
+    
     if (state) {
         [self progress:DTXMessageProgressStateFindSignature message:@"finding ImageSignature"];
         plist_t signature_map = plist_dict_get_item(mounter_lookup_result, "ImageSignature");
@@ -119,33 +118,31 @@ struct DTXMessagePayloadHeader {
         plist_get_data_val(signature_arr, &signature_string, &signture_length);
         
         if (signture_length <= 0 || signature_string == NULL) {
-            [self error:DTXMessageErrorCodeNotFoundSignature message:@"not found signature"];
-            state = NO;
+            isNeedMountImage = YES;
         }
     }
     
-    if (state) {
-        [self progress:DTXMessageProgressStateMonterUploadImage message:@"mobile_image_mounter_upload_image"];
-        if (mobile_image_mounter_upload_image(_mounter_client, "Developer", 9, signature_string, (uint16_t)signture_length, upload_mounter_callback, NULL) != 0) {
-            [self error:DTXMessageErrorCodeUploadImageFailed message:@"upload image error"];
-            state = NO;
+    if (isNeedMountImage) {
+        if (state) {
+            [self progress:DTXMessageProgressStateMonterUploadImage message:@"mobile_image_mounter_upload_image"];
+            if (mobile_image_mounter_upload_image(_mounter_client, "Developer", 9, signature_string, (uint16_t)signture_length, upload_mounter_callback, NULL) != 0) {
+                [self error:DTXMessageErrorCodeUploadImageFailed message:@"upload image error"];
+                state = NO;
+            }
         }
-    }
-    
-    if (state) {
-        [self progress:DTXMessageProgressStateFindImagePath message:@"find_image_path"];
-        image_path = find_image_path(device);
-        if (image_path == NULL) {
-            [self error:DTXMessageErrorCodeNotFoundImagePath message:@"not found imagePath"];
-            state = NO;
+        
+        if (state) {
+            [self progress:DTXMessageProgressStateFindImagePath message:@"find_image_path"];
+            image_path = find_image_path(device);
+            if (image_path == NULL) {
+                [self error:DTXMessageErrorCodeNotFoundImagePath message:@"not found imagePath"];
+                state = NO;
+            }
         }
-    }
-
-    if (state) {
-        [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
-        if (mobile_image_mounter_mount_image(_mounter_client, image_path, signature_string, signture_length, "Developer", &mount_image_result) != 0) {
-            [self error:DTXMessageErrorCodeMonterMountImageFailed message:@"mount image failed"];
-            state = NO;
+        
+        if (state) {
+            [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
+            mobile_image_mounter_mount_image(_mounter_client, image_path, signature_string, signture_length, "Developer", &mount_image_result);
         }
     }
     
