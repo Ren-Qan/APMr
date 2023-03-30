@@ -12,7 +12,7 @@ struct HomepageView: View {
     
     @StateObject private var deviceService = HomepageDeviceService()
     
-    @StateObject private var instrumentService = PerformanceInstrumentsService()
+    @StateObject private var performanceService = PerformanceInstrumentsService()
         
     @StateObject private var launchService = LaunchInstrumentsService()
     
@@ -30,7 +30,7 @@ struct HomepageView: View {
                 case .performance:
                     PerformanceView()
                         .environmentObject(service)
-                        .environmentObject(instrumentService)
+                        .environmentObject(performanceService)
                         .padding(.all, 5)
                     
                 case .launch:
@@ -44,7 +44,7 @@ struct HomepageView: View {
             }
         }
         .navigationTitle(
-            Text(verbatim: instrumentService.isMonitoringPerformance ? "Pid: \(instrumentService.monitorPid)" : "")
+            Text(verbatim: performanceService.isMonitoringPerformance ? "Pid: \(performanceService.monitorPid)" : "")
         )
         .toolbar {
             ToolbarItem(placement: .navigation) {
@@ -73,7 +73,7 @@ struct HomepageView: View {
                     }
                 }
                 .disabled(deviceService.deviceList.count <= 0)
-                .disabled(instrumentService.isMonitoringPerformance)
+                .disabled(performanceService.isMonitoringPerformance)
                 .frame(minWidth: 100)
                 .labelStyle(TitleAndIconLabelStyle.titleAndIcon)
             }
@@ -91,7 +91,7 @@ struct HomepageView: View {
                     Text(service.selectApp?.name ?? "请选择App")
                 }
                 .disabled(deviceService.userApplist.count <= 0)
-                .disabled(instrumentService.isMonitoringPerformance)
+                .disabled(performanceService.isMonitoringPerformance)
                 .frame(minWidth: 100)
             }
         }
@@ -109,7 +109,7 @@ struct HomepageView: View {
                     service.selectApp = nil
                     service.selectDevice = nil
                     launchService.stopService()
-                    instrumentService.stopService()
+                    performanceService.stopService()
                 }
                 
             }

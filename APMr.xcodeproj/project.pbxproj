@@ -625,22 +625,22 @@
 		C7E137BD299C8723000CD484 /* Performance */ = {
 			isa = PBXGroup;
 			children = (
-				C7E137BE299C8747000CD484 /* VIews */,
+				C7E137BE299C8747000CD484 /* Views */,
 				C780D10D29418B5800EF5633 /* Services */,
 				C76E7B5629517CA9004F009B /* Models */,
 			);
 			path = Performance;
 			sourceTree = "<group>";
 		};
-		C7E137BE299C8747000CD484 /* VIews */ = {
+		C7E137BE299C8747000CD484 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				C754F0E2296D33360053DBA3 /* PerformanceView.swift */,
-				C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */,
 				C7B5B94329767921009A88D7 /* PerformaceChartView.swift */,
+				C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */,
 				C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */,
 			);
-			path = VIews;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C7E137BF299C8760000CD484 /* Model */ = {

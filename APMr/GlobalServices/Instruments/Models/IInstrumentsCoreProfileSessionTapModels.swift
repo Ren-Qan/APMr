@@ -91,3 +91,5 @@ struct KDEBUGEntry {
     var action_code: UInt32 { (event_id >> 2) & 0x3fff }
     var func_code: UInt32 { event_id & UInt32(0x00000003) }
 }
+
+

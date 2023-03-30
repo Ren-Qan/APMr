@@ -103,6 +103,25 @@ extension PerformanceInstrumentsService {
         }
     }
         
+    public func monitor(_ pid: UInt32) {
+        monitorPid = pid
+        if pid != 0 {
+            isMonitoringPerformance = true
+            isLaunchingApp = false
+            register()
+            
+            timer?.invalidate()
+            timer = nil
+            timer = Timer(timeInterval: 1,
+                          repeats: true,
+                          block: { [weak self] _ in
+                self?.sample()
+            })
+            timer?.fire()
+            RunLoop.main.add(timer!, forMode: .common)
+        }
+    }
+    
     public func stopService() {
         timer?.invalidate()
         timer = nil
@@ -202,26 +221,11 @@ extension PerformanceInstrumentsService {
 
 extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func outputReceived(_ msg: String) {
-        print(msg)
+        debugPrint(msg)
     }
     
     func launch(pid: UInt32) {
-        monitorPid = pid
-        if pid != 0 {
-            isMonitoringPerformance = true
-            isLaunchingApp = false
-            register()
-            
-            timer?.invalidate()
-            timer = nil
-            timer = Timer(timeInterval: 1,
-                          repeats: true,
-                          block: { [weak self] _ in
-                self?.sample()
-            })
-            timer?.fire()
-            RunLoop.main.add(timer!, forMode: .common)
-        }
+        monitor(pid)
     }
     
     private func sample() {

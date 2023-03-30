@@ -10,7 +10,7 @@ import SwiftUI
 struct PerformanceSettingBarView: View {
     
     @EnvironmentObject var service: HomepageService
-    @EnvironmentObject var instruments: PerformanceInstrumentsService
+    @EnvironmentObject var performance: PerformanceInstrumentsService
     
     @State private var isShowPerformanceItem = false
     @State private var isShowPerformanceSetting = false
@@ -20,13 +20,13 @@ struct PerformanceSettingBarView: View {
             HStack {
                 // MARK: - 启动/停止按钮 
                 Button {
-                    if instruments.isMonitoringPerformance {
-                        instruments.stopService()
+                    if performance.isMonitoringPerformance {
+                        performance.stopService()
                     } else {
                         if let device = service.selectDevice,
                            let app = service.selectApp {
-                            instruments.isLaunchingApp = true
-                            instruments.start(device) { success, server in
+                            performance.isLaunchingApp = true
+                            performance.start(device) { success, server in
                                 if success {
                                     server.launch(app: app)
                                 } else {
@@ -37,16 +37,16 @@ struct PerformanceSettingBarView: View {
                     }
                 } label: {
                     HStack {
-                        Image(systemName: "\(instruments.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
+                        Image(systemName: "\(performance.isMonitoringPerformance ? "stop" : "play")" + ".circle.fill")
                             .resizable()
                             .frame(width: 15, height: 15)
-                        Text("\(instruments.isMonitoringPerformance ? "停止" : "启动")")
+                        Text("\(performance.isMonitoringPerformance ? "停止" : "启动")")
                     }
                     .frame(height: 25)
                 }
                 .common(
-                    backColor: instruments.isMonitoringPerformance ? .red : .blue,
-                    enable: service.selectDevice != nil && service.selectApp != nil && !instruments.isLaunchingApp
+                    backColor: performance.isMonitoringPerformance ? .red : .blue,
+                    enable: service.selectDevice != nil && service.selectApp != nil && !performance.isLaunchingApp
                 )
                 
                 // MARK: - 选择指标按钮
@@ -57,13 +57,12 @@ struct PerformanceSettingBarView: View {
                         .frame(minHeight: 25)
                 }
                 .common(
-                    backColor: .fabulaBar1,
-                    enable: !instruments.isMonitoringPerformance
+                    backColor: .fabulaBar1
                 )
                 .popover(isPresented: $isShowPerformanceItem,
                          arrowEdge: .bottom) {
                     VStack(spacing: 1) {
-                        ForEach(instruments.pCM.models) { chartModel in
+                        ForEach(performance.pCM.models) { chartModel in
                             PerformanceChartShowSettingPopoverButtonView()
                                 .environmentObject(chartModel)
                         }
@@ -73,7 +72,7 @@ struct PerformanceSettingBarView: View {
                 
 #if DEBUG
                 Button("插入随机数据") {
-                    instruments.insertTestData(count: .random(in: 40 ... 80))
+                    performance.insertTestData(count: .random(in: 40 ... 80))
                 }
 #endif
                 Spacer()
@@ -94,7 +93,7 @@ struct PerformanceSettingBarView: View {
             }
         }
         .environmentObject(service)
-        .environmentObject(instruments)
+        .environmentObject(performance)
     }
 }
 

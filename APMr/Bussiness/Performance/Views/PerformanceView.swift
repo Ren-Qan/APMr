@@ -11,7 +11,7 @@ struct PerformanceView: View {
     
     @EnvironmentObject var service: HomepageService
     
-    @EnvironmentObject var instruments: PerformanceInstrumentsService
+    @EnvironmentObject var performance: PerformanceInstrumentsService
     
     var body: some View {
         HStack {
@@ -20,7 +20,7 @@ struct PerformanceView: View {
                 PerformaceChartView()
             }
             .environmentObject(service)
-            .environmentObject(instruments)
+            .environmentObject(performance)
             
             if service.isShowPerformanceSummary {
                 PerformanceSummaryView()
@@ -35,7 +35,7 @@ struct PerformanceView: View {
                         )
                     )
                     .environmentObject(service)
-                    .environmentObject(instruments.summary)
+                    .environmentObject(performance.summary)
             }
         }
         .animation(.default, value: service.isShowPerformanceSummary)

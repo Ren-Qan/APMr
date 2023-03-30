@@ -29,7 +29,7 @@ extension LaunchInstrumentsService {
             
             let version = Data(data.prefix(4))
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
-//                p1(parserData)
+//                p1(data)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
                 p2(data)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
@@ -81,7 +81,13 @@ extension LaunchInstrumentsService.Parser {
 
 extension LaunchInstrumentsService.Parser {
     func p1(_ data: Data) {
-        p4(data)
+        do {
+            if let jsonObject = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed, .json5Allowed]) as? [String: Any] {
+                print(jsonObject)
+            }
+        } catch {
+            print("Error parsing JSON data: \(error)")
+        }
     }
     
     func p2(_ data: Data) {

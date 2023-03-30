@@ -8,23 +8,22 @@
 import SwiftUI
 import Charts
 
-
 struct PerformaceChartView: View {
     // MARK: - Public 
     @EnvironmentObject var service: HomepageService
     
-    @EnvironmentObject var instruments: PerformanceInstrumentsService
+    @EnvironmentObject var performance: PerformanceInstrumentsService
     
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
                 ZStack {
                     VStack(spacing: 10) {
-                        ForEach(instruments.pCM.models) { chartModel in
+                        ForEach(performance.pCM.models) { chartModel in
                             LineChartGroup()
                                 .environmentObject(service)
                                 .environmentObject(chartModel)
-                                .environmentObject(instruments)
+                                .environmentObject(performance)
                         }
                     }
                     .padding(.top, 7)
@@ -37,7 +36,7 @@ struct PerformaceChartView: View {
 extension PerformaceChartView {
     private struct LineChartGroup: View {
         @EnvironmentObject var service: HomepageService
-        @EnvironmentObject var instruments: PerformanceInstrumentsService
+        @EnvironmentObject var performance: PerformanceInstrumentsService
         @EnvironmentObject var model: ChartModel
         
         var body: some View {
@@ -172,7 +171,7 @@ extension PerformaceChartView {
             if !service.isShowPerformanceSummary {
                 service.isShowPerformanceSummary = true
             }
-            instruments.highlight(start: s, end: e, isDragging: isDraging)
+            performance.highlight(start: s, end: e, isDragging: isDraging)
         }
     }	
 }
