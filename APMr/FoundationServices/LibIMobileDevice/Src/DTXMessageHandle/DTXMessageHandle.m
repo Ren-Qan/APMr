@@ -49,6 +49,8 @@ struct DTXMessagePayloadHeader {
 
 - (NSData *)data;
 
+- (BOOL)readComplete;
+
 @end
 
 @interface DTXMessageHandle()
@@ -332,10 +334,12 @@ struct DTXMessagePayloadHeader {
                 nbytes += nrecv;
             }
         }
-        free(fragData);
         
+        free(fragData);
+
         NSString *key = [NSString stringWithFormat:@"%@-%@", @(mheader.channelCode), @(mheader.identifier)];
         BOOL loadFinish = NO;
+
         if (mheader.fragmentCount == 1) {
             payload = frag;
             loadFinish = YES;
@@ -349,29 +353,22 @@ struct DTXMessagePayloadHeader {
             }
             
             [localPayload addData:frag index:mheader.fragmentId];
-            if (mheader.fragmentId == mheader.fragmentCount - 1) {
+            if (mheader.fragmentId == mheader.fragmentCount - 1 && localPayload.readComplete) {
                 payload = [localPayload data];
                 channelCode = localPayload.channel;
                 identifier = localPayload.identifier;
+                [localPayload.payloads removeAllObjects];
                 loadFinish = YES;
             }
         }
         
         if (loadFinish) {
-            if (mheader.fragmentCount > 1) {
-                _receive_map[key] = NULL;
-            }
+            _receive_map[key] = NULL;
             break;
         }
     }
-    
+        
     struct DTXMessagePayloadHeader *pheader = (struct DTXMessagePayloadHeader *)(payload.bytes);
-    
-    if (pheader -> totalLength + sizeof(struct DTXMessagePayloadHeader) != payload.length) {
-        NSString *errorMsg = [NSString.alloc initWithFormat:@"\nChannelID: %@, \nDataLen: %@, \nPayloadHeader.flag: %@, \nPayloadHeader.auxiliaryLength: %@, \nPayloadHeader.totalLength: %@", @(channelCode), @(payload.length), @(pheader->flags), @(pheader->auxiliaryLength), @(pheader->totalLength)];
-        [self error:DTXMessageErrorCodePayLoadParseFailed message:errorMsg];
-    }
-    
     const uint8_t *auxptr = payload.bytes + sizeof(struct DTXMessagePayloadHeader);
     uint32_t auxlen = pheader->auxiliaryLength;
     
@@ -487,6 +484,9 @@ char * find_image_path(idevice_t device) {
 @implementation DTXPayload {
     NSInteger _count;
     NSInteger _capacity;
+    
+    NSInteger _currentLen;
+    NSInteger _totalLen;
 }
 
 - (instancetype)initWithCapacity:(NSInteger)capacity {
@@ -497,14 +497,22 @@ char * find_image_path(idevice_t device) {
         }
         _capacity = capacity;
         _count = 0;
+        _totalLen = -1;
+        _currentLen = 0;
     }
     return self;
 }
 
 - (void)addData:(NSData *)data index:(NSInteger)index {
+    if (index == 1 && data.length > 16) {
+        struct DTXMessagePayloadHeader *pheader = (struct DTXMessagePayloadHeader *)(data.bytes);
+        _totalLen = pheader->totalLength + 16;
+    }
+    
     if (index < _capacity) {
         _payloads[index] = data;
         _count += 1;
+        _currentLen += data.length;
     }
 }
 
@@ -514,6 +522,10 @@ char * find_image_path(idevice_t device) {
         [data appendData:obj];
     }];
     return data;
+}
+
+- (BOOL)readComplete {
+    return _currentLen >= _totalLen;
 }
 
 @end

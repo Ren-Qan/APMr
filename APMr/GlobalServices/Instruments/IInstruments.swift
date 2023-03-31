@@ -25,13 +25,7 @@ class IInstruments: NSObject {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-    
-    private lazy var receiveQ: OperationQueue = {
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }()
-    
+        
     private var reader: DispatchSourceRead? = nil
     
     // MARK: - Public
@@ -50,7 +44,6 @@ extension IInstruments {
     
     public func stop() {
         sendQ.cancelAllOperations()
-        receiveQ.cancelAllOperations()
         reader?.cancel()
         reader = nil
         isConnected = false
@@ -69,11 +62,10 @@ extension IInstruments {
         isConnected = dtxService.connectInstrumentsService(withDevice: device_t)
         
         if isConnected, let fd = fd {
-            let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: .global())
+            let serialQueue = DispatchQueue(label: "serial.dtxmsg.queue", target: .global())
+            let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: serialQueue)
             read.setEventHandler { [weak self] in
-                self?.receiveQ.addOperation {
-                    self?.delegate?.received(responsed: self?.dtxService.receive())
-                }
+                self?.delegate?.received(responsed: self?.dtxService.receive())
             }
             read.resume()
             self.reader = read

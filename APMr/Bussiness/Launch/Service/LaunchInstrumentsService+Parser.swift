@@ -31,11 +31,11 @@ extension LaunchInstrumentsService {
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
 //                p1(data)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
-                p2(data)
+//                p2(data)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-                p2(data)
+//                p2(data)
             } else {
-                p4(data)
+//                p4(data)
             }
         }
     }

@@ -7,13 +7,13 @@
 
 #import "DTXReceiveObject.h"
 
-@interface DTSysmonTapMessage : NSObject<NSSecureCoding>
+@interface DTTapMessage : NSObject<NSSecureCoding>
 
 @property (nonatomic, strong) NSObject * dic;
 
 @end
 
-@implementation DTSysmonTapMessage
+@implementation DTTapMessage
 
 + (BOOL)supportsSecureCoding {
     return YES;
@@ -32,9 +32,24 @@
 
 @end
 
-@interface DTKTraceTapMessage : DTSysmonTapMessage
+@interface DTKTraceTapMessage : DTTapMessage
 @end
 @implementation DTKTraceTapMessage
+@end
+
+@interface DTTapHeartbeatMessage : DTTapMessage
+@end
+@implementation DTTapHeartbeatMessage
+@end
+
+@interface DTTapStatusMessage : DTTapMessage
+@end
+@implementation DTTapStatusMessage
+@end
+
+@interface DTSysmonTapMessage : DTTapMessage
+@end
+@implementation DTSysmonTapMessage
 @end
 
 // MARK: --------------------------------------------------------------------------------
@@ -129,16 +144,12 @@
     NSError *error;
     NSObject *object = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:&error];
     
-    if ([object isKindOfClass:[DTKTraceTapMessage class]]) {
-        return [(DTKTraceTapMessage *)object dic];
-    }
-    
-    if ([object isKindOfClass:[DTSysmonTapMessage class]]) {
-        return [(DTSysmonTapMessage *)object dic];
+    if ([object isKindOfClass: [DTTapMessage class]]) {
+        return [(DTTapMessage *)object dic];
     }
     
     if (error != NULL) {
-        object = data;
+        object = [data copy];
     }
     
     return object;
