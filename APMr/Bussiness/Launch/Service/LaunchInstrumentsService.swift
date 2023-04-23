@@ -9,8 +9,6 @@ import LibMobileDevice
 
 class LaunchInstrumentsService: NSObject, ObservableObject {
     private var monitorPid: UInt32? = nil
-
-    private var readSource: DispatchSourceRead?
     
     private lazy var parser = Parser()
     
@@ -47,8 +45,6 @@ extension LaunchInstrumentsService {
 extension LaunchInstrumentsService {
     public func stopService() {
         serviceGroup.stop()
-        readSource?.cancel()
-        readSource = nil
     }
     
     public func start(_ device: DeviceItem,

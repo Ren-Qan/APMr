@@ -121,8 +121,7 @@ extension IInstruments: DTXMessageHandleDelegate {
     }
     
     func error(_ error: DTXMessageErrorCode, message: String?, handle: DTXMessageHandle) {
-        if error == .payLoadParseFailed, let msg = message {
-            debugPrint("[Error] - \(msg)")
-        }
+       
     }
 }
+
