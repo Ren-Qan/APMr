@@ -1,5 +1,5 @@
 //
-//  IInstrumentsProcessControlByDictionary.swift
+//  ProcessControlByDictionary.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/2/16.
@@ -12,16 +12,18 @@ protocol IInstrumentsProcessControlByDictionaryDelegate: NSObjectProtocol {
     func launch(pid: UInt32)
 }
 
-class IInstrumentsProcessControlByDictionary: IInstrumentsBase {
-    public weak var delegate: IInstrumentsProcessControlByDictionaryDelegate? = nil
-    
-    private var launchConfig: LaunchConfig? = nil
-    private var startPid: UInt32 = 0
-    private var stopPid: UInt32 = 0
-    private var resumePid: UInt32 = 0
+extension IInstruments {
+    class ProcessControlByDictionary: Base {
+        public weak var delegate: IInstrumentsProcessControlByDictionaryDelegate? = nil
+        
+        private var launchConfig: LaunchConfig? = nil
+        private var startPid: UInt32 = 0
+        private var stopPid: UInt32 = 0
+        private var resumePid: UInt32 = 0
+    }
 }
 
-extension IInstrumentsProcessControlByDictionary {
+extension IInstruments.ProcessControlByDictionary {
     func launch(config: LaunchConfig) {
         self.launchConfig = config
         send(P.launch(config: config).arg)
@@ -42,7 +44,7 @@ extension IInstrumentsProcessControlByDictionary {
     }
 }
 
-extension IInstrumentsProcessControlByDictionary: IInstrumentsServiceProtocol {
+extension IInstruments.ProcessControlByDictionary: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         .pcbd
     }
@@ -54,7 +56,7 @@ extension IInstrumentsProcessControlByDictionary: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsProcessControlByDictionary {
+extension IInstruments.ProcessControlByDictionary {
     struct LaunchConfig {
         var devicePath: String
         var bundle: String

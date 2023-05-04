@@ -37,16 +37,16 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     }()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
-        let sysmontap = IInstrumentsSysmontap()
+        let sysmontap = IInstruments.Sysmontap()
         sysmontap.delegate = self
         
-        let opengl = IInstrumentsOpengl()
+        let opengl = IInstruments.Opengl()
         opengl.delegate = self
         
-        let process = IInstrumentsProcesscontrol()
+        let process = IInstruments.Processcontrol()
         process.delegate = self
         
-        let net = IInstrumentsNetworkStatistics()
+        let net = IInstruments.NetworkStatistics()
         net.delegate = self
         
         let group = IInstrumentsServiceGroup()
@@ -75,7 +75,7 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
 extension PerformanceInstrumentsService {
     public func launch(app: IApp) {
         isLaunchingApp = true
-        guard let processControl: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) else {
+        guard let processControl: IInstruments.Processcontrol = serviceGroup.client(.processcontrol) else {
             isLaunchingApp = false
             return
         }
@@ -173,18 +173,18 @@ extension PerformanceInstrumentsService {
 
 extension PerformanceInstrumentsService {
     private func register() {
-        if let client: IInstrumentsSysmontap = serviceGroup.client(.sysmontap) {
+        if let client: IInstruments.Sysmontap = serviceGroup.client(.sysmontap) {
             client.setConfig()
             client.start()
         }
         
-        if let opengl: IInstrumentsOpengl = serviceGroup.client(.opengl) {
+        if let opengl: IInstruments.Opengl = serviceGroup.client(.opengl) {
             opengl.start()
         }
     }
     
     private func send() {
-        if let network: IInstrumentsNetworkStatistics = serviceGroup.client(.networkStatistics) {
+        if let network: IInstruments.NetworkStatistics = serviceGroup.client(.networkStatistics) {
             network.sample(pids: [monitorPid])
         }
         
@@ -201,8 +201,6 @@ extension PerformanceInstrumentsService {
     }
     
     private func record() {
-        debugPrint("第\(currentSeconds)秒-数据同步")
-                
         summary.add(cSPI)
         pCM.add(cSPI, xAxisPageCount)
         
@@ -221,7 +219,7 @@ extension PerformanceInstrumentsService {
 
 extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func outputReceived(_ msg: String) {
-        debugPrint(msg)
+
     }
     
     func launch(pid: UInt32) {
@@ -237,11 +235,11 @@ extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension PerformanceInstrumentsService: IInstrumentsSysmontapDelegate {
-    func sysmotap(model: IInstrumentsSysmotapModel) {
+    func sysmotap(model: IInstruments.Sysmontap.Model) {
         cTotalCPU(model)
     }
     
-    func process(model: IInstrumentsSysmotapProcessesModel) {
+    func process(model: IInstruments.Sysmontap.ProcessesModel) {
         guard let process = model.processModel(pid: Int64(monitorPid)) else {
             return
         }
@@ -252,14 +250,14 @@ extension PerformanceInstrumentsService: IInstrumentsSysmontapDelegate {
 }
 
 extension PerformanceInstrumentsService: IInstrumentsOpenglDelegate {
-    func sampling(model: IInstrumentsOpenglModel) {
+    func sampling(model: IInstruments.Opengl.Model) {
         cGPU(model)
         cFPS(model)
     }
 }
 
 extension PerformanceInstrumentsService: IInstrumentsNetworkStatisticsDelegate {
-    func process(modelMap: [UInt32: IInstrumentsNetworkStatisticsModel]) {
+    func process(modelMap: [UInt32: IInstruments.NetworkStatistics.Model]) {
         guard monitorPid != 0, let model = modelMap[monitorPid] else {
             return
         }
@@ -270,7 +268,7 @@ extension PerformanceInstrumentsService: IInstrumentsNetworkStatisticsDelegate {
 // MARK: - 模型解析
 
 extension PerformanceInstrumentsService {
-    private func cTotalCPU(_ sysmotapInfo: IInstrumentsSysmotapModel) {
+    private func cTotalCPU(_ sysmotapInfo: IInstruments.Sysmontap.Model) {
         var totalUsage: CGFloat = 0
         if let system = sysmotapInfo.SystemCPUUsage {
             // mark Usage = SystemCPUUsage.CPU_TotalLoad / EnabledCPUs - https://github.com/dkw72n/idb
@@ -279,25 +277,25 @@ extension PerformanceInstrumentsService {
         cSPI.cpu.total = totalUsage
     }
     
-    private func cProcessCPU(_ process: IInstrumentsSysmotapSystemProcessesModel) {
+    private func cProcessCPU(_ process: IInstruments.Sysmontap.SystemProcessesModel) {
         cSPI.cpu.process = process.cpuUsage
     }
     
-    private func cGPU(_ info: IInstrumentsOpenglModel) {
+    private func cGPU(_ info: IInstruments.Opengl.Model) {
         let item = cSPI.gpu
         item.device = CGFloat(info.DeviceUtilization)
         item.renderer = CGFloat(info.RendererUtilization)
         item.tiler = CGFloat(info.TilerUtilization)
     }
     
-    private func cMemory(_ process: IInstrumentsSysmotapSystemProcessesModel) {
+    private func cMemory(_ process: IInstruments.Sysmontap.SystemProcessesModel) {
         let item = cSPI.memory
         item.memory = process.physFootprint.MB
         item.resident = process.memResidentSize.MB
         item.vm = process.memVirtualSize.GB
     }
     
-    private func cIO(_ process: IInstrumentsSysmotapSystemProcessesModel) {
+    private func cIO(_ process: IInstruments.Sysmontap.SystemProcessesModel) {
         let item = cSPI.io
         let lastR = cSPI.io.read
         let lastW = cSPI.io.write
@@ -307,12 +305,12 @@ extension PerformanceInstrumentsService {
         item.writeDelta = item.write - lastW
     }
     
-    private func cFPS(_ info: IInstrumentsOpenglModel) {
+    private func cFPS(_ info: IInstruments.Opengl.Model) {
         let item = cSPI.fps
         item.fps = info.CoreAnimationFramesPerSecond
     }
     
-    private func cNetwork(_ info: IInstrumentsNetworkStatisticsModel) {
+    private func cNetwork(_ info: IInstruments.NetworkStatistics.Model) {
         let item = cSPI.network
         item.down = info.net_rx_bytes.MB
         item.up = info.net_tx_bytes.MB

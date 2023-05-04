@@ -1,6 +1,6 @@
 //
-//  IInstrumentsCPU.swift
-//  TestAPP
+//  CPU.swift
+//  APMr
 //
 //  Created by 任玉乾 on 2022/11/28.
 //
@@ -10,17 +10,19 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsSysmontapDelegate: NSObjectProtocol {
-    func sysmotap(model: IInstrumentsSysmotapModel)
-    func process(model: IInstrumentsSysmotapProcessesModel)
+    func sysmotap(model: IInstruments.Sysmontap.Model)
+    func process(model: IInstruments.Sysmontap.ProcessesModel)
 }
 
-class IInstrumentsSysmontap: IInstrumentsBase {
-    public weak var delegate: IInstrumentsSysmontapDelegate? = nil
-    
-    private var sampleInterval: Int = 0
+extension IInstruments {
+    class Sysmontap: Base {
+        public weak var delegate: IInstrumentsSysmontapDelegate? = nil
+        
+        private var sampleInterval: Int = 0
+    }
 }
 
-extension IInstrumentsSysmontap {
+extension IInstruments.Sysmontap {
     func start() {
         send(P.start.arg)
     }
@@ -31,7 +33,7 @@ extension IInstrumentsSysmontap {
     }
 }
 
-extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {    
+extension IInstruments.Sysmontap: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .sysmontap
     }
@@ -49,8 +51,8 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
                 }
             }
             
-            if let sysmotap = Mapper<IInstrumentsSysmotapModel>().map(JSON: result[sysI]),
-               let process = Mapper<IInstrumentsSysmotapProcessesModel>().map(JSON: result[proI]) {
+            if let sysmotap = Mapper<Model>().map(JSON: result[sysI]),
+               let process = Mapper<ProcessesModel>().map(JSON: result[proI]) {
                 delegate?.sysmotap(model: sysmotap)
                 delegate?.process(model: process)
             }
@@ -58,7 +60,7 @@ extension IInstrumentsSysmontap: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsSysmontap {
+extension IInstruments.Sysmontap {
     enum P {
         case start
         case set(sampleInterval: Int)
@@ -73,8 +75,8 @@ extension IInstrumentsSysmontap {
                         "ur": 1000,
                         "cpuUsage": true,
                         "sampleInterval": sampleInterval,
-                        "sysAttrs": IInstrumentsSysmontap.sysAttrs,
-                        "procAttrs": IInstrumentsSysmontap.procAttrs,
+                        "sysAttrs": IInstruments.Sysmontap.SA,
+                        "procAttrs": IInstruments.Sysmontap.PA,
                     ]
                     
                     let args = DTXArguments()
@@ -84,7 +86,7 @@ extension IInstrumentsSysmontap {
         }
     }
     
-    public static let procAttrs = [
+    public static let PA = [
         "cpuUsage",
         "ctxSwitch",
         "intWakeups",
@@ -98,7 +100,7 @@ extension IInstrumentsSysmontap {
         "diskBytesRead",
     ]
     
-    public static let sysAttrs = [
+    public static let SA = [
         "vmExtPageCount",
         "vmFreeCount",
         "vmPurgeableCount",
@@ -106,7 +108,7 @@ extension IInstrumentsSysmontap {
         "physMemSize"
     ]
     
-    public static let coalAttrs = [
+    public static let CA = [
         "bundleID",
         "cpuTime",
         "timeNonEmpty",

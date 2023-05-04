@@ -1,5 +1,5 @@
 //
-//  IInstrumentsEnergy.swift
+//  Energy.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/26.
@@ -13,16 +13,20 @@ protocol IInstrumentsEnergyDelegate: NSObjectProtocol {
     
 }
 
-class IInstrumentsEnergy: IInstrumentsBase {
-    public weak var delegate: IInstrumentsEnergyDelegate? = nil
-    
-    private var startPids: [UInt32] = []
-    
-    private var sampleAttributes: [String : Any] = [:]
-    private var samplePids: [UInt32] = []
+extension IInstruments {
+    class Energy: Base {
+        public weak var delegate: IInstrumentsEnergyDelegate? = nil
+        
+        private var startPids: [UInt32] = []
+        
+        private var sampleAttributes: [String : Any] = [:]
+        private var samplePids: [UInt32] = []
+    }
 }
 
-extension IInstrumentsEnergy {
+
+
+extension IInstruments.Energy {
     func start(pids: [UInt32]) {
         startPids = pids
         send(P.start(pids: pids).arg)
@@ -35,15 +39,15 @@ extension IInstrumentsEnergy {
     }
 }
 
-extension IInstrumentsEnergy: IInstrumentsServiceProtocol {
+extension IInstruments.Energy: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .energy
     }
     
     func response(_ response: DTXReceiveObject) {
         if let response = response.object as? [Int64 : [String : Any]] {
-            var result = [Int64 : IInstrumentsEnergyModel]()
-            let mapper = Mapper<IInstrumentsEnergyModel>()
+            var result = [Int64 : Model]()
+            let mapper = Mapper<Model>()
             response.forEach { item in
                 if let model = mapper.map(JSON: item.value) {
                     result[item.key] = model
@@ -53,7 +57,7 @@ extension IInstrumentsEnergy: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsEnergy {
+extension IInstruments.Energy {
     enum P {
         case start(pids: [UInt32])
         case sample(attributes: [String : Any], pids: [UInt32])

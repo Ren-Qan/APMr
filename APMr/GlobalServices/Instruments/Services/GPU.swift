@@ -1,5 +1,5 @@
 //
-//  IInstrumentsGPU.swift
+//  GPU.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/12.
@@ -14,15 +14,19 @@ protocol IInstrumentsGPUDelegate: NSObjectProtocol {
     
 }
 
-class IInstrumentsGPU: IInstrumentsBase {
-    public weak var delegate: IInstrumentsGPUDelegate? = nil
+extension IInstruments {
+    class GPU: Base {
+        public weak var delegate: IInstrumentsGPUDelegate? = nil
+    }
 }
 
-extension IInstrumentsGPU {
+
+
+extension IInstruments.GPU {
     
 }
 
-extension IInstrumentsGPU: IInstrumentsServiceProtocol {
+extension IInstruments.GPU: IInstrumentsServiceProtocol {
     
     var server: IInstrumentsServiceName {
         return .gpu
@@ -33,7 +37,7 @@ extension IInstrumentsGPU: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsGPU {
+extension IInstruments.GPU {
     struct Configure {
         var counter: Int
         var profile: Int

@@ -1,5 +1,5 @@
 //
-//  IInstrumentsRuningProcess.swift
+//  RuningProcess.swift
 //  TestAPP
 //
 //  Created by 任玉乾 on 2022/11/29.
@@ -16,14 +16,16 @@ protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
     func running(process: [[String : Any]])
 }
 
-class IInstrumentsDeviceInfo: IInstrumentsBase {
-    public weak var delegate: IInstrumentsDeviceInfoDelegate? = nil
-    
-    private var pid: UInt32 = 0
-    private var symbolicatorConfig: SymbolicatorConfig? = nil
+extension IInstruments {
+    class DeviceInfo: Base {
+        public weak var delegate: IInstrumentsDeviceInfoDelegate? = nil
+        
+        private var pid: UInt32 = 0
+        private var symbolicatorConfig: SymbolicatorConfig? = nil
+    }
 }
 
-extension IInstrumentsDeviceInfo {
+extension IInstruments.DeviceInfo {
     func machTime() {
         send(P.machTimeInfo.arg)
     }
@@ -47,7 +49,7 @@ extension IInstrumentsDeviceInfo {
     }
 }
 
-extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
+extension IInstruments.DeviceInfo: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .deviceinfo
     }
@@ -72,7 +74,7 @@ extension IInstrumentsDeviceInfo: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsDeviceInfo {
+extension IInstruments.DeviceInfo {
     struct SymbolicatorConfig {
         var pid: UInt32
         var selector: String

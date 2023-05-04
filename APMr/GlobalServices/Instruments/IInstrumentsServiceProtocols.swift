@@ -94,7 +94,7 @@ extension IInstrumentsServiceProtocol {
     }
     
     func setup(_ insturments: IInstruments) {
-        if let service = self as? IInstrumentsBase {
+        if let service = self as? IInstruments.Base {
             service.instrument = insturments
         }
         insturments.setup(service: self)
@@ -102,7 +102,7 @@ extension IInstrumentsServiceProtocol {
     
     func send(_ arg: IInstrumentRequestArgsProtocol) {
         let channel = server.channel
-        let identifier = (self as? IInstrumentsBase)?.nextIndentifier ?? .max
+        let identifier = (self as? IInstruments.Base)?.nextIndentifier ?? .max
         instrument?.send(channel: channel,
                          identifier: identifier,
                          selector: arg.selector,

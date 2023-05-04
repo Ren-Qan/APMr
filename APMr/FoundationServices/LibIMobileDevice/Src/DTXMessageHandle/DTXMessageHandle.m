@@ -478,6 +478,7 @@ char * find_image_path(idevice_t device) {
     
     return result;
 }
+
 @end
 
 

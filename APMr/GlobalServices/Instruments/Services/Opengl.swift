@@ -1,5 +1,5 @@
 //
-//  IInstrumentsOpengl.swift
+//  Opengl.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/1.
@@ -10,17 +10,19 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsOpenglDelegate: NSObjectProtocol {
-    func sampling(model: IInstrumentsOpenglModel)
+    func sampling(model: IInstruments.Opengl.Model)
 }
 
-class IInstrumentsOpengl: IInstrumentsBase {
-    public weak var delegate: IInstrumentsOpenglDelegate? = nil
-    
-    private var rateSampling: Int = 0
-    private var startInterval: Int = 0
+extension IInstruments {
+    class Opengl: Base {
+        public weak var delegate: IInstrumentsOpenglDelegate? = nil
+        
+        private var rateSampling: Int = 0
+        private var startInterval: Int = 0
+    }
 }
 
-extension IInstrumentsOpengl {
+extension IInstruments.Opengl {
     func set(rate: Int = 5) {
         self.rateSampling = rate
         send(P.rate(sampling: rate).arg)
@@ -32,20 +34,20 @@ extension IInstrumentsOpengl {
     }
 }
 
-extension IInstrumentsOpengl: IInstrumentsServiceProtocol {
+extension IInstruments.Opengl: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .opengl
     }
 
     func response(_ response: DTXReceiveObject) {        
         if let obj = response.object as? [String : Any],
-           let model = Mapper<IInstrumentsOpenglModel>().map(JSON: obj) {
+           let model = Mapper<IInstruments.Opengl.Model>().map(JSON: obj) {
             self.delegate?.sampling(model: model)
         }
     }
 }
 
-extension IInstrumentsOpengl {
+extension IInstruments.Opengl {
     enum P {
         case rate(sampling: Int)
         case start(interval: Int)

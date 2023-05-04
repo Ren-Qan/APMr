@@ -1,5 +1,5 @@
 //
-//  IInstrumentsSampling.swift
+//  Sampling.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/2/16.
@@ -11,12 +11,15 @@ import LibMobileDevice
 protocol IInstrumentSamplingDelegate: NSObjectProtocol {
     
 }
-//TODO: - 补充 Sampling Selector
-class IInstrumentSampling: IInstrumentsBase {
-    public weak var delegagte: IInstrumentSamplingDelegate? = nil
+
+extension IInstruments {
+    //TODO: - 补充 Sampling Selector
+    class Sampling: Base {
+        public weak var delegagte: IInstrumentSamplingDelegate? = nil
+    }
 }
 
-extension IInstrumentSampling: IInstrumentsServiceProtocol {
+extension IInstruments.Sampling: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         .sampling
     }
@@ -26,7 +29,7 @@ extension IInstrumentSampling: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentSampling {
+extension IInstruments.Sampling {
     func start() {
         send(P.start.arg)
     }
@@ -36,7 +39,7 @@ extension IInstrumentSampling {
     }
 }
 
-extension IInstrumentSampling {
+extension IInstruments.Sampling {
     
     enum P {
         case start

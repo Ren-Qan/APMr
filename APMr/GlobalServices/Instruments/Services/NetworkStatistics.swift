@@ -1,5 +1,5 @@
 //
-//  IInstrumentsNetworkStatistics.swift
+//  NetworkStatistics.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/24.
@@ -10,19 +10,21 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsNetworkStatisticsDelegate: NSObjectProtocol {
-    func process(modelMap: [UInt32 : IInstrumentsNetworkStatisticsModel])
+    func process(modelMap: [UInt32 : IInstruments.NetworkStatistics.Model])
 }
 
-class IInstrumentsNetworkStatistics: IInstrumentsBase {
-    public weak var delegate: IInstrumentsNetworkStatisticsDelegate? = nil
-    
-    private var startPids: [UInt32] = []
-    private var stopPids: [UInt32] = []
-    
-    private var sampleConfig: SampleConfig? = nil
+extension IInstruments {
+    class NetworkStatistics: IInstruments.Base {
+        public weak var delegate: IInstrumentsNetworkStatisticsDelegate? = nil
+        
+        private var startPids: [UInt32] = []
+        private var stopPids: [UInt32] = []
+        
+        private var sampleConfig: SampleConfig? = nil
+    }
 }
 
-extension IInstrumentsNetworkStatistics {
+extension IInstruments.NetworkStatistics {
     func start(pids: [UInt32]) {
         self.startPids = pids
         send(P.start(pids: pids).arg)
@@ -44,7 +46,7 @@ extension IInstrumentsNetworkStatistics {
     }
 }
 
-extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {    
+extension IInstruments.NetworkStatistics: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .networkStatistics
     }
@@ -52,8 +54,8 @@ extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
     func response(_ response: DTXReceiveObject) {
         
         if let response = response.object as? [UInt32 : [String : Any]] {
-            var result = [UInt32 : IInstrumentsNetworkStatisticsModel]()
-            let mapper = Mapper<IInstrumentsNetworkStatisticsModel>()
+            var result = [UInt32 : Model]()
+            let mapper = Mapper<Model>()
             response.forEach { item in
                 if let model = mapper.map(JSON: item.value) {
                     result[item.key] = model
@@ -64,7 +66,7 @@ extension IInstrumentsNetworkStatistics: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsNetworkStatistics {
+extension IInstruments.NetworkStatistics {
     struct SampleConfig {
         var attributes: [String]
         var pids: [UInt32]

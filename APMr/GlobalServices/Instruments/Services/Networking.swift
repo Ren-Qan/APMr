@@ -1,5 +1,5 @@
 //
-//  IInstrumentsNetworking.swift
+//  Networking.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/24.
@@ -9,20 +9,24 @@ import Foundation
 import LibMobileDevice
 
 protocol IInstrumentsNetworkingDelegate: NSObjectProtocol {
-    func interfaceDetection(model: IInstrumentsNetworkingInterfaceDetectionModel)
+    func interfaceDetection(model: IInstruments.Networking.InterfaceDetectionModel)
     
-    func connectionDetectedV4(model: IInstrumentsNetworkingConnectionDetectedModelV4)
+    func connectionDetectedV4(model: IInstruments.Networking.ConnectionDetectedModelV4)
     
-    func connectionDetectedV6(model: IInstrumentsNetworkingConnectionDetectedModelV6)
+    func connectionDetectedV6(model: IInstruments.Networking.ConnectionDetectedModelV6)
     
-    func connectionUpdate(model: IInstrumentsNetworkingConnectionUpdateModel)
+    func connectionUpdate(model: IInstruments.Networking.ConnectionUpdateModel)
 }
 
-class IInstrumentsNetworking: IInstrumentsBase {
-    public weak var delegate: IInstrumentsNetworkingDelegate? = nil
+extension IInstruments {
+    class Networking: Base {
+        public weak var delegate: IInstrumentsNetworkingDelegate? = nil
+    }
 }
 
-extension IInstrumentsNetworking {
+
+
+extension IInstruments.Networking {
     func replay() {
         send(P.replay.arg)
     }
@@ -36,7 +40,7 @@ extension IInstrumentsNetworking {
     }
 }
 
-extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
+extension IInstruments.Networking: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .networking
     }
@@ -46,7 +50,7 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
               datas.count == 2,
               let modelDatas = datas[1] as? [Any],
               let typeNumber = datas[0] as? Int64,
-              let type = IInstrumentsNetworkingMessageType(rawValue: typeNumber) else {
+              let type = IInstruments.Networking.MessageType(rawValue: typeNumber) else {
             return
         }
         
@@ -71,22 +75,22 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
         }
     }
     
-    private func interfaceDetection(datas: [Any]) -> IInstrumentsNetworkingInterfaceDetectionModel? {
+    private func interfaceDetection(datas: [Any]) -> IInstruments.Networking.InterfaceDetectionModel? {
         guard datas.count == 2 else {
             return nil
         }
-        var model = IInstrumentsNetworkingInterfaceDetectionModel()
+        var model = IInstruments.Networking.InterfaceDetectionModel()
         model.interfaceIndex = datas[0] as? Int64
         model.name = datas[1] as? String
         return model
     }
     
-    private func connectionDetectedV4(datas: [Any]) -> IInstrumentsNetworkingConnectionDetectedModelV4? {
+    private func connectionDetectedV4(datas: [Any]) -> IInstruments.Networking.ConnectionDetectedModelV4? {
         guard datas.count == 8 else {
             return nil
         }
         
-        var model = IInstrumentsNetworkingConnectionDetectedModelV4()
+        var model = IInstruments.Networking.ConnectionDetectedModelV4()
         if let local = datas[0] as? Data {
             model.local = local.withUnsafeBytes { buffer in
                 buffer.load(as: sockaddr_in.self)
@@ -112,12 +116,12 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
         return model
     }
 
-    private func connectionDetectedV6(datas: [Any]) -> IInstrumentsNetworkingConnectionDetectedModelV6? {
+    private func connectionDetectedV6(datas: [Any]) -> IInstruments.Networking.ConnectionDetectedModelV6? {
         guard datas.count == 8 else {
             return nil
         }
                 
-        var model = IInstrumentsNetworkingConnectionDetectedModelV6()
+        var model = IInstruments.Networking.ConnectionDetectedModelV6()
         
         if let local = datas[0] as? Data {
             model.local = local.withUnsafeBytes { buffer in
@@ -143,11 +147,11 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
         return model
     }
     
-    private func connectionUpdate(datas: [Any]) -> IInstrumentsNetworkingConnectionUpdateModel? {
+    private func connectionUpdate(datas: [Any]) -> IInstruments.Networking.ConnectionUpdateModel? {
         guard datas.count == 11 else {
             return nil
         }
-        var model = IInstrumentsNetworkingConnectionUpdateModel()
+        var model = IInstruments.Networking.ConnectionUpdateModel()
         model.rxPackets = datas[0] as? Int64
         model.rxBytes = datas[1] as? Int64
         model.txPackets = datas[2] as? Int64
@@ -163,7 +167,7 @@ extension IInstrumentsNetworking: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsNetworking {
+extension IInstruments.Networking {
     enum P {
         case replay
         case start

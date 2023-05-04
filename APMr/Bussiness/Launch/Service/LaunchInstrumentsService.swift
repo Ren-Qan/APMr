@@ -13,10 +13,10 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     private lazy var parser = Parser()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
-        let process = IInstrumentsProcesscontrol()
+        let process = IInstruments.Processcontrol()
         process.delegate = self
         
-        let core = IInstrumentsCoreProfileSessionTap()
+        let core = IInstruments.CoreProfileSessionTap()
         core.delegate = self
 
         let group = IInstrumentsServiceGroup()
@@ -27,13 +27,13 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
 
 extension LaunchInstrumentsService {
     func launch(app: IApp) {
-        if let client: IInstrumentsCoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
+        if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
             client.setConfig()
             client.start()
         }
         
-        if let client: IInstrumentsProcesscontrol = serviceGroup.client(.processcontrol) {
-            var config = IInstrumentsProcesscontrol.LaunchConfig.common(bundle: app.bundleId)
+        if let client: IInstruments.Processcontrol = serviceGroup.client(.processcontrol) {
+            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
             config.environment = ["OS_ACTIVITY_DT_MODE": true,
                                   "HIPreventRefEncoding": true,
                                   "DYLD_PRINT_TO_STDERR": true]

@@ -20,7 +20,7 @@ extension LaunchInstrumentsService {
         
         private var launchDatapool: [String : LaunchModel] = [:]
         private var mainUIThread: MainUIThread = .none
-        private var threadMap: [UInt64 : KDThreadMap] = [:]
+        private var threadMap: [UInt64 : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
         
         func parse(data: Data) {
             guard data.count > 0 else {
@@ -54,7 +54,7 @@ extension LaunchInstrumentsService.Parser {
         case initializing
     }
         
-    func decode(_ entry: KDEBUGEntry) {
+    func decode(_ entry: IInstruments.CoreProfileSessionTap.KDEBUGEntry) {
         let list: [UInt32] = [0x1f, 0x2b, 0x31]
         if list.contains([entry.class_code]) {
             decodeAppLifeCycle(entry)
@@ -63,7 +63,7 @@ extension LaunchInstrumentsService.Parser {
         }
     }
     
-    func decodeAppLifeCycle(_ entry: KDEBUGEntry) {
+    func decodeAppLifeCycle(_ entry: IInstruments.CoreProfileSessionTap.KDEBUGEntry) {
         guard let process = threadMap[entry.thread], process.pid == tracePid, tracePid != 0 else {
             return
         }
@@ -96,8 +96,8 @@ extension LaunchInstrumentsService.Parser {
         let stream = InputStream(data: data)
         stream.open()
         
-        var header = KDHeaderV2()
-        offset += stream.read(&header, maxLength: MemoryLayout<KDHeaderV2>.size)
+        var header = IInstruments.CoreProfileSessionTap.KDHeaderV2()
+        offset += stream.read(&header, maxLength: MemoryLayout<IInstruments.CoreProfileSessionTap.KDHeaderV2>.size)
         
         let empty = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x100)
         offset += stream.read(empty, maxLength: 0x100)
@@ -107,7 +107,7 @@ extension LaunchInstrumentsService.Parser {
         var threadI = 0
         
         while stream.hasBytesAvailable, threadI < mapCount {
-            var thread = KDThreadMap()
+            var thread = IInstruments.CoreProfileSessionTap.KDThreadMap()
             
             offset += stream.read(&thread.thread, maxLength: 8)
             offset += stream.read(&thread.pid, maxLength: 4)
@@ -137,7 +137,7 @@ extension LaunchInstrumentsService.Parser {
         }
         
         while stream.hasBytesAvailable {
-            var entry = KDEBUGEntry()
+            var entry = IInstruments.CoreProfileSessionTap.KDEBUGEntry()
             stream.read(&entry, maxLength: 64)
             decode(entry)
         }
@@ -150,14 +150,14 @@ extension LaunchInstrumentsService.Parser {
         let stream = InputStream(data: data)
         stream.open()
         
-        let header = UnsafeMutablePointer<KDHeaderV3>.allocate(capacity: 1)
-        offset += stream.read(header, maxLength: MemoryLayout<KDHeaderV3>.size)
+        let header = UnsafeMutablePointer<IInstruments.CoreProfileSessionTap.KDHeaderV3>.allocate(capacity: 1)
+        offset += stream.read(header, maxLength: MemoryLayout<IInstruments.CoreProfileSessionTap.KDHeaderV3>.size)
         
         while (stream.hasBytesAvailable) {
-            let subheader = UnsafeMutablePointer<KDSubHeaderV3>.allocate(capacity: 1)
-            offset += stream.read(subheader, maxLength: MemoryLayout<KDSubHeaderV3>.size)
+            let subheader = UnsafeMutablePointer<IInstruments.CoreProfileSessionTap.KDSubHeaderV3>.allocate(capacity: 1)
+            offset += stream.read(subheader, maxLength: MemoryLayout<IInstruments.CoreProfileSessionTap.KDSubHeaderV3>.size)
             
-            if let tag = Tag(rawValue: subheader.pointee.tag) {
+            if let tag = IInstruments.CoreProfileSessionTap.Tag(rawValue: subheader.pointee.tag) {
                 let dataLen = Int(subheader.pointee.length)
                 let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: dataLen)
                 offset += stream.read(dataP, maxLength: dataLen)
@@ -200,7 +200,7 @@ extension LaunchInstrumentsService.Parser {
         stream.open()
         
         while stream.hasBytesAvailable {
-            var entry = KDEBUGEntry()
+            var entry = IInstruments.CoreProfileSessionTap.KDEBUGEntry()
             stream.read(&entry, maxLength: 64)
             decode(entry)
         }
@@ -213,8 +213,8 @@ extension LaunchInstrumentsService.Parser {
     class LaunchModel {
         var event: Event = .none
         var scene: String = ""
-        var begin: KDEBUGEntry? = nil
-        var end: KDEBUGEntry? = nil
+        var begin: IInstruments.CoreProfileSessionTap.KDEBUGEntry? = nil
+        var end: IInstruments.CoreProfileSessionTap.KDEBUGEntry? = nil
     }
 }
 

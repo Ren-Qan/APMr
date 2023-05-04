@@ -1,5 +1,5 @@
 //
-//  IInstrumentsCoreProfileSessionTap.swift
+//  CoreProfileSessionTap.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/2/22.
@@ -12,12 +12,13 @@ protocol IInstrumentsCoreProfileSessionTapDelegate: NSObjectProtocol {
     func launch(data: Data)
 }
 
-class IInstrumentsCoreProfileSessionTap: IInstrumentsBase {
-    public weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil
+extension IInstruments {
+    class CoreProfileSessionTap: Base {
+        public weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil
+    }
 }
 
-
-extension IInstrumentsCoreProfileSessionTap: IInstrumentsServiceProtocol {
+extension IInstruments.CoreProfileSessionTap: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         .coreprofilesessiontap
     }
@@ -33,7 +34,7 @@ extension IInstrumentsCoreProfileSessionTap: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsCoreProfileSessionTap {
+extension IInstruments.CoreProfileSessionTap {
     func start() {
         send(P.start.arg)
     }
@@ -47,7 +48,7 @@ extension IInstrumentsCoreProfileSessionTap {
     }
 }
 
-extension IInstrumentsCoreProfileSessionTap {
+extension IInstruments.CoreProfileSessionTap {
     enum P {
         case start
         case stop

@@ -1,5 +1,5 @@
 //
-//  IInstrumentsObjectAlloc.swift
+//  ObjectAlloc.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/2/15.
@@ -12,14 +12,18 @@ protocol IInstrumentsObjectAllocDelegate: NSObjectProtocol {
     func prepared(response: [String : Any])
 }
 
-class IInstrumentsObjectAlloc: IInstrumentsBase {
-    public weak var delegate: IInstrumentsObjectAllocDelegate? = nil
-    
-    private var config: ParpareConfig? = nil
-    private var pid: UInt32 = 0
+extension IInstruments {
+    class ObjectAlloc: Base {
+        public weak var delegate: IInstrumentsObjectAllocDelegate? = nil
+        
+        private var config: ParpareConfig? = nil
+        private var pid: UInt32 = 0
+    }
 }
 
-extension IInstrumentsObjectAlloc {
+
+
+extension IInstruments.ObjectAlloc {
     func parpare(config: ParpareConfig = .default) {
         self.config = config
         send(P.parpare(config: config).arg)
@@ -35,7 +39,7 @@ extension IInstrumentsObjectAlloc {
     }
 }
 
-extension IInstrumentsObjectAlloc: IInstrumentsServiceProtocol {
+extension IInstruments.ObjectAlloc: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .objectalloc
     }
@@ -47,7 +51,7 @@ extension IInstrumentsObjectAlloc: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsObjectAlloc {
+extension IInstruments.ObjectAlloc {
     struct ParpareConfig {
         var launch: [String : Any]
         var mask: Int

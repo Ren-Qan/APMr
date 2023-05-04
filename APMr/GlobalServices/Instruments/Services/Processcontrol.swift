@@ -1,5 +1,5 @@
 //
-//  IInstrumentsProcesscontrol.swift
+//  Processcontrol.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/9.
@@ -14,14 +14,16 @@ protocol IInstrumentsProcesscontrolDelegate: NSObjectProtocol {
     func outputReceived(_ msg: String)
 }
 
-class IInstrumentsProcesscontrol: IInstrumentsBase {
-    public weak var delegate: IInstrumentsProcesscontrolDelegate? = nil
-    
-    private var pid: UInt32 = 0
-    private var launchConfig: LaunchConfig? = nil
+extension IInstruments {
+    class Processcontrol: Base {
+        public weak var delegate: IInstrumentsProcesscontrolDelegate? = nil
+        
+        private var pid: UInt32 = 0
+        private var launchConfig: LaunchConfig? = nil
+    }
 }
 
-extension IInstrumentsProcesscontrol {
+extension IInstruments.Processcontrol {
     func launch(bundle: String) {
         let config = LaunchConfig.common(bundle: bundle)
         launch(config: config)
@@ -38,7 +40,7 @@ extension IInstrumentsProcesscontrol {
     }
 }
 
-extension IInstrumentsProcesscontrol: IInstrumentsServiceProtocol {
+extension IInstruments.Processcontrol: IInstrumentsServiceProtocol {
     var server: IInstrumentsServiceName {
         return .processcontrol
     }
@@ -53,7 +55,7 @@ extension IInstrumentsProcesscontrol: IInstrumentsServiceProtocol {
     }
 }
 
-extension IInstrumentsProcesscontrol {
+extension IInstruments.Processcontrol {
     struct LaunchConfig {
         var devicePath = ""
         var bundle: String
