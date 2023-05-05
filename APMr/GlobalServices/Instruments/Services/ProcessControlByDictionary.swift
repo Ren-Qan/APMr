@@ -49,7 +49,7 @@ extension IInstruments.ProcessControlByDictionary: IInstrumentsServiceProtocol {
         .pcbd
     }
     
-    func response(_ response: DTXReceiveObject) {        
+    func response(_ response: IInstruments.R) {        
         if let pid = response.object as? UInt32 {
             delegate?.launch(pid: pid)
         }

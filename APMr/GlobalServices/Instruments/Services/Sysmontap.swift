@@ -38,7 +38,7 @@ extension IInstruments.Sysmontap: IInstrumentsServiceProtocol {
         return .sysmontap
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         if let result = response.object as? [[String : Any]], result.count >= 2 {
             var sysI = 0
             var proI = 1

@@ -10,6 +10,8 @@ import LibMobileDevice
 
 protocol IInstrumentsCoreProfileSessionTapDelegate: NSObjectProtocol {
     func launch(data: Data)
+    
+    func coreProfile(data: Data)
 }
 
 extension IInstruments {
@@ -23,13 +25,13 @@ extension IInstruments.CoreProfileSessionTap: IInstrumentsServiceProtocol {
         .coreprofilesessiontap
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         if let dic = response.object as? [String : Any] {
             if let data = (dic["sm"] as? [String : Any])?["ktrace"] as? Data {
                 delegate?.launch(data: data)
             }
         } else if let data = response.object as? Data {
-            delegate?.launch(data: data)
+            delegate?.coreProfile(data: data)
         }
     }
 }
@@ -72,7 +74,7 @@ extension IInstruments.CoreProfileSessionTap {
                                 "tk": 3,
                                 "ta": [[3], [0], [2], [1, 1, 0]],
                                 "uuid": UUID().uuidString.uppercased(),
-                            ],
+                            ] as [String : Any],
                             [
                                 "tsf": [65537],
                                 "ta": [[0], [2], [1, 1, 0]],

@@ -51,7 +51,7 @@ extension IInstruments.NetworkStatistics: IInstrumentsServiceProtocol {
         return .networkStatistics
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         
         if let response = response.object as? [UInt32 : [String : Any]] {
             var result = [UInt32 : Model]()

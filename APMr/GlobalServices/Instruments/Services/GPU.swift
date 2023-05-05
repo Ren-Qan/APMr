@@ -32,7 +32,7 @@ extension IInstruments.GPU: IInstrumentsServiceProtocol {
         return .gpu
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         
     }
 }

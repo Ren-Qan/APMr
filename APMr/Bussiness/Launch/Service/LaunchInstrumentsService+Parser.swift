@@ -29,11 +29,11 @@ extension LaunchInstrumentsService {
             
             let version = Data(data.prefix(4))
             if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
-//                p1(data)
+                p1(data)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
-//                p2(data)
+                p2(data)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-//                p2(data)
+                p2(data)
             } else {
 //                p4(data)
             }
@@ -55,12 +55,14 @@ extension LaunchInstrumentsService.Parser {
     }
         
     func decode(_ entry: IInstruments.CoreProfileSessionTap.KDEBUGEntry) {
-        let list: [UInt32] = [0x1f, 0x2b, 0x31]
-        if list.contains([entry.class_code]) {
-            decodeAppLifeCycle(entry)
-        } else if entry.debug_id == 835321862 {
-
-        }
+//        let list: [UInt32] = [0x1f, 0x2b, 0x31]
+//        if list.contains([entry.class_code]) {
+//            decodeAppLifeCycle(entry)
+//        } else if entry.debug_id == 835321862 {
+//            print("阶段")
+//        }
+        
+        decodeAppLifeCycle(entry)
     }
     
     func decodeAppLifeCycle(_ entry: IInstruments.CoreProfileSessionTap.KDEBUGEntry) {
@@ -68,13 +70,7 @@ extension LaunchInstrumentsService.Parser {
             return
         }
         
-        print("[\(process.process) ==== \(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
-        
-        if entry.class_code == 31 {
-            if entry.subclass_code == 7 {
-
-            }
-        }
+        print("[\(process.process) ---\(entry.debug_id) ==== \(entry.class_code) ==== \(entry.subclass_code) === \(entry.action_code) === \(entry.func_code)]")
     }
     
 }

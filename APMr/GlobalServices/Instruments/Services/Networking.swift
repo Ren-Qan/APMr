@@ -45,7 +45,7 @@ extension IInstruments.Networking: IInstrumentsServiceProtocol {
         return .networking
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         guard let datas = response.object as? [Any],
               datas.count == 2,
               let modelDatas = datas[1] as? [Any],

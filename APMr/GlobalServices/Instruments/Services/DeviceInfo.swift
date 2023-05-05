@@ -54,7 +54,7 @@ extension IInstruments.DeviceInfo: IInstrumentsServiceProtocol {
         return .deviceinfo
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         if let runningProcess = response.object as? [[String : Any]] {
             self.delegate?.running(process: runningProcess)
         } else if let arr = response.object as? [Any]  {

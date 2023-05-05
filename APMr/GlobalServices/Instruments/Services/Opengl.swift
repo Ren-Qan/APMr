@@ -39,7 +39,7 @@ extension IInstruments.Opengl: IInstrumentsServiceProtocol {
         return .opengl
     }
 
-    func response(_ response: DTXReceiveObject) {        
+    func response(_ response: IInstruments.R) {        
         if let obj = response.object as? [String : Any],
            let model = Mapper<IInstruments.Opengl.Model>().map(JSON: obj) {
             self.delegate?.sampling(model: model)

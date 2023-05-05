@@ -77,7 +77,7 @@ protocol IInstrumentsServiceProtocol {
     
     var instrument: IInstruments? { get }
     
-    func response(_ response: DTXReceiveObject)
+    func response(_ response: IInstruments.R)
     
     // MARK: - optional
     

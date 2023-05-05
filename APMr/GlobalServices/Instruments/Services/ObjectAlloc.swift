@@ -44,7 +44,7 @@ extension IInstruments.ObjectAlloc: IInstrumentsServiceProtocol {
         return .objectalloc
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         if let response = response.object as? [String : Any]  {
             self.delegate?.prepared(response: response)
         }

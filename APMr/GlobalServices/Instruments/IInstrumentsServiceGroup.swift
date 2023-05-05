@@ -19,7 +19,7 @@ class IInstrumentsServiceGroup: NSObject {
 }
 
 extension IInstrumentsServiceGroup: IInstrumentsDelegate {
-    func received(responsed: DTXReceiveObject?) {
+    func received(responsed: IInstruments.R?) {
         guard let response = responsed,
               let name = IInstrumentsServiceName(channel: response.channel),
               let service = serviceDic[name] else {

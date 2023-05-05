@@ -45,7 +45,7 @@ extension IInstruments.Processcontrol: IInstrumentsServiceProtocol {
         return .processcontrol
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         if response.flag == 2,
            let message = response.array?.first as? String {
             delegate?.outputReceived(message)

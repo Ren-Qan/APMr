@@ -24,7 +24,7 @@ extension IInstruments.Sampling: IInstrumentsServiceProtocol {
         .sampling
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         
     }
 }

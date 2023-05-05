@@ -86,11 +86,11 @@ extension IInstruments.CoreProfileSessionTap {
         var cpu_id: UInt32 = 0
         var unused: UInt64 = 0
         
-        var event_id: UInt32 { debug_id & 0xffffffff}
-        var class_code: UInt32 { (event_id >> 24) & 0xff }
-        var subclass_code: UInt32 { (event_id >> 16) & 0xff }
-        var action_code: UInt32 { (event_id >> 2) & 0x3fff }
-        var func_code: UInt32 { event_id & UInt32(0x00000003) }
+        var event_id: UInt32 { debug_id & 0xfffffffc}
+        var class_code: UInt32 { (debug_id >> 24) & 0xff }
+        var subclass_code: UInt32 { (debug_id >> 16) & 0xff }
+        var action_code: UInt32 { (debug_id >> 2) & 0x3fff }
+        var func_code: UInt32 { debug_id & UInt32(0x00000003) }
     }
 }
 

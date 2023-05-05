@@ -44,7 +44,7 @@ extension IInstruments.Energy: IInstrumentsServiceProtocol {
         return .energy
     }
     
-    func response(_ response: DTXReceiveObject) {
+    func response(_ response: IInstruments.R) {
         if let response = response.object as? [Int64 : [String : Any]] {
             var result = [Int64 : Model]()
             let mapper = Mapper<Model>()

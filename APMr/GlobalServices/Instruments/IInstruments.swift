@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 
 protocol IInstrumentsDelegate: NSObjectProtocol {
-    func received(responsed: DTXReceiveObject?)
+    func received(responsed: IInstruments.R?)
 }
 
 class IInstruments: NSObject {
@@ -65,7 +65,9 @@ extension IInstruments {
             let serialQueue = DispatchQueue(label: "serial.dtxmsg.queue", target: .global())
             let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: serialQueue)
             read.setEventHandler { [weak self] in
-                self?.delegate?.received(responsed: self?.dtxService.receive())
+                let receive = self?.dtxService.receive()
+                let response = R(receive)
+                self?.delegate?.received(responsed: response)
             }
             read.resume()
             self.reader = read
@@ -114,7 +116,6 @@ extension IInstruments {
     }
 }
 
-
 extension IInstruments: DTXMessageHandleDelegate {
     func progress(_ progress: DTXMessageProgressState, message: String?, handle: DTXMessageHandle) {
         debugPrint("[progress] - \(progress) - \(message ?? "none message")")
@@ -125,3 +126,24 @@ extension IInstruments: DTXMessageHandleDelegate {
     }
 }
 
+extension IInstruments {
+    struct R {
+        var channel: UInt32
+        var identifier: UInt32
+        var flag: UInt32
+        
+        var object: Any? = nil
+        var array: [Any]? = nil
+        
+        init?(_ receive: DTXReceiveObject?) {
+            guard let r = receive else {
+                return nil
+            }
+            self.identifier = r.identifier
+            self.channel = r.channel
+            self.flag = r.flag
+            self.object = r.object
+            self.array = r.array
+        }
+    }
+}
