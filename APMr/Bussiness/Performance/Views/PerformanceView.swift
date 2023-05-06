@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PerformanceView: View {
     
-    @EnvironmentObject var service: HomepageService
+    @EnvironmentObject var deviceService: DeviceService
     
     @EnvironmentObject var performance: PerformanceInstrumentsService
     
@@ -19,10 +19,10 @@ struct PerformanceView: View {
                 PerformanceSettingBarView()
                 PerformaceChartView()
             }
-            .environmentObject(service)
+            .environmentObject(deviceService)
             .environmentObject(performance)
             
-            if service.isShowPerformanceSummary {
+            if performance.isShowPerformanceSummary {
                 PerformanceSummaryView()
                     .padding(.leading, 5)
                     .frame(width: 250)
@@ -34,11 +34,11 @@ struct PerformanceView: View {
                             edge: .trailing
                         )
                     )
-                    .environmentObject(service)
+                    .environmentObject(deviceService)
                     .environmentObject(performance.summary)
             }
         }
-        .animation(.default, value: service.isShowPerformanceSummary)
+        .animation(.default, value: performance.isShowPerformanceSummary)
     }
 }
 

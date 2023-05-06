@@ -1,5 +1,5 @@
 //
-//  HomepageView.swift
+//  Root.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/1/10.
@@ -7,40 +7,40 @@
 
 import SwiftUI
 
-struct HomepageView: View {
-    @StateObject private var service = HomepageService()
+struct Root: View {
+    @StateObject private var service = Service()
     
-    @StateObject private var deviceService = HomepageDeviceService()
+    @StateObject private var deviceService = DeviceService()
     
     @StateObject private var performanceService = PerformanceInstrumentsService()
         
     @StateObject private var launchService = LaunchInstrumentsService()
-    
+        
     var body: some View {
         NavigationSplitView {
-            List(selection: $service.selectionSider) {
+            List(selection: $service.selection) {
                 Section("功能") {
-                    ForEach(HomepageService.siders) { sider in
+                    ForEach(Service.siders) { sider in
                         NavigationLink(sider.title, value: sider)
                     }
                 }
             }
         } detail: {
-            switch service.selectionSider.state {
+            switch service.selection.state {
                 case .performance:
                     PerformanceView()
-                        .environmentObject(service)
+                        .environmentObject(deviceService)
                         .environmentObject(performanceService)
                         .padding(.all, 5)
                     
                 case .launch:
                     LaunchView()
-                        .environmentObject(service)
+                        .environmentObject(deviceService)
                         .environmentObject(launchService)
                         .padding(.all, 5)
                     
                 default:
-                    Text(service.selectionSider.title + " In Progress")
+                    Text(service.selection.title + " In Progress")
             }
         }
         .navigationTitle(
@@ -51,12 +51,13 @@ struct HomepageView: View {
                 Menu {
                     ForEach(deviceService.deviceList) { device in
                         Button {
-                            if let beforeDevice = service.selectDevice, beforeDevice.id == device.id { } else {
-                                service.selectDevice = device
-                                service.selectApp = nil
-                                deviceService.userApplist = []
-                                deviceService.refreshApplist(device)
+                            if let beforeDevice = deviceService.selectDevice, beforeDevice.id == device.id {
+                                return
                             }
+                            deviceService.selectDevice = device
+                            deviceService.selectApp = nil
+                            deviceService.userApplist = []
+                            deviceService.refreshApplist(device)
                         } label: {
                             Label(device.deviceName,
                                   systemImage: device.type == .usb ? "cable.connector.horizontal" : "wifi")
@@ -64,10 +65,9 @@ struct HomepageView: View {
                         }
                     }
                 } label: {
-                    if let device = service.selectDevice {
+                    if let device = deviceService.selectDevice {
                         Text("\(device.deviceName)")
                         Image(systemName: device.type == .usb ? "cable.connector.horizontal" : "wifi")
-                        
                     } else {
                         Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
                     }
@@ -83,12 +83,12 @@ struct HomepageView: View {
                     Section("App") {
                         ForEach(deviceService.userApplist) { app in
                             Button(app.name) {
-                                service.selectApp = app
+                                deviceService.selectApp = app
                             }
                         }
                     }
                 } label: {
-                    Text(service.selectApp?.name ?? "请选择App")
+                    Text(deviceService.selectApp?.name ?? "请选择App")
                 }
                 .disabled(deviceService.userApplist.count <= 0)
                 .disabled(performanceService.isMonitoringPerformance)
@@ -97,17 +97,16 @@ struct HomepageView: View {
         }
         .onAppear {
             deviceService.injectClosure = { device in
-                guard let selectDevice = service.selectDevice else {
+                guard let selectDevice = deviceService.selectDevice else {
                     return
                 }
                 
-                let item = device.deviceList.first { item in
+                let item = deviceService.deviceList.first { item in
                     return item.deviceName == selectDevice.deviceName && item.id == selectDevice.id
                 }
                 
                 if item == nil {
-                    service.selectApp = nil
-                    service.selectDevice = nil
+                    deviceService.reset()
                     launchService.stopService()
                     performanceService.stopService()
                 }

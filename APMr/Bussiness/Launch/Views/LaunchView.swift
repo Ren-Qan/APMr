@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LaunchView: View {
     
-    @EnvironmentObject var service: HomepageService
+    @EnvironmentObject var deviceService: DeviceService
     
     @EnvironmentObject var launchService: LaunchInstrumentsService
     
@@ -18,7 +18,7 @@ struct LaunchView: View {
     var body: some View {
         VStack {
             Button("start") {
-                guard let device = service.selectDevice else {
+                guard let device = deviceService.selectDevice else {
                     return
                 }
                 
@@ -28,7 +28,7 @@ struct LaunchView: View {
             }
             
             Button("launch") {
-                guard let app = service.selectApp else {
+                guard let app = deviceService.selectApp else {
                     return
                 }
                 launchService.launch(app: app)

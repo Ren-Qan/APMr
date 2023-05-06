@@ -16,6 +16,8 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     
     @Published private(set) var monitorPid: UInt32 = 0
     
+    @Published var isShowPerformanceSummary = false
+    
     @Published var isMonitoringPerformance = false
     
     @Published var isLaunchingApp = false
@@ -102,26 +104,7 @@ extension PerformanceInstrumentsService {
             complete?(success, self)
         }
     }
-        
-    public func monitor(_ pid: UInt32) {
-        monitorPid = pid
-        if pid != 0 {
-            isMonitoringPerformance = true
-            isLaunchingApp = false
-            register()
             
-            timer?.invalidate()
-            timer = nil
-            timer = Timer(timeInterval: 1,
-                          repeats: true,
-                          block: { [weak self] _ in
-                self?.sample()
-            })
-            timer?.fire()
-            RunLoop.main.add(timer!, forMode: .common)
-        }
-    }
-    
     public func stopService() {
         timer?.invalidate()
         timer = nil
@@ -172,6 +155,32 @@ extension PerformanceInstrumentsService {
 // MARK: - Private
 
 extension PerformanceInstrumentsService {
+    private func monitor(_ pid: UInt32) {
+        monitorPid = pid
+        if pid != 0 {
+            isMonitoringPerformance = true
+            isLaunchingApp = false
+            register()
+            
+            timer?.invalidate()
+            timer = nil
+            timer = Timer(timeInterval: 1,
+                          repeats: true,
+                          block: { [weak self] _ in
+                self?.sample()
+            })
+            timer?.fire()
+            RunLoop.main.add(timer!, forMode: .common)
+        }
+    }
+    
+    private func sample() {
+        self.operationQ.addOperation { [weak self] in
+            self?.send()
+            self?.record()
+        }
+    }
+    
     private func register() {
         if let client: IInstruments.Sysmontap = serviceGroup.client(.sysmontap) {
             client.setConfig()
@@ -192,14 +201,7 @@ extension PerformanceInstrumentsService {
             cDiagnostic(diagnostics)
         }
     }
-    
-    func resetData() {
-        cSPI = PerformanceIndicator()
-        currentSeconds = 1
-        pCM.reset(cSPI)
-        summary.reset()
-    }
-    
+        
     private func record() {
         summary.add(cSPI)
         pCM.add(cSPI, xAxisPageCount)
@@ -215,6 +217,13 @@ extension PerformanceInstrumentsService {
             }
         }
     }
+    
+    private func resetData() {
+        cSPI = PerformanceIndicator()
+        currentSeconds = 1
+        pCM.reset(cSPI)
+        summary.reset()
+    }
 }
 
 extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
@@ -224,13 +233,6 @@ extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
     
     func launch(pid: UInt32) {
         monitor(pid)
-    }
-    
-    private func sample() {
-        self.operationQ.addOperation { [weak self] in
-            self?.send()
-            self?.record()
-        }
     }
 }
 

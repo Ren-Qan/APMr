@@ -1,5 +1,5 @@
 //
-//  HomepageDeviceService.swift
+//  DeviceService.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/9.
@@ -7,12 +7,16 @@
 
 import Cocoa
 
-class HomepageDeviceService: NSObject, ObservableObject {    
+class DeviceService: NSObject, ObservableObject {
     @Published var deviceList: [DeviceItem] = []
     @Published var userApplist: [IApp] = []
     @Published var systemApplist: [IApp] = []
-        
-    var injectClosure: ((HomepageDeviceService) -> Void)? = nil
+    
+    @Published var selectDevice: DeviceItem? = nil
+    @Published var selectApp: IApp? = nil
+    @Published var monitorPid: uint32? = nil
+    
+    var injectClosure: ((DeviceService) -> Void)? = nil
     
     override init() {
         super.init()
@@ -26,7 +30,15 @@ class HomepageDeviceService: NSObject, ObservableObject {
     }
 }
 
-extension HomepageDeviceService {
+extension DeviceService {
+    func reset() {
+        selectDevice = nil
+        selectApp = nil
+        monitorPid = nil
+    }
+}
+
+extension DeviceService {
     func refreshDeviceList() {
         DispatchQueue.global().async {
             MobileManager.share.refreshDeviceList()

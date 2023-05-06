@@ -10,7 +10,7 @@ import Charts
 
 struct PerformaceChartView: View {
     // MARK: - Public 
-    @EnvironmentObject var service: HomepageService
+    @EnvironmentObject var deviceService: DeviceService
     
     @EnvironmentObject var performance: PerformanceInstrumentsService
     
@@ -21,7 +21,7 @@ struct PerformaceChartView: View {
                     VStack(spacing: 10) {
                         ForEach(performance.pCM.models) { chartModel in
                             LineChartGroup()
-                                .environmentObject(service)
+                                .environmentObject(deviceService)
                                 .environmentObject(chartModel)
                                 .environmentObject(performance)
                         }
@@ -35,7 +35,7 @@ struct PerformaceChartView: View {
 
 extension PerformaceChartView {
     private struct LineChartGroup: View {
-        @EnvironmentObject var service: HomepageService
+        @EnvironmentObject var deviceService: DeviceService
         @EnvironmentObject var performance: PerformanceInstrumentsService
         @EnvironmentObject var model: ChartModel
         
@@ -168,8 +168,8 @@ extension PerformaceChartView {
                 }
                 e = endX
             }
-            if !service.isShowPerformanceSummary {
-                service.isShowPerformanceSummary = true
+            if !performance.isShowPerformanceSummary {
+                performance.isShowPerformanceSummary = true
             }
             performance.highlight(start: s, end: e, isDragging: isDraging)
         }

@@ -14,9 +14,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     
     private lazy var parser = Parser()
     
-    private var s: CFTimeInterval = 0
-    private var time: CFTimeInterval = 0
-    
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let process = IInstruments.Processcontrol()
         process.delegate = self
@@ -32,8 +29,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
 
 extension LaunchInstrumentsService {
     func launch(app: IApp) {
-
-        
         if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
             client.setConfig()
             client.start()
@@ -70,8 +65,6 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32) {
         parser.tracePid = pid
         monitorPid = pid
-        s = CACurrentMediaTime()
-        time = CACurrentMediaTime()
         if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
             client.stop()
         }
@@ -81,18 +74,10 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     func launch(data: Data) {
         parser.parse(data: data)
-        let t = CACurrentMediaTime()
-        print("[TIME]=======\(t - time)")
-        print("[ALL]=====\(t - s)")
-        time = t
     }
     
     func coreProfile(data: Data) {
         parser.parse(data: data)
-        let t = CACurrentMediaTime()
-        print("[TIME]=======\(t - time)")
-        print("[ALL]=====\(t - s)")
-        time = t
     }
 }
 

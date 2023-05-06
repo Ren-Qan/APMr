@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PerformanceSettingBarView: View {
     
-    @EnvironmentObject var service: HomepageService
+    @EnvironmentObject var deviceService: DeviceService
     @EnvironmentObject var performance: PerformanceInstrumentsService
     
     @State private var isShowPerformanceItem = false
@@ -23,8 +23,8 @@ struct PerformanceSettingBarView: View {
                     if performance.isMonitoringPerformance {
                         performance.stopService()
                     } else {
-                        if let device = service.selectDevice,
-                           let app = service.selectApp {
+                        if let device = deviceService.selectDevice,
+                           let app = deviceService.selectApp {
                             performance.isLaunchingApp = true
                             performance.start(device) { success, server in
                                 if success {
@@ -46,7 +46,7 @@ struct PerformanceSettingBarView: View {
                 }
                 .common(
                     backColor: performance.isMonitoringPerformance ? .red : .blue,
-                    enable: service.selectDevice != nil && service.selectApp != nil && !performance.isLaunchingApp
+                    enable: deviceService.selectDevice != nil && deviceService.selectApp != nil && !performance.isLaunchingApp
                 )
                 
                 // MARK: - 选择指标按钮
@@ -79,7 +79,7 @@ struct PerformanceSettingBarView: View {
                                 
                 // MARK: - 报告按钮
                 Button {
-                    service.isShowPerformanceSummary.toggle()
+                    performance.isShowPerformanceSummary.toggle()
                 } label: {
                     Text("报告")
                         .frame(minHeight: 25)
@@ -92,7 +92,7 @@ struct PerformanceSettingBarView: View {
                 Color.fabulaBack2
             }
         }
-        .environmentObject(service)
+        .environmentObject(deviceService)
         .environmentObject(performance)
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct Application: App {
     var body: some Scene {
         WindowGroup {
-            HomepageView()
+            Root()
                 .preferredColorScheme(.dark)
                 .monospaced()
                 .frame(minWidth: 1200)

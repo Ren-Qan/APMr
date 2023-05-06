@@ -31,7 +31,7 @@ struct DeviceItem: Identifiable {
     var deviceName: String = ""
 }
 
-class IDevice: NSObject {
+class IDevice {
     public private(set) var device_t: idevice_t? = nil
     public private(set) var deviceItem: DeviceItem? = nil
     

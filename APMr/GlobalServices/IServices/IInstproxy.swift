@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
-class IInstproxy: NSObject {
+class IInstproxy {
     private var service_t: lockdownd_service_descriptor_t? = nil
     private var client_t: instproxy_client_t? = nil
     

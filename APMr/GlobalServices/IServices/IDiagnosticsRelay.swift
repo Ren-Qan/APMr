@@ -8,7 +8,7 @@
 import Cocoa
 import LibMobileDevice
 
-class IDiagnosticsRelay: NSObject {
+class IDiagnosticsRelay {
     private var service_t: lockdownd_service_descriptor_t? = nil
     private var client_t: diagnostics_relay_client_t? = nil
     

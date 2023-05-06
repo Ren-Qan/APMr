@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
-class ILockdown: NSObject {
+class ILockdown {
     public private(set) var lockdown_t: lockdownd_client_t? = nil
     
     convenience init?(_ device: IDevice) {

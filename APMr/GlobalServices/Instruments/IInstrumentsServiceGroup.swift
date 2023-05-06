@@ -15,6 +15,7 @@ class IInstrumentsServiceGroup: NSObject {
         return instruments
     }()
         
+    typealias Service = IInstrumentsServiceProtocol
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
 }
 
@@ -27,10 +28,6 @@ extension IInstrumentsServiceGroup: IInstrumentsDelegate {
         }
         service.response(response)
     }
-}
-
-extension IInstrumentsServiceGroup {
-    typealias Service = IInstrumentsServiceProtocol
 }
 
 extension IInstrumentsServiceGroup {
