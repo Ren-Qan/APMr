@@ -15,6 +15,9 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
     private lazy var parser = Parser()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
+        let device = IInstruments.DeviceInfo()
+        device.delegate = self
+        
         let process = IInstruments.Processcontrol()
         process.delegate = self
         
@@ -22,13 +25,18 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         core.delegate = self
 
         let group = IInstrumentsServiceGroup()
-        group.config([process, core])
+        group.config([process, core, device])
         return group
     }()
 }
 
 extension LaunchInstrumentsService {
     func launch(app: IApp) {
+        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
+            client.traceCodes()
+            client.machTime()
+        }
+        
         if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
             client.setConfig()
             client.start()
@@ -72,12 +80,29 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
-    func launch(data: Data) {
-        parser.parse(data: data)
+    func praserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
+        
     }
     
-    func coreProfile(data: Data) {
-        parser.parse(data: data)
+    func praserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
+        
+    }
+    
+    func praserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {
+        
     }
 }
 
+extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
+    func trace(codes: [Int64 : String]) {
+        
+    }
+    
+    func machTime(info: IInstruments.DeviceInfo.MT) {
+        
+    }
+    
+    func running(process: [[String : Any]]) {
+        
+    }
+}

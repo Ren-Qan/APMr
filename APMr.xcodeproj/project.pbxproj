@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -69,6 +69,7 @@
 		C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */; };
 		C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */; };
 		C7CCDA97298A176900948BA3 /* PerformaceChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA96298A176900948BA3 /* PerformaceChartModels.swift */; };
+		C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */; };
 		C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C5299C8BE5000CD484 /* LaunchView.swift */; };
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
@@ -179,6 +180,7 @@
 		C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSummaryView.swift; sourceTree = "<group>"; };
 		C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonModifier.swift; sourceTree = "<group>"; };
 		C7CCDA96298A176900948BA3 /* PerformaceChartModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartModels.swift; sourceTree = "<group>"; };
+		C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoModels.swift; sourceTree = "<group>"; };
 		C7E137C5299C8BE5000CD484 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 				C704D00F2963EC600065004D /* NetworkingModels.swift */,
 				C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */,
 				C769460529AC4F8300150571 /* CoreProfileSessionTapModels.swift */,
+				C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -709,7 +712,7 @@
 				};
 			};
 			buildConfigurationList = C7483B8B29373A0400F32BE0 /* Build configuration list for PBXProject "APMr" */;
-			compatibilityVersion = "Xcode 13.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -814,6 +817,7 @@
 				C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */,
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
 				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
+				C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */,
 				C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */,
 				C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */,
 				C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */,

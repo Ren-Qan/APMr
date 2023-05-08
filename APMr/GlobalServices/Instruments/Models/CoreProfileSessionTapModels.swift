@@ -8,6 +8,21 @@
 import Foundation
 
 extension IInstruments.CoreProfileSessionTap {
+    struct ModelV1 {
+        var entries: [KCData]
+    }
+    
+    struct ModelV2 {
+        var threadMap: [UInt64 : KDThreadMap]
+        var entries: [KDEBUGEntry]
+    }
+    
+    struct ModelV4 {
+        var entries: [KDEBUGEntry]
+    }
+}
+
+extension IInstruments.CoreProfileSessionTap {
     enum Tag: UInt32 {
         case sshot = 0x8002
         case images = 0x8004
@@ -93,4 +108,15 @@ extension IInstruments.CoreProfileSessionTap {
         var func_code: UInt32 { debug_id & UInt32(0x00000003) }
     }
 }
+
+extension IInstruments.CoreProfileSessionTap {
+    struct KCData {
+        var type: UInt32
+        var size: UInt32
+        var flag: UInt64
+        var data: Data
+    }
+}
+
+
 

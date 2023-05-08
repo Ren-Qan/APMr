@@ -11,7 +11,7 @@ import LibMobileDevice
 protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
     func trace(codes: [Int64 : String])
     
-    func machTime(info: [Any])
+    func machTime(info: IInstruments.DeviceInfo.MT)
     
     func running(process: [[String : Any]])
 }
@@ -57,8 +57,15 @@ extension IInstruments.DeviceInfo: IInstrumentsServiceProtocol {
     func response(_ response: IInstruments.R) {
         if let runningProcess = response.object as? [[String : Any]] {
             self.delegate?.running(process: runningProcess)
-        } else if let arr = response.object as? [Any]  {
-            delegate?.machTime(info: arr)
+        } else if let arr = response.object as? [Any], arr.count >= 3 {
+            if let mt = arr[0] as? Int64,
+               let mn = arr[1] as? Int64,
+               let md = arr[2] as? Int64 {
+                let MT = MT(mach_absolute_time: mt,
+                            mach_timebase_number: mn,
+                            mach_timebase_denom: md)
+                self.delegate?.machTime(info: MT)
+            }
         } else if let codes = response.object as? String {
             let result = codes.split(separator: "\n").reduce(into: [Int64: String]()) { (dict, line) in
                 let parts = line.split(separator: "\t")
