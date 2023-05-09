@@ -5,8 +5,7 @@
 //  Created by 任玉乾 on 2023/2/15.
 //
 
-import QuartzCore
-import Cocoa
+import Foundation
 import LibMobileDevice
 
 class LaunchInstrumentsService: NSObject, ObservableObject {

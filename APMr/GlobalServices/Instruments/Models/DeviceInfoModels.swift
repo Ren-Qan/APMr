@@ -14,7 +14,7 @@ extension IInstruments.DeviceInfo {
         var mach_timebase_denom: Int64
         
         var mach_time_factor: CGFloat {
-            CGFloat(mach_time_factor) / CGFloat(mach_timebase_denom)
+            CGFloat(self.mach_timebase_number) / CGFloat(self.mach_timebase_denom)
         }
     }
 }
