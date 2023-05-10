@@ -12,6 +12,10 @@ protocol IInstrumentsObjectAllocDelegate: NSObjectProtocol {
     func prepared(response: [String : Any])
 }
 
+extension IInstrumentsObjectAllocDelegate {
+    func prepared(response: [String : Any]) { }
+}
+
 extension IInstruments {
     class ObjectAlloc: Base {
         public weak var delegate: IInstrumentsObjectAllocDelegate? = nil
@@ -20,8 +24,6 @@ extension IInstruments {
         private var pid: UInt32 = 0
     }
 }
-
-
 
 extension IInstruments.ObjectAlloc {
     func parpare(config: ParpareConfig = .default) {

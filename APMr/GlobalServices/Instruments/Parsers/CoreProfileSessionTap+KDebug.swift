@@ -12,30 +12,50 @@ extension IInstruments.CoreProfileSessionTap {
         func parseV2(_ data: Data) -> ModelV2 {
             var threadMap: [UInt64 : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
             var entries: [IInstruments.CoreProfileSessionTap.KDEBUGEntry] = []
-            
-            var offset = 0
-            
+                        
             let stream = InputStream(data: data)
             stream.open()
             
-            var header = IInstruments.CoreProfileSessionTap.KDHeaderV2()
-            offset += stream.read(&header, maxLength: MemoryLayout<IInstruments.CoreProfileSessionTap.KDHeaderV2>.size)
+            var tag: UInt32 = 0
+            var numberOfThread: UInt32 = 0
+            var arg1: UInt64 = 0
+            var arg2: UInt32 = 0
+            var is64b: UInt32 = 0
+            var tick_frequency: UInt64 = 0
+
+            stream.read(&tag, maxLength: 4)
+            stream.read(&numberOfThread, maxLength: 4)
+            stream.read(&arg1, maxLength: 8)
+            stream.read(&arg2, maxLength: 4)
+            stream.read(&is64b, maxLength: 4)
+            stream.read(&tick_frequency, maxLength: 8)
+            
+            let header = IInstruments
+                .CoreProfileSessionTap
+                .KDHeaderV2(tag: tag,
+                            number_of_treads: numberOfThread,
+                            is_64bit: is64b,
+                            tick_frequency: tick_frequency)
+            
             
             let empty = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x100)
-            offset += stream.read(empty, maxLength: 0x100)
+            stream.read(empty, maxLength: 0x100)
             empty.deallocate()
             
             let mapCount = Int(header.number_of_treads)
             var threadI = 0
             
             while stream.hasBytesAvailable, threadI < mapCount {
-                var thread = IInstruments.CoreProfileSessionTap.KDThreadMap()
+                var thread: UInt64 = 0
+                var pid: UInt32 = 0
+                var process = ""
                 
-                offset += stream.read(&thread.thread, maxLength: 8)
-                offset += stream.read(&thread.pid, maxLength: 4)
+                stream.read(&thread, maxLength: 8)
+                stream.read(&pid, maxLength: 4)
                 
                 let cStringsData = UnsafeMutablePointer<UInt8>.allocate(capacity: 20)
-                offset += stream.read(cStringsData, maxLength: 20)
+                stream.read(cStringsData, maxLength: 20)
+                
                 var i = 0
                 var cString = [UInt8]()
                 while i < 20, (cStringsData + i).pointee != 0 {
@@ -44,24 +64,46 @@ extension IInstruments.CoreProfileSessionTap {
                 }
                 cString.append(0)
                 cStringsData.deallocate()
-                
-                thread.process = String(cString: cString)
-                threadI += 1
-                threadMap[thread.thread] = thread
-            }
+                process = String(cString: cString)
+
             
-            var e: UInt8 = 0
-            while (offset < data.count && e == 0) {
-                e = UInt8(data[offset])
-                if e == 0 {
-                    offset += stream.read(&e, maxLength: 1)
-                }
+                threadMap[thread] = IInstruments
+                    .CoreProfileSessionTap
+                    .KDThreadMap(thread: thread,
+                                 pid: pid,
+                                 process: process)
+                threadI += 1
             }
             
             while stream.hasBytesAvailable {
-                var entry = IInstruments.CoreProfileSessionTap.KDEBUGEntry()
-                stream.read(&entry, maxLength: 64)
-                entries.append(entry)
+                var timestamp: UInt64 = 0
+                let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: 32)
+                var thread: UInt64 = 0
+                var debug: UInt32 = 0
+                var cpu: UInt32 = 0
+                var unused: UInt64 = 0
+                
+                stream.read(&timestamp, maxLength: 8)
+                stream.read(dataP, maxLength: 32)
+                stream.read(&thread, maxLength: 8)
+                stream.read(&debug, maxLength: 4)
+                stream.read(&cpu, maxLength: 4)
+                stream.read(&unused, maxLength: 8)
+                
+                let data = Data(bytes: dataP, count: 32)
+                dataP.deallocate()
+                
+                let entry = IInstruments
+                    .CoreProfileSessionTap
+                    .KDEBUGEntry(timestamp: timestamp,
+                                 data: data,
+                                 thread: thread,
+                                 debug_id: debug,
+                                 cpu_id: cpu,
+                                 unused: unused)
+                if entry.timestamp != 0 {
+                    entries.append(entry)
+                }
             }
             
             stream.close()
@@ -71,53 +113,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
         
         func parseV3(_ data: Data) {
-            var offset = 0
-            let stream = InputStream(data: data)
-            stream.open()
             
-            let header = UnsafeMutablePointer<IInstruments.CoreProfileSessionTap.KDHeaderV3>.allocate(capacity: 1)
-            offset += stream.read(header, maxLength: MemoryLayout<IInstruments.CoreProfileSessionTap.KDHeaderV3>.size)
-            
-            while (stream.hasBytesAvailable) {
-                let subheader = UnsafeMutablePointer<IInstruments.CoreProfileSessionTap.KDSubHeaderV3>.allocate(capacity: 1)
-                offset += stream.read(subheader, maxLength: MemoryLayout<IInstruments.CoreProfileSessionTap.KDSubHeaderV3>.size)
-                
-                if let tag = IInstruments.CoreProfileSessionTap.Tag(rawValue: subheader.pointee.tag) {
-                    let dataLen = Int(subheader.pointee.length)
-                    let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: dataLen)
-                    offset += stream.read(dataP, maxLength: dataLen)
-                    let subData = Data(bytes: dataP, count: dataLen)
-                    
-                    if let map = try? PropertyListSerialization.propertyList(from: subData, format: nil) as? [String : Any] {
-                        print(map)
-                    }
-                    
-                    dataP.deallocate()
-                    
-                    if tag == .kernel || tag == .machine || tag == .config {
-                        var empty: UInt8 = 0
-                        while (offset < data.count && empty == 0) {
-                            empty = UInt8(data[offset])
-                            if empty == 0 {
-                                offset += stream.read(&empty, maxLength: 1)
-                            }
-                        }
-                    }
-                    
-                    if tag == .v3RawEvents {
-                        
-                    }
-                    
-                    if tag == .rawVersion3 || tag == .cpuEventsNull {
-                        subheader.deallocate()
-                        continue
-                    }
-                }
-                subheader.deallocate()
-            }
-            
-            header.deallocate()
-            stream.close()
         }
         
         func parseNormal(_ data: Data) -> ModelV4 {
@@ -126,8 +122,31 @@ extension IInstruments.CoreProfileSessionTap {
             stream.open()
             
             while stream.hasBytesAvailable {
-                var entry = IInstruments.CoreProfileSessionTap.KDEBUGEntry()
-                stream.read(&entry, maxLength: 64)
+                var timestamp: UInt64 = 0
+                let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: 32)
+                var thread: UInt64 = 0
+                var debug: UInt32 = 0
+                var cpu: UInt32 = 0
+                var unused: UInt64 = 0
+                
+                stream.read(&timestamp, maxLength: 8)
+                stream.read(dataP, maxLength: 32)
+                stream.read(&thread, maxLength: 8)
+                stream.read(&debug, maxLength: 4)
+                stream.read(&cpu, maxLength: 4)
+                stream.read(&unused, maxLength: 8)
+                
+                let data = Data(bytes: dataP, count: 32)
+                dataP.deallocate()
+                                
+                let entry = IInstruments
+                    .CoreProfileSessionTap
+                    .KDEBUGEntry(timestamp: timestamp,
+                                 data: data,
+                                 thread: thread,
+                                 debug_id: debug,
+                                 cpu_id: cpu,
+                                 unused: unused)
                 entries.append(entry)
             }
             

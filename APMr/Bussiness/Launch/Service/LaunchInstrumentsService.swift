@@ -27,26 +27,16 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         group.config([process, core, device])
         return group
     }()
+    
+    private var app: IApp? = nil
 }
 
 extension LaunchInstrumentsService {
     func launch(app: IApp) {
+        self.app = app
         if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
             client.traceCodes()
             client.machTime()
-        }
-        
-        if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
-            client.setConfig()
-            client.start()
-        }
-        
-        if let client: IInstruments.Processcontrol = serviceGroup.client(.processcontrol) {
-            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
-            config.environment = ["OS_ACTIVITY_DT_MODE": true,
-                                  "HIPreventRefEncoding": true,
-                                  "DYLD_PRINT_TO_STDERR": true]
-            client.launch(config: config)
         }
     }
 }
@@ -79,26 +69,48 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
-    func praserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
-        
+    func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
+
     }
     
-    func praserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
-        
+    func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
+        parser.merge(model.threadMap)
+        model.entries.forEach { entry in
+            parser.decode(entry)
+        }
     }
     
-    func praserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {
-        
+    func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {
+        model.entries.forEach { entry in
+            parser.decode(entry)
+        }
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     func trace(codes: [Int64 : String]) {
-        
+        parser.codes = codes
     }
     
     func machTime(info: IInstruments.DeviceInfo.MT) {
+        guard let app = self.app else {
+            return
+        }
         
+        parser.machTime = info
+        
+        if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
+            client.setConfig()
+            client.start()
+        }
+        
+        if let client: IInstruments.Processcontrol = serviceGroup.client(.processcontrol) {
+            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
+            config.environment = ["OS_ACTIVITY_DT_MODE": true,
+                                  "HIPreventRefEncoding": true,
+                                  "DYLD_PRINT_TO_STDERR": true]
+            client.launch(config: config)
+        }
     }
     
     func running(process: [[String : Any]]) {

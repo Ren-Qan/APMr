@@ -9,9 +9,17 @@ import Foundation
 import LibMobileDevice
 
 protocol IInstrumentsCoreProfileSessionTapDelegate: NSObjectProtocol {
-    func praserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1)
-    func praserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2)
-    func praserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4)
+    func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1)
+    func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2)
+    func parserV3(_ model: IInstruments.CoreProfileSessionTap.ModelV3)
+    func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4)
+}
+
+extension IInstrumentsCoreProfileSessionTapDelegate {
+    func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {}
+    func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {}
+    func parserV3(_ model: IInstruments.CoreProfileSessionTap.ModelV3) {}
+    func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {}
 }
 
 extension IInstruments {

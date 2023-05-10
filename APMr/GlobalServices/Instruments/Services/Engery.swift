@@ -18,13 +18,10 @@ extension IInstruments {
         public weak var delegate: IInstrumentsEnergyDelegate? = nil
         
         private var startPids: [UInt32] = []
-        
         private var sampleAttributes: [String : Any] = [:]
         private var samplePids: [UInt32] = []
     }
 }
-
-
 
 extension IInstruments.Energy {
     func start(pids: [UInt32]) {

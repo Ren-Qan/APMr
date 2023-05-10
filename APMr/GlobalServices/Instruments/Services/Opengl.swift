@@ -13,6 +13,10 @@ protocol IInstrumentsOpenglDelegate: NSObjectProtocol {
     func sampling(model: IInstruments.Opengl.Model)
 }
 
+extension IInstrumentsOpenglDelegate {
+    func sampling(model: IInstruments.Opengl.Model) { }
+}
+
 extension IInstruments {
     class Opengl: Base {
         public weak var delegate: IInstrumentsOpenglDelegate? = nil

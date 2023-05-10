@@ -14,6 +14,12 @@ protocol IInstrumentsProcesscontrolDelegate: NSObjectProtocol {
     func outputReceived(_ msg: String)
 }
 
+extension IInstrumentsProcesscontrolDelegate {
+    func launch(pid: UInt32) { }
+    
+    func outputReceived(_ msg: String) { }
+}
+
 extension IInstruments {
     class Processcontrol: Base {
         public weak var delegate: IInstrumentsProcesscontrolDelegate? = nil
@@ -102,8 +108,4 @@ extension IInstruments.Processcontrol {
             }
         }
     }
-}
-
-extension IInstrumentsProcesscontrolDelegate {
-    func outputReceived(_ msg: String) { }
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -64,6 +64,7 @@
 		C7AC98812956EB1D00A6580B /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* Networking.swift */; };
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
 		C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5B94329767921009A88D7 /* PerformaceChartView.swift */; };
+		C7C15F892A0B99E80066FA85 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C15F882A0B99E80066FA85 /* Data+Extension.swift */; };
 		C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */; };
 		C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */; };
 		C7CB104B2A0A077A00828F3D /* CoreProfileSessionTap+KTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CB104A2A0A077A00828F3D /* CoreProfileSessionTap+KTrace.swift */; };
@@ -178,6 +179,7 @@
 		C7AC98802956EB1D00A6580B /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
 		C7B5B94329767921009A88D7 /* PerformaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartView.swift; sourceTree = "<group>"; };
+		C7C15F882A0B99E80066FA85 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		C7C3255229751B9A006939B8 /* PerformanceSettingBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSettingBarView.swift; sourceTree = "<group>"; };
 		C7C3255429751E0E006939B8 /* PerformanceSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSummaryView.swift; sourceTree = "<group>"; };
 		C7CB104A2A0A077A00828F3D /* CoreProfileSessionTap+KTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreProfileSessionTap+KTrace.swift"; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 				C76E7B602951BC70004F009B /* Color+Extensions.swift */,
 				C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */,
 				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
+				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -729,7 +732,7 @@
 				};
 			};
 			buildConfigurationList = C7483B8B29373A0400F32BE0 /* Build configuration list for PBXProject "APMr" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -794,6 +797,7 @@
 				C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */,
 				C73BBB162943154300472A75 /* PerformanceInstrumentsService.swift in Sources */,
 				C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */,
+				C7C15F892A0B99E80066FA85 /* Data+Extension.swift in Sources */,
 				C704D0102963EC600065004D /* NetworkingModels.swift in Sources */,
 				C73BBB1A29431AD200472A75 /* Processcontrol.swift in Sources */,
 				C7F5DA892946EF94005C6F7D /* GPU.swift in Sources */,

@@ -14,10 +14,14 @@ protocol IInstrumentsSysmontapDelegate: NSObjectProtocol {
     func process(model: IInstruments.Sysmontap.ProcessesModel)
 }
 
+extension IInstrumentsSysmontapDelegate {
+    func sysmotap(model: IInstruments.Sysmontap.Model) { }
+    func process(model: IInstruments.Sysmontap.ProcessesModel) { }
+}
+
 extension IInstruments {
     class Sysmontap: Base {
         public weak var delegate: IInstrumentsSysmontapDelegate? = nil
-        
         private var sampleInterval: Int = 0
     }
 }

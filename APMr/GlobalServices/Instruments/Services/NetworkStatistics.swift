@@ -13,6 +13,10 @@ protocol IInstrumentsNetworkStatisticsDelegate: NSObjectProtocol {
     func process(modelMap: [UInt32 : IInstruments.NetworkStatistics.Model])
 }
 
+extension IInstrumentsNetworkStatisticsDelegate {
+    func process(modelMap: [UInt32 : IInstruments.NetworkStatistics.Model]) { }
+}
+
 extension IInstruments {
     class NetworkStatistics: IInstruments.Base {
         public weak var delegate: IInstrumentsNetworkStatisticsDelegate? = nil

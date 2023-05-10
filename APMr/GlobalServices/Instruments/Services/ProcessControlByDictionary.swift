@@ -12,6 +12,10 @@ protocol IInstrumentsProcessControlByDictionaryDelegate: NSObjectProtocol {
     func launch(pid: UInt32)
 }
 
+extension IInstrumentsProcessControlByDictionaryDelegate {
+    func launch(pid: UInt32) { }
+}
+
 extension IInstruments {
     class ProcessControlByDictionary: Base {
         public weak var delegate: IInstrumentsProcessControlByDictionaryDelegate? = nil

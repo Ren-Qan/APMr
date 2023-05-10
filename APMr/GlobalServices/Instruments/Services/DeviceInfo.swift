@@ -16,6 +16,12 @@ protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
     func running(process: [[String : Any]])
 }
 
+extension IInstrumentsDeviceInfoDelegate {
+    func trace(codes: [Int64 : String]) { }
+    func machTime(info: IInstruments.DeviceInfo.MT) { }
+    func running(process: [[String : Any]]) { }
+}
+
 extension IInstruments {
     class DeviceInfo: Base {
         public weak var delegate: IInstrumentsDeviceInfoDelegate? = nil

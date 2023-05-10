@@ -17,6 +17,10 @@ extension IInstruments.CoreProfileSessionTap {
         let entries: [KDEBUGEntry]
     }
     
+    struct ModelV3 {
+        
+    }
+    
     struct ModelV4 {
         let entries: [KDEBUGEntry]
     }
@@ -213,31 +217,25 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct KDHeaderV2 {
-        var tag: UInt32 = 0
-        var number_of_treads: UInt32 = 0
-        var arg1: Int32 = 0
-        var arg2: Int32 = 0
-        var arg3: Int32 = 0
-        var is_64bit: UInt32 = 0
-        var tick_frequency: UInt64 = 0
+        var tag: UInt32
+        var number_of_treads: UInt32
+        var is_64bit: UInt32
+        var tick_frequency: UInt64
     }
     
     struct KDThreadMap {
-        var thread: UInt64 = 0
-        var pid: UInt32 = 0
-        var process = String()
+        var thread: UInt64
+        var pid: UInt32
+        var process: String
     }
     
     struct KDEBUGEntry {
-        var timestamp: UInt64 = 0
-        var arg1: UInt64 = 0
-        var arg2: UInt64 = 0
-        var arg3: UInt64 = 0
-        var arg4: UInt64 = 0
-        var thread: UInt64 = 0
-        var debug_id: UInt32 = 0
-        var cpu_id: UInt32 = 0
-        var unused: UInt64 = 0
+        let timestamp: UInt64
+        let data: Data
+        let thread: UInt64
+        let debug_id: UInt32
+        let cpu_id: UInt32
+        let unused: UInt64
         
         var event_id: UInt32 { debug_id & 0xfffffffc}
         var class_code: UInt32 { (debug_id >> 24) & 0xff }
@@ -262,37 +260,8 @@ extension IInstruments.CoreProfileSessionTap {
             self.type = type
             self.size = size
             self.flag = flag
-            
-            switch type {
-                case .KCDATA_TYPE_UINT32_DESC:
-                    self.entry = .UINT32_DESC(.init(data))
-                    
-                case .KCDATA_TYPE_UINT64_DESC:
-                    self.entry = .UINT64_DESC(.init(data))
-                    
-                case .STACKSHOT_KCTYPE_JETSAM_LEVEL:
-                    self.entry = .JETSAM_LEVEL(.init(data))
-                    
-                case .STACKSHOT_KCTYPE_THREAD_POLICY_VERSION:
-                    self.entry = .THREAD_POLICY_VERSION(.init(data))
-                    
-                case .STACKSHOT_KCTYPE_KERN_PAGE_SIZE:
-                    self.entry = .KERN_PAGE_SIZE(.init(data))
-                    
-                case .STACKSHOT_KCTYPE_OSVERSION:
-                    self.entry = .OSVERSION(.init(data))
-                    
-                case .STACKSHOT_KCTYPE_BOOTARGS:
-                    self.entry = .BOOTARGS(.init(data))
-                    
-                case .STACKSHOT_KCTYPE_SHAREDCACHE_LOADINFO:
-                    self.entry = .SHAREDCACHE_LOADINFO(.init(data))
-                
-                case .KCDATA_TYPE_ARRAY_PAD0:
-                    self.entry = .ARRAY_PAD0(.init(data))
-                    
-                default: self.entry = .INVALID
-            }
+            self.entry = .init(type, data)
+
         }
     }
     
@@ -306,40 +275,100 @@ extension IInstruments.CoreProfileSessionTap {
         case OSVERSION(OSVersion)
         case BOOTARGS(BootArgs)
         case SHAREDCACHE_LOADINFO(DYLDSharedCacheLoadInfo)
-        case ARRAY_PAD0(ArrayPad0)
+        case ARRAY_PAD(ArrayPad)
+        case THREAD_GROUP_SNAPSHOT(ThreadGroupSnapshot)
+        case LIBRARY_LOADINFO64(DYLDLoadInfo)
+        
+// https://github.com/doronz88/pymobiledevice3/blob/2d3ebdebd5e2ef889d51903e2df4196039fb818e/pymobiledevice3/services/dvt/instruments/core_profile_session_tap.py#L436W
+        init(_ type: KT, _ data: Data) {
+            switch type {
+                case .KCDATA_TYPE_UINT32_DESC:
+                    self = .UINT32_DESC(.init(data))
+                    
+                case .KCDATA_TYPE_UINT64_DESC:
+                    self = .UINT64_DESC(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_JETSAM_LEVEL:
+                    self = .JETSAM_LEVEL(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_THREAD_POLICY_VERSION:
+                    self = .THREAD_POLICY_VERSION(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_KERN_PAGE_SIZE:
+                    self = .KERN_PAGE_SIZE(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_OSVERSION:
+                    self = .OSVERSION(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_BOOTARGS:
+                    self = .BOOTARGS(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_SHAREDCACHE_LOADINFO:
+                    self = .SHAREDCACHE_LOADINFO(.init(data))
+                
+                case .STACKSHOT_KCTYPE_THREAD_GROUP_SNAPSHOT:
+                    self = .THREAD_GROUP_SNAPSHOT(.init(data))
+                    
+                case .KCDATA_TYPE_LIBRARY_LOADINFO64, .STACKSHOT_KCTYPE_LOADINFO64_TEXT_EXEC:
+                    self = .LIBRARY_LOADINFO64(.init(data))
+                    
+                default: self = .INVALID
+            }
+        }
     }
 }
 
 extension IInstruments.CoreProfileSessionTap {
+    enum ES {
+        case valid
+        case invalid
+    }
+    
     struct UInt32Desc: KTEntryProtocol {
-        var name: String = ""
-        var obj: UInt32 = 0
+        let state: ES
+        let name: String
+        let obj: UInt32
         init(_ data: Data) {
             if data.count >= 36 {
+                self.state = .valid
                 self.name = data.string()
                 self.obj = data[32 ..< 36].withUnsafeBytes { $0.load(as: UInt32.self) }
+            } else {
+                self.state = .invalid
+                self.name = ""
+                self.obj = 0
             }
         }
     }
     
     struct UInt64Desc: KTEntryProtocol {
-        var name: String = ""
-        var obj: UInt64 = 0
+        let state: ES
+        let name: String
+        let obj: UInt64
         init(_ data: Data) {
-            if data.count >= 36 {
+            if data.count >= 40 {
+                self.state = .valid
                 self.name = data.string()
                 self.obj = data[32 ..< 40].withUnsafeBytes { $0.load(as: UInt64.self) }
+            } else {
+                self.state = .invalid
+                self.name = ""
+                self.obj = 0
             }
         }
     }
     
     struct JetsamLevel: KTEntryProtocol {
-        var name = ""
-        var obj: UInt32 = 0
+        let state: ES
+        let name = "jetsam_level"
+        var obj: UInt32
         init(_ data: Data) {
             if data.count >= 4 {
-                self.name = "jetsam_level"
+                self.state = .valid
                 self.obj = data[0 ..< 4].withUnsafeBytes { $0.load(as: UInt32.self) }
+            } else {
+                self.state = .invalid
+                self.obj = 0
             }
         }
     }
@@ -356,82 +385,96 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct KernPageSize: KTEntryProtocol {
-        var name = ""
-        var obj: UInt32 = 0
+        let state: ES
+        let name = "kernel_page_size"
+        let obj: UInt32
         init(_ data: Data) {
             if data.count >= 4 {
-                self.name = "kernel_page_size"
+                self.state = .valid
                 self.obj = data[0 ..< 4].withUnsafeBytes { $0.load(as: UInt32.self) }
+            } else {
+                self.state = .invalid
+                self.obj = 0
             }
         }
     }
     
     struct OSVersion: KTEntryProtocol {
+        let state: ES
         let name: String
         let obj: String
         init(_ data: Data) {
+            self.state = .valid
             self.name = "osversion"
             self.obj = data.string(data.count)
         }
     }
     
     struct BootArgs: KTEntryProtocol {
+        let state: ES
         let name: String
         let obj: String 
         init(_ data: Data) {
+            self.state = .valid
             self.name = "boot_args"
             self.obj = data.string(data.count)
         }
     }
     
     struct DYLDSharedCacheLoadInfo: KTEntryProtocol {
-        var name: String = ""
-        
-        var imageUUID: [UInt8] = []
-        var imageLoadAddress: UInt64 = 0
-        var imageSlidBaseAddress: UInt64 = 0
+        let state: ES
+        let name: String = "shared_cache_dyld_load_info"
+        let imageUUID: [UInt8]
+        let imageLoadAddress: UInt64
+        let imageSlidBaseAddress: UInt64
         
         init(_ data: Data) {
             if data.count >= 32 {
-                self.name = "shared_cache_dyld_load_info"
+                self.state = .valid
                 self.imageLoadAddress = data[0 ..< 8].withUnsafeBytes { $0.load(as: UInt64.self) }
                 self.imageUUID = [UInt8](data[8 ..< 24])
                 self.imageSlidBaseAddress = data[24 ..< 32].withUnsafeBytes { $0.load(as: UInt64.self) }
+            } else {
+                self.state = .invalid
+                self.imageLoadAddress = 0
+                self.imageUUID = []
+                self.imageSlidBaseAddress = 0
             }
         }
     }
     
-    struct ArrayPad0: KTEntryProtocol {
-        var name: String = ""
-        
-        var imageUUID: [UInt8] = []
-        var imageLoadAddress: UInt64 = 0
-        var imageSlidBaseAddress: UInt64 = 0
+    struct ArrayPad: KTEntryProtocol {
+        let state: ES
+        init(_ data: Data) {
+            state = .invalid
+        }
+    }
+    
+    struct ThreadGroupSnapshot: KTEntryProtocol {
+        let state: ES
+        init(_ data: Data) {
+            state = .invalid
+        }
+    }
+    
+    struct DYLDLoadInfo: KTEntryProtocol {
+        let state: ES
+        let name = "dyld_load_info64"
+        let address: UInt64
+        let uuid: [UInt8]
         
         init(_ data: Data) {
-            if data.count >= 32 {
-                self.name = "shared_cache_dyld_load_info"
-                self.imageLoadAddress = data[0 ..< 8].withUnsafeBytes { $0.load(as: UInt64.self) }
-                self.imageUUID = [UInt8](data[8 ..< 24])
-                self.imageSlidBaseAddress = data[24 ..< 32].withUnsafeBytes { $0.load(as: UInt64.self) }
+            if data.count >= 24 {
+                self.state = .valid
+                self.address = data[0 ..< 8].withUnsafeBytes { $0.load(as: UInt64.self) }
+                self.uuid = [UInt8](data[8 ..< 24])
+            } else {
+                self.state = .invalid
+                self.address = 0
+                self.uuid = []
             }
         }
     }
-}
-
-
-private extension Data {
-    func string(_ len: Int = 32) -> String {
-        var i = 0
-        var cString = [UInt8]()
-        while i < len, i < count, self[i] != 0 {
-            cString.append(self[i])
-            i += 1
-        }
-        cString.append(0)
-        return String(cString: cString)
-    }
-    
-}
+} 
 
 

@@ -18,13 +18,18 @@ protocol IInstrumentsNetworkingDelegate: NSObjectProtocol {
     func connectionUpdate(model: IInstruments.Networking.ConnectionUpdateModel)
 }
 
+extension IInstrumentsNetworkingDelegate {
+    func interfaceDetection(model: IInstruments.Networking.InterfaceDetectionModel) { }
+    func connectionDetectedV4(model: IInstruments.Networking.ConnectionDetectedModelV4) { }
+    func connectionDetectedV6(model: IInstruments.Networking.ConnectionDetectedModelV6) { }
+    func connectionUpdate(model: IInstruments.Networking.ConnectionUpdateModel) { }
+}
+
 extension IInstruments {
     class Networking: Base {
         public weak var delegate: IInstrumentsNetworkingDelegate? = nil
     }
 }
-
-
 
 extension IInstruments.Networking {
     func replay() {

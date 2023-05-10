@@ -20,14 +20,15 @@ extension IInstruments.CoreProfileSessionTap {
             }
 
             let version = Data(data.prefix(4))
-            if version ==  Data([0x07, 0x58, 0xA2, 0x59]) {
-                delegate?.praserV1(kParser.parse(data))
+            if version == Data([0x07, 0x58, 0xA2, 0x59]) {
+//                delegate?.parserV1(kParser.parse(data))
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
-                delegate?.praserV2(dParser.parseV2(data))
+//                delegate?.parserV2(dParser.parseV2(data))
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-                delegate?.praserV2(dParser.parseV2(data))
+//                delegate?.parserV3(dParser.parseV3(data))
             } else {
-                delegate?.praserV4(dParser.parseNormal(data))
+                print(version)
+                delegate?.parserV4(dParser.parseNormal(data))
             }
         }
     }
