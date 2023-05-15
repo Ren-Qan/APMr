@@ -18,7 +18,7 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct ModelV3 {
-        
+        let entries: [KDSubHeaderV3]
     }
     
     struct ModelV4 {
@@ -165,7 +165,7 @@ extension IInstruments.CoreProfileSessionTap {
 }
 
 extension IInstruments.CoreProfileSessionTap {
-    enum Tag: UInt32 {
+    enum SubheaderTag: UInt32 {
         case sshot = 0x8002
         case images = 0x8004
         case kernelExtensions = 0x8005
@@ -181,27 +181,87 @@ extension IInstruments.CoreProfileSessionTap {
         case v3CpuHeaderTag = 0x00001c00
         case v3ThreadMap = 0x00001d00
         case v3RawEvents = 0x00001e00
+        
+        case invalid = 0x0
     }
     
     struct KDHeaderV3 {
-        var tag: UInt32 = 0
-        var sub_tag: UInt32 = 0
-        var length: UInt64 = 0
-        var timebase_numer: UInt32 = 0
-        var timebase_denom: UInt32 = 0
-        var timestamp: UInt64 = 0
-        var walltime_secs: UInt64 = 0
-        var walltime_usecs: UInt32 = 0
-        var timezone_minuteswest: UInt32 = 0
-        var timezone_dst: UInt32 = 0
-        var flags: UInt32 = 0
+        let tag: UInt32
+        let sub_tag: UInt32
+        let length: UInt64
+        let timebase_numer: UInt32
+        let timebase_denom: UInt32
+        let timestamp: UInt64
+        let walltime_secs: UInt64
+        let walltime_usecs: UInt32
+        let timezone_minuteswest: UInt32
+        let timezone_dst: UInt32
+        let flags: UInt32
+        
+        init(_ stream: InputStream) {
+            var tag: UInt32 = 0
+            var sub_tag: UInt32 = 0
+            var length: UInt64 = 0
+            var timebase_numer: UInt32 = 0
+            var timebase_denom: UInt32 = 0
+            var timestamp: UInt64 = 0
+            var walltime_secs: UInt64 = 0
+            var walltime_usecs: UInt32 = 0
+            var timezone_minuteswest: UInt32 = 0
+            var timezone_dst: UInt32 = 0
+            var flags: UInt32 = 0
+
+            stream.read(&tag, maxLength: 4)
+            stream.read(&sub_tag, maxLength: 4)
+            stream.read(&length, maxLength: 8)
+            stream.read(&timebase_numer, maxLength: 4)
+            stream.read(&timebase_denom, maxLength: 4)
+            stream.read(&timestamp, maxLength: 8)
+            stream.read(&walltime_secs, maxLength: 8)
+            stream.read(&walltime_usecs, maxLength: 4)
+            stream.read(&timezone_minuteswest, maxLength: 4)
+            stream.read(&timezone_dst, maxLength: 4)
+            stream.read(&flags, maxLength: 4)
+
+            self.tag = tag
+            self.sub_tag = sub_tag
+            self.length = length
+            self.timebase_numer = timebase_numer
+            self.timebase_denom = timebase_denom
+            self.timestamp = timestamp
+            self.walltime_secs = walltime_secs
+            self.walltime_usecs = walltime_usecs
+            self.timezone_minuteswest = timezone_minuteswest
+            self.timezone_dst = timezone_dst
+            self.flags = flags
+        }
     }
     
     struct KDSubHeaderV3 {
-        var tag: UInt32 = 0
-        var major: UInt16 = 0
-        var minor: UInt16 = 0
-        var length: UInt64 = 0
+        let tag: SubheaderTag
+        let sub_tag: UInt32
+        let length: UInt64
+        let data: Data
+        
+        init(_ stream: InputStream) {
+            var tag: UInt32 = 0
+            var sub_tag: UInt32 = 0
+            var length: UInt64 = 0
+
+            stream.read(&tag, maxLength: 4)
+            stream.read(&sub_tag, maxLength: 4)
+            stream.read(&length, maxLength: 8)
+            
+            var tt = SubheaderTag.invalid
+            if let t = SubheaderTag(rawValue: tag) {
+                tt = t
+            }
+            
+            self.tag = tt
+            self.sub_tag = sub_tag
+            self.length = length
+            self.data = stream.data(Int(length))
+        }
     }
     
     struct KDCpuMapHeader {
@@ -210,10 +270,9 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct KDCpuMap {
-        var cpuId: UInt32 = 0
-        var flags: UInt32 = 0
-        var name = Data(capacity: 8)
-        var args = Array<UInt32>(repeating: 0, count: 6)
+        let cpuId: UInt32
+        let flags: UInt32
+        let name: String
     }
     
     struct KDHeaderV2 {

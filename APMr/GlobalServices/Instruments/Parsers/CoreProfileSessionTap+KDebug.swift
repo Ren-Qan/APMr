@@ -112,8 +112,34 @@ extension IInstruments.CoreProfileSessionTap {
                            entries: entries)
         }
         
-        func parseV3(_ data: Data) {
+        func parseV3(_ data: Data) -> ModelV3 {
+            var entries = [KDSubHeaderV3]()
+            let stream = InputStream(data: data)
+            stream.open()
             
+            let headV3 = KDHeaderV3(stream)
+            var fSpace = Int(headV3.length - 40)
+            
+            while(stream.hasBytesAvailable) {
+                let subheader = KDSubHeaderV3(stream)
+                entries.append(subheader)
+                var padding = 0
+                if fSpace > 0 {
+                    padding = fSpace - 16 - Int(subheader.length)
+                    fSpace = 0
+                } else {
+                    padding = Int((subheader.length + 16) % 8)
+                    if padding > 0 {
+                        padding = 8 - padding
+                    }
+                }
+                if padding > 0 {
+                    let _ = stream.data(padding)
+                }
+            }
+
+            stream.close()
+            return .init(entries: entries)
         }
         
         func parseNormal(_ data: Data) -> ModelV4 {
@@ -155,3 +181,19 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
 }
+
+extension InputStream {
+    func data(_ len: Int) -> Data {
+        guard len > 0 else {
+            return .init()
+        }
+        let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: len)
+        read(dataP, maxLength: len)
+        let data = Data(bytes: dataP, count: len)
+        dataP.deallocate()
+        return data
+    }
+}
+
+
+

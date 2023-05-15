@@ -171,7 +171,7 @@ struct DTXMessagePayloadHeader {
 }
 
 - (BOOL)instrumentsShakeHand {
-    [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instruments_shake_and"];
+    [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instruments_shake_hand_begin"];
     
     NSDictionary * par = @{
         @"com.apple.private.DTXBlockCompression" : [NSNumber numberWithLongLong:2],

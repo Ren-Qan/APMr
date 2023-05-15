@@ -32,16 +32,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
 }
 
 extension LaunchInstrumentsService {
-    func launch(app: IApp) {
-        self.app = app
-        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
-            client.traceCodes()
-            client.machTime()
-        }
-    }
-}
-
-extension LaunchInstrumentsService {
     public func stopService() {
         serviceGroup.stop()
     }
@@ -54,6 +44,14 @@ extension LaunchInstrumentsService {
                 success = self.serviceGroup.start(iDevice)
             }
             complete(success, self)
+        }
+    }
+    
+    public func launch(app: IApp) {
+        self.app = app
+        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
+            client.traceCodes()
+            client.machTime()
         }
     }
 }
@@ -69,15 +67,15 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
-    func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
-
-    }
-    
     func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
         parser.merge(model.threadMap)
         model.entries.forEach { entry in
             parser.decode(entry)
         }
+    }
+    
+    func parserV3(_ model: IInstruments.CoreProfileSessionTap.ModelV3) {
+        
     }
     
     func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {

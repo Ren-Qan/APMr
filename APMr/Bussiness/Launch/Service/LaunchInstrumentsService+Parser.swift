@@ -28,7 +28,7 @@ extension LaunchInstrumentsService.Parser {
             return
         }
         
-        print(String(format: "[\(thread.process)] - 0x%X", entry.class_code))
+//        print(String(format: "[\(thread.process)] - 0x%X", entry.class_code))
         
     }
 }
