@@ -23,13 +23,14 @@ extension LaunchInstrumentsService.Parser {
         }
     }
     
-    func decode(_ entry: IInstruments.CoreProfileSessionTap.KDEBUGEntry) {
-        guard let thread = threadMap[entry.thread] else {
+    func decode(_ element: IInstruments.CoreProfileSessionTap.KDEBUGElement) {
+        guard let thread = threadMap[element.thread] else {
             return
         }
         
-//        print(String(format: "[\(thread.process)] - 0x%X", entry.class_code))
-        
+        if thread.pid == self.tracePid {
+            print(String(format: "[\(thread.process)] - 0x%X",element.class_code))
+        }
     }
 }
 

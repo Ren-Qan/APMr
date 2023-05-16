@@ -10,7 +10,7 @@ import Foundation
 extension IInstruments.CoreProfileSessionTap {
     class KTParser {
         func parse(_ data: Data) -> ModelV1 {
-            var entries = [KCData]()
+            var elements = [KCData]()
             var offset = 0
             let stream = InputStream(data: data)
             stream.open()
@@ -23,11 +23,7 @@ extension IInstruments.CoreProfileSessionTap {
                 offset += stream.read(&type, maxLength: 4)
                 offset += stream.read(&size, maxLength: 4)
                 offset += stream.read(&flag, maxLength: 8)
-                
-                let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(size))
-                offset = stream.read(dataP, maxLength: Int(size))
-                let data = Data(bytes: dataP, count: Int(size))
-                dataP.deallocate()
+                let data = stream.data(Int(size))
                 
                 var kt = IInstruments.CoreProfileSessionTap.KT.KCDATA_TYPE_INVALID
                 if let k = IInstruments.CoreProfileSessionTap.KT(rawValue: type) {
@@ -38,11 +34,11 @@ extension IInstruments.CoreProfileSessionTap {
                                                                      size: size,
                                                                      flag: flag,
                                                                      data: data)
-                entries.append(item)
+                elements.append(item)
             }
             
             stream.close()
-            return ModelV1(entries: entries)
+            return ModelV1(elements: elements)
         }
     }
 }

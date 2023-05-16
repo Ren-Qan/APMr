@@ -9,20 +9,20 @@ import Foundation
 
 extension IInstruments.CoreProfileSessionTap {
     struct ModelV1 {
-        let entries: [KCData]
+        let elements: [KCData]
     }
     
     struct ModelV2 {
         let threadMap: [UInt64 : KDThreadMap]
-        let entries: [KDEBUGEntry]
+        let elements: [KDEBUGElement]
     }
     
     struct ModelV3 {
-        let entries: [KDSubHeaderV3]
+        let elements: [KDSubHeaderV3]
     }
     
     struct ModelV4 {
-        let entries: [KDEBUGEntry]
+        let elements: [KDEBUGElement]
     }
 }
 
@@ -288,7 +288,7 @@ extension IInstruments.CoreProfileSessionTap {
         var process: String
     }
     
-    struct KDEBUGEntry {
+    struct KDEBUGElement {
         let timestamp: UInt64
         let data: Data
         let thread: UInt64
@@ -304,7 +304,7 @@ extension IInstruments.CoreProfileSessionTap {
     }
 }
 
-protocol KTEntryProtocol {
+protocol KTElementProtocol {
     init(_ data: Data)
 }
 
@@ -313,18 +313,17 @@ extension IInstruments.CoreProfileSessionTap {
         let type: KT
         let size: UInt32
         let flag: UInt64
-        let entry: KCTEntry
+        let element: KCTElement
         
         init(type: KT, size: UInt32, flag: UInt64, data: Data) {
             self.type = type
             self.size = size
             self.flag = flag
-            self.entry = .init(type, data)
-
+            self.element = .init(type, data)
         }
     }
     
-    enum KCTEntry {
+    enum KCTElement {
         case INVALID
         case UINT32_DESC(UInt32Desc)
         case UINT64_DESC(UInt64Desc)
@@ -383,7 +382,7 @@ extension IInstruments.CoreProfileSessionTap {
         case invalid
     }
     
-    struct UInt32Desc: KTEntryProtocol {
+    struct UInt32Desc: KTElementProtocol {
         let state: ES
         let name: String
         let obj: UInt32
@@ -400,7 +399,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct UInt64Desc: KTEntryProtocol {
+    struct UInt64Desc: KTElementProtocol {
         let state: ES
         let name: String
         let obj: UInt64
@@ -417,7 +416,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct JetsamLevel: KTEntryProtocol {
+    struct JetsamLevel: KTElementProtocol {
         let state: ES
         let name = "jetsam_level"
         var obj: UInt32
@@ -432,7 +431,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct ThreadPolicyVersion: KTEntryProtocol {
+    struct ThreadPolicyVersion: KTElementProtocol {
         var name = ""
         var obj: UInt32 = 0
         init(_ data: Data) {
@@ -443,7 +442,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct KernPageSize: KTEntryProtocol {
+    struct KernPageSize: KTElementProtocol {
         let state: ES
         let name = "kernel_page_size"
         let obj: UInt32
@@ -458,7 +457,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct OSVersion: KTEntryProtocol {
+    struct OSVersion: KTElementProtocol {
         let state: ES
         let name: String
         let obj: String
@@ -469,7 +468,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct BootArgs: KTEntryProtocol {
+    struct BootArgs: KTElementProtocol {
         let state: ES
         let name: String
         let obj: String 
@@ -480,7 +479,7 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct DYLDSharedCacheLoadInfo: KTEntryProtocol {
+    struct DYLDSharedCacheLoadInfo: KTElementProtocol {
         let state: ES
         let name: String = "shared_cache_dyld_load_info"
         let imageUUID: [UInt8]
@@ -502,21 +501,21 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct ArrayPad: KTEntryProtocol {
+    struct ArrayPad: KTElementProtocol {
         let state: ES
         init(_ data: Data) {
             state = .invalid
         }
     }
     
-    struct ThreadGroupSnapshot: KTEntryProtocol {
+    struct ThreadGroupSnapshot: KTElementProtocol {
         let state: ES
         init(_ data: Data) {
             state = .invalid
         }
     }
     
-    struct DYLDLoadInfo: KTEntryProtocol {
+    struct DYLDLoadInfo: KTElementProtocol {
         let state: ES
         let name = "dyld_load_info64"
         let address: UInt64

@@ -67,10 +67,16 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
+    func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
+        model.elements.forEach { element in
+            
+        }
+    }
+    
     func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
         parser.merge(model.threadMap)
-        model.entries.forEach { entry in
-            parser.decode(entry)
+        model.elements.forEach { element in
+            parser.decode(element)
         }
     }
     
@@ -79,8 +85,8 @@ extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     }
     
     func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {
-        model.entries.forEach { entry in
-            parser.decode(entry)
+        model.elements.forEach { element in
+            parser.decode(element)
         }
     }
 }

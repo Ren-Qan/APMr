@@ -74,6 +74,7 @@
 		C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */; };
 		C7CCDA97298A176900948BA3 /* PerformaceChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA96298A176900948BA3 /* PerformaceChartModels.swift */; };
 		C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */; };
+		C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */; };
 		C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C5299C8BE5000CD484 /* LaunchView.swift */; };
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
@@ -189,6 +190,7 @@
 		C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonModifier.swift; sourceTree = "<group>"; };
 		C7CCDA96298A176900948BA3 /* PerformaceChartModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartModels.swift; sourceTree = "<group>"; };
 		C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoModels.swift; sourceTree = "<group>"; };
+		C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
 		C7E137C5299C8BE5000CD484 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 				C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */,
 				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
 				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
+				C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -814,6 +817,7 @@
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */,
 				C754F0DF296D29040053DBA3 /* Root.swift in Sources */,
+				C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */,
 				C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */,
 				C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */,
 				C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */,

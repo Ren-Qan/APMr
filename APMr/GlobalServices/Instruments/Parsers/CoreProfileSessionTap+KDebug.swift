@@ -11,7 +11,7 @@ extension IInstruments.CoreProfileSessionTap {
     class KDebugParser {
         func parseV2(_ data: Data) -> ModelV2 {
             var threadMap: [UInt64 : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
-            var entries: [IInstruments.CoreProfileSessionTap.KDEBUGEntry] = []
+            var elements: [IInstruments.CoreProfileSessionTap.KDEBUGElement] = []
                         
             let stream = InputStream(data: data)
             stream.open()
@@ -38,10 +38,8 @@ extension IInstruments.CoreProfileSessionTap {
                             tick_frequency: tick_frequency)
             
             
-            let empty = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x100)
-            stream.read(empty, maxLength: 0x100)
-            empty.deallocate()
-            
+            let _ = stream.data(0x100)
+
             let mapCount = Int(header.number_of_treads)
             var threadI = 0
             
@@ -93,27 +91,27 @@ extension IInstruments.CoreProfileSessionTap {
                 let data = Data(bytes: dataP, count: 32)
                 dataP.deallocate()
                 
-                let entry = IInstruments
+                let element = IInstruments
                     .CoreProfileSessionTap
-                    .KDEBUGEntry(timestamp: timestamp,
+                    .KDEBUGElement(timestamp: timestamp,
                                  data: data,
                                  thread: thread,
                                  debug_id: debug,
                                  cpu_id: cpu,
                                  unused: unused)
-                if entry.timestamp != 0 {
-                    entries.append(entry)
+                if element.timestamp != 0 {
+                    elements.append(element)
                 }
             }
             
             stream.close()
             
             return ModelV2(threadMap: threadMap,
-                           entries: entries)
+                           elements: elements)
         }
         
         func parseV3(_ data: Data) -> ModelV3 {
-            var entries = [KDSubHeaderV3]()
+            var elements = [KDSubHeaderV3]()
             let stream = InputStream(data: data)
             stream.open()
             
@@ -122,7 +120,7 @@ extension IInstruments.CoreProfileSessionTap {
             
             while(stream.hasBytesAvailable) {
                 let subheader = KDSubHeaderV3(stream)
-                entries.append(subheader)
+                elements.append(subheader)
                 var padding = 0
                 if fSpace > 0 {
                     padding = fSpace - 16 - Int(subheader.length)
@@ -139,61 +137,43 @@ extension IInstruments.CoreProfileSessionTap {
             }
 
             stream.close()
-            return .init(entries: entries)
+            return .init(elements: elements)
         }
         
         func parseNormal(_ data: Data) -> ModelV4 {
-            var entries = [IInstruments.CoreProfileSessionTap.KDEBUGEntry]()
+            var elements = [IInstruments.CoreProfileSessionTap.KDEBUGElement]()
             let stream = InputStream(data: data)
             stream.open()
             
             while stream.hasBytesAvailable {
                 var timestamp: UInt64 = 0
-                let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: 32)
                 var thread: UInt64 = 0
                 var debug: UInt32 = 0
                 var cpu: UInt32 = 0
                 var unused: UInt64 = 0
                 
                 stream.read(&timestamp, maxLength: 8)
-                stream.read(dataP, maxLength: 32)
+                let data = stream.data(32)
                 stream.read(&thread, maxLength: 8)
                 stream.read(&debug, maxLength: 4)
                 stream.read(&cpu, maxLength: 4)
                 stream.read(&unused, maxLength: 8)
                 
-                let data = Data(bytes: dataP, count: 32)
-                dataP.deallocate()
-                                
-                let entry = IInstruments
+                let element = IInstruments
                     .CoreProfileSessionTap
-                    .KDEBUGEntry(timestamp: timestamp,
+                    .KDEBUGElement(timestamp: timestamp,
                                  data: data,
                                  thread: thread,
                                  debug_id: debug,
                                  cpu_id: cpu,
                                  unused: unused)
-                entries.append(entry)
+                elements.append(element)
             }
             
             stream.close()
-            return ModelV4(entries: entries)
+            return ModelV4(elements: elements)
         }
     }
 }
-
-extension InputStream {
-    func data(_ len: Int) -> Data {
-        guard len > 0 else {
-            return .init()
-        }
-        let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: len)
-        read(dataP, maxLength: len)
-        let data = Data(bytes: dataP, count: len)
-        dataP.deallocate()
-        return data
-    }
-}
-
 
 
