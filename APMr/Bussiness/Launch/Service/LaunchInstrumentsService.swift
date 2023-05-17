@@ -60,17 +60,18 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32) {
         parser.tracePid = pid
         monitorPid = pid
-        if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
-            client.stop()
-        }
+//        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+//            if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
+//                client.stop()
+//                print("\n\n ============\n\n")
+//            }
+//        }
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
-        model.elements.forEach { element in
-            
-        }
+        
     }
     
     func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {

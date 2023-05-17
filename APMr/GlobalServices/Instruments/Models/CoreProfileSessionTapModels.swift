@@ -369,7 +369,7 @@ extension IInstruments.CoreProfileSessionTap {
                     
                 case .KCDATA_TYPE_LIBRARY_LOADINFO64, .STACKSHOT_KCTYPE_LOADINFO64_TEXT_EXEC:
                     self = .LIBRARY_LOADINFO64(.init(data))
-                    
+                                        
                 default: self = .INVALID
             }
         }
@@ -533,6 +533,5 @@ extension IInstruments.CoreProfileSessionTap {
             }
         }
     }
-} 
-
+}
 

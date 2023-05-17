@@ -16,5 +16,9 @@ extension IInstruments.DeviceInfo {
         var mach_time_factor: CGFloat {
             CGFloat(self.mach_timebase_number) / CGFloat(self.mach_timebase_denom)
         }
+        
+        func format(time: Int64) -> CGFloat {
+            return CGFloat(time - mach_absolute_time) * mach_time_factor
+        }
     }
 }
