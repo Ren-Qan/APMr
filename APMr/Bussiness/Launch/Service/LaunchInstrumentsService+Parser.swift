@@ -32,30 +32,21 @@ extension LaunchInstrumentsService.Parser {
     }
     
     func decode(_ element: IInstruments.CoreProfileSessionTap.KDEBUGElement) {
-        let filter = [0x1f, 0x2b, 0x31, 0x31ca0006]
-        
-        
-        guard let thread = threadMap[element.thread] else {
-            return
-        }
-        
-        let time = time(element)
-        if thread.pid == tracePid {
-            print("[\(thread.process)] [class : \(element.class_code)]")
-        }
-//        if element.class_code == 0x1f {
-//            print("[\(thread.process)] === dyld - \(time)")
-//        } else if element.class_code == 0x31 {
-//            print("[\(thread.process)] === launch end - \(time)")
-//        } else if element.class_code == 0x2b {
-//            print("[\(thread.process)] === launching - \(time)")
-//        } else {
-//            print("end")
-//        }
+
     }
     
     func trace(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
-        
+        guard let machTime = machTime else {
+            return
+        }
+        model.elements.forEach { e in
+            switch e.element {
+                case .STACKSHOT_DURATION(let time):
+                    let t = CGFloat(time.stackshot_duration_outer) * machTime.mach_time_factor
+                    print(t / 1000000)
+                default: return
+            }
+        }
     }
 }
 

@@ -18,4 +18,20 @@ extension Data {
         cString.append(0)
         return String(cString: cString)
     }
+    
+    var uint8: UInt8 {
+        return withUnsafeBytes { $0.load(as: UInt8.self) }
+    }
+    
+    var uint16: UInt16 {
+        return withUnsafeBytes { $0.load(as: UInt16.self) }
+    }
+    
+    var uint32: UInt32 {
+        return withUnsafeBytes { $0.load(as: UInt32.self) }
+    }
+    
+    var uint64: UInt64 {
+        return withUnsafeBytes { $0.load(as: UInt64.self) }
+    }
 }

@@ -319,32 +319,50 @@ extension IInstruments.CoreProfileSessionTap {
             self.type = type
             self.size = size
             self.flag = flag
-            self.element = .init(type, data)
+            self.element = .init(type, flag, data)
         }
     }
     
     enum KCTElement {
-        case INVALID
+        case UNDEFINED(Undefined)
+        case CONTAINER_BEGIN(ContainerBegin)
+        case CONTAINER_END(ContainerEnd)
+        case BUFFER_END(BufferEnd)
         case UINT32_DESC(UInt32Desc)
         case UINT64_DESC(UInt64Desc)
+        case TYPEDEFINITION(TypeDefintion)
         case JETSAM_LEVEL(JetsamLevel)
         case THREAD_POLICY_VERSION(ThreadPolicyVersion)
         case KERN_PAGE_SIZE(KernPageSize)
         case OSVERSION(OSVersion)
         case BOOTARGS(BootArgs)
         case SHAREDCACHE_LOADINFO(DYLDSharedCacheLoadInfo)
-        case ARRAY_PAD(ArrayPad)
-        case THREAD_GROUP_SNAPSHOT(ThreadGroupSnapshot)
         case LIBRARY_LOADINFO64(DYLDLoadInfo)
+        case STACKSHOT_DURATION(StackshotDuration)
+        case THREAD_GROUP_SNAPSHOT(ThreadGroupSnapshot)
+        case ARRAY_PAD(ArrayPad)
+
         
-// https://github.com/doronz88/pymobiledevice3/blob/2d3ebdebd5e2ef889d51903e2df4196039fb818e/pymobiledevice3/services/dvt/instruments/core_profile_session_tap.py#L436W
-        init(_ type: KT, _ data: Data) {
+// http://newosxbook.com/src.jl?tree=xnu&file=/libkdd/kcdata.h
+        init(_ type: KT, _ flag: UInt64, _ data: Data) {
             switch type {
+                case .KCDATA_TYPE_CONTAINER_BEGIN:
+                    self = .CONTAINER_BEGIN(.init(flag, data))
+                    
+                case .KCDATA_TYPE_CONTAINER_END:
+                    self = .CONTAINER_END(.init(flag, data))
+                    
+                case .KCDATA_TYPE_BUFFER_END:
+                    self = .BUFFER_END(.init(data))
+                    
                 case .KCDATA_TYPE_UINT32_DESC:
                     self = .UINT32_DESC(.init(data))
                     
                 case .KCDATA_TYPE_UINT64_DESC:
                     self = .UINT64_DESC(.init(data))
+                    
+                case .KCDATA_TYPE_TYPEDEFINITION:
+                    self = .TYPEDEFINITION(.init(data))
                     
                 case .STACKSHOT_KCTYPE_JETSAM_LEVEL:
                     self = .JETSAM_LEVEL(.init(data))
@@ -369,30 +387,80 @@ extension IInstruments.CoreProfileSessionTap {
                     
                 case .KCDATA_TYPE_LIBRARY_LOADINFO64, .STACKSHOT_KCTYPE_LOADINFO64_TEXT_EXEC:
                     self = .LIBRARY_LOADINFO64(.init(data))
+                    
+                case .STACKSHOT_KCTYPE_STACKSHOT_DURATION:
+                    self = .STACKSHOT_DURATION(.init(data))
                                         
-                default: self = .INVALID
+                default: self = .UNDEFINED(.init(data))
             }
         }
     }
 }
 
 extension IInstruments.CoreProfileSessionTap {
-    enum ES {
-        case valid
-        case invalid
+    struct SubElement {
+        let flag: UInt8
+        let type: UInt8
+        let offset: UInt16
+        let size: UInt32
+        let name: String
+        
+        init(_ data: Data) {
+            flag = data[0 ..< 1].uint8
+            type = data[1 ..< 2].uint8
+            offset = data[2 ..< 4].uint16
+            size = data[4 ..< 8].uint32
+            name = data[8 ..< 40].string()
+        }
+    }
+    
+    struct Undefined: KTElementProtocol {
+        let name = "undefined"
+        let data: Data
+        init(_ data: Data) {
+            self.data = data
+        }
+    }
+        
+    struct ContainerBegin {
+        let name: String
+        let uniqID: UInt64
+        let typeID: UInt32
+        
+        init(_ flag: UInt64, _ data: Data) {
+            self.name = "\(flag)"
+            self.uniqID = flag
+            if data.count >= 4 {
+                self.typeID = data[0 ..< 4].withUnsafeBytes { $0.load(as: UInt32.self) }
+            } else {
+                self.typeID = 0
+            }
+        }
+    }
+    
+    struct ContainerEnd {
+        let name = "ContainerEnd"
+        let uniqID: UInt64
+        init(_ flag: UInt64, _ data: Data) {
+            uniqID = flag
+        }
+    }
+    
+    struct BufferEnd: KTElementProtocol {
+        let name = "BufferEnd"
+        init(_ data: Data) {
+            
+        }
     }
     
     struct UInt32Desc: KTElementProtocol {
-        let state: ES
         let name: String
         let obj: UInt32
         init(_ data: Data) {
             if data.count >= 36 {
-                self.state = .valid
                 self.name = data.string()
                 self.obj = data[32 ..< 36].withUnsafeBytes { $0.load(as: UInt32.self) }
             } else {
-                self.state = .invalid
                 self.name = ""
                 self.obj = 0
             }
@@ -400,32 +468,46 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct UInt64Desc: KTElementProtocol {
-        let state: ES
         let name: String
         let obj: UInt64
         init(_ data: Data) {
             if data.count >= 40 {
-                self.state = .valid
                 self.name = data.string()
                 self.obj = data[32 ..< 40].withUnsafeBytes { $0.load(as: UInt64.self) }
             } else {
-                self.state = .invalid
                 self.name = ""
                 self.obj = 0
             }
         }
     }
     
+    struct TypeDefintion: KTElementProtocol {
+        let typeID: UInt32
+        let numOfFields: UInt32
+        let name: String
+        let subelements: [SubElement]
+        
+        init(_ data: Data) {
+            self.typeID = data[0 ..< 4].uint32
+            self.numOfFields = data[4 ..< 8].uint32
+            self.name = data[8 ..< 40].string()
+            
+            var elements = [SubElement]()
+            (0 ..< Int(numOfFields)).forEach { i in
+                let s = 40 + i * (40)
+                elements.append(.init(data[s ..< (s + 40)]))
+            }
+            self.subelements = elements
+        }
+    }
+    
     struct JetsamLevel: KTElementProtocol {
-        let state: ES
         let name = "jetsam_level"
         var obj: UInt32
         init(_ data: Data) {
             if data.count >= 4 {
-                self.state = .valid
                 self.obj = data[0 ..< 4].withUnsafeBytes { $0.load(as: UInt32.self) }
             } else {
-                self.state = .invalid
                 self.obj = 0
             }
         }
@@ -443,44 +525,36 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct KernPageSize: KTElementProtocol {
-        let state: ES
         let name = "kernel_page_size"
         let obj: UInt32
         init(_ data: Data) {
             if data.count >= 4 {
-                self.state = .valid
                 self.obj = data[0 ..< 4].withUnsafeBytes { $0.load(as: UInt32.self) }
             } else {
-                self.state = .invalid
                 self.obj = 0
             }
         }
     }
     
     struct OSVersion: KTElementProtocol {
-        let state: ES
         let name: String
         let obj: String
         init(_ data: Data) {
-            self.state = .valid
             self.name = "osversion"
             self.obj = data.string(data.count)
         }
     }
     
     struct BootArgs: KTElementProtocol {
-        let state: ES
         let name: String
         let obj: String 
         init(_ data: Data) {
-            self.state = .valid
             self.name = "boot_args"
             self.obj = data.string(data.count)
         }
     }
     
     struct DYLDSharedCacheLoadInfo: KTElementProtocol {
-        let state: ES
         let name: String = "shared_cache_dyld_load_info"
         let imageUUID: [UInt8]
         let imageLoadAddress: UInt64
@@ -488,12 +562,10 @@ extension IInstruments.CoreProfileSessionTap {
         
         init(_ data: Data) {
             if data.count >= 32 {
-                self.state = .valid
                 self.imageLoadAddress = data[0 ..< 8].withUnsafeBytes { $0.load(as: UInt64.self) }
                 self.imageUUID = [UInt8](data[8 ..< 24])
                 self.imageSlidBaseAddress = data[24 ..< 32].withUnsafeBytes { $0.load(as: UInt64.self) }
             } else {
-                self.state = .invalid
                 self.imageLoadAddress = 0
                 self.imageUUID = []
                 self.imageSlidBaseAddress = 0
@@ -501,37 +573,44 @@ extension IInstruments.CoreProfileSessionTap {
         }
     }
     
-    struct ArrayPad: KTElementProtocol {
-        let state: ES
-        init(_ data: Data) {
-            state = .invalid
-        }
-    }
-    
-    struct ThreadGroupSnapshot: KTElementProtocol {
-        let state: ES
-        init(_ data: Data) {
-            state = .invalid
-        }
-    }
-    
     struct DYLDLoadInfo: KTElementProtocol {
-        let state: ES
         let name = "dyld_load_info64"
         let address: UInt64
         let uuid: [UInt8]
         
         init(_ data: Data) {
             if data.count >= 24 {
-                self.state = .valid
                 self.address = data[0 ..< 8].withUnsafeBytes { $0.load(as: UInt64.self) }
                 self.uuid = [UInt8](data[8 ..< 24])
             } else {
-                self.state = .invalid
                 self.address = 0
                 self.uuid = []
             }
         }
     }
+    
+    struct StackshotDuration: KTElementProtocol {
+        let stackshot_duration: UInt64
+        let stackshot_duration_outer: UInt64
+        let stackshot_duration_prior: UInt64
+        
+        init(_ data: Data) {
+            self.stackshot_duration = data[0 ..< 8].uint64
+            self.stackshot_duration_outer = data[8 ..< 16].uint64
+            self.stackshot_duration_prior = data[16 ..< 24].uint64
+        }
+    }
+    
+    struct ArrayPad: KTElementProtocol {
+        init(_ data: Data) {
+        }
+    }
+    
+    struct ThreadGroupSnapshot: KTElementProtocol {
+        init(_ data: Data) {
+        }
+    }
+    
+
 }
 
