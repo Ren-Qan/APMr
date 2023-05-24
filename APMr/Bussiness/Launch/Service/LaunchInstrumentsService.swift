@@ -11,7 +11,7 @@ import LibMobileDevice
 class LaunchInstrumentsService: NSObject, ObservableObject {
     private var monitorPid: UInt32? = nil
     
-    private lazy var parser = Parser()
+    private lazy var parser = CoreParser()
     
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let device = IInstruments.DeviceInfo()
@@ -49,10 +49,17 @@ extension LaunchInstrumentsService {
     
     public func launch(app: IApp) {
         self.app = app
-        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
-            client.traceCodes()
-            client.machTime()
+        if let client: IInstruments.Processcontrol = self.serviceGroup.client(.processcontrol) {
+            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
+            config.environment = ["OS_ACTIVITY_DT_MODE": true,
+                                  "HIPreventRefEncoding": true,
+                                  "DYLD_PRINT_TO_STDERR": true]
+            client.launch(config: config)
         }
+//        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
+//            client.traceCodes()
+//            client.machTime()
+//        }
     }
 }
 
@@ -60,24 +67,18 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32) {
         parser.tracePid = pid
         monitorPid = pid
-        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
-            if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
-                client.stop()
-                print("\n\n ============\n\n")
-            }
-        }
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
-        parser.trace(model)
+        
     }
     
     func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
         parser.merge(model.threadMap)
         model.elements.forEach { element in
-            parser.decode(element)
+            parser.feed(element)
         }
     }
     
@@ -87,14 +88,14 @@ extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     
     func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {
         model.elements.forEach { element in
-            parser.decode(element)
+            parser.feed(element)
         }
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     func trace(codes: [Int64 : String]) {
-        parser.codes = codes
+        parser.traceCodes = codes
     }
     
     func machTime(info: IInstruments.DeviceInfo.MT) {
@@ -102,19 +103,19 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
             return
         }
         
-        parser.machTime = info
+        parser.traceMachTime = info
         
-        if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
-            client.setConfig()
-            client.start()
-        }
-        
-        if let client: IInstruments.Processcontrol = serviceGroup.client(.processcontrol) {
+        if let client: IInstruments.Processcontrol = self.serviceGroup.client(.processcontrol) {
             var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
             config.environment = ["OS_ACTIVITY_DT_MODE": true,
                                   "HIPreventRefEncoding": true,
                                   "DYLD_PRINT_TO_STDERR": true]
             client.launch(config: config)
+        }
+        
+        if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
+            client.setConfig()
+            client.start()
         }
     }
     

@@ -9,9 +9,9 @@ import Foundation
 
 extension IInstruments.DeviceInfo {
     struct MT {
-        var mach_absolute_time: Int64
-        var mach_timebase_number: Int64
-        var mach_timebase_denom: Int64
+        let mach_absolute_time: Int64
+        let mach_timebase_number: Int64
+        let mach_timebase_denom: Int64
         
         var mach_time_factor: CGFloat {
             CGFloat(self.mach_timebase_number) / CGFloat(self.mach_timebase_denom)

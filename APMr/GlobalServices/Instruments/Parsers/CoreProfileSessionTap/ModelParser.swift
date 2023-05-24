@@ -1,11 +1,73 @@
 //
-//  CoreProfileSessionTap+KDebug.swift
+//  CoreProfileSessionTap+Parser.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/5/9.
 //
 
 import Foundation
+
+extension IInstruments.CoreProfileSessionTap {
+    class Parser {
+        weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil
+        
+        private lazy var kParser = KTParser()
+        private lazy var dParser = KDebugParser()
+        
+        public func parse(_ data: Data) {
+            guard data.count > 0 else {
+                return
+            }
+
+            let version = Data(data.prefix(4))
+            if version == Data([0x07, 0x58, 0xA2, 0x59]) {
+                delegate?.parserV1(kParser.parse(data))
+            } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
+                delegate?.parserV2(dParser.parseV2(data))
+            } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
+                delegate?.parserV3(dParser.parseV3(data))
+            } else {
+                delegate?.parserV4(dParser.parseNormal(data))
+            }
+        }
+    }
+}
+
+extension IInstruments.CoreProfileSessionTap {
+    class KTParser {
+        func parse(_ data: Data) -> ModelV1 {
+            var elements = [KCData]()
+            var offset = 0
+            let stream = InputStream(data: data)
+            stream.open()
+            
+            while stream.hasBytesAvailable {
+                var type: UInt32 = 0
+                var size: UInt32 = 0
+                var flag: UInt64 = 0
+                
+                offset += stream.read(&type, maxLength: 4)
+                offset += stream.read(&size, maxLength: 4)
+                offset += stream.read(&flag, maxLength: 8)
+                let data = stream.data(Int(size))
+                
+                var kt = IInstruments.CoreProfileSessionTap.KT.KCDATA_TYPE_INVALID
+                if let k = IInstruments.CoreProfileSessionTap.KT(rawValue: type) {
+                    kt = k
+                }
+                
+                let item = IInstruments.CoreProfileSessionTap.KCData(type: kt,
+                                                                     size: size,
+                                                                     flag: flag,
+                                                                     data: data)
+                elements.append(item)
+            }
+            
+            stream.close()
+            return ModelV1(elements: elements)
+        }
+    }
+}
 
 extension IInstruments.CoreProfileSessionTap {
     class KDebugParser {

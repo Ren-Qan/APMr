@@ -144,7 +144,12 @@ struct DTXMessagePayloadHeader {
         
         if (state) {
             [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
-            mobile_image_mounter_mount_image(_mounter_client, image_path, signature_string, signture_length, "Developer", &mount_image_result);
+            if (mobile_image_mounter_mount_image(_mounter_client, image_path, signature_string, signture_length, "Developer", &mount_image_result) != 0) {
+                NSString *path = [NSString stringWithUTF8String:image_path];
+                NSString *msg = [NSString stringWithFormat:@"mount image failed check path %@", path];
+                [self error:DTXMessageErrorCodeMonterMountImageFailed message:msg];
+                state = NO;
+            }
         }
     }
     
