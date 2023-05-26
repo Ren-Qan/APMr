@@ -80,6 +80,14 @@ struct Root: View {
             
             ToolbarItem(placement: .navigation) {
                 Menu {
+                    if let app = deviceService.lastSelectApp {
+                        Section("Last") {
+                            Button(app.name) {
+                                deviceService.selectApp = app
+                            }
+                        }
+                    }
+                    
                     Section("App") {
                         ForEach(deviceService.userApplist) { app in
                             Button(app.name) {

@@ -69,7 +69,8 @@ extension IInstruments.DeviceInfo: IInstrumentsServiceProtocol {
                let md = arr[2] as? Int64 {
                 let MT = MT(mach_absolute_time: mt,
                             mach_timebase_number: mn,
-                            mach_timebase_denom: md)
+                            mach_timebase_denom: md,
+                            usecs_since_epoch: Date().timeIntervalSince1970 * 1000000)
                 self.delegate?.machTime(info: MT)
             }
         } else if let codes = response.object as? String {

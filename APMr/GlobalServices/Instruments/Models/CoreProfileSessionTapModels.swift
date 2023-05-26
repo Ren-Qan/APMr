@@ -290,7 +290,7 @@ extension IInstruments.CoreProfileSessionTap {
     
     struct KDEBUGElement {
         let timestamp: UInt64
-        let data: Data
+        let data: Data // 32B
         let thread: UInt64
         let debug_id: UInt32
         let cpu_id: UInt32

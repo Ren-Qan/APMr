@@ -49,17 +49,17 @@ extension LaunchInstrumentsService {
     
     public func launch(app: IApp) {
         self.app = app
-        if let client: IInstruments.Processcontrol = self.serviceGroup.client(.processcontrol) {
-            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
-            config.environment = ["OS_ACTIVITY_DT_MODE": true,
-                                  "HIPreventRefEncoding": true,
-                                  "DYLD_PRINT_TO_STDERR": true]
-            client.launch(config: config)
-        }
-//        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
-//            client.traceCodes()
-//            client.machTime()
+//        if let client: IInstruments.Processcontrol = self.serviceGroup.client(.processcontrol) {
+//            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
+//            config.environment = ["OS_ACTIVITY_DT_MODE": true,
+//                                  "HIPreventRefEncoding": true,
+//                                  "DYLD_PRINT_TO_STDERR": true]
+//            client.launch(config: config)
 //        }
+        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
+            client.traceCodes()
+            client.machTime()
+        }
     }
 }
 
@@ -67,12 +67,36 @@ extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: UInt32) {
         parser.tracePid = pid
         monitorPid = pid
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM月dd日-HH:mm:ss.SSSSSS"
+        formatter.timeZone = TimeZone(identifier: "Asia/Shanghai")
+        
+        let date = Date()
+        print("[PID:\(pid)] \(formatter.string(from: date))")
+        
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     func parserV1(_ model: IInstruments.CoreProfileSessionTap.ModelV1) {
+        guard let app = self.app else {
+            return
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM月dd日-HH:mm:ss.SSSSSS"
+        formatter.timeZone = TimeZone(identifier: "Asia/Shanghai")
         
+        let date = Date()
+        print("[RUN] \(formatter.string(from: date))")
+        
+        if let client: IInstruments.Processcontrol = self.serviceGroup.client(.processcontrol) {
+            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
+            config.environment = ["OS_ACTIVITY_DT_MODE": true,
+                                  "HIPreventRefEncoding": true,
+                                  "DYLD_PRINT_TO_STDERR": true]
+            client.launch(config: config)
+        }
     }
     
     func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
@@ -99,27 +123,14 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     }
     
     func machTime(info: IInstruments.DeviceInfo.MT) {
-        guard let app = self.app else {
-            return
-        }
+        
         
         parser.traceMachTime = info
-        
-        if let client: IInstruments.Processcontrol = self.serviceGroup.client(.processcontrol) {
-            var config = IInstruments.Processcontrol.LaunchConfig.common(bundle: app.bundleId)
-            config.environment = ["OS_ACTIVITY_DT_MODE": true,
-                                  "HIPreventRefEncoding": true,
-                                  "DYLD_PRINT_TO_STDERR": true]
-            client.launch(config: config)
-        }
-        
+                
         if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
             client.setConfig()
             client.start()
         }
-    }
     
-    func running(process: [[String : Any]]) {
-        
     }
 }

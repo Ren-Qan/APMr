@@ -6,27 +6,45 @@
 //
 
 import Cocoa
+import SwiftUI
 
-class DeviceService: NSObject, ObservableObject {
+class DeviceService: ObservableObject {
     @Published var deviceList: [DeviceItem] = []
     @Published var userApplist: [IApp] = []
     @Published var systemApplist: [IApp] = []
     
-    @Published var selectDevice: DeviceItem? = nil
-    @Published var selectApp: IApp? = nil
+    @Published var lastSelectDevice: DeviceItem? = nil
+    @Published var lastSelectApp: IApp? = nil
+    
     @Published var monitorPid: uint32? = nil
+    @Published var selectDevice: DeviceItem? = nil {
+        didSet {
+            if let name = selectDevice?.id {
+                lastDeviceId = name
+            }
+        }
+    }
+    @Published var selectApp: IApp? = nil {
+        didSet {
+            if let bundleId = selectApp?.bundleId {
+                lastBundleId = bundleId
+            }
+        }
+    }
+    
+    @AppStorage("Last_Select_Bundle_id") private var lastBundleId: String = ""
+    @AppStorage("Last_Select_Device_id") private var lastDeviceId: String = ""
     
     var injectClosure: ((DeviceService) -> Void)? = nil
     
-    override init() {
-        super.init()
+    init() {
         NotificationCenter
             .default
             .addObserver(forName: MobileManager.subscribeChangedNotification,
                          object: nil,
                          queue: nil) { _ in
-            self.refreshDeviceList()
-        }
+                self.refreshDeviceList()
+            }
     }
 }
 
@@ -58,6 +76,11 @@ extension DeviceService {
                         nameMap[result.udid] = name
                     }
                 }
+                
+                if item.id == self.lastBundleId {
+                    self.lastSelectDevice = result
+                }
+                
                 return result
             }
             
@@ -80,6 +103,10 @@ extension DeviceService {
                         user.append(app)
                     } else if app.applicationType == .system {
                         system.append(app)
+                    }
+                    
+                    if self.lastBundleId == app.bundleId {
+                        self.lastSelectApp = app
                     }
                 }
                 

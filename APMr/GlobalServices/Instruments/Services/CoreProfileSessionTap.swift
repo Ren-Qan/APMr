@@ -91,17 +91,10 @@ extension IInstruments.CoreProfileSessionTap {
                                 "tk": 3,
                                 "ta": [[3], [0], [2], [1, 1, 0]],
                                 "uuid": UUID().uuidString.uppercased(),
-                            ] as [String : Any],
-                            [
-                                "tsf": [65537],
-                                "ta": [[0], [2], [1, 1, 0]],
-                                "si": 5000000,
-                                "tk": 1,
-                                "uuid": UUID().uuidString.uppercased(),
-                            ],
+                            ] as [String : Any]
                         ],
                         "rp": 100,
-                        "bm": 1,
+                        "bm": 0,
                     ]
                     let arg = DTXArguments()
                     arg.append(config)

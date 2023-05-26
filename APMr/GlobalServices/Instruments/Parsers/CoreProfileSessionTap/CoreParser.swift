@@ -23,15 +23,44 @@ extension CoreParser {
     }
     
     func feed(_ element: IInstruments.CoreProfileSessionTap.KDEBUGElement) {
-        let name = traceCodes?[Int64(element.event_id)] ?? String(format: "0x%X", element.event_id)
-        let event = Event(trace_name: name, element: element)
-        if let _ = TRACE(rawValue: name) {
-            traces.feed(event)
+        //        let name = traceCodes?[Int64(element.event_id)] ?? String(format: "0x%X", element.event_id)
+        //        let event = Event(trace_name: name, element: element)
+        //        if let _ = TRACE(rawValue: name) {
+        //            traces.feed(event)
+        //            return
+        //        }
+        //        events.feed(event)
+        
+        guard let time = traceMachTime?.format(time: Int64(element.timestamp)) else {
             return
         }
-        events.feed(event)
+        
+        guard let code = traceCodes?[Int64(element.event_id)] else {
+            return
+        }
+        
+        let process = threadMap[UInt64(element.thread)]?.process ?? String(format: "0x%X", element.thread)
+        
+        print("[\(time)] - \(process) - \(code)")
+    }
+    
+    private func trace(_ t: TRACE, _ e: IInstruments.CoreProfileSessionTap.KDEBUGElement) {
+        if t == .TRACE_DATA_NEWTHREAD {
+            let tid = e.data[0 ..< 8].uint32
+            let pid = e.data[8 ..< 16].uint32
+            if let threadMap = threadMap.first(where: { thread in
+                return thread.value.pid == pid
+            }) {
+                var thread = threadMap.value
+                thread.thread = UInt64(tid)
+                self.threadMap[UInt64(tid)] = thread
+            }
+        } else if t == .TRACE_STRING_EXEC {
+            
+        }
     }
 }
+
 
 extension CoreParser {
     class TP {
