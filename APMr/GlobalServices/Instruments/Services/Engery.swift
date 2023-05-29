@@ -17,19 +17,19 @@ extension IInstruments {
     class Energy: Base {
         public weak var delegate: IInstrumentsEnergyDelegate? = nil
         
-        private var startPids: [UInt32] = []
+        private var startPids: [PID] = []
         private var sampleAttributes: [String : Any] = [:]
-        private var samplePids: [UInt32] = []
+        private var samplePids: [PID] = []
     }
 }
 
 extension IInstruments.Energy {
-    func start(pids: [UInt32]) {
+    func start(pids: [PID]) {
         startPids = pids
         send(P.start(pids: pids).arg)
     }
     
-    func sample(attributes: [String : Any] = [:], pids: [UInt32]) {
+    func sample(attributes: [String : Any] = [:], pids: [PID]) {
         sampleAttributes = attributes
         samplePids = pids
         send(P.sample(attributes: attributes, pids: pids).arg)
@@ -56,8 +56,8 @@ extension IInstruments.Energy: IInstrumentsServiceProtocol {
 
 extension IInstruments.Energy {
     enum P {
-        case start(pids: [UInt32])
-        case sample(attributes: [String : Any], pids: [UInt32])
+        case start(pids: [PID])
+        case sample(attributes: [String : Any], pids: [PID])
         
         var arg: IInstrumentArgs {
             switch self {

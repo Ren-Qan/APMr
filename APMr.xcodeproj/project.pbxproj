@@ -59,6 +59,7 @@
 		C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* OpenglModels.swift */; };
 		C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */; };
 		C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A1C4522A0384C5009BA0D5 /* Engery.swift */; };
+		C7A487DB2A24AC5700A033B9 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A487DA2A24AC5700A033B9 /* Constant.swift */; };
 		C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC987E2956E0C200A6580B /* NetworkStatistics.swift */; };
 		C7AC98812956EB1D00A6580B /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* Networking.swift */; };
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
@@ -173,6 +174,7 @@
 		C780D11729419E6100EF5633 /* OpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenglModels.swift; sourceTree = "<group>"; };
 		C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonStyle.swift; sourceTree = "<group>"; };
 		C7A1C4522A0384C5009BA0D5 /* Engery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engery.swift; sourceTree = "<group>"; };
+		C7A487DA2A24AC5700A033B9 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		C7AC987E2956E0C200A6580B /* NetworkStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatistics.swift; sourceTree = "<group>"; };
 		C7AC98802956EB1D00A6580B /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 		C780D11129418C2E00EF5633 /* GlobalServices */ = {
 			isa = PBXGroup;
 			children = (
+				C7A487D92A24AC4200A033B9 /* Constant */,
 				C73BBB0C2942E25700472A75 /* IServices */,
 				C7483BA629373ADC00F32BE0 /* Instruments */,
 				C7483BA329373ADC00F32BE0 /* MobileManager */,
@@ -602,6 +605,14 @@
 				C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */,
 			);
 			path = Button;
+			sourceTree = "<group>";
+		};
+		C7A487D92A24AC4200A033B9 /* Constant */ = {
+			isa = PBXGroup;
+			children = (
+				C7A487DA2A24AC5700A033B9 /* Constant.swift */,
+			);
+			path = Constant;
 			sourceTree = "<group>";
 		};
 		C7CB10492A0A071600828F3D /* Parsers */ = {
@@ -797,6 +808,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7A487DB2A24AC5700A033B9 /* Constant.swift in Sources */,
 				C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */,
 				C7483BEE29373ADC00F32BE0 /* Sysmontap.swift in Sources */,
 				C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */,

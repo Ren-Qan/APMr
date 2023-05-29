@@ -62,12 +62,12 @@ extension IInstruments {
         isConnected = dtxService.connectInstrumentsService(withDevice: device_t)
         
         if isConnected, let fd = fd {
-            let serialQueue = DispatchQueue(label: "serial.dtxmsg.queue", target: .global())
-            let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: serialQueue)
+            let queue = DispatchQueue(label: "serial.dtxmsg.queue", attributes: .concurrent, target: .global())
+            let read = DispatchSource.makeReadSource(fileDescriptor: fd, queue: queue)
             read.setEventHandler { [weak self] in
-                let receive = self?.dtxService.receive()
-                let response = R(receive)
-                self?.delegate?.received(responsed: response)
+                if let receive = self?.dtxService.receive(), let response = R(receive) {
+                    self?.delegate?.received(responsed: response)
+                }
             }
             read.resume()
             self.reader = read

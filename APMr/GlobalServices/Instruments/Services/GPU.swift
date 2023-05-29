@@ -43,7 +43,7 @@ extension IInstruments.GPU {
         var profile: Int
         var interval: Int
         var limit: Int
-        var pid: UInt32
+        var pid: PID
     }
     
     enum P {

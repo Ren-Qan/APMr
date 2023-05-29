@@ -9,11 +9,11 @@ import Foundation
 import LibMobileDevice
 
 protocol IInstrumentsProcessControlByDictionaryDelegate: NSObjectProtocol {
-    func launch(pid: UInt32)
+    func launch(pid: PID)
 }
 
 extension IInstrumentsProcessControlByDictionaryDelegate {
-    func launch(pid: UInt32) { }
+    func launch(pid: PID) { }
 }
 
 extension IInstruments {
@@ -21,9 +21,9 @@ extension IInstruments {
         public weak var delegate: IInstrumentsProcessControlByDictionaryDelegate? = nil
         
         private var launchConfig: LaunchConfig? = nil
-        private var startPid: UInt32 = 0
-        private var stopPid: UInt32 = 0
-        private var resumePid: UInt32 = 0
+        private var startPid: PID = 0
+        private var stopPid: PID = 0
+        private var resumePid: PID = 0
     }
 }
 
@@ -33,17 +33,17 @@ extension IInstruments.ProcessControlByDictionary {
         send(P.launch(config: config).arg)
     }
     
-    func start(pid: UInt32) {
+    func start(pid: PID) {
         self.startPid = pid
         send(P.start(pid: pid).arg)
     }
     
-    func stop(pid: UInt32) {
+    func stop(pid: PID) {
         self.stopPid = pid
         send(P.stop(pid: pid).arg)
     }
     
-    func resume(pid: UInt32) {
+    func resume(pid: PID) {
         self.resumePid = pid
     }
 }
@@ -54,7 +54,7 @@ extension IInstruments.ProcessControlByDictionary: IInstrumentsServiceProtocol {
     }
     
     func response(_ response: IInstruments.R) {        
-        if let pid = response.object as? UInt32 {
+        if let pid = response.object as? PID {
             delegate?.launch(pid: pid)
         }
     }
@@ -76,9 +76,9 @@ extension IInstruments.ProcessControlByDictionary {
     
     enum P {
         case launch(config: LaunchConfig)
-        case start(pid: UInt32)
-        case resume(pid: UInt32)
-        case stop(pid: UInt32)
+        case start(pid: PID)
+        case resume(pid: PID)
+        case stop(pid: PID)
         
         var arg: IInstrumentArgs {
             switch self {

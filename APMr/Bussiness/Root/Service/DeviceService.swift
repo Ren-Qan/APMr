@@ -16,7 +16,7 @@ class DeviceService: ObservableObject {
     @Published var lastSelectDevice: DeviceItem? = nil
     @Published var lastSelectApp: IApp? = nil
     
-    @Published var monitorPid: uint32? = nil
+    @Published var monitorPid: PID? = nil
     @Published var selectDevice: DeviceItem? = nil {
         didSet {
             if let name = selectDevice?.id {

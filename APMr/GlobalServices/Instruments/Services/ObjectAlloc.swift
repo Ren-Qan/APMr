@@ -21,7 +21,7 @@ extension IInstruments {
         public weak var delegate: IInstrumentsObjectAllocDelegate? = nil
         
         private var config: ParpareConfig? = nil
-        private var pid: UInt32 = 0
+        private var pid: PID = 0
     }
 }
 
@@ -31,7 +31,7 @@ extension IInstruments.ObjectAlloc {
         send(P.parpare(config: config).arg)
     }
     
-    func collection(pid: UInt32) {
+    func collection(pid: PID) {
         self.pid = pid
         send(P.collection(pid: pid).arg)
     }
@@ -65,7 +65,7 @@ extension IInstruments.ObjectAlloc {
     
     enum P {
         case parpare(config: ParpareConfig)
-        case collection(pid: UInt32)
+        case collection(pid: PID)
         case stop
         
         var arg: IInstrumentArgs {

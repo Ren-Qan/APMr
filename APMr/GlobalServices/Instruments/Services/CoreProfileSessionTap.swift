@@ -91,7 +91,15 @@ extension IInstruments.CoreProfileSessionTap {
                                 "tk": 3,
                                 "ta": [[3], [0], [2], [1, 1, 0]],
                                 "uuid": UUID().uuidString.uppercased(),
-                            ] as [String : Any]
+                            ] as [String : Any],
+                            
+//                            [
+//                                "tsf": [0xffffffff],
+//                                "ta": [[0], [2], [1, 1, 0]],
+//                                "si": 5000000,
+//                                "tk": 1,
+//                                "uuid": UUID().uuidString.uppercased(),
+//                            ],
                         ],
                         "rp": 100,
                         "bm": 0,

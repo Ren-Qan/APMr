@@ -10,36 +10,36 @@ import LibMobileDevice
 import ObjectMapper
 
 protocol IInstrumentsNetworkStatisticsDelegate: NSObjectProtocol {
-    func process(modelMap: [UInt32 : IInstruments.NetworkStatistics.Model])
+    func process(modelMap: [PID : IInstruments.NetworkStatistics.Model])
 }
 
 extension IInstrumentsNetworkStatisticsDelegate {
-    func process(modelMap: [UInt32 : IInstruments.NetworkStatistics.Model]) { }
+    func process(modelMap: [PID : IInstruments.NetworkStatistics.Model]) { }
 }
 
 extension IInstruments {
     class NetworkStatistics: IInstruments.Base {
         public weak var delegate: IInstrumentsNetworkStatisticsDelegate? = nil
         
-        private var startPids: [UInt32] = []
-        private var stopPids: [UInt32] = []
+        private var startPids: [PID] = []
+        private var stopPids: [PID] = []
         
         private var sampleConfig: SampleConfig? = nil
     }
 }
 
 extension IInstruments.NetworkStatistics {
-    func start(pids: [UInt32]) {
+    func start(pids: [PID]) {
         self.startPids = pids
         send(P.start(pids: pids).arg)
     }
     
-    func stop(pids: [UInt32]) {
+    func stop(pids: [PID]) {
         self.stopPids = pids
         send(P.stop(pids: pids).arg)
     }
     
-    func sample(pids: [UInt32]) {
+    func sample(pids: [PID]) {
         let config = SampleConfig.common(pids: pids)
         sample(config: config)
     }
@@ -57,8 +57,8 @@ extension IInstruments.NetworkStatistics: IInstrumentsServiceProtocol {
     
     func response(_ response: IInstruments.R) {
         
-        if let response = response.object as? [UInt32 : [String : Any]] {
-            var result = [UInt32 : Model]()
+        if let response = response.object as? [PID : [String : Any]] {
+            var result = [PID : Model]()
             let mapper = Mapper<Model>()
             response.forEach { item in
                 if let model = mapper.map(JSON: item.value) {
@@ -73,9 +73,9 @@ extension IInstruments.NetworkStatistics: IInstrumentsServiceProtocol {
 extension IInstruments.NetworkStatistics {
     struct SampleConfig {
         var attributes: [String]
-        var pids: [UInt32]
+        var pids: [PID]
         
-        static func common(pids: [UInt32]) -> SampleConfig {
+        static func common(pids: [PID]) -> SampleConfig {
             let att = ["net.bytes",
                        "net.bytes.delta",
                        "net.connections[]",
@@ -94,8 +94,8 @@ extension IInstruments.NetworkStatistics {
     }
     
     enum P {
-        case start(pids: [UInt32])
-        case stop(pids: [UInt32])
+        case start(pids: [PID])
+        case stop(pids: [PID])
         case sample(config: SampleConfig)
         
         var arg: IInstrumentArgs {

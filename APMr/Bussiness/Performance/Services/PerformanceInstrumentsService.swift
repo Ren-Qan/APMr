@@ -14,7 +14,7 @@ class PerformanceInstrumentsService: NSObject, ObservableObject {
     
     @Published private(set) var summary = Summary()
     
-    @Published private(set) var monitorPid: UInt32 = 0
+    @Published private(set) var monitorPid: PID = 0
     
     @Published var isShowPerformanceSummary = false
     
@@ -155,7 +155,7 @@ extension PerformanceInstrumentsService {
 // MARK: - Private
 
 extension PerformanceInstrumentsService {
-    private func monitor(_ pid: UInt32) {
+    private func monitor(_ pid: PID) {
         monitorPid = pid
         if pid != 0 {
             isMonitoringPerformance = true
@@ -231,7 +231,7 @@ extension PerformanceInstrumentsService: IInstrumentsProcesscontrolDelegate {
 
     }
     
-    func launch(pid: UInt32) {
+    func launch(pid: PID) {
         monitor(pid)
     }
 }

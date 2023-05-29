@@ -107,7 +107,7 @@ extension IInstruments.CoreProfileSessionTap {
             
             while stream.hasBytesAvailable, threadI < mapCount {
                 var thread: UInt64 = 0
-                var pid: UInt32 = 0
+                var pid: PID = 0
                 var process = ""
                 
                 stream.read(&thread, maxLength: 8)
@@ -209,7 +209,7 @@ extension IInstruments.CoreProfileSessionTap {
             
             while stream.hasBytesAvailable {
                 var timestamp: UInt64 = 0
-                var thread: UInt64 = 0
+                var thread: TID = 0
                 var debug: UInt32 = 0
                 var cpu: UInt32 = 0
                 var unused: UInt64 = 0

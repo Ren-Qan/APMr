@@ -13,7 +13,7 @@ protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
     
     func machTime(info: IInstruments.DeviceInfo.MT)
     
-    func running(process: [[String : Any]])
+    func running(process: [IInstruments.DeviceInfo.Process])
 }
 
 extension IInstrumentsDeviceInfoDelegate {
@@ -26,7 +26,7 @@ extension IInstruments {
     class DeviceInfo: Base {
         public weak var delegate: IInstrumentsDeviceInfoDelegate? = nil
         
-        private var pid: UInt32 = 0
+        private var pid: PID = 0
         private var symbolicatorConfig: SymbolicatorConfig? = nil
     }
 }
@@ -44,7 +44,7 @@ extension IInstruments.DeviceInfo {
         send(P.runningProcesses.arg)
     }
     
-    func execname(pid: UInt32) {
+    func execname(pid: PID) {
         self.pid = pid
         send(P.execname(pid: pid).arg)
     }
@@ -62,7 +62,17 @@ extension IInstruments.DeviceInfo: IInstrumentsServiceProtocol {
     
     func response(_ response: IInstruments.R) {
         if let runningProcess = response.object as? [[String : Any]] {
-            self.delegate?.running(process: runningProcess)
+            let processes = runningProcess.compactMap { map in
+                if let name = map["name"] as? String,
+                   let pid = map["pid"] as? PID,
+                   let bundleId = map["bundleIdentifier"] as? String {
+                    return IInstruments.DeviceInfo.Process(name: name,
+                                                           pid: pid,
+                                                           bundleId: bundleId)
+                }
+                return nil
+            }
+            self.delegate?.running(process: processes)
         } else if let arr = response.object as? [Any], arr.count >= 3 {
             if let mt = arr[0] as? Int64,
                let mn = arr[1] as? Int64,
@@ -90,10 +100,10 @@ extension IInstruments.DeviceInfo: IInstrumentsServiceProtocol {
 
 extension IInstruments.DeviceInfo {
     struct SymbolicatorConfig {
-        var pid: UInt32
+        var pid: PID
         var selector: String
         
-        static func common(pid: UInt32, selector: String = "dyldNotificationReceived:") -> SymbolicatorConfig {
+        static func common(pid: PID, selector: String = "dyldNotificationReceived:") -> SymbolicatorConfig {
             return SymbolicatorConfig(pid: pid, selector: selector)
         }
     }
@@ -105,7 +115,7 @@ extension IInstruments.DeviceInfo {
         
         case traceCodesFile
         
-        case execname(pid: UInt32)
+        case execname(pid: PID)
         
         case symbolicator(config: SymbolicatorConfig)
         
@@ -119,10 +129,12 @@ extension IInstruments.DeviceInfo {
                     
                 case .runningProcesses:
                     return IInstrumentArgs("runningProcesses")
+                    
                 case .execname(let pid):
                     let arg = DTXArguments()
                     arg.append(pid)
                     return IInstrumentArgs("execnameForPid:", dtxArg: arg)
+                    
                 case .symbolicator(let config):
                     let arg = DTXArguments()
                     arg.append(config.pid)

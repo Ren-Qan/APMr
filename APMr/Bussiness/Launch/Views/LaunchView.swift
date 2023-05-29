@@ -18,12 +18,12 @@ struct LaunchView: View {
     var body: some View {
         VStack {
             Button("start") {
-                guard let device = deviceService.selectDevice else {
+                guard let device = deviceService.selectDevice, let app = deviceService.selectApp else {
                     return
                 }
                 
                 launchService.start(device) { success, service in
-
+                    service.prepare(app)
                 }
             }
             
@@ -32,6 +32,14 @@ struct LaunchView: View {
                     return
                 }
                 launchService.launch(app: app)
+            }
+            
+            
+            Button("STOP") {
+                guard let app = deviceService.selectApp else {
+                    return
+                }
+                launchService.prepare(app)
             }
         }
     }

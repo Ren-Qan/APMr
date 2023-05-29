@@ -23,7 +23,7 @@ extension IInstruments.DeviceInfo {
             let timeStamp = (usecs_since_epoch + offset) / 1000000
             
             let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm:ss.SSS"
+            formatter.dateFormat = "ss.SSS"
             formatter.timeZone = .current
         
             let date = Date(timeIntervalSince1970: timeStamp)
@@ -36,4 +36,11 @@ extension IInstruments.DeviceInfo {
             return dateString
         }
     }
+    
+    struct Process {
+        let name: String
+        let pid: PID
+        let bundleId: String
+    }
 }
+

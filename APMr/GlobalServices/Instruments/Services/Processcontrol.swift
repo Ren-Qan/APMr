@@ -9,13 +9,13 @@ import Cocoa
 import LibMobileDevice
 
 protocol IInstrumentsProcesscontrolDelegate: NSObjectProtocol {
-    func launch(pid: UInt32)
+    func launch(pid: PID)
     
     func outputReceived(_ msg: String)
 }
 
 extension IInstrumentsProcesscontrolDelegate {
-    func launch(pid: UInt32) { }
+    func launch(pid: PID) { }
     
     func outputReceived(_ msg: String) { }
 }
@@ -24,7 +24,7 @@ extension IInstruments {
     class Processcontrol: Base {
         public weak var delegate: IInstrumentsProcesscontrolDelegate? = nil
         
-        private var pid: UInt32 = 0
+        private var pid: PID = 0
         private var launchConfig: LaunchConfig? = nil
     }
 }
@@ -40,7 +40,7 @@ extension IInstruments.Processcontrol {
         send(P.launch(config: config).arg)
     }
     
-    func kill(pid: UInt32) {
+    func kill(pid: PID) {
         self.pid = pid
         send(P.kill(pid: pid).arg)
     }
@@ -55,7 +55,7 @@ extension IInstruments.Processcontrol: IInstrumentsServiceProtocol {
         if response.flag == 2,
            let message = response.array?.first as? String {
             delegate?.outputReceived(message)
-        } else if let pid = response.object as? UInt32 {
+        } else if let pid = response.object as? PID {
             delegate?.launch(pid: pid)
         }
     }
@@ -82,7 +82,7 @@ extension IInstruments.Processcontrol {
     enum P {
         case launch(config: LaunchConfig)
         
-        case kill(pid: UInt32)
+        case kill(pid: PID)
         
         var arg: IInstrumentArgs {
             switch self {

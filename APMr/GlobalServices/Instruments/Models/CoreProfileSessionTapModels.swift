@@ -284,14 +284,14 @@ extension IInstruments.CoreProfileSessionTap {
     
     struct KDThreadMap {
         var thread: UInt64
-        var pid: UInt32
+        var pid: PID
         var process: String
     }
     
     struct KDEBUGElement {
         let timestamp: UInt64
         let data: Data // 32B
-        let thread: UInt64
+        let thread: TID
         let debug_id: UInt32
         let cpu_id: UInt32
         let unused: UInt64
