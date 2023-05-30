@@ -259,7 +259,7 @@ extension PerformanceInstrumentsService: IInstrumentsOpenglDelegate {
 }
 
 extension PerformanceInstrumentsService: IInstrumentsNetworkStatisticsDelegate {
-    func process(modelMap: [UInt32: IInstruments.NetworkStatistics.Model]) {
+    func process(modelMap: [PID: IInstruments.NetworkStatistics.Model]) {
         guard monitorPid != 0, let model = modelMap[monitorPid] else {
             return
         }
