@@ -7,23 +7,25 @@
 
 import Foundation
 
-class CoreParser {
-    var tracePid: PID? = nil
-    var traceCodes: [Int64 : String]? = nil
-    var traceMachTime: IInstruments.DeviceInfo.MT? = nil
-    private var threadMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
+class CoreParser: NSObject {
+    public var tracePid: PID? = nil
+    public var traceCodes: [Int64 : String]? = nil
+    public var traceMachTime: IInstruments.DeviceInfo.MT? = nil
     
+    private var threadMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
     private lazy var queue: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-    
-    private lazy var hp = TP()
 }
 
 extension CoreParser {
-    func merge(_ threadMap: [UInt64 : IInstruments.CoreProfileSessionTap.KDThreadMap]) {
+    func parpare() {
+        //        hp.clean()
+    }
+    
+    func merge(_ threadMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap]) {
         self.threadMap.merge(threadMap) { current, _ in current }
     }
     
@@ -39,54 +41,35 @@ extension CoreParser {
 extension CoreParser {
     private func feed(_ element: IInstruments.CoreProfileSessionTap.KDEBUGElement) {
         let event = Event(body: element)
-        if let events = hp.feed(event) {
-            parse(events)
-        }
     }
     
     public func parse(_ events: Events) {
-        guard events.list.count > 0 else {
-            return
-        }
-        let event = events.list[0]
-        
-        guard event.body.timestamp < UInt64(Int64.max),
-              let time = traceMachTime?.format(time: Int64(event.body.timestamp)) else {
+        guard let head = events.list.first else {
             return
         }
         
-        guard let traceName = traceCodes?[Int64(event.body.event_id)] else {
+        guard head.body.timestamp < UInt64(Int64.max),
+              let timestamp = traceMachTime?.timeStamp(Int64(head.body.timestamp)) else {
             return
         }
         
-        let thread = threadMap[event.body.thread]?.process ?? "[TID: \(event.body.thread)]"
-        
-        if traceName == "TRACE_STRING_GLOBAL" {
-            let str = handleTraceStringGlobal(events)
-            print("\(time) --- \(thread) --- \(traceName) : \(str)")
+        guard let traceName = traceCodes?[Int64(head.body.event_id)] else {
             return
         }
         
-        print("\(time) --- \(thread) --- \(traceName)")
-    }
-    
-    private func handleTraceStringGlobal(_ events: Events) -> String {
-        var str = ""
-        events.list.forEach { event in
-            if event.body.func_code == .start {
-                str = Data(event.body.data[16 ..< 32]).string(16)
-            } else {
-                str += event.body.data.string()
-            }
-        }
+        let tag = threadMap[head.body.thread]?.process ?? "[TID: \(String(format: "0x%X", head.body.thread))]"
         
-        return str
+        print("\(timestamp) --- \(tag) --- \(traceName)")
     }
 }
 
 extension CoreParser {
     class TP {
         private var map: [TID : TEvent] = [:]
+        
+        public func clean() {
+            map = [:]
+        }
         
         public func feed(_ event: Event) -> Events? {
             let funcID = event.body.func_code
@@ -136,7 +119,6 @@ extension CoreParser {
                 if events(eid) == nil {
                     map[eid] = Events()
                 }
-                map[eid]?.clean()
             }
             
             map.forEach { (key: EID, value: CoreParser.Events) in
@@ -158,6 +140,6 @@ extension CoreParser {
     }
     
     struct Event {
-        let body:  IInstruments.CoreProfileSessionTap.KDEBUGElement
+        let body: IInstruments.CoreProfileSessionTap.KDEBUGElement
     }
 }

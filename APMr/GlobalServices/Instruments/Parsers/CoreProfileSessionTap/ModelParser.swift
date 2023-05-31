@@ -138,7 +138,7 @@ extension IInstruments.CoreProfileSessionTap {
             while stream.hasBytesAvailable {
                 var timestamp: UInt64 = 0
                 let dataP = UnsafeMutablePointer<UInt8>.allocate(capacity: 32)
-                var thread: UInt64 = 0
+                var thread: TID = 0
                 var debug: UInt32 = 0
                 var cpu: UInt32 = 0
                 var unused: UInt64 = 0

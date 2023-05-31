@@ -102,7 +102,8 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
         guard let app = self.app else {
             return
         }
-
+        
+        parser.parpare()
         parser.traceMachTime = info
         
         if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {

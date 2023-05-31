@@ -617,7 +617,5 @@ extension IInstruments.CoreProfileSessionTap {
         init(_ data: Data) {
         }
     }
-    
-
 }
 
