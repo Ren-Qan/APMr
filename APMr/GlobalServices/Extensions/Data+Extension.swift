@@ -34,4 +34,21 @@ extension Data {
     var uint64: UInt64 {
         return withUnsafeBytes { $0.load(as: UInt64.self) }
     }
+    
+    var int64: Int64 {
+        return withUnsafeBytes { $0.load(as: Int64.self) }
+    }
+    
+    var uuid: UUID? {
+        guard count >= 16 else {
+            return nil
+        }
+        
+        return withUnsafeBytes {
+            guard let baseAddress = $0.bindMemory(to: UInt8.self).baseAddress else {
+                return nil
+            }
+            return NSUUID(uuidBytes: baseAddress) as UUID
+        }
+    }
 }

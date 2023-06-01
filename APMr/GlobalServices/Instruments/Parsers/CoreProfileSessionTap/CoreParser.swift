@@ -7,12 +7,20 @@
 
 import Foundation
 
-class CoreParser: NSObject {
-    public var tracePid: PID? = nil
-    public var traceCodes: [Int64 : String]? = nil
-    public var traceMachTime: IInstruments.DeviceInfo.MT? = nil
+protocol CoreParserDelegate: NSObjectProtocol {
+    var traceCodesMap: [TraceID : String]? { get }
     
-    private var threadMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
+    var traceMachTime: IInstruments.DeviceInfo.MT? { get }
+
+    func responsed(_ chunk: CoreParser.Chunk)
+}
+
+class CoreParser {
+    public weak var delegate: CoreParserDelegate? = nil
+    
+    private lazy var tPMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
+    private lazy var tEvent = ThreadEvent()
+    
     private lazy var queue: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
@@ -22,11 +30,12 @@ class CoreParser: NSObject {
 
 extension CoreParser {
     func parpare() {
-        //        hp.clean()
+        tPMap = [:]
+        tEvent.clean()
     }
     
     func merge(_ threadMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap]) {
-        self.threadMap.merge(threadMap) { current, _ in current }
+        self.tPMap.merge(threadMap) { current, _ in current }
     }
     
     func feeds(_ elements: [IInstruments.CoreProfileSessionTap.KDEBUGElement]) {
@@ -40,48 +49,55 @@ extension CoreParser {
 
 extension CoreParser {
     private func feed(_ element: IInstruments.CoreProfileSessionTap.KDEBUGElement) {
-        let event = Event(body: element)
+        guard element.timestamp < UInt64(Int64.max),
+              let timestamp = delegate?.traceMachTime?.timestamp(Int64(element.timestamp)) else {
+            return
+        }
+        
+        let event = Event(body: element,
+                          name: delegate?.traceCodesMap?[TraceID(element.event_id)],
+                          timestamp: timestamp)
+        if let chunk = tEvent.feed(event), generator(chunk) {
+            delegate?.responsed(chunk)
+            
+            switch chunk.occasion {
+                case .undefined: return
+                default: print(chunk)
+            }
+        }
     }
     
-    public func parse(_ events: Events) {
-        guard let head = events.list.first else {
-            return
+    public func generator(_ chunk: Chunk) -> Bool {
+        guard let head = chunk.events.first else {
+            return false
         }
         
-        guard head.body.timestamp < UInt64(Int64.max),
-              let timestamp = traceMachTime?.timeStamp(Int64(head.body.timestamp)) else {
-            return
-        }
+        chunk.tpMap = tPMap[head.body.thread]
+        chunk.occasion = .init(chunk)
         
-        guard let traceName = traceCodes?[Int64(head.body.event_id)] else {
-            return
-        }
-        
-        let tag = threadMap[head.body.thread]?.process ?? "[TID: \(String(format: "0x%X", head.body.thread))]"
-        
-        print("\(timestamp) --- \(tag) --- \(traceName)")
+        return true
     }
 }
 
 extension CoreParser {
-    class TP {
-        private var map: [TID : TEvent] = [:]
+    fileprivate class ThreadEvent {
+        var map: [TID : EEvent] = [:]
         
-        public func clean() {
+        func clean() {
             map = [:]
         }
         
-        public func feed(_ event: Event) -> Events? {
-            let funcID = event.body.func_code
+        func feed(_ event: Event) -> Chunk? {
+            let funcID = event.fCode
             let tid = event.body.thread
             let eid = event.body.event_id
             
             if funcID == .start {
                 if map[tid] == nil {
-                    map[tid] = TEvent()
+                    map[tid] = EEvent()
                 }
             } else if funcID == .end {
-                if map[tid] == nil || map[tid]?.events(eid) == nil {
+                if map[tid] == nil || map[tid]?.chunk(eid) == nil {
                     return nil
                 }
             }
@@ -91,55 +107,76 @@ extension CoreParser {
             if funcID == .end {
                 return map[tid]?.pop(eid)
             } else if funcID == .all || funcID == .none {
-                let events = Events()
-                events.feed(event)
-                return events
+                let chunk = Chunk()
+                chunk.feed(event)
+                return chunk
             }
             return nil
         }
     }
     
-    class TEvent {
-        private var map: [EID : Events] = [:]
+    fileprivate class EEvent {
+        var map: [EID : Chunk] = [:]
         
-        func events(_ eId: EID) -> Events? {
+        func chunk(_ eId: EID) -> Chunk? {
             return map[eId]
         }
         
-        func pop(_ eId: EID) -> Events? {
-            let events = events(eId)
+        func pop(_ eId: EID) -> Chunk? {
+            let chunk = chunk(eId)
             map[eId] = nil
-            return events
+            return chunk
         }
         
-        public func feed(_ event: Event) {
+        func feed(_ event: Event) {
             let eid = event.body.event_id
             
-            if event.body.func_code == .start {
-                if events(eid) == nil {
-                    map[eid] = Events()
+            if event.fCode == .start {
+                map[eid]?.clean()
+                if chunk(eid) == nil {
+                    map[eid] = Chunk()
                 }
             }
             
-            map.forEach { (key: EID, value: CoreParser.Events) in
+            map.forEach { (key: EID, value: CoreParser.Chunk) in
                 value.feed(event)
             }
         }
     }
-    
-    class Events {
-        var list: [Event] = []
+}
+
+extension CoreParser {
+    class Chunk {
+        public private(set) var events: [Event] = []
         
-        func clean() {
-            list = []
+        public fileprivate(set) var tpMap: IInstruments.CoreProfileSessionTap.KDThreadMap? = nil
+        public fileprivate(set) var occasion: HandleO = .undefined
+        
+        public var fCode: Event.FCode? {
+            return events.first?.fCode
         }
         
-        func feed(_ event: Event) {
-            list.append(event)
+        fileprivate func clean() {
+            events = []
+        }
+        
+        fileprivate func feed(_ event: Event) {
+            events.append(event)
         }
     }
     
     struct Event {
         let body: IInstruments.CoreProfileSessionTap.KDEBUGElement
+        let name: String?
+        let timestamp: CGFloat
+        
+        var fCode: FCode { return FCode(rawValue: body.func_code)! }
+        
+        enum FCode: UInt32 {
+            case start = 1
+            case end = 2
+            case all = 3
+            case none = 0
+        }
     }
 }

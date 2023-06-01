@@ -9,7 +9,7 @@ import Cocoa
 import LibMobileDevice
 
 protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
-    func trace(codes: [Int64 : String])
+    func trace(codes: [TraceID : String])
     
     func machTime(info: IInstruments.DeviceInfo.MT)
     
@@ -17,7 +17,7 @@ protocol IInstrumentsDeviceInfoDelegate: NSObjectProtocol {
 }
 
 extension IInstrumentsDeviceInfoDelegate {
-    func trace(codes: [Int64 : String]) { }
+    func trace(codes: [TraceID : String]) { }
     func machTime(info: IInstruments.DeviceInfo.MT) { }
     func running(process: [[String : Any]]) { }
 }

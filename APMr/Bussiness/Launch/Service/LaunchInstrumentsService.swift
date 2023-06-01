@@ -10,9 +10,11 @@ import LibMobileDevice
 
 class LaunchInstrumentsService: NSObject, ObservableObject {
     private var monitorPid: PID? = nil
+    private var app: IApp? = nil
     
-    private lazy var parser = CoreParser()
-    
+    private var traceCodes: [Int64 : String]? = nil
+    private var machTime: IInstruments.DeviceInfo.MT? = nil
+        
     private lazy var serviceGroup: IInstrumentsServiceGroup = {
         let device = IInstruments.DeviceInfo()
         device.delegate = self
@@ -27,8 +29,6 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
         group.config([process, core, device])
         return group
     }()
-    
-    private var app: IApp? = nil
 }
 
 extension LaunchInstrumentsService {
@@ -49,8 +49,13 @@ extension LaunchInstrumentsService {
     
     public func prepare(_ app: IApp) {
         self.app = app
+        
         if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
             client.runningProcess()
+        }
+        
+        if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
+            client.prepare()
         }
     }
     
@@ -65,20 +70,27 @@ extension LaunchInstrumentsService {
 
 extension LaunchInstrumentsService: IInstrumentsProcesscontrolDelegate {
     func launch(pid: PID) {
-        parser.tracePid = pid
         monitorPid = pid
     }
 }
 
 extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {    
-    func parserV2(_ model: IInstruments.CoreProfileSessionTap.ModelV2) {
-        parser.merge(model.threadMap)
-        parser.feeds(model.elements)
+    
+}
+
+
+extension LaunchInstrumentsService: CoreLiveCallstacksDelegate {
+    var traceCodesMap: [TraceID : String]? {
+        return traceCodes
     }
     
-    func parserV4(_ model: IInstruments.CoreProfileSessionTap.ModelV4) {
-        parser.feeds(model.elements)
+    var traceMachTime: IInstruments.DeviceInfo.MT? {
+        return machTime
     }
+}
+
+extension LaunchInstrumentsService: CoreStackShotDelegate {
+    
 }
 
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
@@ -94,18 +106,13 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
         }
     }
     
-    func trace(codes: [Int64 : String]) {
-        parser.traceCodes = codes
+    func trace(codes: [TraceID : String]) {
+        traceCodes = codes
     }
     
     func machTime(info: IInstruments.DeviceInfo.MT) {
-        guard let app = self.app else {
-            return
-        }
-        
-        parser.parpare()
-        parser.traceMachTime = info
-        
+        self.machTime = info
+                
         if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
             client.setConfig()
             client.start()
@@ -115,7 +122,9 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
         formatter.dateFormat = "MM月dd日-HH:mm:ss.SSSSSS"
         formatter.timeZone = TimeZone(identifier: "Asia/Shanghai")
         
-        
+        guard let app = self.app else {
+            return
+        }
         print("[BASE] \(formatter.string(from: Date(timeIntervalSince1970: info.usecs_since_epoch / 1000000)))")
         DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
             let date = Date()

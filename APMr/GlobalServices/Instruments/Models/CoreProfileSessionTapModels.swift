@@ -13,7 +13,7 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     struct ModelV2 {
-        let threadMap: [UInt64 : KDThreadMap]
+        let threadMap: [TID : KDThreadMap]
         let elements: [KDEBUGElement]
     }
     
@@ -300,14 +300,7 @@ extension IInstruments.CoreProfileSessionTap {
         var class_code: UInt32 { (debug_id >> 24) & 0xff }
         var subclass_code: UInt32 { (debug_id >> 16) & 0xff }
         var action_code: UInt32 { (debug_id >> 2) & 0x3fff }
-        var func_code: FC { return FC(rawValue: debug_id & UInt32(0x00000003))! }
-        
-        enum FC: UInt32 {
-            case start = 1
-            case end = 2
-            case all = 3
-            case none = 0
-        }
+        var func_code: UInt32 { debug_id & UInt32(0x00000003) }
     }
 }
 

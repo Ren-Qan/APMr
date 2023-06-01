@@ -10,3 +10,5 @@ import Foundation
 typealias PID = UInt32
 typealias TID = UInt64
 typealias EID = UInt32
+typealias TraceID = Int64
+typealias Frame = Int64

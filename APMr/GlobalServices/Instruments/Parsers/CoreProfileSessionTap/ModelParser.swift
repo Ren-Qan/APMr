@@ -7,12 +7,51 @@
 
 import Foundation
 
+protocol CoreParserBase {
+    var traceCodesMap: [TraceID : String]? { get }
+    
+    var traceMachTime: IInstruments.DeviceInfo.MT? { get }
+}
+
+protocol CoreLiveCallstacksDelegate: CoreParserBase {
+    
+}
+
+protocol CoreStackShotDelegate: CoreParserBase {
+    
+}
+
 extension IInstruments.CoreProfileSessionTap {
-    class Parser {
+    class Parser: NSObject, CoreParserDelegate {
         weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil
         
         private lazy var kParser = KTParser()
         private lazy var dParser = KDebugParser()
+        private lazy var coreParser: CoreParser = {
+            let p = CoreParser()
+            p.delegate = self
+            return p
+        } ()
+        
+        private lazy var csHanle = CoreParser.CallstackHandle()
+        
+        var traceCodesMap: [TraceID : String]? {
+            if let core = delegate as? CoreParserBase {
+                return core.traceCodesMap
+            }
+            return nil
+        }
+        
+        var traceMachTime: IInstruments.DeviceInfo.MT? {
+            if let core = delegate as? CoreParserBase {
+                return core.traceMachTime
+            }
+            return nil
+        }
+        
+        public func prepare() {
+            coreParser.parpare()
+        }
         
         public func parse(_ data: Data) {
             guard data.count > 0 else {
@@ -21,14 +60,53 @@ extension IInstruments.CoreProfileSessionTap {
 
             let version = Data(data.prefix(4))
             if version == Data([0x07, 0x58, 0xA2, 0x59]) {
-                delegate?.parserV1(kParser.parse(data))
+                let model = kParser.parse(data)
+                delegate?.parserV1(model)
+                handleV1(model)
             } else if version == Data([0x00, 0x02, 0xaa, 0x55]) {
-                delegate?.parserV2(dParser.parseV2(data))
+                let model = dParser.parseV2(data)
+                delegate?.parserV2(model)
+                handleV2(model)
             } else if version == Data([0x00, 0x03, 0xaa, 0x55]) {
-                delegate?.parserV3(dParser.parseV3(data))
+                let model = dParser.parseV3(data)
+                delegate?.parserV3(model)
+                handleV3(model)
             } else {
-                delegate?.parserV4(dParser.parseNormal(data))
+                let model = dParser.parseNormal(data)
+                delegate?.parserV4(model)
+                handleV4(model)
             }
+        }
+        
+        private func handleV1(_ model: ModelV1) {
+            guard let _ = delegate as? CoreParserBase else {
+                return
+            }
+        }
+        
+        private func handleV2(_ model: ModelV2) {
+            guard let _ = delegate as? CoreParserBase else {
+                return
+            }
+            coreParser.merge(model.threadMap)
+            coreParser.feeds(model.elements)
+        }
+        
+        private func handleV3(_ model: ModelV3) {
+            guard let _ = delegate as? CoreParserBase else {
+                return
+            }
+        }
+        
+        private func handleV4(_ model: ModelV4) {
+            guard let _ = delegate as? CoreParserBase else {
+                return
+            }
+            coreParser.feeds(model.elements)
+        }
+        
+        func responsed(_ events: CoreParser.Chunk) {
+            
         }
     }
 }

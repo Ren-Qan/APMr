@@ -25,7 +25,7 @@ extension IInstrumentsCoreProfileSessionTapDelegate {
 extension IInstruments {
     class CoreProfileSessionTap: Base {
         private lazy var parser = Parser()
-        
+            
         public weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil {
             didSet {
                 parser.delegate = delegate
@@ -64,7 +64,12 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     func setConfig() {
+        parser.prepare()
         send(P.setConfig.arg)
+    }
+    
+    func prepare() {
+        parser.prepare()
     }
 }
 
@@ -83,10 +88,10 @@ extension IInstruments.CoreProfileSessionTap {
                     [
                         "tc": [
                             [
-                                "kdf2": [735576064, 19202048, 67895296, 835321856, 735838208, 554762240,
-                                         730267648, 520552448, 117440512, 19922944, 17563648, 17104896, 17367040,
-                                         771686400, 520617984, 20971520, 520421376],
-//                                "kdf2": [0xffffffff],
+//                                "kdf2": [735576064, 19202048, 67895296, 835321856, 735838208, 554762240,
+//                                         730267648, 520552448, 117440512, 19922944, 17563648, 17104896, 17367040,
+//                                         771686400, 520617984, 20971520, 520421376],
+                                "kdf2": [0xffffffff],
                                 "csd": 128,
                                 "tk": 3,
                                 "ta": [[3], [0], [2], [1, 1, 0]],

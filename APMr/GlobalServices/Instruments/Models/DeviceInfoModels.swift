@@ -18,7 +18,7 @@ extension IInstruments.DeviceInfo {
             CGFloat(self.mach_timebase_number) / CGFloat(self.mach_timebase_denom * 1000)
         }
         
-        func timeStamp(_ time: Int64) -> CGFloat {
+        func timestamp(_ time: Int64) -> CGFloat {
             let offset = CGFloat(time - mach_absolute_time) * mach_time_factor
             let timeStamp = (usecs_since_epoch + offset) / 1000000
             return timeStamp
