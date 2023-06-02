@@ -87,6 +87,16 @@ extension LaunchInstrumentsService: CoreLiveCallstacksDelegate {
     var traceMachTime: IInstruments.DeviceInfo.MT? {
         return machTime
     }
+    
+    func callStack(_ result: CoreParser.Handle.CallStack.CS) {
+        print("\n[\(result.timestamp)] --- \(result.tpMap?.process ?? String(format: "0x%X", result.tid))")
+        var padding = " "
+        result.frames.forEach { cs in
+            let string = padding + String(format: "0x%X", cs.frame)
+            print(string)
+            padding += " "
+        }
+    }
 }
 
 extension LaunchInstrumentsService: CoreStackShotDelegate {

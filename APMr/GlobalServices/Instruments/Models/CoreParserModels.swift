@@ -8,7 +8,7 @@
 import Foundation
 
 extension CoreParser {
-    enum HandleO {
+    enum OccasionT {
         case undefined
         case PERF_Event(PERFOccasion)
         case DYLD_uuid_map_a(DyldUuidMapAOccasion)
@@ -134,7 +134,7 @@ extension CoreParser {
 
 extension CoreParser {
     struct DyldLaunchExecutableOccasion {
-        let mainExecutableMh: Int64
+        let mainExecutableMh: Frame
         let mapAs: [DyldUuidMapAOccasion]
         
         init?(_ chunk: Chunk) {
@@ -158,7 +158,7 @@ extension CoreParser {
     
     struct DyldUuidMapAOccasion {
         let uuid: UUID
-        let loadAddr: Int64
+        let loadAddr: Frame
         let fsid: Int64
         
         init?(_ chunk: Chunk) {

@@ -59,11 +59,6 @@ extension CoreParser {
                           timestamp: timestamp)
         if let chunk = tEvent.feed(event), generator(chunk) {
             delegate?.responsed(chunk)
-            
-            switch chunk.occasion {
-                case .undefined: return
-                default: print(chunk)
-            }
         }
     }
     
@@ -150,7 +145,7 @@ extension CoreParser {
         public private(set) var events: [Event] = []
         
         public fileprivate(set) var tpMap: IInstruments.CoreProfileSessionTap.KDThreadMap? = nil
-        public fileprivate(set) var occasion: HandleO = .undefined
+        public fileprivate(set) var occasion: OccasionT = .undefined
         
         public var fCode: Event.FCode? {
             return events.first?.fCode

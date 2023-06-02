@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol CoreParserBase {
+protocol CoreParserBase: NSObjectProtocol {
     var traceCodesMap: [TraceID : String]? { get }
     
     var traceMachTime: IInstruments.DeviceInfo.MT? { get }
 }
 
 protocol CoreLiveCallstacksDelegate: CoreParserBase {
-    
+    func callStack(_ result: CoreParser.Handle.CallStack.CS)
 }
 
 protocol CoreStackShotDelegate: CoreParserBase {
@@ -23,7 +23,13 @@ protocol CoreStackShotDelegate: CoreParserBase {
 
 extension IInstruments.CoreProfileSessionTap {
     class Parser: NSObject, CoreParserDelegate {
-        weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil
+        weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil {
+            didSet {
+                if let target = delegate as? CoreLiveCallstacksDelegate {
+                    csHandle.delegate = target
+                }
+            }
+        }
         
         private lazy var kParser = KTParser()
         private lazy var dParser = KDebugParser()
@@ -33,7 +39,7 @@ extension IInstruments.CoreProfileSessionTap {
             return p
         } ()
         
-        private lazy var csHanle = CoreParser.CallstackHandle()
+        private lazy var csHandle = CoreParser.Handle.CallStack()
         
         var traceCodesMap: [TraceID : String]? {
             if let core = delegate as? CoreParserBase {
@@ -105,8 +111,10 @@ extension IInstruments.CoreProfileSessionTap {
             coreParser.feeds(model.elements)
         }
         
-        func responsed(_ events: CoreParser.Chunk) {
-            
+        func responsed(_ chunk: CoreParser.Chunk) {
+            if let _ = delegate as? CoreLiveCallstacksDelegate {
+                csHandle.generator(chunk)
+            }
         }
     }
 }
