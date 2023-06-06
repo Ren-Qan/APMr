@@ -29,9 +29,9 @@ class CoreParser {
 }
 
 extension CoreParser {
-    func parpare() {
+    func clear() {
         tPMap = [:]
-        tEvent.clean()
+        tEvent.clear()
     }
     
     func merge(_ threadMap: [TID : IInstruments.CoreProfileSessionTap.KDThreadMap]) {
@@ -78,7 +78,7 @@ extension CoreParser {
     fileprivate class ThreadEvent {
         var map: [TID : EEvent] = [:]
         
-        func clean() {
+        func clear() {
             map = [:]
         }
         

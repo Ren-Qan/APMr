@@ -7,17 +7,17 @@
 
 import Foundation
 
-protocol CoreParserBase: NSObjectProtocol {
+protocol CoreLiveProtocol: NSObjectProtocol {
     var traceCodesMap: [TraceID : String]? { get }
     
     var traceMachTime: IInstruments.DeviceInfo.MT? { get }
 }
 
-protocol CoreLiveCallstacksDelegate: CoreParserBase {
+protocol CoreLiveCallStacksDelegate: CoreLiveProtocol {
     func callStack(_ result: CoreParser.Handle.CallStack.CS)
 }
 
-protocol CoreStackShotDelegate: CoreParserBase {
+protocol CoreStackShotDelegate: CoreLiveProtocol {
     
 }
 
@@ -25,7 +25,7 @@ extension IInstruments.CoreProfileSessionTap {
     class Parser: NSObject, CoreParserDelegate {
         weak var delegate: IInstrumentsCoreProfileSessionTapDelegate? = nil {
             didSet {
-                if let target = delegate as? CoreLiveCallstacksDelegate {
+                if let target = delegate as? CoreLiveCallStacksDelegate {
                     csHandle.delegate = target
                 }
             }
@@ -42,21 +42,21 @@ extension IInstruments.CoreProfileSessionTap {
         private lazy var csHandle = CoreParser.Handle.CallStack()
         
         var traceCodesMap: [TraceID : String]? {
-            if let core = delegate as? CoreParserBase {
+            if let core = delegate as? CoreLiveProtocol {
                 return core.traceCodesMap
             }
             return nil
         }
         
         var traceMachTime: IInstruments.DeviceInfo.MT? {
-            if let core = delegate as? CoreParserBase {
+            if let core = delegate as? CoreLiveProtocol {
                 return core.traceMachTime
             }
             return nil
         }
         
-        public func prepare() {
-            coreParser.parpare()
+        public func clear() {
+            coreParser.clear()
         }
         
         public func parse(_ data: Data) {
@@ -85,13 +85,13 @@ extension IInstruments.CoreProfileSessionTap {
         }
         
         private func handleV1(_ model: ModelV1) {
-            guard let _ = delegate as? CoreParserBase else {
+            guard let _ = delegate as? CoreLiveProtocol else {
                 return
             }
         }
         
         private func handleV2(_ model: ModelV2) {
-            guard let _ = delegate as? CoreParserBase else {
+            guard let _ = delegate as? CoreLiveProtocol else {
                 return
             }
             coreParser.merge(model.threadMap)
@@ -99,20 +99,20 @@ extension IInstruments.CoreProfileSessionTap {
         }
         
         private func handleV3(_ model: ModelV3) {
-            guard let _ = delegate as? CoreParserBase else {
+            guard let _ = delegate as? CoreLiveProtocol else {
                 return
             }
         }
         
         private func handleV4(_ model: ModelV4) {
-            guard let _ = delegate as? CoreParserBase else {
+            guard let _ = delegate as? CoreLiveProtocol else {
                 return
             }
             coreParser.feeds(model.elements)
         }
         
         func responsed(_ chunk: CoreParser.Chunk) {
-            if let _ = delegate as? CoreLiveCallstacksDelegate {
+            if let _ = delegate as? CoreLiveCallStacksDelegate {
                 csHandle.generator(chunk)
             }
         }

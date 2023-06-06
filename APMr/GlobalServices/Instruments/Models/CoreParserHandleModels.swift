@@ -23,6 +23,6 @@ extension CoreParser.Handle.CallStack {
     struct CSFrame {
         let frame: Frame
         let uuid: UUID?
-        let offset: Int64?
+        let offset: Frame?
     }
 }

@@ -115,7 +115,7 @@ struct Root: View {
                 
                 if item == nil {
                     deviceService.reset()
-                    launchService.stopService()
+                    launchService.stop()
                     performanceService.stopService()
                 }
                 

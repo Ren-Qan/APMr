@@ -36,10 +36,7 @@ struct LaunchView: View {
             
             
             Button("STOP") {
-                guard let app = deviceService.selectApp else {
-                    return
-                }
-                launchService.prepare(app)
+                launchService.stop()
             }
         }
     }

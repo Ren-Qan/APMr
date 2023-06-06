@@ -14,8 +14,9 @@ class IInstrumentsServiceGroup: NSObject {
         instruments.delegate = self
         return instruments
     }()
-        
-    typealias Service = IInstrumentsServiceProtocol
+    
+    public typealias Service = IInstrumentsServiceProtocol
+    
     private lazy var serviceDic: [IInstrumentsServiceName : any Service] = [:]
 }
 

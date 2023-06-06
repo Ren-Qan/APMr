@@ -32,7 +32,11 @@ class LaunchInstrumentsService: NSObject, ObservableObject {
 }
 
 extension LaunchInstrumentsService {
-    public func stopService() {
+    public func stop() {
+        if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
+            client.clear()
+        }
+        
         serviceGroup.stop()
     }
     
@@ -55,7 +59,7 @@ extension LaunchInstrumentsService {
         }
         
         if let client: IInstruments.CoreProfileSessionTap = serviceGroup.client(.coreprofilesessiontap) {
-            client.prepare()
+            client.clear()
         }
     }
     
@@ -78,8 +82,7 @@ extension LaunchInstrumentsService: IInstrumentsCoreProfileSessionTapDelegate {
     
 }
 
-
-extension LaunchInstrumentsService: CoreLiveCallstacksDelegate {
+extension LaunchInstrumentsService: CoreLiveProtocol {
     var traceCodesMap: [TraceID : String]? {
         return traceCodes
     }
@@ -87,20 +90,6 @@ extension LaunchInstrumentsService: CoreLiveCallstacksDelegate {
     var traceMachTime: IInstruments.DeviceInfo.MT? {
         return machTime
     }
-    
-    func callStack(_ result: CoreParser.Handle.CallStack.CS) {
-        print("\n[\(result.timestamp)] --- \(result.tpMap?.process ?? String(format: "0x%X", result.tid))")
-        var padding = " "
-        result.frames.forEach { cs in
-            let string = padding + String(format: "0x%X", cs.frame)
-            print(string)
-            padding += " "
-        }
-    }
-}
-
-extension LaunchInstrumentsService: CoreStackShotDelegate {
-    
 }
 
 extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
@@ -122,7 +111,6 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
     
     func machTime(info: IInstruments.DeviceInfo.MT) {
         self.machTime = info
-                
         if let client: IInstruments.CoreProfileSessionTap = self.serviceGroup.client(.coreprofilesessiontap) {
             client.setConfig()
             client.start()
@@ -135,6 +123,7 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
         guard let app = self.app else {
             return
         }
+        
         print("[BASE] \(formatter.string(from: Date(timeIntervalSince1970: info.usecs_since_epoch / 1000000)))")
         DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
             let date = Date()
@@ -150,3 +139,27 @@ extension LaunchInstrumentsService: IInstrumentsDeviceInfoDelegate {
         }
     }
 }
+
+
+//extension LaunchInstrumentsService: CoreLiveCallStacksDelegate {
+//    func callStack(_ result: CoreParser.Handle.CallStack.CS) {
+//        print("\n[\(result.timestamp)] --- \(result.tpMap?.process ?? String(format: "0x%X", result.tid))")
+//        var padding = " "
+//        result.frames.forEach { cs in
+//
+//            if let uuid = cs.uuid {
+//                let string = padding + String(format: "\(uuid) - 0x%X", cs.frame)
+//                print(string)
+//            } else {
+//                let string = padding + String(format: "0x%X", cs.frame)
+//                print(string)
+//            }
+//
+//            padding += " "
+//        }
+//    }
+//}
+//
+//extension LaunchInstrumentsService: CoreStackShotDelegate {
+//
+//}

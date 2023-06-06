@@ -64,12 +64,12 @@ extension IInstruments.CoreProfileSessionTap {
     }
     
     func setConfig() {
-        parser.prepare()
+        parser.clear()
         send(P.setConfig.arg)
     }
     
-    func prepare() {
-        parser.prepare()
+    func clear() {
+        parser.clear()
     }
 }
 

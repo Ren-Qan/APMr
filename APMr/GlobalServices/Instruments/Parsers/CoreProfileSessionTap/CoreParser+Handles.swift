@@ -15,7 +15,7 @@ extension CoreParser {
 
 extension CoreParser.Handle {
     class CallStack {
-        public weak var delegate: CoreLiveCallstacksDelegate? = nil
+        public weak var delegate: CoreLiveCallStacksDelegate? = nil
         
         private var dylds: [DYLD] = []
         
@@ -65,7 +65,6 @@ extension CoreParser.Handle {
                         let dyld = DYLD(frame: o.loadAddr, uuid: o.uuid)
                         insert(dyld)
                     }
-                
             }
         }
         
