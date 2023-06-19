@@ -20,12 +20,6 @@ extension IInstruments {
     }
 }
 
-
-
-extension IInstruments.GPU {
-    
-}
-
 extension IInstruments.GPU: IInstrumentsServiceProtocol {
     
     var server: IInstrumentsServiceName {

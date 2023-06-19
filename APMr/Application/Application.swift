@@ -19,6 +19,10 @@ struct Application: App {
                 .background {
                     Color.fabulaBack0
                 }
+                .onAppear {
+                    NSWindow.allowsAutomaticWindowTabbing = false
+                }
         }
+        .commandsRemoved()
     }
 }

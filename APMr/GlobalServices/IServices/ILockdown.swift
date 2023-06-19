@@ -46,7 +46,7 @@ extension ILockdown {
         if let json = plist_to_nsobject(result) as? [String : Any] {
             info = Mapper<ILockdownDeivceInfo>().map(JSON: json)
         }
-        
+         
         if let result = result {
             plist_free(result)
         }
