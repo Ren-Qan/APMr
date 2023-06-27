@@ -18,7 +18,7 @@ struct LaunchView: View {
     var body: some View {
         VStack {
             Button("start") {
-                guard let device = deviceService.selectDevice, let app = deviceService.selectApp else {
+                guard let device = deviceService.selectPhone, let app = deviceService.selectApp else {
                     return
                 }
                 

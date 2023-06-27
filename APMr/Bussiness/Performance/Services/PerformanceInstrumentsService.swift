@@ -88,7 +88,7 @@ extension PerformanceInstrumentsService {
 // MARK: - Public Service Setup Functions
 
 extension PerformanceInstrumentsService {
-    public func start(_ device: DeviceItem,
+    public func start(_ device: IDevice.P,
                       _ complete: ((Bool, PerformanceInstrumentsService) -> Void)? = nil) {
         DispatchQueue.global().async {
             var success = false

@@ -40,7 +40,7 @@ extension LaunchInstrumentsService {
         serviceGroup.stop()
     }
     
-    public func start(_ device: DeviceItem,
+    public func start(_ device: IDevice.P,
                       _ complete: @escaping (Bool, LaunchInstrumentsService) -> Void) {
         DispatchQueue.global().async {
             var success = false

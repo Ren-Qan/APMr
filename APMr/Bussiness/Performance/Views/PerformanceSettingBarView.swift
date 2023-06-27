@@ -23,7 +23,7 @@ struct PerformanceSettingBarView: View {
                     if performance.isMonitoringPerformance {
                         performance.stopService()
                     } else {
-                        if let device = deviceService.selectDevice,
+                        if let device = deviceService.selectPhone,
                            let app = deviceService.selectApp {
                             performance.isLaunchingApp = true
                             performance.start(device) { success, server in
@@ -46,7 +46,7 @@ struct PerformanceSettingBarView: View {
                 }
                 .common(
                     backColor: performance.isMonitoringPerformance ? .red : .blue,
-                    enable: deviceService.selectDevice != nil && deviceService.selectApp != nil && !performance.isLaunchingApp
+                    enable: deviceService.selectPhone != nil && deviceService.selectApp != nil && !performance.isLaunchingApp
                 )
                 
                 // MARK: - 选择指标按钮

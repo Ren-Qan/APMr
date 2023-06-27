@@ -1,0 +1,148 @@
+//
+//  DeviceService.swift
+//  APMr
+//
+//  Created by 任玉乾 on 2022/12/9.
+//
+
+import Cocoa
+import SwiftUI
+
+class DeviceService: NSObject, ObservableObject {
+    @AppStorage("Last_Select_Bundle_id") private var lastBundleId: String = ""
+    @AppStorage("Last_Select_Device_id") private var lastDeviceId: String = ""
+    
+    @Published var phoneList: [IDevice.P] = []
+    @Published var userApplist: [IApp] = []
+    @Published var systemApplist: [IApp] = []
+    
+    @Published var runningProcess: [IInstruments.DeviceInfo.Process] = []
+    
+    @Published var lastSelectPhone: IDevice.P? = nil
+    @Published var lastSelectApp: IApp? = nil
+    
+    @Published var monitorPid: PID? = nil
+    @Published var selectPhone: IDevice.P? = nil {
+        didSet {
+            if let name = selectPhone?.id {
+                lastDeviceId = name
+            }
+        }
+    }
+    
+    @Published var selectApp: IApp? = nil {
+        didSet {
+            if let bundleId = selectApp?.bundleId {
+                lastBundleId = bundleId
+            }
+        }
+    }
+    
+    private lazy var serviceGroup: IInstrumentsServiceGroup = {
+        let device = IInstruments.DeviceInfo()
+        device.delegate = self
+        
+        let group = IInstrumentsServiceGroup()
+        group.config([device])
+        
+        return group
+    }()
+    
+    var injectClosure: ((DeviceService) -> Void)? = nil
+    
+    override init() {
+        super.init()
+        NotificationCenter
+            .default
+            .addObserver(forName: MobileManager.subscribeChangedNotification,
+                         object: nil,
+                         queue: nil) { _ in
+                self.refreshDeviceList()
+            }
+        refreshDeviceList()
+    }
+}
+
+extension DeviceService {
+    func reset() {
+        selectPhone = nil
+        selectApp = nil
+        monitorPid = nil
+        serviceGroup.stop()
+    }
+}
+
+extension DeviceService: IInstrumentsDeviceInfoDelegate {
+    func running(process: [IInstruments.DeviceInfo.Process]) {
+        runningProcess = process
+        serviceGroup.stop()
+    }
+}
+
+extension DeviceService {
+    func refreshDeviceList() {
+        DispatchQueue.global().async {
+            var nameMap: [String : String] = [:]
+            self.phoneList = MobileManager.share.deviceList.compactMap { item in
+                var result = item
+                
+                if let name = nameMap[result.udid] {
+                    result.name = name
+                } else {
+                    if let iDevice = IDevice(item),
+                       let lockdown = ILockdown(iDevice),
+                       let name = lockdown.fetchDeviceInfo?.deivceName {
+                        result.name = name
+                        nameMap[result.udid] = name
+                    }
+                }
+                
+                if item.id == self.lastBundleId {
+                    self.lastSelectPhone = result
+                }
+                
+                return result
+            }
+            
+            self.injectClosure?(self)
+        }
+    }
+    
+    func refreshRunningProcess(_ phone: IDevice.P) {
+        guard let iDevice = IDevice(phone) else {
+            return
+        }
+        serviceGroup.start(iDevice)
+        if let client: IInstruments.DeviceInfo = serviceGroup.client(.deviceinfo) {
+            client.runningProcess()
+        }
+    }
+    
+    func refreshApplist(_ phone: IDevice.P) {
+        DispatchQueue.global().async {
+            if let iDevice = IDevice(phone),
+               let lockdown = ILockdown(iDevice),
+               let instproxy = IInstproxy(iDevice, lockdown) {
+                let applist = instproxy.applist
+                
+                var user = [IApp]()
+                var system = [IApp]()
+                
+                applist.forEach { app in
+                    if app.applicationType == .user {
+                        user.append(app)
+                    } else if app.applicationType == .system {
+                        system.append(app)
+                    }
+                    
+                    if self.lastBundleId == app.bundleId {
+                        self.lastSelectApp = app
+                    }
+                }
+                
+                self.userApplist = user
+                self.systemApplist = system
+            }
+        }
+    }
+}

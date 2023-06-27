@@ -46,71 +46,71 @@ struct Root: View {
         .navigationTitle(
             Text(verbatim: performanceService.isMonitoringPerformance ? "Pid: \(performanceService.monitorPid)" : "")
         )
-        .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Menu {
-                    ForEach(deviceService.deviceList) { device in
-                        Button {
-                            if let beforeDevice = deviceService.selectDevice, beforeDevice.id == device.id {
-                                return
-                            }
-                            deviceService.selectDevice = device
-                            deviceService.selectApp = nil
-                            deviceService.userApplist = []
-                            deviceService.refreshApplist(device)
-                        } label: {
-                            Label(device.deviceName,
-                                  systemImage: device.type == .usb ? "cable.connector.horizontal" : "wifi")
-                            .labelStyle(.titleAndIcon)
-                        }
-                    }
-                } label: {
-                    if let device = deviceService.selectDevice {
-                        Text("\(device.deviceName)")
-                        Image(systemName: device.type == .usb ? "cable.connector.horizontal" : "wifi")
-                    } else {
-                        Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
-                    }
-                }
-                .disabled(deviceService.deviceList.count <= 0)
-                .disabled(performanceService.isMonitoringPerformance)
-                .frame(minWidth: 100)
-                .labelStyle(TitleAndIconLabelStyle.titleAndIcon)
-            }
-            
-            ToolbarItem(placement: .navigation) {
-                Menu {
-                    if let app = deviceService.lastSelectApp {
-                        Section("Last") {
-                            Button(app.name) {
-                                deviceService.selectApp = app
-                            }
-                        }
-                    }
-                    
-                    Section("App") {
-                        ForEach(deviceService.userApplist) { app in
-                            Button(app.name) {
-                                deviceService.selectApp = app
-                            }
-                        }
-                    }
-                } label: {
-                    Text(deviceService.selectApp?.name ?? "请选择App")
-                }
-                .disabled(deviceService.userApplist.count <= 0)
-                .disabled(performanceService.isMonitoringPerformance)
-                .frame(minWidth: 100)
-            }
-        }
+//        .toolbar {
+//            ToolbarItem(placement: .navigation) {
+//                Menu {
+//                    ForEach(deviceService.deviceList) { device in
+//                        Button {
+//                            if let beforeDevice = deviceService.selectDevice, beforeDevice.id == device.id {
+//                                return
+//                            }
+//                            deviceService.selectDevice = device
+//                            deviceService.selectApp = nil
+//                            deviceService.userApplist = []
+//                            deviceService.refreshApplist(device)
+//                        } label: {
+//                            Label(device.deviceName,
+//                                  systemImage: device.type == .usb ? "cable.connector.horizontal" : "wifi")
+//                            .labelStyle(.titleAndIcon)
+//                        }
+//                    }
+//                } label: {
+//                    if let device = deviceService.selectDevice {
+//                        Text("\(device.deviceName)")
+//                        Image(systemName: device.type == .usb ? "cable.connector.horizontal" : "wifi")
+//                    } else {
+//                        Text(deviceService.deviceList.count <= 0 ? "暂无检测到设备" : "请选择设备")
+//                    }
+//                }
+//                .disabled(deviceService.deviceList.count <= 0)
+//                .disabled(performanceService.isMonitoringPerformance)
+//                .frame(minWidth: 100)
+//                .labelStyle(TitleAndIconLabelStyle.titleAndIcon)
+//            }
+//
+//            ToolbarItem(placement: .navigation) {
+//                Menu {
+//                    if let app = deviceService.lastSelectApp {
+//                        Section("Last") {
+//                            Button(app.name) {
+//                                deviceService.selectApp = app
+//                            }
+//                        }
+//                    }
+//
+//                    Section("App") {
+//                        ForEach(deviceService.userApplist) { app in
+//                            Button(app.name) {
+//                                deviceService.selectApp = app
+//                            }
+//                        }
+//                    }
+//                } label: {
+//                    Text(deviceService.selectApp?.name ?? "请选择App")
+//                }
+//                .disabled(deviceService.userApplist.count <= 0)
+//                .disabled(performanceService.isMonitoringPerformance)
+//                .frame(minWidth: 100)
+//            }
+//        }
         .onAppear {
             deviceService.injectClosure = { device in
-                guard let selectDevice = deviceService.selectDevice else {
+                guard let selectDevice = deviceService.selectPhone else {
                     return
                 }
                 
-                let item = deviceService.deviceList.first { item in
-                    return item.deviceName == selectDevice.deviceName && item.id == selectDevice.id
+                let item = deviceService.phoneList.first { item in
+                    return item.name == selectDevice.name && item.id == selectDevice.id
                 }
                 
                 if item == nil {
