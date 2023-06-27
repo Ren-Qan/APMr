@@ -602,9 +602,9 @@
 			children = (
 				C78CB9132973AC3300F86B33 /* View */,
 				C7A487D92A24AC4200A033B9 /* Constant */,
+				C7483BA329373ADC00F32BE0 /* MobileManager */,
 				C73BBB0C2942E25700472A75 /* IServices */,
 				C7483BA629373ADC00F32BE0 /* Instruments */,
-				C7483BA329373ADC00F32BE0 /* MobileManager */,
 				C76E7B5E2951BC29004F009B /* Extensions */,
 			);
 			path = Global;

@@ -48,7 +48,6 @@ struct Application: App {
                     ToolbarItem(placement: .navigation) {
                         Toggle("切换显示模式", isOn: $schemeIsDark)
                     }
-                    
                 }
                 .preferredColorScheme(schemeIsDark ? .dark : .light)
 #endif
