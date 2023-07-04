@@ -1,5 +1,5 @@
 //
-//  DeviceService.swift
+//  ADevice.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2022/12/9.
@@ -8,7 +8,7 @@
 import Cocoa
 import SwiftUI
 
-class DeviceService: NSObject, ObservableObject {
+class ADevice: NSObject, ObservableObject {
     @AppStorage("Last_Select_Bundle_id") private var lastBundleId: String = ""
     @AppStorage("Last_Select_Device_id") private var lastDeviceId: String = ""
     
@@ -48,7 +48,7 @@ class DeviceService: NSObject, ObservableObject {
         return group
     }()
     
-    var injectClosure: ((DeviceService) -> Void)? = nil
+    var injectClosure: ((ADevice) -> Void)? = nil
     
     override init() {
         super.init()
@@ -63,7 +63,7 @@ class DeviceService: NSObject, ObservableObject {
     }
 }
 
-extension DeviceService {
+extension ADevice {
     func reset() {
         selectPhone = nil
         selectApp = nil
@@ -72,14 +72,14 @@ extension DeviceService {
     }
 }
 
-extension DeviceService: IInstrumentsDeviceInfoDelegate {
+extension ADevice: IInstrumentsDeviceInfoDelegate {
     func running(process: [IInstruments.DeviceInfo.Process]) {
         runningProcess = process
         serviceGroup.stop()
     }
 }
 
-extension DeviceService {
+extension ADevice {
     func refreshDeviceList() {
         DispatchQueue.global().async {
             var nameMap: [String : String] = [:]

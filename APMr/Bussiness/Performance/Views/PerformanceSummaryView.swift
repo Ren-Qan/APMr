@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PerformanceSummaryView: View {
-    @EnvironmentObject var deviceService: DeviceService
+    @EnvironmentObject var deviceService: ADevice
     
     @EnvironmentObject var summary: PerformanceInstrumentsService.Summary
             

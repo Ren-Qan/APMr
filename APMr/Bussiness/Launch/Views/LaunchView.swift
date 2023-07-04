@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LaunchView: View {
     
-    @EnvironmentObject var deviceService: DeviceService
+    @EnvironmentObject var deviceService: ADevice
     
     @EnvironmentObject var launchService: LaunchInstrumentsService
     

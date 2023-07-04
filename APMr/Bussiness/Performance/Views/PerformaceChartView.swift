@@ -10,7 +10,7 @@ import Charts
 
 struct PerformaceChartView: View {
     // MARK: - Public 
-    @EnvironmentObject var deviceService: DeviceService
+    @EnvironmentObject var deviceService: ADevice
     
     @EnvironmentObject var performance: PerformanceInstrumentsService
     
@@ -35,7 +35,7 @@ struct PerformaceChartView: View {
 
 extension PerformaceChartView {
     private struct LineChartGroup: View {
-        @EnvironmentObject var deviceService: DeviceService
+        @EnvironmentObject var deviceService: ADevice
         @EnvironmentObject var performance: PerformanceInstrumentsService
         @EnvironmentObject var model: ChartModel
         

@@ -1,5 +1,5 @@
 //
-//  Constant.swift
+//  Typealias.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/5/29.

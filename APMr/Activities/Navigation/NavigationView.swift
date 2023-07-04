@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct NavigationView: View {
-    @EnvironmentObject var navigation: NavigationService
+    @EnvironmentObject var navigation: ANavigation
     
-    @EnvironmentObject var device: DeviceService
+    @EnvironmentObject var device: ADevice
     
-    @EnvironmentObject var performance: PerformanceService
+    @EnvironmentObject var performance: CPerformance
     
     var body: some View {
         NavigationSplitView {
             List(selection: $navigation.selection) {
                 Section("功能") {
-                    ForEach(NavigationService.siders) { sider in
+                    ForEach(ANavigation.siders) { sider in
                         NavigationLink(sider.title, value: sider)
                     }
                 }
@@ -79,7 +79,6 @@ struct NavigationView: View {
                     }
                     
                     Section("Menu") {
-                        
                         if device.userApplist.count > 0 {
                             Menu("Installed Apps") {
                                 ForEach(device.userApplist) { app in

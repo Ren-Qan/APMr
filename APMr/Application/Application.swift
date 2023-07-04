@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct Application: App {
-    @StateObject private var navigation = NavigationService()
+    @StateObject private var navigation = ANavigation()
     
-    @StateObject private var device = DeviceService()
+    @StateObject private var device = ADevice()
     
-    @StateObject private var performance = PerformanceService()
+    @StateObject private var performance = CPerformance()
     
     #if DEBUG
     @State private var schemeIsDark: Bool = false

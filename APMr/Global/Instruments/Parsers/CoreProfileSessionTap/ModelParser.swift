@@ -63,7 +63,7 @@ extension IInstruments.CoreProfileSessionTap {
             guard data.count > 0 else {
                 return
             }
-
+            
             let version = Data(data.prefix(4))
             if version == Data([0x07, 0x58, 0xA2, 0x59]) {
                 let model = kParser.parse(data)
@@ -160,7 +160,7 @@ extension IInstruments.CoreProfileSessionTap {
         func parseV2(_ data: Data) -> ModelV2 {
             var threadMap: [UInt64 : IInstruments.CoreProfileSessionTap.KDThreadMap] = [:]
             var elements: [IInstruments.CoreProfileSessionTap.KDEBUGElement] = []
-                        
+            
             let stream = InputStream(data: data)
             stream.open()
             
@@ -170,7 +170,7 @@ extension IInstruments.CoreProfileSessionTap {
             var arg2: UInt32 = 0
             var is64b: UInt32 = 0
             var tick_frequency: UInt64 = 0
-
+            
             stream.read(&tag, maxLength: 4)
             stream.read(&numberOfThread, maxLength: 4)
             stream.read(&arg1, maxLength: 8)
@@ -187,7 +187,7 @@ extension IInstruments.CoreProfileSessionTap {
             
             
             let _ = stream.data(0x100)
-
+            
             let mapCount = Int(header.number_of_treads)
             var threadI = 0
             
@@ -211,8 +211,8 @@ extension IInstruments.CoreProfileSessionTap {
                 cString.append(0)
                 cStringsData.deallocate()
                 process = String(cString: cString)
-
-            
+                
+                
                 threadMap[thread] = IInstruments
                     .CoreProfileSessionTap
                     .KDThreadMap(thread: thread,
@@ -242,11 +242,11 @@ extension IInstruments.CoreProfileSessionTap {
                 let element = IInstruments
                     .CoreProfileSessionTap
                     .KDEBUGElement(timestamp: timestamp,
-                                 data: data,
-                                 thread: thread,
-                                 debug_id: debug,
-                                 cpu_id: cpu,
-                                 unused: unused)
+                                   data: data,
+                                   thread: thread,
+                                   debug_id: debug,
+                                   cpu_id: cpu,
+                                   unused: unused)
                 if element.timestamp != 0 {
                     elements.append(element)
                 }
@@ -283,7 +283,7 @@ extension IInstruments.CoreProfileSessionTap {
                     let _ = stream.data(padding)
                 }
             }
-
+            
             stream.close()
             return .init(elements: elements)
         }
@@ -310,11 +310,11 @@ extension IInstruments.CoreProfileSessionTap {
                 let element = IInstruments
                     .CoreProfileSessionTap
                     .KDEBUGElement(timestamp: timestamp,
-                                 data: data,
-                                 thread: thread,
-                                 debug_id: debug,
-                                 cpu_id: cpu,
-                                 unused: unused)
+                                   data: data,
+                                   thread: thread,
+                                   debug_id: debug,
+                                   cpu_id: cpu,
+                                   unused: unused)
                 elements.append(element)
             }
             

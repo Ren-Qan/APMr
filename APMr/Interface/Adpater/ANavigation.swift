@@ -1,5 +1,5 @@
 //
-//  NavigationService.swift
+//  ANavigation.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/6/27.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NavigationService: ObservableObject {
+class ANavigation: ObservableObject {
 #if DEBUG
     public static let siders = [
         Sider(state: .performance),
@@ -22,7 +22,7 @@ class NavigationService: ObservableObject {
     @Published var selection: Sider = siders.first!
 }
 
-extension NavigationService {
+extension ANavigation {
     enum S: Codable {
         case performance
         case launch
