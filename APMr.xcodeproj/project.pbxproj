@@ -67,6 +67,7 @@
 		C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */; };
 		C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A1C4522A0384C5009BA0D5 /* Engery.swift */; };
 		C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A487DA2A24AC5700A033B9 /* Typealias.swift */; };
+		C7A687AC2A554189002BDD9E /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A687AB2A554189002BDD9E /* Entity.swift */; };
 		C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC987E2956E0C200A6580B /* NetworkStatistics.swift */; };
 		C7AC98812956EB1D00A6580B /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* Networking.swift */; };
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
@@ -195,6 +196,7 @@
 		C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonStyle.swift; sourceTree = "<group>"; };
 		C7A1C4522A0384C5009BA0D5 /* Engery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engery.swift; sourceTree = "<group>"; };
 		C7A487DA2A24AC5700A033B9 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
+		C7A687AB2A554189002BDD9E /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		C7AC987E2956E0C200A6580B /* NetworkStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatistics.swift; sourceTree = "<group>"; };
 		C7AC98802956EB1D00A6580B /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
@@ -313,7 +315,7 @@
 				C779C6B2296BDE9A00F710D4 /* Application */,
 				C7B8B34B2A53F996008E9D53 /* Activities */,
 				C7B8B3582A54118E008E9D53 /* Commercial */,
-				C780D10C29418B4800EF5633 /* Bussiness */,
+				C780D10C29418B4800EF5633 /* (D)Bussiness */,
 				C771EF6B2A4A886400EC305E /* Interface */,
 				C780D11129418C2E00EF5633 /* Global */,
 				C7150E70293C901900C2B380 /* Foundation */,
@@ -566,7 +568,7 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		C780D10C29418B4800EF5633 /* Bussiness */ = {
+		C780D10C29418B4800EF5633 /* (D)Bussiness */ = {
 			isa = PBXGroup;
 			children = (
 				C78CB9132973AC3300F86B33 /* View */,
@@ -574,7 +576,7 @@
 				C7E137BD299C8723000CD484 /* Performance */,
 				C7E137C1299C87C1000CD484 /* Launch */,
 			);
-			path = Bussiness;
+			path = "(D)Bussiness";
 			sourceTree = "<group>";
 		};
 		C780D10D29418B5800EF5633 /* Services */ = {
@@ -669,8 +671,8 @@
 			isa = PBXGroup;
 			children = (
 				C786B35D2A4ACEDD00F3ABB8 /* IPerformanceView.swift */,
-				C7B8B3512A54036E008E9D53 /* HintView.swift */,
 				C7B8B34D2A53FBFA008E9D53 /* LineView.swift */,
+				C7B8B3512A54036E008E9D53 /* HintView.swift */,
 			);
 			name = Performance;
 			sourceTree = "<group>";
@@ -714,6 +716,7 @@
 			children = (
 				C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */,
 				C7B8B35C2A541872008E9D53 /* Chart.swift */,
+				C7A687AB2A554189002BDD9E /* Entity.swift */,
 			);
 			path = Performance;
 			sourceTree = "<group>";
@@ -935,6 +938,7 @@
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */,
 				C754F0DF296D29040053DBA3 /* Root.swift in Sources */,
+				C7A687AC2A554189002BDD9E /* Entity.swift in Sources */,
 				C70BFCBA2A29D97800CBD6B3 /* CoreParser+Handles.swift in Sources */,
 				C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */,
 				C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */,

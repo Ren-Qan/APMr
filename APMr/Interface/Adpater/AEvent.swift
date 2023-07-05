@@ -9,10 +9,22 @@ import AppKit
 import Combine
 
 class AEvent: ObservableObject {
-    @Published var state: S = .invalid
+    var state: S = .invalid
     
-    func sync(_ event: NSEvent) {
-        
+    var point: CGPoint = .zero
+    var type: String = ""
+    
+    func sync(_ event: IEventHandleView.IEvent) {
+        if event.source.type == .scrollWheel {
+            var p = point
+            p.x += event.source.deltaX
+            p.y += event.source.deltaY
+            point = p
+        } else {
+            point = event.locationInView
+        }
+        type = "\(event.source.type.rawValue)"
+        objectWillChange.send()
     }
 }
 

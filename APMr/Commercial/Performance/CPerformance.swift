@@ -9,17 +9,17 @@ import AppKit
 import Combine
 
 class CPerformance: ObservableObject {
-    private lazy var event = AEvent()
     private lazy var source = DSPMetrics()
     
+    private(set) lazy var event = AEvent()
     private(set) lazy var chart = Chart()
     
-    private var timer: Timer?
+    private var timer: Timer?    
 }
 
 extension CPerformance {
-    func sync(event: NSEvent) {
-        
+    func sync(event: IEventHandleView.IEvent) {
+        self.event.sync(event)
     }
     
     func start() {
@@ -34,32 +34,5 @@ extension CPerformance {
         })
         timer?.fire()
         RunLoop.main.add(timer!, forMode: .common)
-    }
-}
-
-extension CPerformance {
-    enum E {
-        case cpu
-        case gpu
-        case fps
-        case memory
-        case network
-        case io
-        case diagnostic
-        
-        var name: String {
-            switch self {
-                case .memory:
-                    return "Memory"
-                case .network:
-                    return "Network"
-                case .io:
-                    return "I/O"
-                case .diagnostic:
-                    return "Diagnostic"
-                default:
-                    return "\(self)".uppercased()
-            }
-        }
     }
 }

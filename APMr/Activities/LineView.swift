@@ -29,16 +29,23 @@ extension IPerformanceView {
     class NSLineView: NSView {
         fileprivate var target: LineView? = nil
         
+        private lazy var content: Content = {
+            let layer = Content()
+            self.layer?.addSublayer(layer)
+            return layer
+        }()
+        
         override func layout() {
             if bounds.size.width != 0, bounds.size.height != 0 {
+                content.frame = bounds
                 refresh()
             }
         }
         
         func refresh() {
-            self.layer?.sublayers?.forEach({ layer in
+            content.sublayers?.forEach { layer in
                 layer.removeFromSuperlayer()
-            })
+            }
 
             target?.model.series.forEach { series in
                 let modelLayer = CAShapeLayer()
@@ -64,8 +71,16 @@ extension IPerformanceView {
                 }
                 
                 modelLayer.path = path
-                self.layer?.addSublayer(modelLayer)
+                self.content.addSublayer(modelLayer)
             }
+        }
+    }
+}
+
+extension IPerformanceView {
+    fileprivate class Content: CAShapeLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
         }
     }
 }

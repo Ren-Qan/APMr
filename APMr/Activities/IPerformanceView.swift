@@ -13,16 +13,22 @@ struct IPerformanceView: View {
     @EnvironmentObject var device: ADevice
         
     var body: some View {
+        #if DEBUG
+        HStack {
+            Button("start") {
+                performance.start()
+            }
+            
+            T().environmentObject(performance.event)
+        }
+        #endif
+        
         ZStack {
             EventView()
                 .environmentObject(performance)
             
             ScrollView {
                 VStack(spacing: 10) {
-                    Button("start") {
-                        performance.start()
-                    }
-                    
                     ForEach(performance.chart.models) { model in
                         Cell()
                             .environmentObject(model)
@@ -35,7 +41,7 @@ struct IPerformanceView: View {
 
 fileprivate struct EventView: View {
     @EnvironmentObject var p: CPerformance
-    
+
     var body: some View {
         IEventHandleView()
             .onEvent { event in
@@ -57,5 +63,14 @@ fileprivate struct Cell: View {
         .background {
             Color.orange
         }
+    }
+}
+
+
+fileprivate struct T: View {
+    @EnvironmentObject var event: AEvent
+    
+    var body: some View {
+        Text("[\(event.type)] - X: \(event.point.x) Y:\(event.point.y)")
     }
 }
