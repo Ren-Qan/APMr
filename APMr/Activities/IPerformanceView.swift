@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct IPerformanceView: View {
+    @EnvironmentObject var device: ADevice
     @EnvironmentObject var performance: CPerformance
     
-    @EnvironmentObject var device: ADevice
-        
     var body: some View {
         #if DEBUG
         HStack {
@@ -19,58 +18,77 @@ struct IPerformanceView: View {
                 performance.start()
             }
             
-            T().environmentObject(performance.event)
+            Debug_T().environmentObject(performance)
         }
         #endif
         
         ZStack {
             EventView()
                 .environmentObject(performance)
-            
-            ScrollView {
-                VStack(spacing: 10) {
-                    ForEach(performance.chart.models) { model in
-                        Cell()
-                            .environmentObject(model)
-                    }
-                }
-            }
-        }
-    }
-}
-
-fileprivate struct EventView: View {
-    @EnvironmentObject var p: CPerformance
-
-    var body: some View {
-        IEventHandleView()
-            .onEvent { event in
-                self.p.sync(event: event)
-            }
-    }
-}
-
-fileprivate struct Cell: View {
-    @EnvironmentObject var model: CPerformance.Chart.M
-    
-    var body: some View {
-        ZStack {
-            IPerformanceView.LineView()
+  
             IPerformanceView.HintView()
-        }
-        .environmentObject(model)
-        .frame(minHeight: 200)
-        .background {
-            Color.orange
+                .environmentObject(performance.event.hint)
+            
+//            ScrollView {
+//                VStack(spacing: 10) {
+//                    ForEach(performance.chart.models) { model in
+//                        Cell().environmentObject(model)
+//                    }
+//                }
+//            }
         }
     }
 }
 
+extension IPerformanceView {
+    fileprivate struct EventView: View {
+        @EnvironmentObject var performance: CPerformance
 
-fileprivate struct T: View {
-    @EnvironmentObject var event: AEvent
+        var body: some View {
+            IEventHandleView()
+                .onEvent { event in
+                    self.performance.interact(event)
+                }
+        }
+    }
+
     
-    var body: some View {
-        Text("[\(event.type)] - X: \(event.point.x) Y:\(event.point.y)")
+    fileprivate struct Cell: View {
+//        @EnvironmentObject var model: CPerformance.Chart.M
+        
+        var body: some View {
+            ZStack {
+                IPerformanceView.LineView()
+                IPerformanceView.HintView()
+            }
+//            .environmentObject(model)
+            .frame(minHeight: 200)
+            .background {
+                Color.orange
+            }
+        }
     }
 }
+
+extension IPerformanceView {
+    class Element: CAShapeLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
+    }
+    
+    class Text: CATextLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
+    }
+}
+
+
+#if DEBUG
+fileprivate struct Debug_T: View {
+    var body: some View {
+        Text("Event Sync")
+    }
+}
+#endif

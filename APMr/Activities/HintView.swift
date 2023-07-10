@@ -9,16 +9,17 @@ import SwiftUI
 
 extension IPerformanceView {
     struct HintView: NSViewRepresentable {
+        @EnvironmentObject var hint: CPerformance.Event.Hint
+        
         func makeNSView(context: Context) -> IPerformanceView.NSHintView {
             let view = NSHintView()
-            view.wantsLayer = true
             view.target = self
             return view
         }
         
         func updateNSView(_ nsView: IPerformanceView.NSHintView, context: Context) {
             nsView.target = self
-            nsView.reload()
+            nsView.refresh()
         }
     }
 }
@@ -27,48 +28,76 @@ extension IPerformanceView {
     class NSHintView: NSView {
         fileprivate var target: HintView? = nil
         
-        private lazy var xAixs: Element = {
-            let e = Element()
-            layer?.addSublayer(e)
-            return e
-        }()
+        private lazy var tracker = Element()
+        private lazy var selecter = Element()
         
-        private lazy var yAxis: Element = {
-            let e = Element()
-            layer?.addSublayer(e)
-            return e
-        }()
-
+        override init(frame frameRect: NSRect) {
+            super.init(frame: frameRect)
+            wantsLayer = true
+            
+            selecter.backgroundColor = NSColor.blue.withAlphaComponent(0.2).cgColor
+            tracker.backgroundColor = NSColor.red.withAlphaComponent(0.2).cgColor
+            
+            layer?.addSublayer(selecter)
+            layer?.addSublayer(tracker)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
         override func layout() {
             if bounds.size.width != 0, bounds.size.height != 0 {
-                xAixs.frame = bounds
-                yAxis.frame = bounds
-                reload()
+                refresh()
             }
         }
         
-        func reload() {
-            yAxis.sublayers?.forEach { layer in
-                layer.removeFromSuperlayer()
+        func refresh() {
+            drawTracker()
+            drawSelecter()
+        }
+        
+        private func drawTracker() {
+            guard let hintter = target?.hint else {
+                tracker.opacity = 0
+                return
             }
             
-            xAixs.sublayers?.forEach { layer in
-                layer.removeFromSuperlayer()
+            switch hintter.move {
+                case .empty:
+                    tracker.opacity = 0
+                    return
+                    
+                case .move(let location):
+                    tracker.opacity = 1
+                    tracker.frame = .init(x: location.x - 1, y: 0, width: 2, height: bounds.height)
             }
+        }
+        
+        private func drawSelecter() {
+            guard let hintter = target?.hint else {
+                selecter.opacity = 0
+                return
+            }
+            
+            var rect: CGRect = .zero
+            
+            switch hintter.select {
+                case .empty:
+                    selecter.opacity = 0
+                    return
+                    
+                case .drag(let area):
+                    selecter.opacity = 1
+                    rect = .init(x: area.origin.x, y: 0, width: area.width, height: bounds.height)
+                    
+                case .click(let point):
+                    selecter.opacity = 1
+                    rect = .init(x: point.x - 1, y: 0, width: 2, height: bounds.height)
+            }
+            
+            selecter.frame = rect
         }
     }
 }
 
-extension IPerformanceView {
-    fileprivate class Element: CAShapeLayer {
-        override func action(forKey event: String) -> CAAction? {
-            return nil
-        }
-    }
-    
-    fileprivate class Text: CATextLayer {
-        override func action(forKey event: String) -> CAAction? {
-            return nil
-        }
-    }
-}
