@@ -9,28 +9,37 @@ import AppKit
 import Combine
 
 extension CPerformance {
-    enum E {
-        case cpu
-        case gpu
-        case fps
-        case memory
-        case network
-        case io
-        case diagnostic
+    struct E {
         
-        var name: String {
-            switch self {
-                case .memory:
-                    return "Memory"
-                case .network:
-                    return "Network"
-                case .io:
-                    return "I/O"
-                case .diagnostic:
-                    return "Diagnostic"
-                default:
-                    return "\(self)".uppercased()
-            }
-        }
     }
 }
+//
+//extension CPerformance.E {
+//    enum CPU {
+//        var label: String { "CPU" }
+//    }
+//    
+//    enum GPU {
+//        var label: String { "GPU" }
+//    }
+//    
+//    enum FPS {
+//        var label: String { "FPS" }
+//    }
+//    
+//    enum Memory {
+//        var label: String { "Memory" }
+//    }
+//    
+//    enum Network {
+//        var label: String { "Network" }
+//    }
+//    
+//    enum IO {
+//        var label: String { "I/O" }
+//    }
+//    
+//    enum Diagnostic {
+//        var label: String { "Diagnostic" }
+//    }
+//}

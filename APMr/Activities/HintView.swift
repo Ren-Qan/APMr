@@ -89,7 +89,7 @@ extension IPerformanceView {
                     
                 case .drag(let area):
                     selecter.opacity = 1
-                    rect = .init(x: area.origin.x, y: 0, width: area.width, height: bounds.height)
+                    rect = .init(x: area.origin.x, y: 0, width: area.size.width, height: bounds.height)
                     
                 case .click(let point):
                     selecter.opacity = 1

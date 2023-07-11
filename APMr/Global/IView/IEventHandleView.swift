@@ -73,47 +73,12 @@ class INSEventHandleView: NSView {
                                       owner: self)
         addTrackingArea(tracking)
     }
-    
-    override func mouseDown(with event: NSEvent) {
-        super.mouseDown(with: event)
-        make(event)
-    }
-    
-    override func rightMouseDown(with event: NSEvent) {
-        super.rightMouseDown(with: event)
-        make(event)
-    }
-    
-    override func mouseUp(with event: NSEvent) {
-        super.mouseUp(with: event)
-        make(event)
-    }
-    
-    override func rightMouseUp(with event: NSEvent) {
-        super.rightMouseUp(with: event)
-        make(event)
-    }
-    
+        
     override func mouseMoved(with event: NSEvent) {
         super.mouseMoved(with: event)
         make(event)
     }
-    
-    override func rightMouseDragged(with event: NSEvent) {
-        super.rightMouseDragged(with: event)
-        make(event)
-    }
-    
-    override func scrollWheel(with event: NSEvent) {
-        super.scrollWheel(with: event)
-        make(event)
-    }
-    
-    override func mouseDragged(with event: NSEvent) {
-        super.mouseDragged(with: event)
-        make(event)
-    }
-    
+            
     override func mouseEntered(with event: NSEvent) {
         super.mouseEntered(with: event)
         make(event)
@@ -138,7 +103,7 @@ extension INSEventHandleView {
         var monitor: ((NSEvent) -> Void)? = nil
         
         init() {
-            NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
+            NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel, .leftMouseDown, .leftMouseUp, .leftMouseDragged]) { event in
                 ScrollEventHandle.share.monitor?(event)
                 return event
             }

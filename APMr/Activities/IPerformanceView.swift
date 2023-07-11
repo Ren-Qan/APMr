@@ -26,16 +26,17 @@ struct IPerformanceView: View {
             EventView()
                 .environmentObject(performance)
   
-            IPerformanceView.HintView()
-                .environmentObject(performance.event.hint)
-            
-//            ScrollView {
-//                VStack(spacing: 10) {
-//                    ForEach(performance.chart.models) { model in
-//                        Cell().environmentObject(model)
-//                    }
-//                }
-//            }
+    
+            ScrollView {
+                VStack(spacing: 10) {
+                    ForEach(performance.chart.models) { model in
+                        Cell()
+                            .environmentObject(model.line)
+                            .environmentObject(model.axis)
+                            .environmentObject(performance.event.hint)
+                    }
+                }
+            }
         }
     }
 }
@@ -54,18 +55,20 @@ extension IPerformanceView {
 
     
     fileprivate struct Cell: View {
-//        @EnvironmentObject var model: CPerformance.Chart.M
+        @EnvironmentObject var line: CPerformance.Chart.Model.Line
+        @EnvironmentObject var axis: CPerformance.Chart.Model.Axis
+        @EnvironmentObject var hint: CPerformance.Event.Hint
         
         var body: some View {
             ZStack {
                 IPerformanceView.LineView()
+                    .environmentObject(line)
+                    .environmentObject(axis)
+                
                 IPerformanceView.HintView()
+                    .environmentObject(hint)
             }
-//            .environmentObject(model)
             .frame(minHeight: 200)
-            .background {
-                Color.orange
-            }
         }
     }
 }

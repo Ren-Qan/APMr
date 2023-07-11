@@ -40,12 +40,7 @@ extension CPerformance.Event {
                     drag.origin = iEvent.locationInView
                     isNeedUpdateStartLocation = false
                 }
-                
-                let dx = iEvent.source.deltaX
-                
-                if dx < 0 { drag.origin.x += dx }
-                drag.size.width += dx
-                
+                drag.size.width += iEvent.source.deltaX
                 select = .drag(drag)
                 move = .empty
             } else if iEvent.source.type == .leftMouseUp, iEvent.source.clickCount > 0 {
@@ -54,7 +49,6 @@ extension CPerformance.Event {
             } else {
                 needSendObserver = false
             }
-            
             
             if needSendObserver {
                 objectWillChange.send()
