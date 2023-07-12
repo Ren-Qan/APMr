@@ -1,57 +1,29 @@
 //
-//  DSPMetrics.swift
+//  DSPMetrics+Entity.swift
 //  APMr
 //
-//  Created by 任玉乾 on 2023/6/27.
+//  Created by 任玉乾 on 2023/7/12.
 //
 
-import Foundation
-
-class DSPMetrics: NSObject, ObservableObject {
-    private lazy var serviceGroup: IInstrumentsServiceGroup = {
-        let sysmontap = IInstruments.Sysmontap()
-        sysmontap.delegate = self
-        
-        let opengl = IInstruments.Opengl()
-        opengl.delegate = self
-        
-        let process = IInstruments.Processcontrol()
-        process.delegate = self
-        
-        let net = IInstruments.NetworkStatistics()
-        net.delegate = self
-                
-        let group = IInstrumentsServiceGroup()
-        group.config([sysmontap, opengl, process, net])
-        
-        return group
-    }()
-    
-    private(set) lazy var syncModel = M()
-}
+import AppKit
 
 extension DSPMetrics {
-    public func reset() {
-        syncModel.reset()
+    enum MT {
+        case app(IApp)
+        case pid(PID)
+        case empty
+    }
+    
+    enum MR {
+        case pid(PID)
+        case empty
+    }
+    
+    struct Monitor {
+        var type: MT = .empty
+        var result: MR = .empty
     }
 }
-
-extension DSPMetrics: IInstrumentsSysmontapDelegate {
-    
-}
-
-extension DSPMetrics: IInstrumentsOpenglDelegate {
-    
-}
-
-extension DSPMetrics: IInstrumentsProcesscontrolDelegate {
-    
-}
-
-extension DSPMetrics: IInstrumentsNetworkStatisticsDelegate {
-    
-}
-
 
 extension DSPMetrics {
     enum T {
@@ -62,6 +34,11 @@ extension DSPMetrics {
         case Memory
         case IO
         case Diagnostic
+    }
+    
+    enum S {
+        case invalid
+        case success(M)
     }
     
     struct M {
@@ -94,8 +71,8 @@ extension DSPMetrics.M {
     class CPU: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .CPU }
         
-        fileprivate(set) var total: CGFloat = 0      // 0 - 100
-        fileprivate(set) var process: CGFloat = 0    // 0 - 100
+        var total: CGFloat = 0      // 0 - 100
+        var process: CGFloat = 0    // 0 - 100
         
         func reset() {
             total = 0
@@ -106,9 +83,9 @@ extension DSPMetrics.M {
     class GPU: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .GPU }
         
-        fileprivate(set) var device: CGFloat = 0     // 0 - 100
-        fileprivate(set) var renderer: CGFloat = 0   // 0 - 100
-        fileprivate(set) var tiler: CGFloat = 0      // 0 - 100
+        var device: CGFloat = 0     // 0 - 100
+        var renderer: CGFloat = 0   // 0 - 100
+        var tiler: CGFloat = 0      // 0 - 100
         
         func reset() {
             device = 0
@@ -120,10 +97,10 @@ extension DSPMetrics.M {
     class FPS: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .FPS }
         
-        fileprivate(set) var fps: CGFloat = 0
-        fileprivate(set) var jank: CGFloat = 0
-        fileprivate(set) var bigJank: CGFloat = 0
-        fileprivate(set) var stutter: CGFloat = 0
+        var fps: CGFloat = 0
+        var jank: CGFloat = 0
+        var bigJank: CGFloat = 0
+        var stutter: CGFloat = 0
         
         func reset() {
             fps = 0
@@ -136,10 +113,10 @@ extension DSPMetrics.M {
     class Network: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .Network }
         
-        fileprivate(set) var down: CGFloat = 0
-        fileprivate(set) var up: CGFloat = 0
-        fileprivate(set) var downDelta: CGFloat = 0 // MB/s
-        fileprivate(set) var upDelta: CGFloat = 0 // MB/s
+        var down: CGFloat = 0
+        var up: CGFloat = 0
+        var downDelta: CGFloat = 0 // MB
+        var upDelta: CGFloat = 0 // MB
         
         func reset() {
             down = 0
@@ -152,9 +129,9 @@ extension DSPMetrics.M {
     class Memory: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .Memory }
         
-        fileprivate(set) var resident: CGFloat = 0 // MB
-        fileprivate(set) var memory: CGFloat = 0 // MB
-        fileprivate(set) var vm: CGFloat = 0 // GB
+        var resident: CGFloat = 0 // MB
+        var memory: CGFloat = 0 // MB
+        var vm: CGFloat = 0 // GB
         
         func reset() {
             resident = 0
@@ -166,10 +143,10 @@ extension DSPMetrics.M {
     class IO: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .IO }
         
-        fileprivate(set) var read: CGFloat = 0 // MB
-        fileprivate(set) var write: CGFloat = 0 // MB
-        fileprivate(set) var readDelta: CGFloat = 0 // MB/s
-        fileprivate(set) var writeDelta: CGFloat = 0 // MB/s
+        var read: CGFloat = 0 // MB
+        var write: CGFloat = 0 // MB
+        var readDelta: CGFloat = 0 // MB
+        var writeDelta: CGFloat = 0 // MB
         
         func reset() {
             read = 0
@@ -182,10 +159,10 @@ extension DSPMetrics.M {
     class Diagnostic: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .Diagnostic }
         
-        fileprivate(set) var amperage: CGFloat = 0 // mA
-        fileprivate(set) var voltage: CGFloat = 0 // V
-        fileprivate(set) var battery: CGFloat = 0 // 1 - 100
-        fileprivate(set) var temperature: CGFloat = 0 // °C
+        var amperage: CGFloat = 0 // mA
+        var voltage: CGFloat = 0 // V
+        var battery: CGFloat = 0 // 1 - 100
+        var temperature: CGFloat = 0 // °C
         
         func reset() {
             amperage = 0

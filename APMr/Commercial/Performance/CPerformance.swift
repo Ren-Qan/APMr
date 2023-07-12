@@ -12,7 +12,7 @@ class CPerformance: ObservableObject {
     private lazy var metrics = DSPMetrics()
     
     private(set) lazy var event = Event()
-    private(set) lazy var chart = Chart(metrics.syncModel)
+    private(set) lazy var chart = Chart()
     
     private var timer: Timer? = nil
 }
@@ -20,26 +20,40 @@ class CPerformance: ObservableObject {
 extension CPerformance {
     func interact(_ iEvent: IEventHandleView.IEvent) {
         event.sync(iEvent)
-        
-        if iEvent.source.type == .scrollWheel {
-            chart.offset(iEvent.source.deltaX)
+    }
+    
+    func start(_ phone: IDevice.P, _ app: IApp) {
+        metrics.link(phone) { [weak self] state in
+            if state {
+                self?.monitor(app)
+            }
         }
     }
     
-    func start() {
-        #if DEBUG
-        if timer != nil {
-            timer?.invalidate()
-            timer = nil
-            return
+    private func monitor(_ app: IApp) {
+        metrics.monitor(app: app) { [weak self] state in
+            self?.sample()
         }
+    }
+    
+    private func sample() {
+        timer?.invalidate()
+        timer = nil
         
-        timer = Timer(timeInterval: 0.5, repeats: true, block: { [weak self] _ in
-            self?.chart.addRandom(1)
-        })
+        timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
+            DispatchQueue.global().async {
+                self?.metrics.sample { state in
+                    switch state {
+                        case .invalid:
+                            break
+                        case .success(let m):
+                            self?.chart.sync(m)
+                    }
+                }
+            }
+        }
         
         timer?.fire()
         RunLoop.main.add(timer!, forMode: .common)
-        #endif
     }
 }

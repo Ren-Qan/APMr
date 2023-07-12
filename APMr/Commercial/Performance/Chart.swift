@@ -10,66 +10,88 @@ import Combine
 
 extension CPerformance {
     class Chart {
-        let models: [Model]
-        
-        
-        
-        private let map: [DSPMetrics.T : Model]
-        
-        init(_ m: DSPMetrics.M) {
-            var map: [DSPMetrics.T : Model] = [:]
-            
-            self.models = m.all.compactMap { item in
-                let model = Model(type: item.type)
-                map[item.type] = model
-                return model
-            }
-            
-            self.map = map
-        }
-        
+        private var models: [Model] = []
+        private var chartMap: [DSPMetrics.T : Model] = [:]
+                            
         public func sync(_ model: DSPMetrics.M) {
-            
+
         }
-    
-        #if DEBUG
-        
-        public func addRandom(_ count: Int) {
-            if let count = models.first?.line.series.count, count == 0 {
-                models.forEach { model in
-                    model.line.series.removeAll()
-                    let count = 1
-                    (0 ..< count).forEach { _ in
-                        model.line.series.append(.init())
-                    }
-                }
-            }
-            
-            
-            (0 ..< count).forEach { i in
-                models.forEach { model in
-                    model.line.series.forEach { series in
-                        let x = CGFloat(series.landmarks.count)
-                        series.landmarks.append(.init(x: x, y: .random(in: 0 ..< 100)))
-                    }
-                }
-            }
-            
-            models.forEach { model in
-                model.line.objectWillChange.send()
-            }
-        }
-        
-        public func offset(_ delta: CGFloat) {
-            models.forEach { model in
-                model.line.offset += delta
-                model.line.objectWillChange.send()
-            }
-        }
-        
-        #endif
     }
 }
+
+extension CPerformance.Chart {
+    private func cpu(_ model: DSPMetrics.M.CPU) {
+        if chartMap[.CPU] == nil {
+            chartMap[.CPU] = Model(type: .CPU).set(2)
+        }
+    }
+    
+    private func gpu(_ model: DSPMetrics.M.GPU) {
+        if chartMap[.GPU] == nil {
+            chartMap[.GPU] = Model(type: .GPU).set(3)
+        }
+    }
+    
+    private func fps(_ model: DSPMetrics.M.FPS) {
+        if chartMap[.FPS] == nil {
+            chartMap[.FPS] = Model(type: .FPS).set(1)
+        }
+    }
+    
+    private func memory(_ model: DSPMetrics.M.Memory) {
+        if chartMap[.Memory] == nil {
+            chartMap[.Memory] = Model(type: .Memory).set(3)
+        }
+    }
+    
+    private func io(_ model: DSPMetrics.M.IO) {
+        if chartMap[.IO] == nil {
+            chartMap[.IO] = Model(type: .IO).set(4)
+        }
+    }
+    
+    private func network(_ model: DSPMetrics.M.Network) {
+        if chartMap[.Network] == nil {
+            chartMap[.Network] = Model(type: .Network).set(4)
+        }
+    }
+    
+    private func diagnostic(_ model: DSPMetrics.M.Diagnostic) {
+        if chartMap[.Diagnostic] == nil {
+            chartMap[.Diagnostic] = Model(type: .Diagnostic).set(4)
+        }
+    }
+}
+
+#if DEBUG
+extension CPerformance.Chart {
+    public func addRandom(_ count: Int) {
+        if let count = models.first?.line.series.count, count == 0 {
+            models.forEach { model in
+                model.line.series.removeAll()
+                let count = 1
+                (0 ..< count).forEach { _ in
+                    model.line.series.append(.init())
+                }
+            }
+        }
+        
+        
+        (0 ..< count).forEach { i in
+            models.forEach { model in
+                model.line.series.forEach { series in
+                    let x = CGFloat(series.landmarks.count)
+                    series.landmarks.append(.init(x: x, y: .random(in: 0 ..< 100)))
+                }
+            }
+        }
+        
+        models.forEach { model in
+            model.line.objectWillChange.send()
+        }
+    }
+}
+#endif
 
 extension CPerformance.Chart {
     struct Model: Identifiable {
@@ -82,15 +104,26 @@ extension CPerformance.Chart {
         init(type: DSPMetrics.T) {
             self.type = type
         }
+        
+        func set(_ seriesCount: Int) -> Self {
+            line.set(seriesCount)
+            return self
+        }
     }
 }
 
 // Line
 extension CPerformance.Chart.Model {
     class Line: ObservableObject {
-        fileprivate(set) var offset: CGFloat = 0
         fileprivate(set) var series: [Series] = []
         fileprivate(set) var visible: Bool = true
+        
+        func set(_ count: Int) {
+            series.removeAll()
+            (0 ..< count).forEach { _ in
+                series.append(Series())
+            }
+        }
     }
 }
 

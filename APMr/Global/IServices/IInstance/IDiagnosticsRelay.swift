@@ -8,11 +8,11 @@
 import Cocoa
 import LibMobileDevice
 
-class IDiagnosticsRelay {
+class IDiagnosticsRelay: ILockdownProtocol {
     private var service_t: lockdownd_service_descriptor_t? = nil
     private var client_t: diagnostics_relay_client_t? = nil
     
-    convenience init?(_ device: IDevice, _ lockdown: ILockdown) {
+    required convenience init?(_ device: IDevice, _ lockdown: ILockdown) {
         self.init()
 
         guard let service_t = lockdown.service_t(DIAGNOSTICS_RELAY_SERVICE_NAME),

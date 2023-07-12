@@ -9,6 +9,10 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
+protocol ILockdownProtocol {
+    init?(_ device: IDevice, _ lockdown: ILockdown)
+}
+
 class ILockdown {
     public private(set) var lockdown_t: lockdownd_client_t? = nil
     

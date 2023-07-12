@@ -15,7 +15,11 @@ struct IPerformanceView: View {
         #if DEBUG
         HStack {
             Button("start") {
-                performance.start()
+                guard let phone = device.selectPhone,
+                        let app = device.selectApp else {
+                    return
+                }
+                performance.start(phone, app)
             }
             
             Debug_T().environmentObject(performance)
@@ -29,12 +33,12 @@ struct IPerformanceView: View {
     
             ScrollView {
                 VStack(spacing: 10) {
-                    ForEach(performance.chart.models) { model in
-                        Cell()
-                            .environmentObject(model.line)
-                            .environmentObject(model.axis)
-                            .environmentObject(performance.event.hint)
-                    }
+//                    ForEach(performance.chart.models) { model in
+//                        Cell()
+//                            .environmentObject(model.line)
+//                            .environmentObject(model.axis)
+//                            .environmentObject(performance.event.hint)
+//                    }
                 }
             }
         }

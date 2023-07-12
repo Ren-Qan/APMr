@@ -9,11 +9,11 @@ import Cocoa
 import LibMobileDevice
 import ObjectMapper
 
-class IInstproxy {
+class IInstproxy: ILockdownProtocol {
     private var service_t: lockdownd_service_descriptor_t? = nil
     private var client_t: instproxy_client_t? = nil
     
-    convenience init?(_ device: IDevice, _ lockdown: ILockdown) {
+    required convenience init?(_ device: IDevice, _ lockdown: ILockdown) {
         self.init()
         guard let service_t = lockdown.service_t(INSTPROXY_SERVICE_NAME),
               let device_t = device.device_t else {

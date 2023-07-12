@@ -52,37 +52,8 @@ extension IPerformanceView {
         }
         
         func refresh() {
-            content.sublayers?.forEach { layer in
-                layer.removeFromSuperlayer()
-            }
-            
-            target?.line.series.forEach { series in
-                let modelLayer = CAShapeLayer()
-                modelLayer.strokeColor = series.style.cgColor
-                modelLayer.fillColor = .clear
-                modelLayer.lineWidth = 3
-                modelLayer.lineCap = .round
-                modelLayer.lineJoin = .bevel
-
-                let path = CGMutablePath()
-                let h = self.frame.height
-
-                var isFirst = true
-                let offset: CGFloat = target?.line.offset ?? 0
-                
-                series.landmarks.forEach { landmark in
-                    let point: CGPoint = .init(x: landmark.x * 80 + 10 + offset, y: ((landmark.y) / 100.0) * h)
-                    if isFirst {
-                        isFirst = false
-                        path.move(to: point)
-                    } else {
-                        path.addLine(to: point)
-                    }
-                }
-
-                modelLayer.path = path
-                self.content.addSublayer(modelLayer)
-            }
+            drawAxis()
+            drawLine()
         }
         
         private func drawAxis() {
@@ -90,7 +61,9 @@ extension IPerformanceView {
         }
         
         private func drawLine() {
-            
+            content.sublayers?.forEach { layer in
+                layer.removeFromSuperlayer()
+            }
         }
     }
 }

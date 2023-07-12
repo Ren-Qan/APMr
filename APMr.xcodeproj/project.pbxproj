@@ -86,11 +86,13 @@
 		C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */; };
 		C7CCDA97298A176900948BA3 /* PerformaceChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CCDA96298A176900948BA3 /* PerformaceChartModels.swift */; };
 		C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */; };
+		C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0D1B32A5E742600F610F6 /* ALockAction.swift */; };
 		C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */; };
 		C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C5299C8BE5000CD484 /* LaunchView.swift */; };
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
 		C7E137CD299CB52A000CD484 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CC299CB52A000CD484 /* Base.swift */; };
+		C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */; };
 		C7F5DA892946EF94005C6F7D /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* GPU.swift */; };
 		C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA2E4F299E036A00FE78F2 /* ProcessControlByDictionary.swift */; };
 		C7FA2E52299E28F900FE78F2 /* Sampling.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA2E51299E28F900FE78F2 /* Sampling.swift */; };
@@ -215,11 +217,13 @@
 		C7CCDA94298A127100948BA3 /* ButtonCommonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonModifier.swift; sourceTree = "<group>"; };
 		C7CCDA96298A176900948BA3 /* PerformaceChartModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartModels.swift; sourceTree = "<group>"; };
 		C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoModels.swift; sourceTree = "<group>"; };
+		C7D0D1B32A5E742600F610F6 /* ALockAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALockAction.swift; sourceTree = "<group>"; };
 		C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
 		C7E137C5299C8BE5000CD484 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
 		C7E137CC299CB52A000CD484 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
+		C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DSPMetrics+Entity.swift"; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* GPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPU.swift; sourceTree = "<group>"; };
 		C7FA2E4F299E036A00FE78F2 /* ProcessControlByDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessControlByDictionary.swift; sourceTree = "<group>"; };
 		C7FA2E51299E28F900FE78F2 /* Sampling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sampling.swift; sourceTree = "<group>"; };
@@ -274,8 +278,7 @@
 			children = (
 				C7483BA529373ADC00F32BE0 /* IDevice.swift */,
 				C73BBB0A2942E25100472A75 /* ILockdown.swift */,
-				C73BBB0D2942E84D00472A75 /* IInstproxy.swift */,
-				C7719B432987B5D700DC6044 /* IDiagnosticsRelay.swift */,
+				C7D0D1B52A5E77E800F610F6 /* IInstance */,
 				C73BBB0F2942FBC900472A75 /* Models */,
 			);
 			path = IServices;
@@ -680,7 +683,7 @@
 		C7B8B3532A5407D7008E9D53 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
-				C786B35F2A4ACF7800F3ABB8 /* DSPMetrics.swift */,
+				C7E40A472A5E5C7E001629E3 /* Metrics */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -690,6 +693,7 @@
 			children = (
 				C771EF6F2A4A8AE800EC305E /* ANavigation.swift */,
 				C73BBB17294315A600472A75 /* ADevice.swift */,
+				C7D0D1B32A5E742600F610F6 /* ALockAction.swift */,
 			);
 			path = Adpater;
 			sourceTree = "<group>";
@@ -745,6 +749,15 @@
 			path = Button;
 			sourceTree = "<group>";
 		};
+		C7D0D1B52A5E77E800F610F6 /* IInstance */ = {
+			isa = PBXGroup;
+			children = (
+				C73BBB0D2942E84D00472A75 /* IInstproxy.swift */,
+				C7719B432987B5D700DC6044 /* IDiagnosticsRelay.swift */,
+			);
+			path = IInstance;
+			sourceTree = "<group>";
+		};
 		C7E137BD299C8723000CD484 /* Performance */ = {
 			isa = PBXGroup;
 			children = (
@@ -797,6 +810,15 @@
 				C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		C7E40A472A5E5C7E001629E3 /* Metrics */ = {
+			isa = PBXGroup;
+			children = (
+				C786B35F2A4ACF7800F3ABB8 /* DSPMetrics.swift */,
+				C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */,
+			);
+			path = Metrics;
 			sourceTree = "<group>";
 		};
 		C7FBB47A2A1C969C00A6A8DF /* CoreProfileSessionTap */ = {
@@ -959,6 +981,7 @@
 				C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */,
 				C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */,
 				C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */,
+				C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */,
 				C7B8B35B2A5411B5008E9D53 /* CPerformance.swift in Sources */,
 				C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
@@ -973,6 +996,7 @@
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
 				C786B3602A4ACF7800F3ABB8 /* DSPMetrics.swift in Sources */,
 				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
+				C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */,
 				C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */,
 				C771EF6E2A4A8AC800EC305E /* NavigationView.swift in Sources */,
 				C7CB10512A0A102500828F3D /* CoreProfileSessionTapModels.swift in Sources */,

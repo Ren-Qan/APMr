@@ -9,13 +9,13 @@ import Cocoa
 import LibMobileDevice
 
 protocol IInstrumentsProcesscontrolDelegate: NSObjectProtocol {
-    func launch(pid: PID)
+    func launched(pid: PID)
     
     func outputReceived(_ msg: String)
 }
 
 extension IInstrumentsProcesscontrolDelegate {
-    func launch(pid: PID) { }
+    func launched(pid: PID) { }
     
     func outputReceived(_ msg: String) { }
 }
@@ -56,7 +56,7 @@ extension IInstruments.Processcontrol: IInstrumentsServiceProtocol {
            let message = response.array?.first as? String {
             delegate?.outputReceived(message)
         } else if let pid = response.object as? PID {
-            delegate?.launch(pid: pid)
+            delegate?.launched(pid: pid)
         }
     }
 }
