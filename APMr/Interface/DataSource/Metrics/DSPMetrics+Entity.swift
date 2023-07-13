@@ -68,107 +68,132 @@ protocol DSPMetricsMItemProtocol {
 }
 
 extension DSPMetrics.M {
+    enum U {
+        case Percent
+        case MB
+        case GB
+        case Frame
+        case mA
+        case V
+        case Celsius
+    }
+    
+    struct R {
+        var value: CGFloat = 0
+        let unit: U
+        
+        init(_ unit: U) {
+            self.unit = unit
+        }
+        
+        mutating func set(_ value: CGFloat) {
+            self.value = value
+        }
+    }
+}
+
+extension DSPMetrics.M {
     class CPU: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .CPU }
         
-        var total: CGFloat = 0      // 0 - 100
-        var process: CGFloat = 0    // 0 - 100
+        var total = R(.Percent)      // 0 - 100
+        var process = R(.Percent)   // 0 - 100
         
         func reset() {
-            total = 0
-            process = 0
+            total.value = 0
+            process.value = 0
         }
     }
     
     class GPU: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .GPU }
         
-        var device: CGFloat = 0     // 0 - 100
-        var renderer: CGFloat = 0   // 0 - 100
-        var tiler: CGFloat = 0      // 0 - 100
+        var device = R(.Percent)    // 0 - 100
+        var renderer = R(.Percent)// 0 - 100
+        var tiler = R(.Percent)    // 0 - 100
         
         func reset() {
-            device = 0
-            renderer = 0
-            tiler = 0
+            device.value = 0
+            renderer.value = 0
+            tiler.value = 0
         }
     }
     
     class FPS: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .FPS }
         
-        var fps: CGFloat = 0
-        var jank: CGFloat = 0
-        var bigJank: CGFloat = 0
-        var stutter: CGFloat = 0
+        var fps = R(.Frame)
+        var jank = R(.Frame)
+        var bigJank = R(.Frame)
+        var stutter = R(.Frame)
         
         func reset() {
-            fps = 0
-            jank = 0
-            bigJank = 0
-            stutter = 0
+            fps.value = 0
+            jank.value = 0
+            bigJank.value = 0
+            stutter.value = 0
         }
     }
     
     class Network: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .Network }
         
-        var down: CGFloat = 0
-        var up: CGFloat = 0
-        var downDelta: CGFloat = 0 // MB
-        var upDelta: CGFloat = 0 // MB
+        var down = R(.MB)
+        var up = R(.MB)
+        var downDelta = R(.MB) // MB
+        var upDelta = R(.MB) // MB
         
         func reset() {
-            down = 0
-            up = 0
-            downDelta = 0
-            upDelta = 0
+            down.value = 0
+            up.value = 0
+            downDelta.value = 0
+            upDelta.value = 0
         }
     }
     
     class Memory: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .Memory }
         
-        var resident: CGFloat = 0 // MB
-        var memory: CGFloat = 0 // MB
-        var vm: CGFloat = 0 // GB
+        var resident = R(.MB) // MB
+        var memory = R(.MB) // MB
+        var vm = R(.GB) // GB
         
         func reset() {
-            resident = 0
-            memory = 0
-            vm = 0
+            resident.value = 0
+            memory.value = 0
+            vm.value = 0
         }
     }
     
     class IO: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .IO }
         
-        var read: CGFloat = 0 // MB
-        var write: CGFloat = 0 // MB
-        var readDelta: CGFloat = 0 // MB
-        var writeDelta: CGFloat = 0 // MB
+        var read = R(.MB) // MB
+        var write = R(.MB)// MB
+        var readDelta = R(.MB) // MB
+        var writeDelta = R(.MB) // MB
         
         func reset() {
-            read = 0
-            write = 0
-            readDelta = 0
-            writeDelta = 0
+            read.value = 0
+            write.value = 0
+            readDelta.value = 0
+            writeDelta.value = 0
         }
     }
     
     class Diagnostic: DSPMetricsMItemProtocol {
         var type: DSPMetrics.T { .Diagnostic }
         
-        var amperage: CGFloat = 0 // mA
-        var voltage: CGFloat = 0 // V
-        var battery: CGFloat = 0 // 1 - 100
-        var temperature: CGFloat = 0 // °C
+        var amperage = R(.mA) // mA
+        var voltage = R(.V) // V
+        var battery = R(.Percent) // 1 - 100
+        var temperature = R(.Celsius) // °C
         
         func reset() {
-            amperage = 0
-            voltage = 0
-            battery = 0
-            temperature = 0
+            amperage.value = 0
+            voltage.value = 0
+            battery.value = 0
+            temperature.value = 0
         }
     }
 }

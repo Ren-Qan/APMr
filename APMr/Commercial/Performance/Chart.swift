@@ -10,55 +10,70 @@ import Combine
 
 extension CPerformance {
     class Chart {
-        private var models: [Model] = []
-        private var chartMap: [DSPMetrics.T : Model] = [:]
-                            
+        
+        private(set) var notifiers: [Notifier] = []
+        
+        private var map: [DSPMetrics.T : Notifier] = [:]
+        private var width: CGFloat = 20
+        
         public func sync(_ model: DSPMetrics.M) {
-
+            snap(model)
+        }
+        
+        public func preset(_ model: DSPMetrics.M) {
+            model.all.forEach { i in
+                if self.map[i.type] == nil {
+                    let notifier = Notifier(type: i.type)
+                    self.notifiers.append(notifier)
+                    self.map[i.type] = notifier
+                }
+            }
+        }
+        
+        public func clean() {
+            notifiers.forEach { notifier in
+                notifier.graph.clean()
+            }
         }
     }
 }
 
 extension CPerformance.Chart {
-    private func cpu(_ model: DSPMetrics.M.CPU) {
-        if chartMap[.CPU] == nil {
-            chartMap[.CPU] = Model(type: .CPU).set(2)
-        }
+    private func snap(_ model: DSPMetrics.M) {
+        let cpu =           [model.cpu.total, model.cpu.process]
+        let gpu =           [model.gpu.device, model.gpu.tiler, model.gpu.renderer]
+        let fps =           [model.fps.fps]
+        let memory =        [model.memory.memory, model.memory.resident, model.memory.vm]
+        let io =            [model.io.write, model.io.readDelta, model.io.writeDelta, model.io.readDelta]
+        let network =       [model.network.down, model.network.up, model.network.downDelta, model.network.upDelta]
+        let diagnostic =    [model.diagnostic.amperage, model.diagnostic.battery, model.diagnostic.temperature, model.diagnostic.voltage]
+        
+        update(.CPU, cpu)
+        update(.GPU, gpu)
+        update(.FPS, fps)
+        update(.Memory, memory)
+        update(.IO, io)
+        update(.Network, network)
+        update(.Diagnostic, diagnostic)
     }
-    
-    private func gpu(_ model: DSPMetrics.M.GPU) {
-        if chartMap[.GPU] == nil {
-            chartMap[.GPU] = Model(type: .GPU).set(3)
+        
+    private func update(_ type: DSPMetrics.T, _ sources: [DSPMetrics.M.R]) {
+        guard let notifier = map[type] else {
+            return
         }
-    }
-    
-    private func fps(_ model: DSPMetrics.M.FPS) {
-        if chartMap[.FPS] == nil {
-            chartMap[.FPS] = Model(type: .FPS).set(1)
+        
+        if notifier.graph.series.count != sources.count {
+            notifier.graph.series.removeAll()
+            sources.forEach { _ in
+                notifier.graph.series.append(.init())
+            }
         }
-    }
-    
-    private func memory(_ model: DSPMetrics.M.Memory) {
-        if chartMap[.Memory] == nil {
-            chartMap[.Memory] = Model(type: .Memory).set(3)
-        }
-    }
-    
-    private func io(_ model: DSPMetrics.M.IO) {
-        if chartMap[.IO] == nil {
-            chartMap[.IO] = Model(type: .IO).set(4)
-        }
-    }
-    
-    private func network(_ model: DSPMetrics.M.Network) {
-        if chartMap[.Network] == nil {
-            chartMap[.Network] = Model(type: .Network).set(4)
-        }
-    }
-    
-    private func diagnostic(_ model: DSPMetrics.M.Diagnostic) {
-        if chartMap[.Diagnostic] == nil {
-            chartMap[.Diagnostic] = Model(type: .Diagnostic).set(4)
+        
+        (0 ..< sources.count).forEach { index in
+            let source = sources[index]
+            let series = notifier.graph.series[index]
+            series.width = width
+            series.add(source)
         }
     }
 }
@@ -66,90 +81,107 @@ extension CPerformance.Chart {
 #if DEBUG
 extension CPerformance.Chart {
     public func addRandom(_ count: Int) {
-        if let count = models.first?.line.series.count, count == 0 {
-            models.forEach { model in
-                model.line.series.removeAll()
-                let count = 1
-                (0 ..< count).forEach { _ in
-                    model.line.series.append(.init())
-                }
-            }
-        }
         
-        
-        (0 ..< count).forEach { i in
-            models.forEach { model in
-                model.line.series.forEach { series in
-                    let x = CGFloat(series.landmarks.count)
-                    series.landmarks.append(.init(x: x, y: .random(in: 0 ..< 100)))
-                }
-            }
-        }
-        
-        models.forEach { model in
-            model.line.objectWillChange.send()
-        }
     }
 }
 #endif
 
 extension CPerformance.Chart {
-    struct Model: Identifiable {
-        var id: DSPMetrics.T { type }
+    class Notifier: Identifiable, ObservableObject {
         let type: DSPMetrics.T
-        
-        let line = Line()
-        let axis = Axis()
+        let graph = Graph()
         
         init(type: DSPMetrics.T) {
             self.type = type
-        }
-        
-        func set(_ seriesCount: Int) -> Self {
-            line.set(seriesCount)
-            return self
         }
     }
 }
 
 // Line
-extension CPerformance.Chart.Model {
-    class Line: ObservableObject {
+extension CPerformance.Chart.Notifier {
+    class Graph {
+        fileprivate lazy var axis = Axis()
         fileprivate(set) var series: [Series] = []
         fileprivate(set) var visible: Bool = true
         
-        func set(_ count: Int) {
-            series.removeAll()
-            (0 ..< count).forEach { _ in
-                series.append(Series())
+        func clean() {
+            series.forEach { s in
+                axis.clean()
+                s.sources.removeAll()
             }
+        }
+        
+        func xAxis(_ offset: CGFloat, _ size: CGSize) -> [Axis.Domain] {
+            return []
+        }
+        
+        func yAxis() -> [Axis.Domain] {
+            return []
         }
     }
 }
 
-extension CPerformance.Chart.Model.Line {
+extension CPerformance.Chart.Notifier.Graph {
     class Series: Identifiable {
-        fileprivate(set) var landmarks: [Landmark] = []
-        fileprivate(set) var visible: Bool = true
+        fileprivate var sources: [DSPMetrics.M.R] = []
         
-        let style: NSColor = .random
+        fileprivate(set) var visible: Bool = true
+        fileprivate(set) var label: String = ""
+        fileprivate(set) var style: NSColor = .random
+        
+        fileprivate(set) var contentSize: CGSize = .zero
+        fileprivate(set) var width: CGFloat = 20
+                
+        func add(_ source: DSPMetrics.M.R) {
+            sources.append(source)
+            contentSize.width = CGFloat(sources.count) * width
+        }
+        
+        func landmarks(_ offsetX: CGFloat, _ size: CGSize) -> [Landmark] {
+            // todo:
+            // 1. 根据偏移和页面大小计算出对应的landmark个数
+            return []
+        }
     }
     
     struct Landmark {
-        var x: Double
-        var y: Double
+        let x: CGFloat
+        let y: CGFloat
     }
 }
 
 // Axis
-extension CPerformance.Chart.Model {
-    class Axis: ObservableObject {
-        struct A {
-            var upper: Double = 0
-            var lower: Double = 0
-        }
+extension CPerformance.Chart.Notifier.Graph {
+    struct Axis {
+        public let X = Part()
+        public let Y = Part()
         
-        private(set) var x = A()
-        private(set) var y = A()
+        func clean() {
+            X.clean()
+            Y.clean()
+        }
+    }
+}
+
+extension CPerformance.Chart.Notifier.Graph.Axis {
+    class Part {
+        fileprivate(set) var limit = Limit()
+        fileprivate(set) var domains = [Domain]()
+        
+        func clean() {
+            limit = Limit()
+            domains.removeAll()
+        }
+    }
+    
+    struct Limit {
+        var upper: CGFloat = 0
+        var lower: CGFloat = 0
+    }
+    
+    struct Domain {
+        let label: String
+        let x: CGFloat
+        let y: CGFloat
     }
 }

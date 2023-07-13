@@ -11,15 +11,19 @@ import Combine
 class CPerformance: ObservableObject {
     private lazy var metrics = DSPMetrics()
     
-    private(set) lazy var event = Event()
-    private(set) lazy var chart = Chart()
+    private(set) lazy var hint = Hint()
+    private(set) lazy var chart = {
+        let chart = Chart()
+        chart.preset(metrics.syncModel)
+        return chart
+    }()
     
     private var timer: Timer? = nil
 }
 
 extension CPerformance {
     func interact(_ iEvent: IEventHandleView.IEvent) {
-        event.sync(iEvent)
+        hint.sync(iEvent)
     }
     
     func start(_ phone: IDevice.P, _ app: IApp) {
@@ -37,6 +41,9 @@ extension CPerformance {
     }
     
     private func sample() {
+        chart.clean()
+        hint.clean()
+        
         timer?.invalidate()
         timer = nil
         

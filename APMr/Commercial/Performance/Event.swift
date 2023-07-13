@@ -9,24 +9,20 @@ import AppKit
 import Combine
 
 extension CPerformance {
-    class Event {
-        private(set) lazy var hint = Hint()
-        
-        func sync(_ iEvent: IEventHandleView.IEvent) {
-            hint.sync(iEvent)
-        }
-    }
-}
-
-extension CPerformance.Event {
     class Hint: ObservableObject {
         fileprivate(set) var move: M = .empty
         fileprivate(set) var select: S = .empty
+        fileprivate(set) var offset: CGPoint = .zero
         
         private var drag: CGRect = .zero
         private var isNeedUpdateStartLocation = true
         
-        fileprivate func sync(_ iEvent: IEventHandleView.IEvent) {
+        public func clean() {
+            select = .empty
+            offset = .zero
+        }
+        
+        public func sync(_ iEvent: IEventHandleView.IEvent) {
             var needSendObserver = true
             if iEvent.source.type == .mouseExited {
                 move = .empty
@@ -46,6 +42,8 @@ extension CPerformance.Event {
             } else if iEvent.source.type == .leftMouseUp, iEvent.source.clickCount > 0 {
                 select = .click(iEvent.locationInView)
                 move = .empty
+            } else if iEvent.source.type == .scrollWheel {
+                offset.x += iEvent.source.deltaX
             } else {
                 needSendObserver = false
             }
@@ -57,7 +55,7 @@ extension CPerformance.Event {
     }
 }
 
-extension CPerformance.Event.Hint {
+extension CPerformance.Hint {
     enum M {
         case move(CGPoint)
         case empty

@@ -9,7 +9,7 @@ import SwiftUI
 
 extension IPerformanceView {
     struct HintView: NSViewRepresentable {
-        @EnvironmentObject var hint: CPerformance.Event.Hint
+        @EnvironmentObject var hint: CPerformance.Hint
         
         func makeNSView(context: Context) -> IPerformanceView.NSHintView {
             let view = NSHintView()

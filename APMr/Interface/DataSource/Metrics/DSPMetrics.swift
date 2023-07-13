@@ -78,15 +78,20 @@ extension DSPMetrics {
     }
     
     public func sample(_ closure: @escaping (_ state: DSPMetrics.S) -> Void) {
+        guard serviceGroup.isConnected else {
+            closure(.invalid)
+            return
+        }
+        
         self.sampleClosure = closure
         
         if let analysis = diagnostics.instance?.analysis {
-            syncModel.diagnostic.voltage = (analysis["Voltage"] as? CGFloat ?? 0) / 1000
-            syncModel.diagnostic.battery = (analysis["CurrentCapacity"] as? CGFloat ?? 0)
-            syncModel.diagnostic.temperature = (analysis["Temperature"] as? CGFloat ?? 0) / 100
+            syncModel.diagnostic.voltage.value = (analysis["Voltage"] as? CGFloat ?? 0) / 1000
+            syncModel.diagnostic.battery.value = (analysis["CurrentCapacity"] as? CGFloat ?? 0)
+            syncModel.diagnostic.temperature.value = (analysis["Temperature"] as? CGFloat ?? 0) / 100
             if let amperage = analysis["InstantAmperage"] as? UInt64, (amperage >> 63) == 0x1 {
                 // https://github.com/dkw72n/idb/blob/c0789be034bbf2890aa6044a27d74938a646898d/app.py
-                syncModel.diagnostic.amperage = CGFloat(UInt64.max - amperage) + 1
+                syncModel.diagnostic.amperage.value = CGFloat(UInt64.max - amperage) + 1
             }
         } else {
             closure(.invalid)
@@ -137,7 +142,7 @@ extension DSPMetrics: IInstrumentsProcesscontrolDelegate {
 extension DSPMetrics: IInstrumentsSysmontapDelegate {
     func sysmotap(model: IInstruments.Sysmontap.Model) {
         if let system = model.SystemCPUUsage {
-            syncModel.cpu.total = CGFloat(system.CPU_TotalLoad) / CGFloat(model.CPUCount)
+            syncModel.cpu.total.value  = CGFloat(system.CPU_TotalLoad) / CGFloat(model.CPUCount)
         }
     }
     
@@ -147,31 +152,29 @@ extension DSPMetrics: IInstrumentsSysmontapDelegate {
             return
         }
         
+        syncModel.cpu.process.value = model.cpuUsage
         
-        syncModel.cpu.process = model.cpuUsage
+        syncModel.memory.memory.value = model.physFootprint.MB
+        syncModel.memory.resident.value = model.physFootprint.MB
+        syncModel.memory.vm.value = model.memVirtualSize.GB
         
-        syncModel.memory.memory = model.physFootprint.MB
-        syncModel.memory.resident = model.physFootprint.MB
-        syncModel.memory.vm = model.memVirtualSize.GB
+        let lastR = syncModel.io.read.value
+        let lastW = syncModel.io.write.value
+        syncModel.io.read.value = model.diskBytesRead.MB
+        syncModel.io.write.value = model.diskBytesWritten.MB
         
-        let current = Date().timeIntervalSince1970
-        let lastR = syncModel.io.read
-        let lastW = syncModel.io.write
-        syncModel.io.read = model.diskBytesRead.MB
-        syncModel.io.write = model.diskBytesWritten.MB
-        
-        syncModel.io.readDelta = (syncModel.io.read - lastR)
-        syncModel.io.writeDelta = (syncModel.io.write - lastW)
+        syncModel.io.readDelta.value = (syncModel.io.read.value - lastR)
+        syncModel.io.writeDelta.value = (syncModel.io.write.value - lastW)
     }
 }
 
 extension DSPMetrics: IInstrumentsOpenglDelegate {
     func sampling(model: IInstruments.Opengl.Model) {
-        syncModel.gpu.device = CGFloat(model.DeviceUtilization)
-        syncModel.gpu.renderer = CGFloat(model.RendererUtilization)
-        syncModel.gpu.tiler = CGFloat(model.TilerUtilization)
+        syncModel.gpu.device.value = CGFloat(model.DeviceUtilization)
+        syncModel.gpu.renderer.value = CGFloat(model.RendererUtilization)
+        syncModel.gpu.tiler.value = CGFloat(model.TilerUtilization)
         
-        syncModel.fps.fps = model.CoreAnimationFramesPerSecond
+        syncModel.fps.fps.value = model.CoreAnimationFramesPerSecond
     }
 }
 
@@ -183,10 +186,10 @@ extension DSPMetrics: IInstrumentsNetworkStatisticsDelegate {
             return
         }
         
-        syncModel.network.down = model.net_rx_bytes.MB
-        syncModel.network.up = model.net_tx_bytes.MB
-        syncModel.network.downDelta = model.net_rx_bytes_delta.MB
-        syncModel.network.upDelta = model.net_tx_bytes_delta.MB
+        syncModel.network.down.value = model.net_rx_bytes.MB
+        syncModel.network.up.value = model.net_tx_bytes.MB
+        syncModel.network.downDelta.value = model.net_rx_bytes_delta.MB
+        syncModel.network.upDelta.value = model.net_tx_bytes_delta.MB
         
         sampleClosure?(.success(syncModel))
     }

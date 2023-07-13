@@ -33,12 +33,11 @@ struct IPerformanceView: View {
     
             ScrollView {
                 VStack(spacing: 10) {
-//                    ForEach(performance.chart.models) { model in
-//                        Cell()
-//                            .environmentObject(model.line)
-//                            .environmentObject(model.axis)
-//                            .environmentObject(performance.event.hint)
-//                    }
+                    ForEach(performance.chart.notifiers) { notifier in
+                        IPerformanceView.GraphView()
+                            .environmentObject(notifier)
+                            .environmentObject(performance.hint)
+                    }
                 }
             }
         }
@@ -58,23 +57,23 @@ extension IPerformanceView {
     }
 
     
-    fileprivate struct Cell: View {
-        @EnvironmentObject var line: CPerformance.Chart.Model.Line
-        @EnvironmentObject var axis: CPerformance.Chart.Model.Axis
-        @EnvironmentObject var hint: CPerformance.Event.Hint
-        
-        var body: some View {
-            ZStack {
-                IPerformanceView.LineView()
-                    .environmentObject(line)
-                    .environmentObject(axis)
-                
-                IPerformanceView.HintView()
-                    .environmentObject(hint)
-            }
-            .frame(minHeight: 200)
-        }
-    }
+//    fileprivate struct Cell: View {
+//        @EnvironmentObject var graph: CPerformance.Chart.Model.Graph
+//        @EnvironmentObject var axis: CPerformance.Chart.Model.Axis
+//        @EnvironmentObject var hint: CPerformance.Hint
+//
+//        var body: some View {
+//            ZStack {
+//
+//                    .environmentObject(graph)
+//                    .environmentObject(axis)
+//
+//                IPerformanceView.HintView()
+//                    .environmentObject(hint)
+//            }
+//            .frame(minHeight: 200)
+//        }
+//    }
 }
 
 extension IPerformanceView {

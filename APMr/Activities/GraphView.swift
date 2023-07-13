@@ -1,5 +1,5 @@
 //
-//  LineView.swift
+//  GraphView.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/7/4.
@@ -8,17 +8,17 @@
 import SwiftUI
 
 extension IPerformanceView  {
-    struct LineView: NSViewRepresentable {
-        @EnvironmentObject var line: CPerformance.Chart.Model.Line
-        @EnvironmentObject var axis: CPerformance.Chart.Model.Axis
+    struct GraphView: NSViewRepresentable {
+        @EnvironmentObject var notifier: CPerformance.Chart.Notifier
+        @EnvironmentObject var hint: CPerformance.Hint
         
-        func makeNSView(context: Context) -> IPerformanceView.NSLineView {
-            let view = NSLineView()
+        func makeNSView(context: Context) -> IPerformanceView.NSGraphView {
+            let view = NSGraphView()
             view.target = self
             return view
         }
         
-        func updateNSView(_ nsView: IPerformanceView.NSLineView, context: Context) {
+        func updateNSView(_ nsView: IPerformanceView.NSGraphView, context: Context) {
             nsView.target = self
             nsView.refresh()
         }
@@ -26,8 +26,8 @@ extension IPerformanceView  {
 }
 
 extension IPerformanceView {
-    class NSLineView: NSView {
-        fileprivate var target: LineView? = nil
+    class NSGraphView: NSView {
+        fileprivate var target: GraphView? = nil
         
         private lazy var content = Content()
         private lazy var axis = Content()
@@ -57,12 +57,23 @@ extension IPerformanceView {
         }
         
         private func drawAxis() {
+            guard let hint = target?.hint,
+                  let model = target?.notifier else {
+                return
+            }
             
+            model.graph.xAxis(hint.offset.x, bounds.size)
+            model.graph.yAxis()
         }
         
         private func drawLine() {
-            content.sublayers?.forEach { layer in
-                layer.removeFromSuperlayer()
+            guard let hint = target?.hint,
+                  let model = target?.notifier else {
+                return
+            }
+            
+            model.graph.series.forEach { series in
+                let marks = series.landmarks(hint.offset.x, bounds.size)
             }
         }
     }

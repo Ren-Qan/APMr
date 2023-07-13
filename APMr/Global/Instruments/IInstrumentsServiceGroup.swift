@@ -32,6 +32,10 @@ extension IInstrumentsServiceGroup {
         return instruments.fd
     }
     
+    public var isConnected: Bool {
+        return instruments.isConnected
+    }
+    
     func config(_ clients: [Service]) {
         clients.forEach { client in
             config(client)

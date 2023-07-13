@@ -73,7 +73,7 @@
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
 		C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5B94329767921009A88D7 /* PerformaceChartView.swift */; };
 		C7B8B34A2A53EA0D008E9D53 /* IEventHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */; };
-		C7B8B34E2A53FBFA008E9D53 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B34D2A53FBFA008E9D53 /* LineView.swift */; };
+		C7B8B34E2A53FBFA008E9D53 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B34D2A53FBFA008E9D53 /* GraphView.swift */; };
 		C7B8B3502A53FC87008E9D53 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B34F2A53FC87008E9D53 /* Event.swift */; };
 		C7B8B3522A54036E008E9D53 /* HintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B3512A54036E008E9D53 /* HintView.swift */; };
 		C7B8B35B2A5411B5008E9D53 /* CPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */; };
@@ -204,7 +204,7 @@
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
 		C7B5B94329767921009A88D7 /* PerformaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartView.swift; sourceTree = "<group>"; };
 		C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IEventHandleView.swift; sourceTree = "<group>"; };
-		C7B8B34D2A53FBFA008E9D53 /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
+		C7B8B34D2A53FBFA008E9D53 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		C7B8B34F2A53FC87008E9D53 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		C7B8B3512A54036E008E9D53 /* HintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintView.swift; sourceTree = "<group>"; };
 		C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPerformance.swift; sourceTree = "<group>"; };
@@ -674,7 +674,7 @@
 			isa = PBXGroup;
 			children = (
 				C786B35D2A4ACEDD00F3ABB8 /* IPerformanceView.swift */,
-				C7B8B34D2A53FBFA008E9D53 /* LineView.swift */,
+				C7B8B34D2A53FBFA008E9D53 /* GraphView.swift */,
 				C7B8B3512A54036E008E9D53 /* HintView.swift */,
 			);
 			name = Performance;
@@ -972,7 +972,7 @@
 				C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C7651EFF298B5FC3006F3310 /* Int64+Extensions.swift in Sources */,
-				C7B8B34E2A53FBFA008E9D53 /* LineView.swift in Sources */,
+				C7B8B34E2A53FBFA008E9D53 /* GraphView.swift in Sources */,
 				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
 				C7FA2E52299E28F900FE78F2 /* Sampling.swift in Sources */,
 				C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */,
