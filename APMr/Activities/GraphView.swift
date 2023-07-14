@@ -29,14 +29,14 @@ extension IPerformanceView {
     class NSGraphView: NSView {
         fileprivate var target: GraphView? = nil
         
-        private lazy var content = Content()
+        private lazy var chart = Content()
         private lazy var axis = Content()
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
             layer?.addSublayer(axis)
-            layer?.addSublayer(content)
+            layer?.addSublayer(chart)
         }
         
         required init?(coder: NSCoder) {
@@ -48,7 +48,7 @@ extension IPerformanceView {
             if bounds.size.width != 0, bounds.size.height != 0 {
                 target?.notifier.graph.update(bounds.size)
                 axis.frame = bounds
-                content.frame = bounds
+                chart.frame = bounds
                 refresh()
             }
         }
@@ -68,12 +68,16 @@ extension IPerformanceView {
                 return
             }
 
-            graph.horizontal(config) { domains in
-                
+            axis.sublayers?.forEach { layer in
+                layer.removeFromSuperlayer()
             }
             
-            graph.vertical(config) { domains in
-                
+            graph.horizontal(config) { [weak self] paint in
+                self?.axis.addSublayer(paint.layer)
+            }
+            
+            graph.vertical(config) { [weak self] paint in
+                self?.axis.addSublayer(paint.layer)
             }
         }
         
@@ -81,8 +85,13 @@ extension IPerformanceView {
             guard let graph = target?.notifier.graph else {
                 return
             }
-            graph.chart(config) { series in
-                
+            
+            chart.sublayers?.forEach { layer in
+                layer.removeFromSuperlayer()
+            }
+            
+            graph.chart(config) { [weak self] paint in
+                self?.chart.addSublayer(paint.layer)
             }
         }
     }
