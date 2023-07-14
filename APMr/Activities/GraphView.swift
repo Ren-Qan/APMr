@@ -44,43 +44,52 @@ extension IPerformanceView {
         }
         
         override func layout() {
+            let bounds = self.bounds
             if bounds.size.width != 0, bounds.size.height != 0 {
+                target?.notifier.graph.update(bounds.size)
                 axis.frame = bounds
                 content.frame = bounds
                 refresh()
             }
         }
         
-        func refresh() {
-            drawAxis()
-            drawLine()
-        }
-        
-        private func drawAxis() {
-            guard let hint = target?.hint,
-                  let model = target?.notifier else {
+        public func refresh() {
+            guard let hint = target?.hint else {
                 return
             }
-            
-            model.graph.xAxis(hint.offset.x, bounds.size)
-            model.graph.yAxis()
+            let config = CPerformance.Chart.Notifier.Graph.Config(offset: hint.offset,
+                                                                  edge: NSEdgeInsets(value: 10))
+            drawAxis(config)
+            drawChart(config)
         }
         
-        private func drawLine() {
-            guard let hint = target?.hint,
-                  let model = target?.notifier else {
+        private func drawAxis(_ config: CPerformance.Chart.Notifier.Graph.Config) {
+            guard let graph = target?.notifier.graph else {
                 return
             }
+
+            graph.horizontal(config) { domains in
+                
+            }
             
-            model.graph.series.forEach { series in
-                let marks = series.landmarks(hint.offset.x, bounds.size)
+            graph.vertical(config) { domains in
+                
+            }
+        }
+        
+        private func drawChart(_ config: CPerformance.Chart.Notifier.Graph.Config) {
+            guard let graph = target?.notifier.graph else {
+                return
+            }
+            graph.chart(config) { series in
+                
             }
         }
     }
 }
 
 extension IPerformanceView {
-    fileprivate class Content: CAShapeLayer {
+    fileprivate class Content: CALayer {
         override func action(forKey event: String) -> CAAction? {
             return nil
         }

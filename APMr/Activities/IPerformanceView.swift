@@ -35,6 +35,7 @@ struct IPerformanceView: View {
                 VStack(spacing: 10) {
                     ForEach(performance.chart.notifiers) { notifier in
                         IPerformanceView.GraphView()
+                            .frame(minHeight: 200)
                             .environmentObject(notifier)
                             .environmentObject(performance.hint)
                     }
@@ -55,25 +56,6 @@ extension IPerformanceView {
                 }
         }
     }
-
-    
-//    fileprivate struct Cell: View {
-//        @EnvironmentObject var graph: CPerformance.Chart.Model.Graph
-//        @EnvironmentObject var axis: CPerformance.Chart.Model.Axis
-//        @EnvironmentObject var hint: CPerformance.Hint
-//
-//        var body: some View {
-//            ZStack {
-//
-//                    .environmentObject(graph)
-//                    .environmentObject(axis)
-//
-//                IPerformanceView.HintView()
-//                    .environmentObject(hint)
-//            }
-//            .frame(minHeight: 200)
-//        }
-//    }
 }
 
 extension IPerformanceView {

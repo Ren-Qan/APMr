@@ -10,7 +10,6 @@ import Combine
 
 extension CPerformance {
     class Chart {
-        
         private(set) var notifiers: [Notifier] = []
         
         private var map: [DSPMetrics.T : Notifier] = [:]
@@ -61,20 +60,9 @@ extension CPerformance.Chart {
         guard let notifier = map[type] else {
             return
         }
-        
-        if notifier.graph.series.count != sources.count {
-            notifier.graph.series.removeAll()
-            sources.forEach { _ in
-                notifier.graph.series.append(.init())
-            }
-        }
-        
-        (0 ..< sources.count).forEach { index in
-            let source = sources[index]
-            let series = notifier.graph.series[index]
-            series.width = width
-            series.add(source)
-        }
+                
+        notifier.graph.set(width, sources)
+        notifier.objectWillChange.send()
     }
 }
 
@@ -88,8 +76,8 @@ extension CPerformance.Chart {
 
 extension CPerformance.Chart {
     class Notifier: Identifiable, ObservableObject {
-        let type: DSPMetrics.T
-        let graph = Graph()
+        public let type: DSPMetrics.T
+        public let graph = Graph()
         
         init(type: DSPMetrics.T) {
             self.type = type
@@ -100,88 +88,192 @@ extension CPerformance.Chart {
 // Line
 extension CPerformance.Chart.Notifier {
     class Graph {
-        fileprivate lazy var axis = Axis()
-        fileprivate(set) var series: [Series] = []
-        fileprivate(set) var visible: Bool = true
+        private lazy var x = X()
+        private lazy var y = Y()
         
-        func clean() {
+        private var series: [Series] = []
+        private var visible: Bool = true
+        
+        private var windowSize: CGSize = .zero
+        private var contentSize: CGSize = .zero
+
+        fileprivate func clean() {
+            x.clean()
+            y.clean()
             series.forEach { s in
-                axis.clean()
                 s.sources.removeAll()
             }
         }
         
-        func xAxis(_ offset: CGFloat, _ size: CGSize) -> [Axis.Domain] {
-            return []
+        fileprivate func set(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
+            var count = 0
+            
+            if series.count != sources.count {
+                series.removeAll()
+                sources.forEach { _ in
+                    series.append(.init())
+                }
+            }
+            
+            x.add()
+            (0 ..< sources.count).forEach { i in
+                let series = series[i]
+                let source = sources[i]
+                
+                series.update(width, source)
+                count = max(count, series.sources.count)
+                y.update(source)
+            }
+            
+            contentSize.width = CGFloat(count) * width
         }
         
-        func yAxis() -> [Axis.Domain] {
-            return []
+        /// todo: check
+        private func check(_ config: Config) -> Bool {
+            return false
         }
+        
+        public func update(_ windowSize: CGSize) {
+            self.windowSize = windowSize
+            self.contentSize.height = windowSize.height
+        }
+        
+        /// todo: Create X Axis Path
+        public func horizontal(_ config: Config, _ closure: @escaping (_ paint: Paint) -> Void) {
+            if check(config) {
+                DispatchQueue.global().async {
+                    if let paint = self.x.draw(config, self.windowSize) {
+                        DispatchQueue.main.async {
+                            closure(paint)
+                        }
+                    }
+                }
+            } else {
+                if let paint = x.paint {
+                    closure(paint)
+                }
+            }
+        }
+        
+        /// todo: Create Y Axis Path
+        public func vertical(_ config: Config, _ closure: @escaping (_ paint: Paint) -> Void) {
+            if check(config) {
+                DispatchQueue.global().async {
+                    if let paint = self.y.draw(config, self.windowSize) {
+                        DispatchQueue.main.async {
+                            closure(paint)
+                        }
+                    }
+                }
+            } else {
+                if let paint = y.paint {
+                    closure(paint)
+                }
+            }
+        }
+        
+        /// todo: Create series Line Paths
+        public func chart(_ config: Config, _ closure: @escaping (_ paint: Paint) -> Void) {
+            if check(config) {
+                DispatchQueue.global().async {
+                    self.series.forEach { series in
+                        if let paint = series.draw(config, self.windowSize) {
+                            DispatchQueue.main.async {
+                                closure(paint)
+                            }
+                        }
+                    }
+                }
+            } else {
+                series.forEach { series in
+                    if let paint = series.paint {
+                        closure(paint)
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension CPerformance.Chart.Notifier.Graph {
+    struct Config {
+        let offset: CGPoint
+        let edge: NSEdgeInsets
+    }
+    
+    struct Paint {
+        let layer: CALayer
     }
 }
 
 extension CPerformance.Chart.Notifier.Graph {
     class Series: Identifiable {
         fileprivate var sources: [DSPMetrics.M.R] = []
+        fileprivate var paint: Paint? = nil
         
-        fileprivate(set) var visible: Bool = true
-        fileprivate(set) var label: String = ""
-        fileprivate(set) var style: NSColor = .random
-        
-        fileprivate(set) var contentSize: CGSize = .zero
-        fileprivate(set) var width: CGFloat = 20
-                
-        func add(_ source: DSPMetrics.M.R) {
+        private(set) var visible: Bool = true
+        private(set) var label: String = ""
+        private(set) var style: NSColor = .random
+        private(set) var width: CGFloat = 20
+
+        fileprivate func update(_ width: CGFloat, _ source: DSPMetrics.M.R) {
+            self.width = width
             sources.append(source)
-            contentSize.width = CGFloat(sources.count) * width
         }
         
-        func landmarks(_ offsetX: CGFloat, _ size: CGSize) -> [Landmark] {
-            // todo:
-            // 1. 根据偏移和页面大小计算出对应的landmark个数
-            return []
+        fileprivate func draw(_ config: Config, _ windowSize: CGSize) -> Paint? {
+            
+            return nil
         }
-    }
-    
-    struct Landmark {
-        let x: CGFloat
-        let y: CGFloat
+        
+        struct Landmark {
+            let x: CGFloat
+            let y: CGFloat
+        }
     }
 }
 
 // Axis
 extension CPerformance.Chart.Notifier.Graph {
-    struct Axis {
-        public let X = Part()
-        public let Y = Part()
+    class Axis {
+        fileprivate(set) var limit = Limit()
+        fileprivate var paint: Paint? = nil
         
-        func clean() {
-            X.clean()
-            Y.clean()
+        fileprivate func clean() {
+            limit = Limit()
+        }
+        
+        struct Limit {
+            var upper: CGFloat = 0
+            var lower: CGFloat = 0
+        }
+        
+        struct Domain {
+            let label: String
+            let x: CGFloat
+            let y: CGFloat
         }
     }
 }
 
-extension CPerformance.Chart.Notifier.Graph.Axis {
-    class Part {
-        fileprivate(set) var limit = Limit()
-        fileprivate(set) var domains = [Domain]()
+extension CPerformance.Chart.Notifier.Graph {
+    class X: Axis {
+        fileprivate func add() {
+            limit.upper += 1
+        }
         
-        func clean() {
-            limit = Limit()
-            domains.removeAll()
+        fileprivate func draw(_ config: Config, _ windowSize: CGSize) -> Paint? {
+            return nil
         }
     }
     
-    struct Limit {
-        var upper: CGFloat = 0
-        var lower: CGFloat = 0
-    }
-    
-    struct Domain {
-        let label: String
-        let x: CGFloat
-        let y: CGFloat
+    class Y: Axis {
+        fileprivate func update(_ source: DSPMetrics.M.R) {
+            limit.upper = max(source.value, limit.upper)
+        }
+        
+        fileprivate func draw(_ config: Config, _ windowSize: CGSize) -> Paint? {
+            return nil
+        }
     }
 }

@@ -60,6 +60,7 @@
 		C771EF702A4A8AE800EC305E /* ANavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C771EF6F2A4A8AE800EC305E /* ANavigation.swift */; };
 		C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */; };
 		C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7790F2629A5EEAF00948934 /* CoreProfileSessionTap.swift */; };
+		C77B36852A6137800054DE7F /* NSEdgeInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77B36842A6137800054DE7F /* NSEdgeInset.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* OpenglModels.swift */; };
 		C786B35E2A4ACEDD00F3ABB8 /* IPerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C786B35D2A4ACEDD00F3ABB8 /* IPerformanceView.swift */; };
@@ -191,6 +192,7 @@
 		C771EF6F2A4A8AE800EC305E /* ANavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANavigation.swift; sourceTree = "<group>"; };
 		C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyModels.swift; sourceTree = "<group>"; };
 		C7790F2629A5EEAF00948934 /* CoreProfileSessionTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreProfileSessionTap.swift; sourceTree = "<group>"; };
+		C77B36842A6137800054DE7F /* NSEdgeInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSEdgeInset.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* OpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenglModels.swift; sourceTree = "<group>"; };
 		C786B35D2A4ACEDD00F3ABB8 /* IPerformanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPerformanceView.swift; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
 				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
 				C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */,
+				C77B36842A6137800054DE7F /* NSEdgeInset.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1001,6 +1004,7 @@
 				C771EF6E2A4A8AC800EC305E /* NavigationView.swift in Sources */,
 				C7CB10512A0A102500828F3D /* CoreProfileSessionTapModels.swift in Sources */,
 				C7CB104F2A0A0B1B00828F3D /* ModelParser.swift in Sources */,
+				C77B36852A6137800054DE7F /* NSEdgeInset.swift in Sources */,
 				C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */,
 				C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */,
 				C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */,

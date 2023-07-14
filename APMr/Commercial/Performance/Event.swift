@@ -49,7 +49,7 @@ extension CPerformance {
             }
             
             if needSendObserver {
-                objectWillChange.send()
+//                objectWillChange.send()
             }
         }
     }
