@@ -15,10 +15,6 @@ extension CPerformance {
         private var map: [DSPMetrics.T : Notifier] = [:]
         private var width: CGFloat = 20
         
-        public func sync(_ model: DSPMetrics.M) {
-            snap(model)
-        }
-        
         public func preset(_ model: DSPMetrics.M) {
             model.all.forEach { i in
                 if self.map[i.type] == nil {
@@ -33,6 +29,14 @@ extension CPerformance {
             notifiers.forEach { notifier in
                 notifier.graph.clean()
             }
+        }
+        
+        public func sync(_ model: DSPMetrics.M) {
+            snap(model)
+        }
+        
+        public func scroll() {
+            
         }
     }
 }
@@ -93,10 +97,8 @@ extension CPerformance.Chart.Notifier {
         
         private var series: [Series] = []
         private var visible: Bool = true
+        private var lastParameter: Parameter? = nil
         
-        private var windowSize: CGSize = .zero
-        private var contentSize: CGSize = .zero
-
         fileprivate func clean() {
             x.clean()
             y.clean()
@@ -106,8 +108,6 @@ extension CPerformance.Chart.Notifier {
         }
         
         fileprivate func set(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
-            var count = 0
-            
             if series.count != sources.count {
                 series.removeAll()
                 sources.forEach { _ in
@@ -115,89 +115,36 @@ extension CPerformance.Chart.Notifier {
                 }
             }
             
-            x.add()
+            x.update(width)
             (0 ..< sources.count).forEach { i in
                 let series = series[i]
                 let source = sources[i]
-                
-                series.update(width, source)
-                count = max(count, series.sources.count)
                 y.update(source)
-            }
-            
-            contentSize.width = CGFloat(count) * width
-        }
-        
-        /// todo: check
-        private func check(_ config: Config) -> Bool {
-            return false
-        }
-        
-        public func update(_ windowSize: CGSize) {
-            self.windowSize = windowSize
-            self.contentSize.height = windowSize.height
-        }
-        
-        /// todo: Create X Axis Path
-        public func horizontal(_ config: Config, _ closure: @escaping (_ paint: Paint) -> Void) {
-            if check(config) {
-                DispatchQueue.global().async {
-                    if let paint = self.x.draw(config, self.windowSize) {
-                        DispatchQueue.main.async {
-                            closure(paint)
-                        }
-                    }
-                }
-            } else {
-                if let paint = x.paint {
-                    closure(paint)
-                }
+                series.update(source)
             }
         }
-        
-        /// todo: Create Y Axis Path
-        public func vertical(_ config: Config, _ closure: @escaping (_ paint: Paint) -> Void) {
-            if check(config) {
-                DispatchQueue.global().async {
-                    if let paint = self.y.draw(config, self.windowSize) {
-                        DispatchQueue.main.async {
-                            closure(paint)
-                        }
-                    }
-                }
-            } else {
-                if let paint = y.paint {
-                    closure(paint)
-                }
-            }
-        }
-        
-        /// todo: Create series Line Paths
-        public func chart(_ config: Config, _ closure: @escaping (_ paint: Paint) -> Void) {
-            if check(config) {
-                DispatchQueue.global().async {
-                    self.series.forEach { series in
-                        if let paint = series.draw(config, self.windowSize) {
-                            DispatchQueue.main.async {
-                                closure(paint)
-                            }
-                        }
-                    }
-                }
-            } else {
-                series.forEach { series in
-                    if let paint = series.paint {
+                
+        public func chart(_ parameter: Parameter, _ closure: @escaping (_ paint: Paint) -> Void) {
+            self.series.forEach { series in
+                if let paint = series.draw(parameter, self.x, self.y) {
+                    DispatchQueue.main.async {
                         closure(paint)
                     }
                 }
             }
         }
+        
+        /// todo: Create Y Axis Path
+        public func vertical(_ parameter: Parameter, _ closure: @escaping (_ paint: Paint) -> Void) {
+
+        }
     }
 }
 
 extension CPerformance.Chart.Notifier.Graph {
-    struct Config {
-        let offset: CGPoint
+    struct Parameter {
+        let offsetX: CGFloat
+        let size: CGSize
         let edge: NSEdgeInsets
     }
     
@@ -214,21 +161,46 @@ extension CPerformance.Chart.Notifier.Graph {
         private(set) var visible: Bool = true
         private(set) var label: String = ""
         private(set) var style: NSColor = .random
-        private(set) var width: CGFloat = 20
-
-        fileprivate func update(_ width: CGFloat, _ source: DSPMetrics.M.R) {
-            self.width = width
+                
+        fileprivate func update(_ source: DSPMetrics.M.R) {
             sources.append(source)
         }
         
-        fileprivate func draw(_ config: Config, _ windowSize: CGSize) -> Paint? {
+        fileprivate func draw(_ parameter: Parameter,
+                              _ x: X,
+                              _ y: Y) -> Paint? {
+            let path = CGMutablePath()
+            let layer = CAShapeLayer()
+            layer.frame.size = parameter.size
+            layer.fillColor = .clear
+            layer.strokeColor = style.cgColor
+            layer.lineCap = .round
+            layer.lineWidth = 2
+                        
+            let viewCount = Int(parameter.size.width / x.width)
+            var leftPadding: CGFloat = 0
             
-            return nil
-        }
+            var r = 0
+            let l = sources.count
+            if sources.count > viewCount {
+                r = sources.count - viewCount
+                leftPadding = parameter.size.width - CGFloat(viewCount) * x.width
+            }
+            
+            sources[r ..< l].each { index, element in
+                let y = y.calculate(element, parameter)
+                let x = x.calculate(index, parameter) + leftPadding
+                let location = CGPoint(x: x, y: y)
+                if index == 0 {
+                    path.move(to: location)
+                } else {
+                    path.addLine(to: location)
+                }
+            }
+
+            layer.path = path
         
-        struct Landmark {
-            let x: CGFloat
-            let y: CGFloat
+            return Paint(layer: layer)
         }
     }
 }
@@ -258,22 +230,35 @@ extension CPerformance.Chart.Notifier.Graph {
 
 extension CPerformance.Chart.Notifier.Graph {
     class X: Axis {
-        fileprivate func add() {
+        fileprivate var width: CGFloat = 20
+        
+        fileprivate func update(_ width: CGFloat) {
+            self.width = width
             limit.upper += 1
         }
         
-        fileprivate func draw(_ config: Config, _ windowSize: CGSize) -> Paint? {
-            return nil
+        fileprivate func calculate(_ index: Int, _ parameter: Parameter) -> CGFloat {
+            return CGFloat(index) * width + parameter.edge.left
         }
     }
     
     class Y: Axis {
+        private var checkTag: CGFloat = 0
+        
         fileprivate func update(_ source: DSPMetrics.M.R) {
             limit.upper = max(source.value, limit.upper)
         }
         
-        fileprivate func draw(_ config: Config, _ windowSize: CGSize) -> Paint? {
-            return nil
+        fileprivate func draw(_ parameter: Parameter) -> Paint? {
+            let layer = CAShapeLayer()
+            layer.frame.size = parameter.size
+                        
+            return Paint(layer: layer)
+        }
+        
+        fileprivate func calculate(_ source: DSPMetrics.M.R, _ parameter: Parameter) -> CGFloat {
+            let h = parameter.size.height - parameter.edge.bottom - parameter.edge.top
+            return h * source.value / limit.upper + parameter.edge.bottom
         }
     }
 }

@@ -76,7 +76,7 @@
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
 		C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5B94329767921009A88D7 /* PerformaceChartView.swift */; };
 		C7B8B34A2A53EA0D008E9D53 /* IEventHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */; };
-		C7B8B3502A53FC87008E9D53 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B34F2A53FC87008E9D53 /* Event.swift */; };
+		C7B8B3502A53FC87008E9D53 /* Hint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B34F2A53FC87008E9D53 /* Hint.swift */; };
 		C7B8B35B2A5411B5008E9D53 /* CPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */; };
 		C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B35C2A541872008E9D53 /* Chart.swift */; };
 		C7C15F892A0B99E80066FA85 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C15F882A0B99E80066FA85 /* Data+Extension.swift */; };
@@ -94,6 +94,7 @@
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
 		C7E137CD299CB52A000CD484 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CC299CB52A000CD484 /* Base.swift */; };
 		C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */; };
+		C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */; };
 		C7F5DA892946EF94005C6F7D /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* GPU.swift */; };
 		C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA2E4F299E036A00FE78F2 /* ProcessControlByDictionary.swift */; };
 		C7FA2E52299E28F900FE78F2 /* Sampling.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA2E51299E28F900FE78F2 /* Sampling.swift */; };
@@ -208,7 +209,7 @@
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
 		C7B5B94329767921009A88D7 /* PerformaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartView.swift; sourceTree = "<group>"; };
 		C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IEventHandleView.swift; sourceTree = "<group>"; };
-		C7B8B34F2A53FC87008E9D53 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		C7B8B34F2A53FC87008E9D53 /* Hint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hint.swift; sourceTree = "<group>"; };
 		C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPerformance.swift; sourceTree = "<group>"; };
 		C7B8B35C2A541872008E9D53 /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
 		C7C15F882A0B99E80066FA85 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
@@ -226,6 +227,7 @@
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
 		C7E137CC299CB52A000CD484 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
 		C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DSPMetrics+Entity.swift"; sourceTree = "<group>"; };
+		C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* GPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPU.swift; sourceTree = "<group>"; };
 		C7FA2E4F299E036A00FE78F2 /* ProcessControlByDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessControlByDictionary.swift; sourceTree = "<group>"; };
 		C7FA2E51299E28F900FE78F2 /* Sampling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sampling.swift; sourceTree = "<group>"; };
@@ -501,9 +503,9 @@
 		C76A6EF32A614E1900836807 /* Performance */ = {
 			isa = PBXGroup;
 			children = (
+				C76A6EF62A614E1900836807 /* IPerformanceView.swift */,
 				C76A6EF42A614E1900836807 /* GraphView.swift */,
 				C76A6EF52A614E1900836807 /* HintView.swift */,
-				C76A6EF62A614E1900836807 /* IPerformanceView.swift */,
 			);
 			name = Performance;
 			path = APMr/Activities/Performance;
@@ -555,6 +557,7 @@
 				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
 				C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */,
 				C77B36842A6137800054DE7F /* NSEdgeInset.swift */,
+				C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -723,7 +726,7 @@
 			children = (
 				C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */,
 				C7B8B35C2A541872008E9D53 /* Chart.swift */,
-				C7B8B34F2A53FC87008E9D53 /* Event.swift */,
+				C7B8B34F2A53FC87008E9D53 /* Hint.swift */,
 				C7A687AB2A554189002BDD9E /* Entity.swift */,
 			);
 			path = Performance;
@@ -943,7 +946,8 @@
 				C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */,
 				C7B8B34A2A53EA0D008E9D53 /* IEventHandleView.swift in Sources */,
 				C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */,
-				C7B8B3502A53FC87008E9D53 /* Event.swift in Sources */,
+				C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */,
+				C7B8B3502A53FC87008E9D53 /* Hint.swift in Sources */,
 				C7483BEE29373ADC00F32BE0 /* Sysmontap.swift in Sources */,
 				C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */,
 				C73BBB162943154300472A75 /* PerformanceInstrumentsService.swift in Sources */,

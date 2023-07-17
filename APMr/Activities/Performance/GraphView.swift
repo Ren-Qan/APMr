@@ -30,11 +30,12 @@ extension IPerformanceView {
         fileprivate var target: GraphView? = nil
         
         private lazy var chart = Content()
-        private lazy var axis = Content()
+        private lazy var axis = Axis()
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
+            axis.backgroundColor = NSColor.random.cgColor
             layer?.addSublayer(axis)
             layer?.addSublayer(chart)
         }
@@ -46,7 +47,6 @@ extension IPerformanceView {
         override func layout() {
             let bounds = self.bounds
             if bounds.size.width != 0, bounds.size.height != 0 {
-                target?.notifier.graph.update(bounds.size)
                 axis.frame = bounds
                 chart.frame = bounds
                 refresh()
@@ -57,41 +57,32 @@ extension IPerformanceView {
             guard let hint = target?.hint else {
                 return
             }
-            let config = CPerformance.Chart.Notifier.Graph.Config(offset: hint.offset,
-                                                                  edge: NSEdgeInsets(value: 10))
-            drawAxis(config)
-            drawChart(config)
+            
+            let edge = NSEdgeInsets(top: 10, left: 10, bottom: 30, right: 10)
+            let parameter = CPerformance.Chart.Notifier.Graph.Parameter(offsetX: hint.deltaX,
+                                                                        size: bounds.size,
+                                                                        edge: edge)
+            drawAxis(parameter)
+            drawChart(parameter)
         }
         
-        private func drawAxis(_ config: CPerformance.Chart.Notifier.Graph.Config) {
-            guard let graph = target?.notifier.graph else {
-                return
-            }
-
-            axis.sublayers?.forEach { layer in
-                layer.removeFromSuperlayer()
-            }
-            
-            graph.horizontal(config) { [weak self] paint in
-                self?.axis.addSublayer(paint.layer)
-            }
-            
-            graph.vertical(config) { [weak self] paint in
-                self?.axis.addSublayer(paint.layer)
-            }
-        }
-        
-        private func drawChart(_ config: CPerformance.Chart.Notifier.Graph.Config) {
+        private func drawAxis(_ parameter: CPerformance.Chart.Notifier.Graph.Parameter) {
             guard let graph = target?.notifier.graph else {
                 return
             }
             
-            chart.sublayers?.forEach { layer in
-                layer.removeFromSuperlayer()
+            graph.vertical(parameter) { [weak self] paint in
+                self?.axis.setY(paint.layer)
             }
-            
-            graph.chart(config) { [weak self] paint in
-                self?.chart.addSublayer(paint.layer)
+        }
+        
+        private func drawChart(_ parameter: CPerformance.Chart.Notifier.Graph.Parameter) {
+            guard let graph = target?.notifier.graph else {
+                return
+            }
+                        
+            graph.chart(parameter) { [weak self] paint in
+                self?.chart.set(paint.layer)
             }
         }
     }
@@ -101,6 +92,34 @@ extension IPerformanceView {
     fileprivate class Content: CALayer {
         override func action(forKey event: String) -> CAAction? {
             return nil
+        }
+        
+        func set(_ layer: CALayer) {
+            sublayers?.forEach { layer in
+                layer.removeFromSuperlayer()
+            }
+            addSublayer(layer)
+        }
+    }
+    
+    fileprivate class Axis: Content {
+        private var y: CALayer? = nil
+        private var x: CALayer? = nil
+        
+        func setX(_ layer: CALayer) {
+            x?.removeFromSuperlayer()
+            x = nil
+            
+            addSublayer(layer)
+            x = layer
+        }
+        
+        func setY(_ layer: CALayer) {
+            y?.removeFromSuperlayer()
+            y = nil
+            
+            addSublayer(layer)
+            y = layer
         }
     }
 }

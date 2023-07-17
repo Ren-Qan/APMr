@@ -37,7 +37,7 @@ class DSPMetrics: NSObject, ObservableObject {
 }
 
 extension DSPMetrics {
-    public func reset() {
+    public func stop() {
         diagnostics.clean()
         serviceGroup.stop()
         monitor = Monitor()
@@ -49,7 +49,7 @@ extension DSPMetrics {
             comlete(false)
             return
         }
-        self.reset()
+        self.stop()
         DispatchQueue.global().async {
             if self.serviceGroup.start(device),
                self.diagnostics.build(device) {

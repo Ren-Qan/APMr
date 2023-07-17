@@ -19,11 +19,28 @@ class CPerformance: ObservableObject {
     }()
     
     private var timer: Timer? = nil
+    
+    #if DEBUG
+    
+    @Published var isRunning: Bool = false
+    
+    #endif
 }
 
 extension CPerformance {
     func interact(_ iEvent: IEventHandleView.IEvent) {
         hint.sync(iEvent)
+    }
+}
+
+extension CPerformance {
+    func stop() {
+        isRunning = false
+        
+        timer?.invalidate()
+        timer = nil
+        
+        metrics.stop()
     }
     
     func start(_ phone: IDevice.P, _ app: IApp) {
@@ -41,6 +58,8 @@ extension CPerformance {
     }
     
     private func sample() {
+        isRunning = true
+        
         chart.clean()
         hint.clean()
         

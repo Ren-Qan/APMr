@@ -14,23 +14,27 @@ struct IPerformanceView: View {
     var body: some View {
         #if DEBUG
         HStack {
-            Button("start") {
+            Button("\(performance.isRunning ? "stop" : "start")") {
+                if performance.isRunning {
+                    performance.stop()
+                    return
+                }
                 guard let phone = device.selectPhone,
                         let app = device.selectApp else {
                     return
                 }
                 performance.start(phone, app)
             }
-            
+
             Debug_T().environmentObject(performance)
         }
+        .padding(.top, 10)
         #endif
         
         ZStack {
             EventView()
                 .environmentObject(performance)
   
-    
             ScrollView {
                 VStack(spacing: 10) {
                     ForEach(performance.chart.notifiers) { notifier in
