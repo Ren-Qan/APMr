@@ -14,16 +14,8 @@ struct IPerformanceView: View {
     var body: some View {
         #if DEBUG
         HStack {
-            Button("\(performance.isRunning ? "stop" : "start")") {
-                if performance.isRunning {
-                    performance.stop()
-                    return
-                }
-                guard let phone = device.selectPhone,
-                        let app = device.selectApp else {
-                    return
-                }
-                performance.start(phone, app)
+            Button("insert random Data") {
+                performance.chart.addRandom(10)
             }
 
             Debug_T().environmentObject(performance)
@@ -48,6 +40,18 @@ struct IPerformanceView: View {
         }
     }
 }
+           
+extension IPerformanceView {
+    fileprivate struct ScrollControl: View {
+        @EnvironmentObject var performance: CPerformance
+        
+        var body: some View {
+            ScrollView(.horizontal) {
+                
+            }
+        }
+    }
+}
 
 extension IPerformanceView {
     fileprivate struct EventView: View {
@@ -56,7 +60,7 @@ extension IPerformanceView {
         var body: some View {
             IEventHandleView()
                 .onEvent { event in
-                    self.performance.interact(event)
+                    performance.hint.sync(event)
                 }
         }
     }

@@ -9,8 +9,6 @@ import AppKit
 import Combine
 
 class CPerformance: ObservableObject {
-    private lazy var metrics = DSPMetrics()
-    
     private(set) lazy var hint = Hint()
     private(set) lazy var chart = {
         let chart = Chart()
@@ -18,19 +16,12 @@ class CPerformance: ObservableObject {
         return chart
     }()
     
+    private lazy var metrics = DSPMetrics()
     private var timer: Timer? = nil
     
     #if DEBUG
-    
     @Published var isRunning: Bool = false
-    
     #endif
-}
-
-extension CPerformance {
-    func interact(_ iEvent: IEventHandleView.IEvent) {
-        hint.sync(iEvent)
-    }
 }
 
 extension CPerformance {
@@ -61,7 +52,6 @@ extension CPerformance {
         isRunning = true
         
         chart.clean()
-        hint.clean()
         
         timer?.invalidate()
         timer = nil

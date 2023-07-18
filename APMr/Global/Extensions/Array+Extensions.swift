@@ -9,11 +9,11 @@ import AppKit
 
 extension Array {
     @discardableResult
-    public func each(_ closure: (_ index: Int, _ element: Element) -> Void) -> Self {
-        var i = 0
-        forEach { element in
-            closure(i, element)
-            i += 1
+    public func each(_ closure: (_ index: Int, _ element: Element) -> Bool) -> Self {
+        for (index, item) in enumerated() {
+            guard closure(index, item) else {
+                return self
+            }
         }
         return self
     }
@@ -21,11 +21,11 @@ extension Array {
 
 extension ArraySlice {
     @discardableResult
-    public func each(_ closure: (_ index: Int, _ element: Element) -> Void) -> Self {
-        var i = 0
-        forEach { element in
-            closure(i, element)
-            i += 1
+    public func each(_ closure: (_ index: Int, _ element: Element) -> Bool) -> Self {
+        for (index, item) in enumerated() {
+            guard closure(index, item) else {
+                return self
+            }
         }
         return self
     }

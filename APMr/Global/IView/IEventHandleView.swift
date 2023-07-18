@@ -89,6 +89,11 @@ class INSEventHandleView: NSView {
         make(event)
     }
     
+    override func scrollWheel(with event: NSEvent) {
+        super.scrollWheel(with: event)
+        make(event)
+    }
+    
     private func make(_ event: NSEvent) {
         let location = self.convert(event.locationInWindow, from: nil)
         let iEvent = IEventHandleView.IEvent(source: event, locationInView: location)

@@ -32,34 +32,26 @@ extension CPerformance {
         }
         
         public func sync(_ model: DSPMetrics.M) {
-            snap(model)
-        }
-        
-        public func scroll() {
+            let cpu =           [model.cpu.total, model.cpu.process]
+            let gpu =           [model.gpu.device, model.gpu.tiler, model.gpu.renderer]
+            let fps =           [model.fps.fps]
+            let memory =        [model.memory.memory, model.memory.resident, model.memory.vm]
+            let io =            [model.io.write, model.io.readDelta, model.io.writeDelta, model.io.readDelta]
+            let network =       [model.network.down, model.network.up, model.network.downDelta, model.network.upDelta]
+            let diagnostic =    [model.diagnostic.amperage, model.diagnostic.battery, model.diagnostic.temperature, model.diagnostic.voltage]
             
+            update(.CPU, cpu)
+            update(.GPU, gpu)
+            update(.FPS, fps)
+            update(.Memory, memory)
+            update(.IO, io)
+            update(.Network, network)
+            update(.Diagnostic, diagnostic)
         }
     }
 }
 
 extension CPerformance.Chart {
-    private func snap(_ model: DSPMetrics.M) {
-        let cpu =           [model.cpu.total, model.cpu.process]
-        let gpu =           [model.gpu.device, model.gpu.tiler, model.gpu.renderer]
-        let fps =           [model.fps.fps]
-        let memory =        [model.memory.memory, model.memory.resident, model.memory.vm]
-        let io =            [model.io.write, model.io.readDelta, model.io.writeDelta, model.io.readDelta]
-        let network =       [model.network.down, model.network.up, model.network.downDelta, model.network.upDelta]
-        let diagnostic =    [model.diagnostic.amperage, model.diagnostic.battery, model.diagnostic.temperature, model.diagnostic.voltage]
-        
-        update(.CPU, cpu)
-        update(.GPU, gpu)
-        update(.FPS, fps)
-        update(.Memory, memory)
-        update(.IO, io)
-        update(.Network, network)
-        update(.Diagnostic, diagnostic)
-    }
-        
     private func update(_ type: DSPMetrics.T, _ sources: [DSPMetrics.M.R]) {
         guard let notifier = map[type] else {
             return
@@ -69,14 +61,6 @@ extension CPerformance.Chart {
         notifier.objectWillChange.send()
     }
 }
-
-#if DEBUG
-extension CPerformance.Chart {
-    public func addRandom(_ count: Int) {
-        
-    }
-}
-#endif
 
 extension CPerformance.Chart {
     class Notifier: Identifiable, ObservableObject {
@@ -97,13 +81,12 @@ extension CPerformance.Chart.Notifier {
         
         private var series: [Series] = []
         private var visible: Bool = true
-        private var lastParameter: Parameter? = nil
         
         fileprivate func clean() {
             x.clean()
             y.clean()
             series.forEach { s in
-                s.sources.removeAll()
+                s.clean()
             }
         }
         
@@ -125,12 +108,22 @@ extension CPerformance.Chart.Notifier {
         }
                 
         public func chart(_ parameter: Parameter, _ closure: @escaping (_ paint: Paint) -> Void) {
-            self.series.forEach { series in
-                if let paint = series.draw(parameter, self.x, self.y) {
-                    DispatchQueue.main.async {
-                        closure(paint)
+            let group = DispatchGroup()
+            let layer = CALayer()
+            layer.frame.size = parameter.size
+            
+            group.enter()
+            DispatchQueue.global().async {
+                self.series.forEach { series in
+                    if let paint = series.draw(parameter, self.x, self.y) {
+                        layer.addSublayer(paint.layer)
                     }
                 }
+                group.leave()
+            }
+            
+            group.notify(queue: .main) {
+                closure(.init(layer: layer))
             }
         }
         
@@ -143,7 +136,7 @@ extension CPerformance.Chart.Notifier {
 
 extension CPerformance.Chart.Notifier.Graph {
     struct Parameter {
-        let offsetX: CGFloat
+        let deltaX: CGFloat
         let size: CGSize
         let edge: NSEdgeInsets
     }
@@ -156,12 +149,16 @@ extension CPerformance.Chart.Notifier.Graph {
 extension CPerformance.Chart.Notifier.Graph {
     class Series: Identifiable {
         fileprivate var sources: [DSPMetrics.M.R] = []
-        fileprivate var paint: Paint? = nil
         
         private(set) var visible: Bool = true
-        private(set) var label: String = ""
         private(set) var style: NSColor = .random
-                
+        
+        private var offsetX: CGFloat = 0
+        
+        fileprivate func clean() {
+            sources.removeAll()
+        }
+        
         fileprivate func update(_ source: DSPMetrics.M.R) {
             sources.append(source)
         }
@@ -176,30 +173,38 @@ extension CPerformance.Chart.Notifier.Graph {
             layer.strokeColor = style.cgColor
             layer.lineCap = .round
             layer.lineWidth = 2
-                        
-            let viewCount = Int(parameter.size.width / x.width)
-            var leftPadding: CGFloat = 0
+                                    
+            offsetX += parameter.deltaX
             
-            var r = 0
-            let l = sources.count
-            if sources.count > viewCount {
-                r = sources.count - viewCount
-                leftPadding = parameter.size.width - CGFloat(viewCount) * x.width
+            var rightEdge = parameter.size.width - (x.calculate(sources.count - 1, parameter) + parameter.edge.right)
+            if rightEdge >= 0 {
+                rightEdge = 0
             }
             
-            sources[r ..< l].each { index, element in
+            if offsetX > 0 {
+                offsetX = 0
+            } else if offsetX <= rightEdge {
+                offsetX = rightEdge
+            }
+
+            
+            var l = Int((-offsetX - parameter.edge.right) / x.width)
+            if l < 0 { l = 0 }
+            guard l < sources.count else { return nil }
+            
+            sources[0 ..< sources.count].each { index, element in
                 let y = y.calculate(element, parameter)
-                let x = x.calculate(index, parameter) + leftPadding
+                let x = x.calculate(index, parameter) + offsetX
                 let location = CGPoint(x: x, y: y)
                 if index == 0 {
                     path.move(to: location)
                 } else {
                     path.addLine(to: location)
                 }
+                return (x) < parameter.size.width
             }
 
             layer.path = path
-        
             return Paint(layer: layer)
         }
     }
@@ -218,12 +223,6 @@ extension CPerformance.Chart.Notifier.Graph {
         struct Limit {
             var upper: CGFloat = 0
             var lower: CGFloat = 0
-        }
-        
-        struct Domain {
-            let label: String
-            let x: CGFloat
-            let y: CGFloat
         }
     }
 }
@@ -262,3 +261,43 @@ extension CPerformance.Chart.Notifier.Graph {
         }
     }
 }
+
+
+#if DEBUG
+extension CPerformance.Chart {
+    static var debug_Data = DSPMetrics.M()
+    public func addRandom(_ count: Int) {
+        (0 ..< count).forEach { _ in
+            CPerformance.Chart.debug_Data.cpu.total.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.cpu.process.value = .random(in:  0.1 ... 99.9)
+
+            CPerformance.Chart.debug_Data.gpu.device.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.gpu.renderer.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.gpu.tiler.value = .random(in:  0.1 ... 99.9)
+
+            CPerformance.Chart.debug_Data.fps.fps.value = .random(in:  0.1 ... 99.9)
+
+            CPerformance.Chart.debug_Data.io.read.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.io.write.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.io.readDelta.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.io.writeDelta.value = .random(in:  0.1 ... 99.9)
+
+            CPerformance.Chart.debug_Data.network.up.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.network.down.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.network.upDelta.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.network.downDelta.value = .random(in:  0.1 ... 99.9)
+
+            CPerformance.Chart.debug_Data.memory.memory.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.memory.resident.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.memory.vm.value = .random(in:  0.1 ... 99.9)
+
+            CPerformance.Chart.debug_Data.diagnostic.amperage.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.diagnostic.battery.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.diagnostic.temperature.value = .random(in:  0.1 ... 99.9)
+            CPerformance.Chart.debug_Data.diagnostic.voltage.value = .random(in:  0.1 ... 99.9)
+            
+            sync(CPerformance.Chart.debug_Data)
+        }
+    }
+}
+#endif

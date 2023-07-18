@@ -30,13 +30,10 @@ extension IPerformanceView {
         fileprivate var target: GraphView? = nil
         
         private lazy var chart = Content()
-        private lazy var axis = Axis()
-        
+                        
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
-            axis.backgroundColor = NSColor.random.cgColor
-            layer?.addSublayer(axis)
             layer?.addSublayer(chart)
         }
         
@@ -47,7 +44,6 @@ extension IPerformanceView {
         override func layout() {
             let bounds = self.bounds
             if bounds.size.width != 0, bounds.size.height != 0 {
-                axis.frame = bounds
                 chart.frame = bounds
                 refresh()
             }
@@ -59,21 +55,10 @@ extension IPerformanceView {
             }
             
             let edge = NSEdgeInsets(top: 10, left: 10, bottom: 30, right: 10)
-            let parameter = CPerformance.Chart.Notifier.Graph.Parameter(offsetX: hint.deltaX,
+            let parameter = CPerformance.Chart.Notifier.Graph.Parameter(deltaX: hint.deltaX,
                                                                         size: bounds.size,
                                                                         edge: edge)
-            drawAxis(parameter)
             drawChart(parameter)
-        }
-        
-        private func drawAxis(_ parameter: CPerformance.Chart.Notifier.Graph.Parameter) {
-            guard let graph = target?.notifier.graph else {
-                return
-            }
-            
-            graph.vertical(parameter) { [weak self] paint in
-                self?.axis.setY(paint.layer)
-            }
         }
         
         private func drawChart(_ parameter: CPerformance.Chart.Notifier.Graph.Parameter) {
@@ -99,27 +84,6 @@ extension IPerformanceView {
                 layer.removeFromSuperlayer()
             }
             addSublayer(layer)
-        }
-    }
-    
-    fileprivate class Axis: Content {
-        private var y: CALayer? = nil
-        private var x: CALayer? = nil
-        
-        func setX(_ layer: CALayer) {
-            x?.removeFromSuperlayer()
-            x = nil
-            
-            addSublayer(layer)
-            x = layer
-        }
-        
-        func setY(_ layer: CALayer) {
-            y?.removeFromSuperlayer()
-            y = nil
-            
-            addSublayer(layer)
-            y = layer
         }
     }
 }
