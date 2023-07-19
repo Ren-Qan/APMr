@@ -15,7 +15,7 @@ struct IPerformanceView: View {
         #if DEBUG
         HStack {
             Button("insert random Data") {
-                performance.chart.addRandom(10)
+                performance.Debug_sample()
             }
 
             Debug_T().environmentObject(performance)

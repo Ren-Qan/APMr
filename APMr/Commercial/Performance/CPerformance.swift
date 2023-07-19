@@ -18,16 +18,10 @@ class CPerformance: ObservableObject {
     
     private lazy var metrics = DSPMetrics()
     private var timer: Timer? = nil
-    
-    #if DEBUG
-    @Published var isRunning: Bool = false
-    #endif
 }
 
 extension CPerformance {
     func stop() {
-        isRunning = false
-        
         timer?.invalidate()
         timer = nil
         
@@ -49,8 +43,6 @@ extension CPerformance {
     }
     
     private func sample() {
-        isRunning = true
-        
         chart.clean()
         
         timer?.invalidate()
@@ -73,3 +65,28 @@ extension CPerformance {
         RunLoop.main.add(timer!, forMode: .common)
     }
 }
+
+#if DEBUG
+
+extension CPerformance {
+    func Debug_sample() {
+        if timer != nil {
+            timer?.invalidate()
+            timer = nil
+            return
+        }
+        
+        chart.clean()
+        
+        timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
+            DispatchQueue.global().async {
+                self?.chart.addRandom(3)
+            }
+        }
+        
+        timer?.fire()
+        RunLoop.main.add(timer!, forMode: .common)
+    }
+}
+
+#endif

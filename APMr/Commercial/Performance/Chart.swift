@@ -129,7 +129,7 @@ extension CPerformance.Chart.Notifier {
         
         /// todo: Create Y Axis Path
         public func vertical(_ parameter: Parameter, _ closure: @escaping (_ paint: Paint) -> Void) {
-
+            
         }
     }
 }
@@ -153,7 +153,7 @@ extension CPerformance.Chart.Notifier.Graph {
         private(set) var visible: Bool = true
         private(set) var style: NSColor = .random
         
-        private var offsetX: CGFloat = 0
+        private var scrollEdge = Edge()
         
         fileprivate func clean() {
             sources.removeAll()
@@ -166,6 +166,11 @@ extension CPerformance.Chart.Notifier.Graph {
         fileprivate func draw(_ parameter: Parameter,
                               _ x: X,
                               _ y: Y) -> Paint? {
+            let sources = sources
+            guard sources.count > 0 else {
+                return nil
+            }
+            
             let path = CGMutablePath()
             let layer = CAShapeLayer()
             layer.frame.size = parameter.size
@@ -173,40 +178,74 @@ extension CPerformance.Chart.Notifier.Graph {
             layer.strokeColor = style.cgColor
             layer.lineCap = .round
             layer.lineWidth = 2
-                                    
-            offsetX += parameter.deltaX
-            
-            var rightEdge = parameter.size.width - (x.calculate(sources.count - 1, parameter) + parameter.edge.right)
-            if rightEdge >= 0 {
-                rightEdge = 0
-            }
-            
-            if offsetX > 0 {
-                offsetX = 0
-            } else if offsetX <= rightEdge {
-                offsetX = rightEdge
-            }
+                       
 
+            let allCount = Int(parameter.size.width / x.width)
+            let dataCount = sources.count
             
-            var l = Int((-offsetX - parameter.edge.right) / x.width)
-            if l < 0 { l = 0 }
-            guard l < sources.count else { return nil }
+            var offsetX: CGFloat = 0
+            var leftPadding = 0
             
-            sources[0 ..< sources.count].each { index, element in
+            if dataCount > allCount {
+                let lastX = x.calculate(sources.count - 1, parameter)
+                let low = parameter.size.width - lastX - parameter.edge.right
+                
+                if scrollEdge.state == .latest {
+                    offsetX = low
+                } else {
+                    offsetX = scrollEdge.lastOffset
+                }
+                
+                if parameter.deltaX != 0 {
+                    if scrollEdge.state == .latest {
+                        scrollEdge.state = .stable
+                    }
+                    
+                    offsetX += parameter.deltaX
+                }
+            
+                if offsetX > 0 {
+                    offsetX = 0
+                }
+                
+                if offsetX < low {
+                    scrollEdge.state = .latest
+                    offsetX = low
+                }
+                leftPadding = Int(-offsetX / x.width) - 1
+                if leftPadding < 0 { leftPadding = 0 }
+            }
+            
+            scrollEdge.lastOffset = offsetX
+            
+            sources[leftPadding ..< sources.count].each { index, element in
                 let y = y.calculate(element, parameter)
-                let x = x.calculate(index, parameter) + offsetX
+                let x = x.calculate((index + leftPadding), parameter) + offsetX
                 let location = CGPoint(x: x, y: y)
                 if index == 0 {
                     path.move(to: location)
                 } else {
                     path.addLine(to: location)
                 }
-                return (x) < parameter.size.width
+                return x < parameter.size.width
             }
 
             layer.path = path
+            
             return Paint(layer: layer)
         }
+    }
+}
+
+extension CPerformance.Chart.Notifier.Graph.Series {
+    fileprivate struct Edge {
+        enum S {
+            case stable
+            case latest
+        }
+        
+        var state: S = .latest
+        var lastOffset: CGFloat = 0
     }
 }
 
