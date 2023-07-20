@@ -81,6 +81,7 @@ extension CPerformance.Chart.Notifier {
         
         private var series: [Series] = []
         private var visible: Bool = true
+        private var scrollEdge = Edge()
         
         fileprivate func clean() {
             x.clean()
@@ -106,88 +107,15 @@ extension CPerformance.Chart.Notifier {
                 series.update(source)
             }
         }
-                
-        public func chart(_ parameter: Parameter, _ closure: @escaping (_ paint: Paint) -> Void) {
-            let group = DispatchGroup()
-            let layer = CALayer()
-            layer.frame.size = parameter.size
-            
-            group.enter()
-            DispatchQueue.global().async {
-                self.series.forEach { series in
-                    if let paint = series.draw(parameter, self.x, self.y) {
-                        layer.addSublayer(paint.layer)
-                    }
-                }
-                group.leave()
-            }
-            
-            group.notify(queue: .main) {
-                closure(.init(layer: layer))
-            }
-        }
         
-        /// todo: Create Y Axis Path
-        public func vertical(_ parameter: Parameter, _ closure: @escaping (_ paint: Paint) -> Void) {
-            
-        }
-    }
-}
-
-extension CPerformance.Chart.Notifier.Graph {
-    struct Parameter {
-        let deltaX: CGFloat
-        let size: CGSize
-        let edge: NSEdgeInsets
-    }
-    
-    struct Paint {
-        let layer: CALayer
-    }
-}
-
-extension CPerformance.Chart.Notifier.Graph {
-    class Series: Identifiable {
-        fileprivate var sources: [DSPMetrics.M.R] = []
-        
-        private(set) var visible: Bool = true
-        private(set) var style: NSColor = .random
-        
-        private var scrollEdge = Edge()
-        
-        fileprivate func clean() {
-            sources.removeAll()
-        }
-        
-        fileprivate func update(_ source: DSPMetrics.M.R) {
-            sources.append(source)
-        }
-        
-        fileprivate func draw(_ parameter: Parameter,
-                              _ x: X,
-                              _ y: Y) -> Paint? {
-            let sources = sources
-            guard sources.count > 0 else {
-                return nil
-            }
-            
-            let path = CGMutablePath()
-            let layer = CAShapeLayer()
-            layer.frame.size = parameter.size
-            layer.fillColor = .clear
-            layer.strokeColor = style.cgColor
-            layer.lineCap = .round
-            layer.lineWidth = 2
-                       
-
+        private func offset(_ parameter: Parameter) -> CGFloat {
             let allCount = Int(parameter.size.width / x.width)
-            let dataCount = sources.count
+            let dataCount = Int(x.limit.upper)
             
             var offsetX: CGFloat = 0
-            var leftPadding = 0
             
             if dataCount > allCount {
-                let lastX = x.calculate(sources.count - 1, parameter)
+                let lastX = x.calculate(dataCount - 1, parameter)
                 let low = parameter.size.width - lastX - parameter.edge.right
                 
                 if scrollEdge.state == .latest {
@@ -212,15 +140,108 @@ extension CPerformance.Chart.Notifier.Graph {
                     scrollEdge.state = .latest
                     offsetX = low
                 }
-                leftPadding = Int(-offsetX / x.width) - 1
-                if leftPadding < 0 { leftPadding = 0 }
             }
             
             scrollEdge.lastOffset = offsetX
+            return offsetX
+        }
+        
+        public func chart(_ parameter: Parameter,
+                          _ closure: @escaping (_ paint: Paint) -> Void) {
+            let group = DispatchGroup()
+            let layer = CALayer()
+            layer.frame.size = parameter.size
             
-            sources[leftPadding ..< sources.count].each { index, element in
+            group.enter()
+            DispatchQueue.global().async {
+                let offset = self.offset(parameter)
+                var padding = Int(-offset / self.x.width) - 1
+                if padding < 0 { padding = 0 }
+                
+                self.series.forEach { series in
+                    if let paint = series.draw(parameter, offset, padding, self.x, self.y) {
+                        layer.addSublayer(paint)
+                    }
+                }
+                
+                if let paint = self.x.draw(parameter, offset, padding) {
+                    layer.addSublayer(paint)
+                }
+                
+                if let paint = self.y.draw(parameter) {
+                    layer.addSublayer(paint)
+                }
+                
+                group.leave()
+            }
+            
+            group.notify(queue: .main) {
+                closure(.init(layer: layer))
+            }
+        }
+    }
+}
+
+extension CPerformance.Chart.Notifier.Graph {
+    struct Parameter {
+        let deltaX: CGFloat
+        let size: CGSize
+        let edge: NSEdgeInsets
+    }
+    
+    struct Paint {
+        let layer: CALayer
+    }
+}
+
+extension CPerformance.Chart.Notifier.Graph {
+    class Series: Identifiable {
+        fileprivate var sources: [DSPMetrics.M.R] = []
+        
+        private(set) var visible: Bool = true
+        private(set) var style: NSColor = .random
+        
+        fileprivate func clean() {
+            sources.removeAll()
+        }
+        
+        fileprivate func update(_ source: DSPMetrics.M.R) {
+            sources.append(source)
+        }
+        
+        fileprivate func draw(_ parameter: Parameter,
+                              _ offsetX: CGFloat,
+                              _ padding: Int,
+                              _ x: X,
+                              _ y: Y) -> CALayer? {
+            let sources = sources
+            guard sources.count > 0 else {
+                return nil
+            }
+            
+            let layerX = parameter.edge.left
+            
+            var size = parameter.size
+            size.width -= layerX
+            
+            var edge = parameter.edge
+            edge.left = 0
+            
+            let parameter = Parameter(deltaX: parameter.deltaX, size: size, edge: edge)
+            
+            let path = CGMutablePath()
+            let layer = CAShapeLayer()
+            layer.frame.origin.x = layerX
+            layer.frame.size = parameter.size
+            layer.fillColor = .clear
+            layer.strokeColor = style.cgColor
+            layer.lineCap = .round
+            layer.lineWidth = 2
+            layer.masksToBounds = true
+            
+            sources[padding ..< sources.count].each { index, element in
                 let y = y.calculate(element, parameter)
-                let x = x.calculate((index + leftPadding), parameter) + offsetX
+                let x = x.calculate((index + padding), parameter) + offsetX
                 let location = CGPoint(x: x, y: y)
                 if index == 0 {
                     path.move(to: location)
@@ -232,12 +253,12 @@ extension CPerformance.Chart.Notifier.Graph {
 
             layer.path = path
             
-            return Paint(layer: layer)
+            return layer
         }
     }
 }
 
-extension CPerformance.Chart.Notifier.Graph.Series {
+extension CPerformance.Chart.Notifier.Graph {
     fileprivate struct Edge {
         enum S {
             case stable
@@ -269,6 +290,9 @@ extension CPerformance.Chart.Notifier.Graph {
 extension CPerformance.Chart.Notifier.Graph {
     class X: Axis {
         fileprivate var width: CGFloat = 20
+        fileprivate var offset: CGFloat = 0
+        
+        fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
         
         fileprivate func update(_ width: CGFloat) {
             self.width = width
@@ -278,25 +302,83 @@ extension CPerformance.Chart.Notifier.Graph {
         fileprivate func calculate(_ index: Int, _ parameter: Parameter) -> CGFloat {
             return CGFloat(index) * width + parameter.edge.left
         }
+        
+        fileprivate func draw(_ parameter: Parameter,
+                              _ offset: CGFloat,
+                              _ padding: Int) -> CALayer? {
+            let path = CGMutablePath()
+            let layer = CAShapeLayer()
+            layer.frame.size = parameter.size
+            layer.fillColor = .clear
+            layer.strokeColor = style.cgColor
+            layer.lineCap = .round
+            layer.lineWidth = 1
+            
+            var padding = padding
+            var x = CGFloat(padding) * width + parameter.edge.left + offset
+        
+            let y = parameter.edge.bottom - 1
+            
+            path.move(to: CGPoint(x: parameter.edge.left, y: y))
+            path.addLine(to: CGPoint(x: parameter.size.width, y: y))
+            
+            while(x < parameter.size.width) {
+                if padding % 5 == 0, x >= parameter.edge.left {
+                    path.move(to: CGPoint(x: x - 0.5, y: y))
+                    path.addLine(to: CGPoint(x: x - 0.5, y: y - 10))
+                }
+                
+                x = CGFloat(padding) * width + parameter.edge.left + offset
+                padding += 1
+            }
+            
+            layer.path = path
+            
+            return layer
+        }
     }
     
     class Y: Axis {
         private var checkTag: CGFloat = 0
+        fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
         
         fileprivate func update(_ source: DSPMetrics.M.R) {
             limit.upper = max(source.value, limit.upper)
         }
         
-        fileprivate func draw(_ parameter: Parameter) -> Paint? {
-            let layer = CAShapeLayer()
-            layer.frame.size = parameter.size
-                        
-            return Paint(layer: layer)
-        }
-        
         fileprivate func calculate(_ source: DSPMetrics.M.R, _ parameter: Parameter) -> CGFloat {
             let h = parameter.size.height - parameter.edge.bottom - parameter.edge.top
             return h * source.value / limit.upper + parameter.edge.bottom
+        }
+        
+        fileprivate func draw(_ parameter: Parameter) -> CALayer? {
+            let path = CGMutablePath()
+            let layer = CAShapeLayer()
+            layer.frame.size = parameter.size
+            layer.fillColor = .clear
+            layer.strokeColor = style.cgColor
+            layer.lineCap = .round
+            layer.lineWidth = 1
+            
+            let tags = 5
+            let x = parameter.edge.right - 1
+            let h = parameter.size.height - parameter.edge.top
+            let bottom = parameter.edge.bottom - 1
+            
+            path.move(to: CGPoint(x: x, y: bottom))
+            path.addLine(to: CGPoint(x: parameter.edge.left, y: h))
+        
+            let padding = (h - bottom) / CGFloat(tags)
+            (1 ... tags).forEach { i in
+                let y = bottom + CGFloat(i) * padding
+                path.move(to: CGPoint(x: x, y: y))
+                path.addLine(to: CGPoint(x: x - 3, y: y))
+            }
+            
+            
+            layer.path = path
+            
+            return layer
         }
     }
 }
