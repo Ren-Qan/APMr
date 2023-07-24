@@ -150,11 +150,12 @@ extension CPerformance.Chart.Notifier {
                           _ closure: @escaping (_ paint: Paint) -> Void) {
             let group = DispatchGroup()
             let layer = CALayer()
-            layer.frame.size = parameter.size
+            let offset = self.offset(parameter)
             
+            layer.frame.size = parameter.size
+    
             group.enter()
             DispatchQueue.global().async {
-                let offset = self.offset(parameter)
                 var padding = Int(-offset / self.x.width) - 1
                 if padding < 0 { padding = 0 }
                 
@@ -188,7 +189,7 @@ extension CPerformance.Chart.Notifier.Graph {
         let size: CGSize
         let edge: NSEdgeInsets
     }
-    
+
     struct Paint {
         let layer: CALayer
     }
@@ -374,7 +375,6 @@ extension CPerformance.Chart.Notifier.Graph {
                 path.move(to: CGPoint(x: x, y: y))
                 path.addLine(to: CGPoint(x: x - 3, y: y))
             }
-            
             
             layer.path = path
             
