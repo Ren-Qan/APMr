@@ -12,6 +12,9 @@ struct IPerformanceView: View {
     @EnvironmentObject var performance: CPerformance
     
     var body: some View {
+        VStack {
+            
+        }
         #if DEBUG
         HStack {
             Button("insert random Data") {
@@ -95,6 +98,9 @@ fileprivate struct Debug_T: View {
                 Text(t)
             case .click(let location):
                 let t = "\(location)"
+                Text(t)
+            case .begin:
+                let t = "begin"
                 Text(t)
         }
     }

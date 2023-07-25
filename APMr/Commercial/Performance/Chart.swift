@@ -78,11 +78,13 @@ extension CPerformance.Chart.Notifier {
     class Graph {
         private lazy var x = X()
         private lazy var y = Y()
+        private lazy var hint = HintRender()
         
         private var series: [Series] = []
         private var visible: Bool = true
-        private var scrollEdge = Edge()
         
+        private var scrollEdge = Edge()
+    
         fileprivate func clean() {
             x.clean()
             y.clean()
@@ -148,13 +150,11 @@ extension CPerformance.Chart.Notifier {
         
         public func chart(_ parameter: Parameter,
                           _ closure: @escaping (_ paint: Paint) -> Void) {
-            let group = DispatchGroup()
             let layer = CALayer()
             let offset = self.offset(parameter)
             
             layer.frame.size = parameter.size
-    
-            group.enter()
+                
             DispatchQueue.global().async {
                 var padding = Int(-offset / self.x.width) - 1
                 if padding < 0 { padding = 0 }
@@ -173,11 +173,13 @@ extension CPerformance.Chart.Notifier {
                     layer.addSublayer(paint)
                 }
                 
-                group.leave()
-            }
-            
-            group.notify(queue: .main) {
-                closure(.init(layer: layer))
+                if let paint = self.hint.draw(parameter, offset) {
+                    layer.addSublayer(paint)
+                }
+                
+                DispatchQueue.main.async {
+                    closure(.init(layer: layer))
+                }
             }
         }
     }
@@ -188,6 +190,7 @@ extension CPerformance.Chart.Notifier.Graph {
         let deltaX: CGFloat
         let size: CGSize
         let edge: NSEdgeInsets
+        let interactive: CPerformance.Hint.I
     }
 
     struct Paint {
@@ -228,7 +231,10 @@ extension CPerformance.Chart.Notifier.Graph {
             var edge = parameter.edge
             edge.left = 0
             
-            let parameter = Parameter(deltaX: parameter.deltaX, size: size, edge: edge)
+            let parameter = Parameter(deltaX: parameter.deltaX,
+                                      size: size,
+                                      edge: edge,
+                                      interactive: parameter.interactive)
             
             let path = CGMutablePath()
             let layer = CAShapeLayer()
@@ -286,9 +292,7 @@ extension CPerformance.Chart.Notifier.Graph {
             var lower: CGFloat = 0
         }
     }
-}
-
-extension CPerformance.Chart.Notifier.Graph {
+    
     class X: Axis {
         fileprivate var width: CGFloat = 20
         fileprivate var offset: CGFloat = 0
@@ -383,6 +387,84 @@ extension CPerformance.Chart.Notifier.Graph {
     }
 }
 
+extension CPerformance.Chart.Notifier.Graph {
+    fileprivate class HintRender {
+        private let style = NSColor.random
+        private var offsetX: CGFloat = 0
+        
+        private var isNeedClickToHide = false
+        fileprivate var isInShow = false
+        fileprivate var selectRect: CGRect = .zero
+        
+        fileprivate class Content: CAShapeLayer {
+            override func action(forKey event: String) -> CAAction? {
+                return nil
+            }
+        }
+        
+        private lazy var layer: Content = {
+            let layer = Content()
+            layer.fillColor = .clear
+            layer.strokeColor = style.cgColor
+            layer.lineCap = .round
+            layer.lineWidth = 1
+            layer.masksToBounds = true
+            return layer
+        }()
+        
+        func draw(_ parameter: Parameter, _ offset: CGFloat) -> CALayer? {
+            layer.frame.size.height = parameter.size.height
+            layer.frame.size.width = parameter.size.width - parameter.edge.left
+            layer.frame.origin.x = parameter.edge.left
+            switch parameter.interactive {
+                case .empty:
+                    isInShow = false
+                    return nil
+                    
+                case .begin:
+                    offsetX = offset
+                    if isInShow {
+                        isNeedClickToHide = true
+                    }
+                    
+                case .drag(let rect):
+                    let path = CGMutablePath()
+                    var r = rect
+                    r.origin.x += offset - offsetX - parameter.edge.left
+                    r.origin.y = parameter.edge.bottom
+                    r.size.height = parameter.size.height - parameter.edge.bottom - parameter.edge.top
+                    path.addRect(r)
+                                        
+                    layer.fillColor = style.withAlphaComponent(0.1).cgColor
+                    layer.path = path
+                    isInShow = true
+                    selectRect = r
+                    
+                case .click(let orgin):
+                    if isNeedClickToHide {
+                        isInShow = false
+                        isNeedClickToHide = false
+                        layer.path = nil
+                        return nil
+                    }
+                    
+                    let path = CGMutablePath()
+                    let x = orgin.x + offset - offsetX - parameter.edge.left
+                    path.move(to: CGPoint(x: x, y: parameter.edge.bottom))
+                    path.addLine(to:  CGPoint(x: x, y: parameter.size.height - parameter.edge.top))
+                    
+                    selectRect.origin.x = x
+                    selectRect.size = .zero
+                    
+                    layer.fillColor = .clear
+                    layer.path = path
+                    isInShow = true
+            }
+            
+            return layer
+        }
+    }
+}
 
 #if DEBUG
 extension CPerformance.Chart {

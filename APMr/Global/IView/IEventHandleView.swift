@@ -30,11 +30,17 @@ struct IEventHandleView: NSViewRepresentable {
 extension IEventHandleView {
     struct IEvent {
         let source: NSEvent
-        let locationInView: CGPoint
+        let locationInTarget: CGPoint
+        let targetSize: CGSize
         
-        init(source: NSEvent, locationInView: CGPoint) {
+        var isInTarget: Bool {
+            CGRectContainsPoint(CGRect(origin: .zero, size: targetSize), locationInTarget)
+        }
+        
+        init(source: NSEvent, locationInTarget: CGPoint, targetSize: CGSize) {
             self.source = source
-            self.locationInView = locationInView
+            self.locationInTarget = locationInTarget
+            self.targetSize = targetSize
         }
     }
 }
@@ -94,9 +100,26 @@ class INSEventHandleView: NSView {
         make(event)
     }
     
+    override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+        make(event)
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        make(event)
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
+        make(event)
+    }
+    
     private func make(_ event: NSEvent) {
         let location = self.convert(event.locationInWindow, from: nil)
-        let iEvent = IEventHandleView.IEvent(source: event, locationInView: location)
+        let iEvent = IEventHandleView.IEvent(source: event,
+                                             locationInTarget: location,
+                                             targetSize: bounds.size)
         target?.monitor?(iEvent)
     }
 }
@@ -108,7 +131,10 @@ extension INSEventHandleView {
         var monitor: ((NSEvent) -> Void)? = nil
         
         init() {
-            NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel, .leftMouseDown, .leftMouseUp, .leftMouseDragged]) { event in
+            NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel,
+                                                        .leftMouseDown,
+                                                        .leftMouseUp,
+                                                        .leftMouseDragged]) { event in
                 ScrollEventHandle.share.monitor?(event)
                 return event
             }

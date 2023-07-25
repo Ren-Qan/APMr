@@ -17,12 +17,17 @@ extension CPerformance {
         private(set) var interactive: I = .empty
         
         func sync(_ iEvent: IEventHandleView.IEvent) {
+            guard iEvent.isInTarget else {
+                return
+            }
+            
             if iEvent.source.type == .scrollWheel, iEvent.source.hasPreciseScrollingDeltas {
                 scroll(iEvent)
             }
             
             if iEvent.source.type == .leftMouseDown {
-                dragRect.origin = iEvent.locationInView
+                dragRect.origin = iEvent.locationInTarget
+                dragRect.size.width = 0
                 interactive = .begin
                 objectWillChange.send()
             } else if iEvent.source.type == .leftMouseDragged || (iEvent.source.type == .leftMouseUp && iEvent.source.clickCount == 0) {
@@ -30,7 +35,7 @@ extension CPerformance {
                 interactive = .drag(dragRect)
                 objectWillChange.send()
             } else if iEvent.source.type == .leftMouseUp, iEvent.source.clickCount == 1 {
-                interactive = .click(iEvent.locationInView)
+                interactive = .click(iEvent.locationInTarget)
                 objectWillChange.send()
             } 
         }

@@ -57,7 +57,8 @@ extension IPerformanceView {
             let edge = NSEdgeInsets(top: 10, left: 10, bottom: 30, right: 10)
             let parameter = CPerformance.Chart.Notifier.Graph.Parameter(deltaX: hint.scrollX,
                                                                         size: bounds.size,
-                                                                        edge: edge)
+                                                                        edge: edge,
+                                                                        interactive: hint.interactive)
             drawChart(parameter)
         }
         
