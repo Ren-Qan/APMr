@@ -190,7 +190,7 @@ extension CPerformance.Chart.Notifier.Graph {
         let deltaX: CGFloat
         let size: CGSize
         let edge: NSEdgeInsets
-        let interactive: CPerformance.Hint.I
+        let active: CPerformance.Hint.Active?
     }
 
     struct Paint {
@@ -234,7 +234,7 @@ extension CPerformance.Chart.Notifier.Graph {
             let parameter = Parameter(deltaX: parameter.deltaX,
                                       size: size,
                                       edge: edge,
-                                      interactive: parameter.interactive)
+                                      active: parameter.active)
             
             let path = CGMutablePath()
             let layer = CAShapeLayer()
@@ -394,7 +394,6 @@ extension CPerformance.Chart.Notifier.Graph {
         
         private var isNeedClickToHide = false
         fileprivate var isInShow = false
-        fileprivate var selectRect: CGRect = .zero
         
         fileprivate class Content: CAShapeLayer {
             override func action(forKey event: String) -> CAAction? {
@@ -413,54 +412,52 @@ extension CPerformance.Chart.Notifier.Graph {
         }()
         
         func draw(_ parameter: Parameter, _ offset: CGFloat) -> CALayer? {
+            guard let active = parameter.active else {
+                return nil
+            }
+            
             layer.frame.size.height = parameter.size.height
             layer.frame.size.width = parameter.size.width - parameter.edge.left
             layer.frame.origin.x = parameter.edge.left
-            switch parameter.interactive {
-                case .empty:
-                    isInShow = false
-                    return nil
-                    
-                case .begin:
-                    offsetX = offset
+
+            switch active.state {
+                case .began:
                     if isInShow {
                         isNeedClickToHide = true
                     }
+                    offsetX = offset
+                    return nil
                     
-                case .drag(let rect):
-                    let path = CGMutablePath()
-                    var r = rect
-                    r.origin.x += offset - offsetX - parameter.edge.left
-                    r.origin.y = parameter.edge.bottom
-                    r.size.height = parameter.size.height - parameter.edge.bottom - parameter.edge.top
-                    path.addRect(r)
-                                        
-                    layer.fillColor = style.withAlphaComponent(0.1).cgColor
-                    layer.path = path
-                    isInShow = true
-                    selectRect = r
-                    
-                case .click(let orgin):
-                    if isNeedClickToHide {
-                        isInShow = false
+                case .changed, .ended:
+                    if isNeedClickToHide, active.type == .click {
                         isNeedClickToHide = false
+                        isInShow = false
                         layer.path = nil
                         return nil
                     }
-                    
                     let path = CGMutablePath()
-                    let x = orgin.x + offset - offsetX - parameter.edge.left
-                    path.move(to: CGPoint(x: x, y: parameter.edge.bottom))
-                    path.addLine(to:  CGPoint(x: x, y: parameter.size.height - parameter.edge.top))
                     
-                    selectRect.origin.x = x
-                    selectRect.size = .zero
-                    
-                    layer.fillColor = .clear
+                    if active.type == .click {
+                        let x = active.value.origin.x + offset - offsetX - parameter.edge.left
+                        path.move(to: CGPoint(x: x, y: parameter.edge.bottom))
+                        path.addLine(to:  CGPoint(x: x, y: parameter.size.height - parameter.edge.top))
+                                            
+                        layer.fillColor = .clear
+                    } else {
+                        var r = active.value
+                        r.origin.x += offset - offsetX - parameter.edge.left
+                        r.origin.y = parameter.edge.bottom
+                        r.size.height = parameter.size.height - parameter.edge.bottom - parameter.edge.top
+                        path.addRect(r)
+                                            
+                        layer.fillColor = style.withAlphaComponent(0.1).cgColor
+                    }
+                        
                     layer.path = path
-                    isInShow = true
+                default: return nil
             }
-            
+                      
+            isInShow = true
             return layer
         }
     }

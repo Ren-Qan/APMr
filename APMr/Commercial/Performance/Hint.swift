@@ -13,10 +13,9 @@ extension CPerformance {
         private var current: State = .stop
         private(set) var scrollX: CGFloat = 0
         
-        private var dragRect: CGRect = .zero
-        private(set) var interactive: I = .empty
+        private(set) var active: Active? = nil
         
-        func sync(_ iEvent: IEventHandleView.IEvent) {
+        public func sync(_ iEvent: IEventHandleView.IEvent) {
             guard iEvent.isInTarget else {
                 return
             }
@@ -26,16 +25,15 @@ extension CPerformance {
             }
             
             if iEvent.source.type == .leftMouseDown {
-                dragRect.origin = iEvent.locationInTarget
-                dragRect.size.width = 0
-                interactive = .begin
+                active = .init(state: .began, type: .begin, value: .init(origin: iEvent.locationInTarget, size: .zero))
                 objectWillChange.send()
             } else if iEvent.source.type == .leftMouseDragged || (iEvent.source.type == .leftMouseUp && iEvent.source.clickCount == 0) {
-                dragRect.size.width += iEvent.source.deltaX
-                interactive = .drag(dragRect)
+                var value = active?.value ?? .zero
+                value.size.width += iEvent.source.deltaX
+                active = .init(state: iEvent.source.type == .leftMouseDragged ? .changed : .ended, type: .drag, value: value)
                 objectWillChange.send()
             } else if iEvent.source.type == .leftMouseUp, iEvent.source.clickCount == 1 {
-                interactive = .click(iEvent.locationInTarget)
+                active = .init(state: .ended, type: .click, value: .init(origin: iEvent.locationInTarget, size: .zero))
                 objectWillChange.send()
             } 
         }
@@ -75,10 +73,15 @@ extension CPerformance.Hint {
         case stop
     }
     
-    enum I {
-        case empty
-        case begin
-        case click(CGPoint)
-        case drag(CGRect)
+    struct Active {
+        enum T {
+            case begin
+            case click
+            case drag
+        }
+        
+        let state: NSGestureRecognizer.State
+        let type: T
+        let value: CGRect
     }
 }

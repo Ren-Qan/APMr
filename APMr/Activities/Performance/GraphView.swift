@@ -30,11 +30,13 @@ extension IPerformanceView {
         fileprivate var target: GraphView? = nil
         
         private lazy var chart = Content()
+        private lazy var interactive = Content()
                         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
             layer?.addSublayer(chart)
+            layer?.addSublayer(interactive)
         }
         
         required init?(coder: NSCoder) {
@@ -45,6 +47,7 @@ extension IPerformanceView {
             let bounds = self.bounds
             if bounds.size.width != 0, bounds.size.height != 0 {
                 chart.frame = bounds
+                interactive.frame = bounds
                 refresh()
             }
         }
@@ -58,7 +61,7 @@ extension IPerformanceView {
             let parameter = CPerformance.Chart.Notifier.Graph.Parameter(deltaX: hint.scrollX,
                                                                         size: bounds.size,
                                                                         edge: edge,
-                                                                        interactive: hint.interactive)
+                                                                        active: hint.active)
             drawChart(parameter)
         }
         

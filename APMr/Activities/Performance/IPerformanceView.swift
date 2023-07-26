@@ -20,9 +20,6 @@ struct IPerformanceView: View {
             Button("insert random Data") {
                 performance.Debug_sample()
             }
-
-            Debug_T()
-                .environmentObject(performance.hint)
         }
         .padding(.top, 10)
         #endif
@@ -83,26 +80,3 @@ extension IPerformanceView {
         }
     }
 }
-
-
-#if DEBUG
-fileprivate struct Debug_T: View {
-    @EnvironmentObject var hint: CPerformance.Hint
-    
-    var body: some View {
-        switch hint.interactive {
-            case .empty:
-                Text("empty")
-            case .drag(let area):
-                let t = "\(area)"
-                Text(t)
-            case .click(let location):
-                let t = "\(location)"
-                Text(t)
-            case .begin:
-                let t = "begin"
-                Text(t)
-        }
-    }
-}
-#endif
