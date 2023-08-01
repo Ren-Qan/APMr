@@ -49,11 +49,11 @@ extension DSPMetrics {
         let memory = Memory()
         let io = IO()
         let diagnostic = Diagnostic()
-
+        
         var all: [DSPMetricsMItemProtocol] {
             [cpu, gpu, fps, network, memory, io, diagnostic]
         }
-                
+        
         func reset() {
             all.forEach { item in
                 item.reset()
@@ -76,6 +76,25 @@ extension DSPMetrics.M {
         case mA
         case V
         case Celsius
+        
+        var format: String {
+            switch self {
+                case .Percent:
+                    return "%"
+                case .MB:
+                    return "MB"
+                case .GB:
+                    return "GB"
+                case .Frame:
+                    return "F"
+                case .mA:
+                    return "mA"
+                case .V:
+                    return "V"
+                case .Celsius:
+                    return "°C"
+            }
+        }
     }
     
     struct R {

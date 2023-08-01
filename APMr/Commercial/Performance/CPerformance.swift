@@ -18,6 +18,8 @@ class CPerformance: ObservableObject {
     
     private lazy var metrics = DSPMetrics()
     private var timer: Timer? = nil
+    
+    @Published var sampleCount = 0
 }
 
 extension CPerformance {
@@ -44,6 +46,7 @@ extension CPerformance {
     
     private func sample() {
         chart.clean()
+        sampleCount = 0
         
         timer?.invalidate()
         timer = nil
@@ -56,6 +59,7 @@ extension CPerformance {
                             break
                         case .success(let m):
                             self?.chart.sync(m)
+                            self?.sampleCount += 1
                     }
                 }
             }
@@ -77,10 +81,12 @@ extension CPerformance {
         }
         
         chart.clean()
+        sampleCount = 0
         
         timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
             DispatchQueue.global().async {
                 self?.chart.addRandom(3)
+                self?.sampleCount += 3
             }
         }
         

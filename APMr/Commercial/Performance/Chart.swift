@@ -14,7 +14,7 @@ extension CPerformance {
         
         private var map: [DSPMetrics.T : Notifier] = [:]
         private var width: CGFloat = 20
-        
+    
         public func preset(_ model: DSPMetrics.M) {
             model.all.forEach { i in
                 if self.map[i.type] == nil {
@@ -78,12 +78,13 @@ extension CPerformance.Chart.Notifier {
     class Graph {
         private lazy var x = X()
         private lazy var y = Y()
-        private lazy var hint = HintRender()
         
         private var series: [Series] = []
         private var visible: Bool = true
         
         private var scrollEdge = Edge()
+        
+        private lazy var layer = CALayer()
     
         fileprivate func clean() {
             x.clean()
@@ -97,9 +98,14 @@ extension CPerformance.Chart.Notifier {
             if series.count != sources.count {
                 series.removeAll()
                 sources.forEach { _ in
-                    series.append(.init())
+                    let item = Series()
+                    self.layer.addSublayer(item.layer)
+                    series.append(item)
                 }
             }
+            
+            self.layer.addSublayer(x.layer)
+            self.layer.addSublayer(y.layer)
             
             x.update(width)
             (0 ..< sources.count).forEach { i in
@@ -150,7 +156,7 @@ extension CPerformance.Chart.Notifier {
         
         public func chart(_ parameter: Parameter,
                           _ closure: @escaping (_ paint: Paint) -> Void) {
-            let layer = CALayer()
+            
             let offset = self.offset(parameter)
             
             layer.frame.size = parameter.size
@@ -160,25 +166,18 @@ extension CPerformance.Chart.Notifier {
                 if padding < 0 { padding = 0 }
                 
                 self.series.forEach { series in
-                    if let paint = series.draw(parameter, offset, padding, self.x, self.y) {
-                        layer.addSublayer(paint)
-                    }
+                    series.draw(parameter, offset, padding, self.x, self.y)
+                    
                 }
                 
-                if let paint = self.x.draw(parameter, offset, padding) {
-                    layer.addSublayer(paint)
-                }
+                self.x.draw(parameter, offset, padding)
+                self.layer.addSublayer(self.x.layer)
                 
-                if let paint = self.y.draw(parameter) {
-                    layer.addSublayer(paint)
-                }
-                
-                if let paint = self.hint.draw(parameter, offset) {
-                    layer.addSublayer(paint)
-                }
+                self.y.draw(parameter)
+                self.layer.addSublayer(self.y.layer)
                 
                 DispatchQueue.main.async {
-                    closure(.init(layer: layer))
+                    closure(.init(layer: self.layer))
                 }
             }
         }
@@ -191,6 +190,7 @@ extension CPerformance.Chart.Notifier.Graph {
         let size: CGSize
         let edge: NSEdgeInsets
         let active: CPerformance.Hint.Active?
+        let offset: CGFloat
     }
 
     struct Paint {
@@ -205,6 +205,14 @@ extension CPerformance.Chart.Notifier.Graph {
         private(set) var visible: Bool = true
         private(set) var style: NSColor = .random
         
+        fileprivate lazy var layer: CAShapeLayer = {
+            let layer = CAShapeLayer()
+            layer.lineCap = .round
+            layer.lineWidth = 1
+            layer.masksToBounds = true
+            return layer
+        }()
+        
         fileprivate func clean() {
             sources.removeAll()
         }
@@ -217,10 +225,10 @@ extension CPerformance.Chart.Notifier.Graph {
                               _ offsetX: CGFloat,
                               _ padding: Int,
                               _ x: X,
-                              _ y: Y) -> CALayer? {
+                              _ y: Y) {
             let sources = sources
             guard sources.count > 0 else {
-                return nil
+                return
             }
             
             let layerX = parameter.edge.left
@@ -234,17 +242,16 @@ extension CPerformance.Chart.Notifier.Graph {
             let parameter = Parameter(deltaX: parameter.deltaX,
                                       size: size,
                                       edge: edge,
-                                      active: parameter.active)
+                                      active: parameter.active, offset: 0)
             
             let path = CGMutablePath()
-            let layer = CAShapeLayer()
             layer.frame.origin.x = layerX
             layer.frame.size = parameter.size
             layer.fillColor = .clear
             layer.strokeColor = style.cgColor
-            layer.lineCap = .round
-            layer.lineWidth = 2
-            layer.masksToBounds = true
+            
+            var max: CGPoint = .zero
+            var maxSource: DSPMetrics.M.R? = nil
             
             sources[padding ..< sources.count].each { index, element in
                 let y = y.calculate(element, parameter)
@@ -255,12 +262,17 @@ extension CPerformance.Chart.Notifier.Graph {
                 } else {
                     path.addLine(to: location)
                 }
+                
+                if y >= max.y {
+                    max.x = x
+                    max.y = y
+                    maxSource = element
+                }
+                
                 return x < parameter.size.width
             }
-
-            layer.path = path
             
-            return layer
+            layer.path = path
         }
     }
 }
@@ -298,6 +310,12 @@ extension CPerformance.Chart.Notifier.Graph {
         fileprivate var offset: CGFloat = 0
         
         fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
+        fileprivate lazy var layer: CAShapeLayer = {
+            let layer = CAShapeLayer()
+            layer.lineCap = .round
+            layer.lineWidth = 1
+            return layer
+        }()
         
         fileprivate func update(_ width: CGFloat) {
             self.width = width
@@ -310,15 +328,13 @@ extension CPerformance.Chart.Notifier.Graph {
         
         fileprivate func draw(_ parameter: Parameter,
                               _ offset: CGFloat,
-                              _ padding: Int) -> CALayer? {
-            let path = CGMutablePath()
-            let layer = CAShapeLayer()
+                              _ padding: Int) {
+            
             layer.frame.size = parameter.size
             layer.fillColor = .clear
             layer.strokeColor = style.cgColor
-            layer.lineCap = .round
-            layer.lineWidth = 1
             
+            let path = CGMutablePath()
             var padding = padding
             var x = CGFloat(padding) * width + parameter.edge.left + offset
         
@@ -338,14 +354,17 @@ extension CPerformance.Chart.Notifier.Graph {
             }
             
             layer.path = path
-            
-            return layer
         }
     }
     
     class Y: Axis {
-        private var checkTag: CGFloat = 0
         fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
+        fileprivate lazy var layer: CAShapeLayer = {
+            let layer = CAShapeLayer()
+            layer.lineCap = .round
+            layer.lineWidth = 1
+            return layer
+        }()
         
         fileprivate func update(_ source: DSPMetrics.M.R) {
             limit.upper = max(source.value, limit.upper)
@@ -356,15 +375,13 @@ extension CPerformance.Chart.Notifier.Graph {
             return h * source.value / limit.upper + parameter.edge.bottom
         }
         
-        fileprivate func draw(_ parameter: Parameter) -> CALayer? {
-            let path = CGMutablePath()
-            let layer = CAShapeLayer()
+        fileprivate func draw(_ parameter: Parameter) {
+            
             layer.frame.size = parameter.size
             layer.fillColor = .clear
             layer.strokeColor = style.cgColor
-            layer.lineCap = .round
-            layer.lineWidth = 1
-            
+
+            let path = CGMutablePath()
             let tags = 5
             let x = parameter.edge.right - 1
             let h = parameter.size.height - parameter.edge.top
@@ -381,8 +398,6 @@ extension CPerformance.Chart.Notifier.Graph {
             }
             
             layer.path = path
-            
-            return layer
         }
     }
 }
@@ -390,7 +405,8 @@ extension CPerformance.Chart.Notifier.Graph {
 extension CPerformance.Chart.Notifier.Graph {
     fileprivate class HintRender {
         private let style = NSColor.random
-        private var offsetX: CGFloat = 0
+        fileprivate var offsetX: CGFloat = 0
+        fileprivate var selectRect: CGRect = .zero
         
         private var isNeedClickToHide = false
         fileprivate var isInShow = false
@@ -433,15 +449,16 @@ extension CPerformance.Chart.Notifier.Graph {
                         isNeedClickToHide = false
                         isInShow = false
                         layer.path = nil
+                        selectRect = .zero
                         return nil
                     }
+
                     let path = CGMutablePath()
-                    
                     if active.type == .click {
                         let x = active.value.origin.x + offset - offsetX - parameter.edge.left
                         path.move(to: CGPoint(x: x, y: parameter.edge.bottom))
                         path.addLine(to:  CGPoint(x: x, y: parameter.size.height - parameter.edge.top))
-                                            
+                        selectRect.origin.x = x
                         layer.fillColor = .clear
                     } else {
                         var r = active.value
@@ -449,11 +466,14 @@ extension CPerformance.Chart.Notifier.Graph {
                         r.origin.y = parameter.edge.bottom
                         r.size.height = parameter.size.height - parameter.edge.bottom - parameter.edge.top
                         path.addRect(r)
-                                            
+
                         layer.fillColor = style.withAlphaComponent(0.1).cgColor
-                    }
                         
+                        selectRect.origin.x = r.origin.x
+                        selectRect.size.width = r.width
+                    }
                     layer.path = path
+                    
                 default: return nil
             }
                       

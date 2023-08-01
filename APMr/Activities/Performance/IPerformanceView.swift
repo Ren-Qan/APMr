@@ -12,22 +12,26 @@ struct IPerformanceView: View {
     @EnvironmentObject var performance: CPerformance
     
     var body: some View {
-        VStack {
-            
-        }
         #if DEBUG
         HStack {
-            Button("insert random Data") {
+            Button("[\(performance.sampleCount)] sample") {
                 performance.Debug_sample()
+//                if let p = device.selectPhone, let app = device.selectApp {
+//                    performance.start(p, app)
+//                }
+            }
+            
+            Button("[\(performance.sampleCount)] Device") {
+//                performance.Debug_sample()
+                if let p = device.selectPhone, let app = device.selectApp {
+                    performance.start(p, app)
+                }
             }
         }
         .padding(.top, 10)
         #endif
         
         ZStack {
-            EventView()
-                .environmentObject(performance)
-  
             ScrollView {
                 VStack(spacing: 10) {
                     ForEach(performance.chart.notifiers) { notifier in
@@ -55,16 +59,16 @@ extension IPerformanceView {
 }
 
 extension IPerformanceView {
-    fileprivate struct EventView: View {
-        @EnvironmentObject var performance: CPerformance
-
-        var body: some View {
-            IEventHandleView()
-                .onEvent { event in
-                    performance.hint.sync(event)
-                }
-        }
-    }
+//    fileprivate struct EventView: View {
+//        @EnvironmentObject var performance: CPerformance
+//
+//        var body: some View {
+//            IEventHandleView()
+//                .onEvent { event in
+//                    performance.hint.sync(event)
+//                }
+//        }
+//    }
 }
 
 extension IPerformanceView {
