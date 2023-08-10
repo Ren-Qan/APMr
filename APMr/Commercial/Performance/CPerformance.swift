@@ -9,7 +9,6 @@ import AppKit
 import Combine
 
 class CPerformance: ObservableObject {
-    private(set) lazy var hint = Hint()
     private(set) lazy var chart = {
         let chart = Chart()
         chart.preset(metrics.syncModel)

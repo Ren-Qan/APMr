@@ -48,8 +48,9 @@
 		C754F0E1296D2A350053DBA3 /* RootService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C754F0E0296D2A350053DBA3 /* RootService.swift */; };
 		C754F0E3296D33360053DBA3 /* PerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C754F0E2296D33360053DBA3 /* PerformanceView.swift */; };
 		C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* SysmotapModels.swift */; };
+		C7640A612A84C41100C1F267 /* ITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7640A602A84C41100C1F267 /* ITableView.swift */; };
+		C7640A632A84DBAD00C1F267 /* ITableView+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7640A622A84DBAD00C1F267 /* ITableView+Cell.swift */; };
 		C7651EFF298B5FC3006F3310 /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */; };
-		C76A6EF72A614E1900836807 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76A6EF42A614E1900836807 /* GraphView.swift */; };
 		C76A6EF92A614E1900836807 /* IPerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76A6EF62A614E1900836807 /* IPerformanceView.swift */; };
 		C76ACF3B2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76ACF3A2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift */; };
 		C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76ACF3C299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift */; };
@@ -86,7 +87,6 @@
 		C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */; };
 		C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0D1B32A5E742600F610F6 /* ALockAction.swift */; };
 		C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */; };
-		C7DC2A352A6668D300276EC5 /* Hint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DC2A342A6668D300276EC5 /* Hint.swift */; };
 		C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C5299C8BE5000CD484 /* LaunchView.swift */; };
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
@@ -179,8 +179,9 @@
 		C754F0E0296D2A350053DBA3 /* RootService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootService.swift; sourceTree = "<group>"; };
 		C754F0E2296D33360053DBA3 /* PerformanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceView.swift; sourceTree = "<group>"; };
 		C75750F6293DA1980074E707 /* SysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SysmotapModels.swift; sourceTree = "<group>"; };
+		C7640A602A84C41100C1F267 /* ITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITableView.swift; sourceTree = "<group>"; };
+		C7640A622A84DBAD00C1F267 /* ITableView+Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ITableView+Cell.swift"; sourceTree = "<group>"; };
 		C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int64+Extensions.swift"; sourceTree = "<group>"; };
-		C76A6EF42A614E1900836807 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		C76A6EF62A614E1900836807 /* IPerformanceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPerformanceView.swift; sourceTree = "<group>"; };
 		C76ACF3A2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PerformanceInstrumentsService+Summary.swift"; sourceTree = "<group>"; };
 		C76ACF3C299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PerformaceInstrumentsModels+Summary.swift"; sourceTree = "<group>"; };
@@ -217,7 +218,6 @@
 		C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoModels.swift; sourceTree = "<group>"; };
 		C7D0D1B32A5E742600F610F6 /* ALockAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALockAction.swift; sourceTree = "<group>"; };
 		C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
-		C7DC2A342A6668D300276EC5 /* Hint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hint.swift; sourceTree = "<group>"; };
 		C7E137C5299C8BE5000CD484 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
@@ -500,7 +500,8 @@
 			isa = PBXGroup;
 			children = (
 				C76A6EF62A614E1900836807 /* IPerformanceView.swift */,
-				C76A6EF42A614E1900836807 /* GraphView.swift */,
+				C7640A602A84C41100C1F267 /* ITableView.swift */,
+				C7640A622A84DBAD00C1F267 /* ITableView+Cell.swift */,
 			);
 			name = Performance;
 			path = APMr/Activities/Performance;
@@ -721,7 +722,6 @@
 			children = (
 				C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */,
 				C7B8B35C2A541872008E9D53 /* Chart.swift */,
-				C7DC2A342A6668D300276EC5 /* Hint.swift */,
 			);
 			path = Performance;
 			sourceTree = "<group>";
@@ -952,7 +952,6 @@
 				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
 				C7CCDA97298A176900948BA3 /* PerformaceChartModels.swift in Sources */,
 				C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */,
-				C7DC2A352A6668D300276EC5 /* Hint.swift in Sources */,
 				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
 				C754F0E3296D33360053DBA3 /* PerformanceView.swift in Sources */,
@@ -992,7 +991,6 @@
 				C7719B42298664A100DC6044 /* PerformaceInstrumentsModels.swift in Sources */,
 				C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */,
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
-				C76A6EF72A614E1900836807 /* GraphView.swift in Sources */,
 				C786B3602A4ACF7800F3ABB8 /* DSPMetrics.swift in Sources */,
 				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
 				C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */,
@@ -1008,6 +1006,8 @@
 				C7483B9429373A0400F32BE0 /* Application.swift in Sources */,
 				C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */,
 				C771EF702A4A8AE800EC305E /* ANavigation.swift in Sources */,
+				C7640A632A84DBAD00C1F267 /* ITableView+Cell.swift in Sources */,
+				C7640A612A84C41100C1F267 /* ITableView.swift in Sources */,
 				C73BBB18294315A600472A75 /* ADevice.swift in Sources */,
 				C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */,
 				C7E137CD299CB52A000CD484 /* Base.swift in Sources */,
