@@ -66,7 +66,11 @@ extension IPerformanceView {
 fileprivate extension IPerformanceView.NSITableView {
     class ScrollView: NSScrollView {
         private var cells: [IPerformanceView.ITableView.Cell] = []
+        
+        private var currentScrollIsHorizontal = false
+        
         private var view = NSView()
+        private var offsetX: CGFloat = 0
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -100,7 +104,7 @@ fileprivate extension IPerformanceView.NSITableView {
                 let i = cells.count - index - 1
                 let cell = cells[i]
                 let notifier = datas[i]
-                cell.reload(notifier)
+                cell.reload(notifier, offsetX)
                 cell.isHidden = !notifier.graph.visible
                 guard notifier.graph.visible else {
                     return
@@ -117,6 +121,18 @@ fileprivate extension IPerformanceView.NSITableView {
         }
         
         override func scrollWheel(with event: NSEvent) {
+            if event.phase == .began {
+                currentScrollIsHorizontal = abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY)
+            }
+
+            if currentScrollIsHorizontal {
+                offsetX += event.scrollingDeltaX
+                cells.forEach { cell in
+                    cell.scroll(offsetX)
+                }
+                return
+            }
+            
             super.scrollWheel(with: event)
         }
     }

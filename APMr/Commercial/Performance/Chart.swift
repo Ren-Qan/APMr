@@ -113,8 +113,7 @@ extension CPerformance.Chart.Notifier {
 
 extension CPerformance.Chart.Notifier.Graph {
     class Series: Identifiable {
-        fileprivate var sources: [DSPMetrics.M.R] = []
-        
+        fileprivate(set) var sources: [DSPMetrics.M.R] = []
         private(set) var visible: Bool = true
         private(set) var style: NSColor = .random
                 
@@ -131,15 +130,21 @@ extension CPerformance.Chart.Notifier.Graph {
 extension CPerformance.Chart.Notifier.Graph {
     class Axis {
         fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
+        fileprivate(set) var upper: DSPMetrics.M.R? = nil
         
         fileprivate func clean() {
             
         }
         
         fileprivate func update(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
+            let max = sources.max { l, r in
+                return l.value < r.value
+            }
             
+            if (max?.value ?? 0) > (upper?.value ?? 0) {
+                upper = max
+            }
         }
-
     }
 }
 
