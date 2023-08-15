@@ -131,12 +131,19 @@ extension CPerformance.Chart.Notifier.Graph {
     class Axis {
         fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
         fileprivate(set) var upper: DSPMetrics.M.R? = nil
+        fileprivate(set) var count = 0
+        
+        fileprivate(set) var width: CGFloat = 20
         
         fileprivate func clean() {
-            
+            upper = nil
+            count = 0
         }
         
         fileprivate func update(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
+            self.width = width
+            self.count += 1
+            
             let max = sources.max { l, r in
                 return l.value < r.value
             }
