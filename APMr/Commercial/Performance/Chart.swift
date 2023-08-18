@@ -13,6 +13,8 @@ extension CPerformance {
         private(set) var group = Group()
         
         private var map: [DSPMetrics.T : Notifier] = [:]
+        
+        private var inset = NSEdgeInsets(top: 10, left: 10, bottom: 20, right: 0)
         private var width: CGFloat = 20
     
         public func preset(_ model: DSPMetrics.M) {
@@ -26,6 +28,7 @@ extension CPerformance {
         }
         
         public func clean() {
+            group.snapCount = 0
             group.notifiers.forEach { notifier in
                 notifier.graph.clean()
             }
@@ -47,6 +50,10 @@ extension CPerformance {
             update(.IO, io)
             update(.Network, network)
             update(.Diagnostic, diagnostic)
+            
+            group.inset = inset
+            group.snapCount += 1
+            group.width = width
             group.objectWillChange.send()
         }
     }
@@ -59,13 +66,18 @@ extension CPerformance.Chart {
             return
         }
                 
+        notifier.graph.inset = inset
         notifier.graph.update(width, sources)
     }
 }
 
 extension CPerformance.Chart {
     class Group: ObservableObject {
-        var notifiers: [Notifier] = []
+        fileprivate(set) var notifiers: [Notifier] = []
+        
+        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 10, bottom: 20, right: 0)
+        fileprivate(set) var width: CGFloat = 20
+        fileprivate(set) var snapCount: Int = 0
     }
     
     class Notifier: Identifiable, ObservableObject {
@@ -81,9 +93,10 @@ extension CPerformance.Chart {
 // Line
 extension CPerformance.Chart.Notifier {
     class Graph {
-        private(set) var axis = Axis()
-        private(set) var series: [Series] = []
-        private(set) var visible: Bool = true
+        fileprivate(set) var axis = Axis()
+        fileprivate(set) var series: [Series] = []
+        fileprivate(set) var visible: Bool = true
+        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 10, bottom: 20, right: 0)
         
         fileprivate func clean() {
             axis.clean()

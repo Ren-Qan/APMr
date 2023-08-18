@@ -9,12 +9,17 @@ import AppKit
 
 extension IPerformanceView.ITableView {
     class Cell: NSView {
-        private var notifier: CPerformance.Chart.Notifier? = nil
-        private var offsetX: CGFloat = 0
-        
         private lazy var contentLayer = Layer()
+        private var notifier: CPerformance.Chart.Notifier? = nil
+        private var offsetX: CGFloat = 0 {
+            didSet {
+                label.stringValue = "\(offsetX)"
+            }
+        }
         
-        let label = NSTextField()
+        private let label = NSTextField()
+        
+        public var canVisible: Bool = true
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -40,35 +45,33 @@ extension IPerformanceView.ITableView {
         public func reload(_ notifier: CPerformance.Chart.Notifier, _ offsetX: CGFloat) {
             self.notifier = notifier
             self.offsetX = offsetX
-            label.stringValue = "\(offsetX)"
             refresh()
         }
         
         public func scroll(_ offsetX: CGFloat) {
             self.offsetX = offsetX
-            label.stringValue = "\(offsetX)"
             refresh()
         }
         
         private func refresh() {
-            guard let graph = notifier?.graph else {
+            guard let graph = notifier?.graph, canVisible else {
                 return
             }
             
             contentLayer.clean()
-            drawChart(NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0), graph)
-            drawAxis(NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0), graph)
+            drawChart(graph)
+            drawAxis(graph)
         }
         
-        func drawChart(_ insets: NSEdgeInsets, _ graph: CPerformance.Chart.Notifier.Graph) {
+        func drawChart(_ graph: CPerformance.Chart.Notifier.Graph) {
             var frame: CGRect = .zero
-            frame.origin = CGPoint(x: insets.left, y: insets.top)
-            frame.size.width = contentLayer.bounds.width - insets.left - insets.right
-            frame.size.height = contentLayer.bounds.height - insets.top - insets.bottom
+            frame.origin = CGPoint(x: graph.inset.left, y: graph.inset.top)
+            frame.size.width = contentLayer.bounds.width - graph.inset.left - graph.inset.right
+            frame.size.height = contentLayer.bounds.height - graph.inset.top - graph.inset.bottom
             
             let w = graph.axis.width
             let r = graph.axis.count
-            var l = Int((-offsetX - insets.left) / graph.axis.width)
+            var l = Int((-offsetX - graph.inset.left) / graph.axis.width)
             if l < 0 { l = 0 }
             
             guard l < r else { return }
@@ -96,11 +99,11 @@ extension IPerformanceView.ITableView {
             }
         }
         
-        func drawAxis(_ insets: NSEdgeInsets, _ graph: CPerformance.Chart.Notifier.Graph) {
+        func drawAxis(_ graph: CPerformance.Chart.Notifier.Graph) {
             var frame: CGRect = .zero
-            frame.origin = CGPoint(x: insets.left, y: insets.top)
-            frame.size.width = contentLayer.bounds.width - insets.left - insets.right
-            frame.size.height = contentLayer.bounds.height - insets.top - insets.bottom
+            frame.origin = CGPoint(x: graph.inset.left, y: graph.inset.top)
+            frame.size.width = contentLayer.bounds.width - graph.inset.left - graph.inset.right
+            frame.size.height = contentLayer.bounds.height - graph.inset.top - graph.inset.bottom
         }
     }
 }

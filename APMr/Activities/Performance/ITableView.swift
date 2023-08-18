@@ -43,6 +43,7 @@ extension IPerformanceView {
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
+            scrollView.target = self
             addSubview(scrollView)
         }
         
@@ -56,9 +57,7 @@ extension IPerformanceView {
         }
         
         fileprivate func refresh() {
-            if let datas = target?.group.notifiers {
-                scrollView.update(datas)
-            }
+            scrollView.refresh()
         }
     }
 }
@@ -68,9 +67,13 @@ fileprivate extension IPerformanceView.NSITableView {
         private var cells: [IPerformanceView.ITableView.Cell] = []
         
         private var currentScrollIsHorizontal = false
-        
+                
         private var view = NSView()
         private var offsetX: CGFloat = 0
+        private var offsetXState: S = .latest
+        private var chartContentW: CGFloat = 0
+        
+        fileprivate weak var target: IPerformanceView.NSITableView? = nil
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -81,10 +84,14 @@ fileprivate extension IPerformanceView.NSITableView {
             fatalError("init(coder:) has not been implemented")
         }
         
-        func update(_ datas: [CPerformance.Chart.Notifier]) {
-            check(datas)
+        func refresh() {
+            guard let group = target?.target?.group else {
+                return
+            }
+            
+            check(group.notifiers)
         }
-        
+                
         private func check(_ datas: [CPerformance.Chart.Notifier]) {
             let isNeedScrollTop = cells.count == 0
             
@@ -100,6 +107,9 @@ fileprivate extension IPerformanceView.NSITableView {
             
             let padding: CGFloat = 10
             var y: CGFloat = 10
+            
+            calculate(0)
+                        
             (0 ..< cells.count).forEach { index in
                 let i = cells.count - index - 1
                 let cell = cells[i]
@@ -126,20 +136,70 @@ fileprivate extension IPerformanceView.NSITableView {
             }
 
             if currentScrollIsHorizontal {
-                offsetX += event.scrollingDeltaX
+                calculate(event.scrollingDeltaX)
                 cells.forEach { cell in
+                    cell.canVisible = canVisible(cell.convert(cell.bounds, to: self))
                     cell.scroll(offsetX)
                 }
                 return
             }
             
             super.scrollWheel(with: event)
+            cells.forEach { cell in
+                cell.canVisible = canVisible(cell.convert(cell.bounds, to: self))
+            }
+        }
+        
+        private func canVisible(_ frame: CGRect) -> Bool {
+            if frame.maxY < -frame.height || frame.minY > self.frame.height + frame.height {
+                return false
+            }
+            return true
+        }
+        
+        private func calculate(_ deltaX: CGFloat) {
+            var offsetX = self.offsetX
+            guard let group = target?.target?.group else {
+                return
+            }
+            
+            offsetX += deltaX
+            
+            let w = frame.width - group.inset.left - group.inset.right
+            let contentWidth: CGFloat = group.width * CGFloat(group.snapCount)
+            
+            let max: CGFloat = 0
+            var min = w - contentWidth
+            if min > 0 { min = 0 }
+            
+            if offsetXState == .stable {
+                if offsetX < min {
+                    offsetXState = .latest
+                }
+            } else {
+                if deltaX > 0 {
+                    offsetXState = .stable
+                }
+            }
+            
+            if offsetXState == .latest {
+                offsetX = min
+            }
+            
+            if offsetX > max { offsetX = max }
+            else if offsetX < min { offsetX = min }
+            
+            self.offsetX = offsetX
         }
     }
 }
 
-
-
+fileprivate extension IPerformanceView.NSITableView.ScrollView {
+    enum S {
+        case latest
+        case stable
+    }
+}
 
 fileprivate extension NSScrollView {
     func scrollToTop() {
