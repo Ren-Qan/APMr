@@ -73,11 +73,19 @@ fileprivate extension IPerformanceView.NSITableView {
         private var offsetXState: S = .latest
         private var chartContentW: CGFloat = 0
         
+        private var hint = Hint()
+        
         fileprivate weak var target: IPerformanceView.NSITableView? = nil
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             documentView = view
+            
+            let tap = NSClickGestureRecognizer(target: self, action: #selector(click(_:)))
+            addGestureRecognizer(tap)
+            
+            let drag = NSPanGestureRecognizer(target: self, action: #selector(drag(_:)))
+            addGestureRecognizer(drag)
         }
         
         required init?(coder: NSCoder) {
@@ -89,10 +97,10 @@ fileprivate extension IPerformanceView.NSITableView {
                 return
             }
             
-            check(group.notifiers)
+            reload(group.notifiers)
         }
                 
-        private func check(_ datas: [CPerformance.Chart.Notifier]) {
+        private func reload(_ datas: [CPerformance.Chart.Notifier]) {
             let isNeedScrollTop = cells.count == 0
             
             if datas.count > cells.count {
@@ -114,7 +122,7 @@ fileprivate extension IPerformanceView.NSITableView {
                 let i = cells.count - index - 1
                 let cell = cells[i]
                 let notifier = datas[i]
-                cell.reload(notifier, offsetX)
+                cell.reload(notifier, hint, offsetX)
                 cell.isHidden = !notifier.graph.visible
                 guard notifier.graph.visible else {
                     return
@@ -130,6 +138,14 @@ fileprivate extension IPerformanceView.NSITableView {
             }
         }
         
+        private func hintRender() {
+            cells.forEach { cell in
+                cell.hint(hint)
+            }
+        }
+        
+        // MARK: - calculate function
+        
         override func scrollWheel(with event: NSEvent) {
             if event.phase == .began {
                 currentScrollIsHorizontal = abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY)
@@ -138,7 +154,7 @@ fileprivate extension IPerformanceView.NSITableView {
             if currentScrollIsHorizontal {
                 calculate(event.scrollingDeltaX)
                 cells.forEach { cell in
-                    cell.canVisible = canVisible(cell.convert(cell.bounds, to: self))
+                    cell.visible(canVisible(cell.convert(cell.bounds, to: self)))
                     cell.scroll(offsetX)
                 }
                 return
@@ -146,10 +162,30 @@ fileprivate extension IPerformanceView.NSITableView {
             
             super.scrollWheel(with: event)
             cells.forEach { cell in
-                cell.canVisible = canVisible(cell.convert(cell.bounds, to: self))
+                cell.visible(canVisible(cell.convert(cell.bounds, to: self)))
             }
         }
         
+        @objc private func click(_ gesture: NSClickGestureRecognizer) {
+            if hint.action == .click {
+                hint.action = .none
+            } else {
+                hint.action = .click
+                hint.area.origin = gesture.location(in: self)
+            }
+            hintRender()
+        }
+        
+        @objc private func drag(_ gesture: NSPanGestureRecognizer) {
+            if gesture.state == .began {
+                hint.action = .drag
+                hint.area.origin = gesture.location(in: self)
+            } else {
+                hint.area.size.width = gesture.location(in: self).x - hint.area.origin.x
+            }
+            hintRender()
+        }
+                
         private func canVisible(_ frame: CGRect) -> Bool {
             if frame.maxY < -frame.height || frame.minY > self.frame.height + frame.height {
                 return false
@@ -190,7 +226,33 @@ fileprivate extension IPerformanceView.NSITableView {
             else if offsetX < min { offsetX = min }
             
             self.offsetX = offsetX
+            self.hint.offsetX = offsetX
         }
+    }
+}
+
+extension IPerformanceView.NSITableView {
+    enum Action {
+        case none
+        case click
+        case drag
+    }
+    
+    struct Hint {
+        var offsetX: CGFloat = 0
+        var action: Action = .none
+        var area: CGRect = .zero
+        #if DEBUG
+        var description: String {
+            """
+            [action : \(action)]
+            [offset : \(offsetX)]
+            [X : \(area.origin.x)]
+            [W : \(area.size.width)]
+            
+            """
+        }
+        #endif
     }
 }
 
