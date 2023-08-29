@@ -64,15 +64,13 @@ extension IPerformanceView {
 
 fileprivate extension IPerformanceView.NSITableView {
     class ScrollView: NSScrollView {
-        private var cells: [IPerformanceView.ITableView.Cell] = []
-        
-        private var currentScrollIsHorizontal = false
-                
         private var view = NSView()
+        private var cells: [IPerformanceView.ITableView.Cell] = []
+        private var currentScrollIsHorizontal = false
+        
         private var offsetX: CGFloat = 0
         private var offsetXState: S = .latest
         private var chartContentW: CGFloat = 0
-        
         private var hint = Hint()
         
         fileprivate weak var target: IPerformanceView.NSITableView? = nil
@@ -167,11 +165,12 @@ fileprivate extension IPerformanceView.NSITableView {
         }
         
         @objc private func click(_ gesture: NSClickGestureRecognizer) {
-            if hint.action == .click {
+            if hint.action != .none {
                 hint.action = .none
             } else {
                 hint.action = .click
                 hint.area.origin = gesture.location(in: self)
+                hint.offsetX = offsetX
             }
             hintRender()
         }
@@ -180,6 +179,8 @@ fileprivate extension IPerformanceView.NSITableView {
             if gesture.state == .began {
                 hint.action = .drag
                 hint.area.origin = gesture.location(in: self)
+                hint.area.size.width = 0
+                hint.offsetX = offsetX
             } else {
                 hint.area.size.width = gesture.location(in: self).x - hint.area.origin.x
             }
@@ -226,7 +227,6 @@ fileprivate extension IPerformanceView.NSITableView {
             else if offsetX < min { offsetX = min }
             
             self.offsetX = offsetX
-            self.hint.offsetX = offsetX
         }
     }
 }
@@ -246,7 +246,6 @@ extension IPerformanceView.NSITableView {
         var description: String {
             """
             [action : \(action)]
-            [offset : \(offsetX)]
             [X : \(area.origin.x)]
             [W : \(area.size.width)]
             
