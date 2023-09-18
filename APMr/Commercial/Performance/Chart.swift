@@ -14,17 +14,21 @@ extension CPerformance {
         
         private var map: [DSPMetrics.T : Notifier] = [:]
         
-        private var inset = NSEdgeInsets(top: 10, left: 10, bottom: 20, right: 0)
+        private var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
         private var width: CGFloat = 20
     
         public func preset(_ model: DSPMetrics.M) {
             model.all.forEach { i in
                 if self.map[i.type] == nil {
                     let notifier = Notifier(type: i.type)
+                    notifier.graph.inset = inset
+                    notifier.graph.axis.width = width
                     self.group.notifiers.append(notifier)
                     self.map[i.type] = notifier
                 }
             }
+            group.inset = inset
+            group.width = width
         }
         
         public func clean() {
@@ -74,8 +78,8 @@ extension CPerformance.Chart {
 extension CPerformance.Chart {
     class Group: ObservableObject {
         fileprivate(set) var notifiers: [Notifier] = []
-        
-        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 10, bottom: 20, right: 0)
+        // 只需要编辑 Chart 中的inset
+        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
         fileprivate(set) var width: CGFloat = 20
         fileprivate(set) var snapCount: Int = 0
     }
@@ -96,7 +100,8 @@ extension CPerformance.Chart.Notifier {
         fileprivate(set) var axis = Axis()
         fileprivate(set) var series: [Series] = []
         fileprivate(set) var visible: Bool = true
-        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 10, bottom: 20, right: 0)
+        // 只需要编辑 Chart 中的inset
+        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
         
         fileprivate func clean() {
             axis.clean()

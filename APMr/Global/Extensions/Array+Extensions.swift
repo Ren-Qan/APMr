@@ -7,19 +7,7 @@
 
 import AppKit
 
-extension Array {
-    @discardableResult
-    public func each(_ closure: (_ index: Int, _ element: Element) -> Bool) -> Self {
-        for (index, item) in enumerated() {
-            guard closure(index, item) else {
-                return self
-            }
-        }
-        return self
-    }
-}
-
-extension ArraySlice {
+extension Sequence {
     @discardableResult
     public func each(_ closure: (_ index: Int, _ element: Element) -> Bool) -> Self {
         for (index, item) in enumerated() {

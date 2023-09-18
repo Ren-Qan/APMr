@@ -82,12 +82,12 @@ extension IPerformanceView.ITableView {
             }
             
             var frame: CGRect = .zero
-            frame.origin = CGPoint(x: graph.inset.left, y: graph.inset.top)
+            frame.origin = CGPoint(x: graph.inset.left, y: graph.inset.bottom)
             frame.size.width = contentLayer.bounds.width - graph.inset.horizontal
             frame.size.height = contentLayer.bounds.height - graph.inset.vertical
             
             drawChart(graph, frame)
-            drawAxis(graph, frame)
+            drawAxis(graph, contentLayer.frame)
             drawHint(graph, frame)
         }
     }
@@ -110,7 +110,10 @@ extension IPerformanceView.ITableView.Cell {
             contentLayer.chart.add(
                 layer(frame) { layer, path in
                     let r = min(r, series.sources.count)
+                    layer.masksToBounds = true
                     layer.strokeColor = series.style.cgColor
+                    
+                    layer.backgroundColor = NSColor.black.withAlphaComponent(0.15).cgColor
                     series.sources[l ..< r].each { index, element in
                         let x: CGFloat = CGFloat(index + l) * w + offsetX
                         let y: CGFloat = element.value / (graph.axis.upper?.value ?? 1) * frame.height
@@ -122,7 +125,7 @@ extension IPerformanceView.ITableView.Cell {
                             path.addLine(to: point)
                         }
                         
-                        return x < frame.maxX
+                        return x < frame.width + graph.inset.horizontal
                     }
                 }
             )
@@ -131,6 +134,45 @@ extension IPerformanceView.ITableView.Cell {
     
     fileprivate func drawAxis(_ graph: CPerformance.Chart.Notifier.Graph,
                               _ frame: CGRect) {
+        let count = Int(frame.width / graph.axis.width) + 2
+        let upper = graph.axis.upper?.value ?? 0
+        guard checker.axis(frame.width, offsetX, count, upper) else { return }
+        var l = Int((-graph.inset.left - offsetX) / graph.axis.width)
+        if l < 0 { l = 0 }
+        let w = graph.axis.width
+        contentLayer.axis.clear()
+        contentLayer.axis.add(
+            layer(frame) { layer, path in
+                let LW: CGFloat = 1.5
+                layer.masksToBounds = true
+                layer.lineWidth = LW
+                layer.strokeColor = NSColor.orange.cgColor
+                
+                // Y
+                let x = graph.inset.left
+                path.move(to: .init(x: x, y: graph.inset.bottom))
+                path.addLine(to: .init(x: x, y: frame.height - graph.inset.top))
+                path.addLine(to: .init(x: x - 5, y: frame.height - graph.inset.top))
+
+                // X
+                (0 ..< count).each { _, padding in
+                    let index = l + padding
+                    var x = CGFloat(index) * w + graph.inset.left + offsetX
+                    if x < graph.inset.left { x = graph.inset.left }
+                    let point = CGPoint(x: x, y: graph.inset.bottom)
+                    if padding == 0 {
+                        path.move(to: point)
+                    } else {
+                        path.addLine(to: point)
+                    }
+                    guard index % 3 == 0 || padding == 0 else { return x < frame.width }
+                    path.addLine(to: .init(x: x, y: graph.inset.bottom - 6))
+                    path.move(to: point)
+                    return x < frame.width + graph.inset.horizontal
+                }
+            }
+        )
+        
     }
     
     fileprivate func drawHint(_ graph: CPerformance.Chart.Notifier.Graph,
@@ -143,6 +185,8 @@ extension IPerformanceView.ITableView.Cell {
         contentLayer.hint.add(
             layer(frame) { layer, path in
                 let x = hint.area.origin.x - frame.origin.x - hint.offsetX + offsetX
+                layer.lineWidth = 1.5
+                layer.lineDashPattern = [5, 1.5]
                 layer.strokeColor = NSColor.orange.cgColor
                 if hint.action == .click {
                     path.move(to: .init(x: x, y: 0))
@@ -162,7 +206,7 @@ extension IPerformanceView.ITableView.Cell {
         let path = CGMutablePath()
         let layer = CAShapeLayer()
         layer.frame = frame
-        layer.lineWidth = 3
+        layer.lineWidth = 2.5
         layer.fillColor = .clear
         closure(layer, path)
         layer.path = path
@@ -178,6 +222,8 @@ extension IPerformanceView.ITableView.Cell {
         
         private var axis_offset: CGFloat = 0
         private var axis_content_width: CGFloat = 0
+        private var axis_count: Int = 0
+        private var axis_upper: CGFloat = 0
         
         private var hint = IPerformanceView.NSITableView.Hint()
         private var hint_offsetX: CGFloat = 0
@@ -192,12 +238,20 @@ extension IPerformanceView.ITableView.Cell {
             return true
         }
         
-        func axis(_ contentWidth: CGFloat, _ offset: CGFloat) -> Bool {
-            if axis_content_width == contentWidth, axis_offset == offset {
+        func axis(_ contentWidth: CGFloat,
+                  _ offset: CGFloat,
+                  _ count: Int,
+                  _ upper: CGFloat) -> Bool {
+            if axis_content_width == contentWidth,
+               axis_offset == offset,
+               axis_count == count,
+               axis_upper == upper {
                 return false
             }
             axis_content_width = contentWidth
             axis_offset = offset
+            axis_count = count
+            axis_upper = upper
             return true
         }
         
@@ -217,6 +271,8 @@ extension IPerformanceView.ITableView.Cell {
         func reset() {
             self.axis_offset = 0
             self.axis_content_width = 0
+            self.axis_upper = 0
+            self.axis_count = 0
             
             self.chart_offset = 0
             self.chart_r = 0
