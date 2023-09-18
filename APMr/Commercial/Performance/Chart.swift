@@ -82,6 +82,16 @@ extension CPerformance.Chart {
         fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
         fileprivate(set) var width: CGFloat = 20
         fileprivate(set) var snapCount: Int = 0
+        
+        public var offsetX: CGFloat = 0
+        public var offsetXState: IPerformanceView.NSITableView.S = .latest
+        public var hint = IPerformanceView.NSITableView.Hint()
+        
+        public func reset() {
+            offsetX = 0
+            offsetXState = .latest
+            hint = .init()
+        }
     }
     
     class Notifier: Identifiable, ObservableObject {

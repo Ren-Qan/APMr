@@ -113,7 +113,6 @@ extension IPerformanceView.ITableView.Cell {
                     layer.masksToBounds = true
                     layer.strokeColor = series.style.cgColor
                     
-                    layer.backgroundColor = NSColor.black.withAlphaComponent(0.15).cgColor
                     series.sources[l ..< r].each { index, element in
                         let x: CGFloat = CGFloat(index + l) * w + offsetX
                         let y: CGFloat = element.value / (graph.axis.upper?.value ?? 1) * frame.height
@@ -177,7 +176,7 @@ extension IPerformanceView.ITableView.Cell {
     
     fileprivate func drawHint(_ graph: CPerformance.Chart.Notifier.Graph,
                               _ frame: CGRect) {
-        guard checker.hint(hint, offsetX) else { return }
+        guard checker.hint(hint, offsetX, frame.size.width) else { return }
         
         contentLayer.hint.clear()
         if hint.action == .none { return }
@@ -227,6 +226,7 @@ extension IPerformanceView.ITableView.Cell {
         
         private var hint = IPerformanceView.NSITableView.Hint()
         private var hint_offsetX: CGFloat = 0
+        private var hint_contentW: CGFloat = 0
         
         func chart(_ l: Int, _ r: Int, _ offset: CGFloat) -> Bool {
             if chart_l == l, chart_r == r, chart_offset == offset {
@@ -255,16 +255,20 @@ extension IPerformanceView.ITableView.Cell {
             return true
         }
         
-        func hint(_ hint: IPerformanceView.NSITableView.Hint, _ offset: CGFloat) -> Bool {
+        func hint(_ hint: IPerformanceView.NSITableView.Hint,
+                  _ offset: CGFloat,
+                  _ contentW: CGFloat) -> Bool {
             if self.hint.action == hint.action,
                self.hint.offsetX == hint.offsetX,
                self.hint.area.origin.x == hint.area.origin.x,
                self.hint.area.size.width == hint.area.size.width,
-               self.hint_offsetX == offset {
+               self.hint_offsetX == offset,
+               self.hint_contentW == contentW {
                 return false
             }
             self.hint = hint
             self.hint_offsetX = offset
+            self.hint_contentW = contentW
             return true
         }
         
@@ -284,9 +288,9 @@ extension IPerformanceView.ITableView.Cell {
     }
 
     fileprivate class Content: Layer {
-        fileprivate lazy var chart = Layer()
-        fileprivate lazy var axis = Layer()
-        fileprivate lazy var hint = Layer()
+        fileprivate var chart = Layer()
+        fileprivate var axis = Layer()
+        fileprivate var hint = Layer()
                 
         override init() {
             super.init()
@@ -301,8 +305,8 @@ extension IPerformanceView.ITableView.Cell {
                 
         override func layoutSublayers() {
             chart.frame = bounds
-            axis.frame = bounds
-            hint.frame = bounds
+//            axis.frame = bounds
+//            hint.frame = bounds
         }
     }
     

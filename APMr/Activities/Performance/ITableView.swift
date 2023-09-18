@@ -13,14 +13,20 @@ extension IPerformanceView {
         @EnvironmentObject var group: CPerformance.Chart.Group
         
         func makeNSView(context: Context) -> IPerformanceView.NSITableView {
-            let view = IPerformanceView.NSITableView()
-            view.target = self
-            view.refresh()
-            return view
+            let nsView = IPerformanceView.NSITableView()
+            setup(nsView)
+            return nsView
         }
         
         func updateNSView(_ nsView: IPerformanceView.NSITableView, context: Context) {
+            setup(nsView)
+        }
+        
+        private func setup(_ nsView: IPerformanceView.NSITableView) {
             nsView.target = self
+            nsView.scrollView.offsetXState = group.offsetXState
+            nsView.scrollView.offsetX = group.offsetX
+            nsView.scrollView.hint = group.hint
             nsView.refresh()
         }
     }
@@ -62,16 +68,15 @@ extension IPerformanceView {
     }
 }
 
-fileprivate extension IPerformanceView.NSITableView {
+extension IPerformanceView.NSITableView {
     class ScrollView: NSScrollView {
         private var view = NSView()
         private var cells: [IPerformanceView.ITableView.Cell] = []
         private var currentScrollIsHorizontal = false
         
-        private var offsetX: CGFloat = 0
-        private var offsetXState: S = .latest
-        private var chartContentW: CGFloat = 0
-        private var hint = Hint()
+        fileprivate var offsetX: CGFloat = 0
+        fileprivate var offsetXState: S = .latest
+        fileprivate var hint = Hint()
         
         fileprivate weak var target: IPerformanceView.NSITableView? = nil
         
@@ -137,6 +142,7 @@ fileprivate extension IPerformanceView.NSITableView {
         }
         
         private func hintRender() {
+            target?.target?.group.hint = hint
             cells.forEach { cell in
                 cell.hint(hint)
             }
@@ -227,6 +233,8 @@ fileprivate extension IPerformanceView.NSITableView {
             else if offsetX < min { offsetX = min }
             
             self.offsetX = offsetX
+            self.target?.target?.group.offsetX = offsetX
+            self.target?.target?.group.offsetXState = offsetXState
         }
     }
 }
@@ -255,7 +263,7 @@ extension IPerformanceView.NSITableView {
     }
 }
 
-fileprivate extension IPerformanceView.NSITableView.ScrollView {
+extension IPerformanceView.NSITableView {
     enum S {
         case latest
         case stable
