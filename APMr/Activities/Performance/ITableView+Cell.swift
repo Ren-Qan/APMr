@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import SwiftUI
 
 extension IPerformanceView.ITableView {
     class Cell: NSView {
@@ -17,7 +18,9 @@ extension IPerformanceView.ITableView {
         private var hint = IPerformanceView.NSITableView.Hint()
         private var offsetX: CGFloat = 0 {
             didSet {
+            #if DEBUG
                 label.stringValue = "\(offsetX)"
+            #endif
             }
         }
         
@@ -28,13 +31,12 @@ extension IPerformanceView.ITableView {
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
-            layer?.backgroundColor = NSColor.random.cgColor
             layer?.addSublayer(contentLayer)
             
             #if DEBUG
             addSubview(label)
             label.isEditable = false
-            label.frame = .init(x: 10, y: 0, width: 100, height: 20)
+            label.frame = .init(x: 50, y: 0, width: 100, height: 20)
             #endif
         }
         
@@ -97,8 +99,8 @@ extension IPerformanceView.ITableView.Cell {
     fileprivate func drawChart(_ graph: CPerformance.Chart.Notifier.Graph,
                                _ frame: CGRect) {
         let w = graph.axis.width
-        var l = Int((-offsetX - graph.inset.left) / graph.axis.width)
-        var r = l + Int(frame.size.width / w) + 2
+        var l = Int((-offsetX) / graph.axis.width)
+        var r = l + Int(frame.size.width / w) + 4
         if l < 0 { l = 0 }
         if r > graph.axis.count { r = graph.axis.count }
         
@@ -136,7 +138,7 @@ extension IPerformanceView.ITableView.Cell {
         let count = Int(frame.width / graph.axis.width) + 2
         let upper = graph.axis.upper?.value ?? 0
         guard checker.axis(frame.width, offsetX, count, upper) else { return }
-        var l = Int((-graph.inset.left - offsetX) / graph.axis.width)
+        var l = Int((-offsetX) / graph.axis.width)
         if l < 0 { l = 0 }
         let w = graph.axis.width
         contentLayer.axis.clear()
@@ -164,9 +166,18 @@ extension IPerformanceView.ITableView.Cell {
                     } else {
                         path.addLine(to: point)
                     }
-                    guard index % 3 == 0 || padding == 0 else { return x < frame.width }
+                    guard (index + 1) % 5 == 0 || padding == 0 else { return x < frame.width + graph.inset.horizontal }
                     path.addLine(to: .init(x: x, y: graph.inset.bottom - 6))
                     path.move(to: point)
+                    
+                    let text = CATextLayer()
+                    text.fontSize = 10
+                    text.alignmentMode = .center
+                    text.string = "\(index + 1) s"
+                    text.frame = .init(x: x - 25, y: graph.inset.bottom - 16, width: 50, height: 10)
+                    text.foregroundColor = Color.P.H2.cgColor
+                    layer.addSublayer(text)
+                    
                     return x < frame.width + graph.inset.horizontal
                 }
             }
@@ -186,6 +197,7 @@ extension IPerformanceView.ITableView.Cell {
                 let x = hint.area.origin.x - frame.origin.x - hint.offsetX + offsetX
                 layer.lineWidth = 1.5
                 layer.lineDashPattern = [5, 1.5]
+                layer.masksToBounds = true
                 layer.strokeColor = NSColor.orange.cgColor
                 if hint.action == .click {
                     path.move(to: .init(x: x, y: 0))
