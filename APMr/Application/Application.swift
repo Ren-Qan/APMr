@@ -46,7 +46,9 @@ struct Application: App {
 #if DEBUG
                 .toolbar {
                     ToolbarItem(placement: .navigation) {
-                        Toggle("切换显示模式", isOn: $schemeIsDark)
+                        Button("切换显示模式") {
+                            schemeIsDark.toggle()
+                        }
                     }
                 }
                 .preferredColorScheme(schemeIsDark ? .dark : .light)

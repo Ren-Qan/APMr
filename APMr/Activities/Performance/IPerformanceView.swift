@@ -26,6 +26,9 @@ struct IPerformanceView: View {
                 }
             }
         }
+        .background {
+            Color.P.BG1
+        }
         .padding(.top, 10)
         #endif
         

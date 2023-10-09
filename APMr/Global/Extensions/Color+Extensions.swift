@@ -55,6 +55,10 @@ public extension Color {
 }
 
 public extension Color {
+    var NS: NSColor {
+        NSColor(self)
+    }
+    
     init(hex: UInt, alpha: Double = 1) {
         self.init(
             .sRGB,
@@ -97,6 +101,7 @@ public extension Color {
             blue: .random(in: 0...1)
         )
     }
+    
 }
 
 extension NSColor {

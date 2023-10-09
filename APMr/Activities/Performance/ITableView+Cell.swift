@@ -27,6 +27,11 @@ extension IPerformanceView.ITableView {
         #if DEBUG
         private let label = NSTextField()
         #endif
+        
+        private var axisColor: CGColor? = nil
+        private var axisTextColor: CGColor? = nil
+        private var hintStrokeColor: CGColor? = nil
+        private var hintFillColor: CGColor? = nil
                 
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -43,13 +48,25 @@ extension IPerformanceView.ITableView {
         override func layout() {
             label.frame.origin.y = bounds.height - 30
             contentLayer.frame = bounds
+
+            contentLayer.backgroundColor = Color.P.BG2.NS.cgColor
+            
+            axisColor = Color.P.B1.NS.cgColor
+            axisTextColor = Color.P.H1.NS.cgColor
+            hintStrokeColor = Color.P.BLUE1.NS.cgColor
+            hintFillColor = Color.P.BLUE1.NS.withAlphaComponent(0.15).cgColor
+            
+            contentLayer.chart.sync()
+            contentLayer.axis.sync()
+            contentLayer.hint.sync()
+            
             refresh()
         }
-        
+                
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
+                
         public func reload(_ notifier: CPerformance.Chart.Notifier,
                            _ hint: IPerformanceView.NSITableView.Hint,
                            _ offset: CGFloat) {
@@ -109,27 +126,29 @@ extension IPerformanceView.ITableView.Cell {
         
         contentLayer.chart.clear()
         graph.series.forEach { series in
-            contentLayer.chart.add(
-                layer(frame) { layer, path in
-                    let r = min(r, series.sources.count)
-                    layer.masksToBounds = true
-                    layer.strokeColor = series.style.cgColor
+            contentLayer.chart.new(frame) { container, layer, path in
+                let r = min(r, series.sources.count)
+                layer.masksToBounds = true
+                layer.strokeColor = series.style.cgColor
+                
+                series.sources[l ..< r].each { index, element in
+                    let x: CGFloat = CGFloat(index + l) * w + offsetX
+                    let y: CGFloat = element.value / (graph.axis.upper?.value ?? 1) * frame.height
+                    let point = CGPoint(x: x, y: y)
                     
-                    series.sources[l ..< r].each { index, element in
-                        let x: CGFloat = CGFloat(index + l) * w + offsetX
-                        let y: CGFloat = element.value / (graph.axis.upper?.value ?? 1) * frame.height
-                        let point = CGPoint(x: x, y: y)
-                        
-                        if index == 0 {
-                            path.move(to: point)
-                        } else {
-                            path.addLine(to: point)
-                        }
-                        
-                        return x < frame.width + graph.inset.horizontal
+                    if index == 0 {
+                        path.move(to: point)
+                    } else {
+                        path.addLine(to: point)
                     }
+                    
+                    return x < frame.width + graph.inset.horizontal
                 }
-            )
+                
+                container.style {
+                    layer.strokeColor = series.style.cgColor
+                }
+            }
         }
     }
     
@@ -141,48 +160,56 @@ extension IPerformanceView.ITableView.Cell {
         var l = Int((-offsetX) / graph.axis.width)
         if l < 0 { l = 0 }
         let w = graph.axis.width
+        
         contentLayer.axis.clear()
-        contentLayer.axis.add(
-            layer(frame) { layer, path in
-                let LW: CGFloat = 1.5
-                layer.masksToBounds = true
-                layer.lineWidth = LW
-                layer.strokeColor = NSColor.orange.cgColor
-                
-                // Y
-                let x = graph.inset.left
-                path.move(to: .init(x: x, y: graph.inset.bottom))
-                path.addLine(to: .init(x: x, y: frame.height - graph.inset.top))
-                path.addLine(to: .init(x: x - 5, y: frame.height - graph.inset.top))
+        contentLayer.axis.new(frame) { container, layer, path in
+            let LW: CGFloat = 1.5
+            layer.masksToBounds = true
+            layer.lineWidth = LW
 
-                // X
-                (0 ..< count).each { _, padding in
-                    let index = l + padding
-                    var x = CGFloat(index) * w + graph.inset.left + offsetX
-                    if x < graph.inset.left { x = graph.inset.left }
-                    let point = CGPoint(x: x, y: graph.inset.bottom)
-                    if padding == 0 {
-                        path.move(to: point)
-                    } else {
-                        path.addLine(to: point)
-                    }
-                    guard (index + 1) % 5 == 0 || padding == 0 else { return x < frame.width + graph.inset.horizontal }
-                    path.addLine(to: .init(x: x, y: graph.inset.bottom - 6))
+            // Y
+            let x = graph.inset.left
+            path.move(to: .init(x: x, y: graph.inset.bottom))
+            path.addLine(to: .init(x: x, y: frame.height - graph.inset.top))
+            path.addLine(to: .init(x: x - 5, y: frame.height - graph.inset.top))
+
+            // X
+            var texts: [CATextLayer] = []
+            (0 ..< count).each { _, padding in
+                let index = l + padding
+                var x = CGFloat(index) * w + graph.inset.left + offsetX
+                if x < graph.inset.left { x = graph.inset.left }
+                let point = CGPoint(x: x, y: graph.inset.bottom)
+                if padding == 0 {
                     path.move(to: point)
-                    
-                    let text = CATextLayer()
-                    text.fontSize = 10
-                    text.alignmentMode = .center
-                    text.string = "\(index + 1) s"
-                    text.frame = .init(x: x - 25, y: graph.inset.bottom - 16, width: 50, height: 10)
-                    text.foregroundColor = Color.P.H2.cgColor
-                    layer.addSublayer(text)
-                    
-                    return x < frame.width + graph.inset.horizontal
+                } else {
+                    path.addLine(to: point)
+                }
+                guard (index + 1) % 5 == 0 || padding == 0 else { return x < frame.width + graph.inset.horizontal }
+                path.addLine(to: .init(x: x, y: graph.inset.bottom - 6))
+                path.move(to: point)
+                
+                let text = CATextLayer()
+                text.fontSize = 10
+                text.alignmentMode = .center
+                
+                text.string = "\(index + 1) s"
+                text.frame = .init(x: x - 25, y: graph.inset.bottom - 16, width: 50, height: 10)
+                layer.addSublayer(text)
+                
+                texts.append(text)
+                return x < frame.width + graph.inset.horizontal
+            }
+            
+            // Style
+            container.style { [weak self] in
+                layer.strokeColor = self?.axisColor
+                texts.forEach { text in
+                    text.foregroundColor = self?.axisTextColor
                 }
             }
-        )
-        
+            container.sync()
+        }
     }
     
     fileprivate func drawHint(_ graph: CPerformance.Chart.Notifier.Graph,
@@ -192,36 +219,30 @@ extension IPerformanceView.ITableView.Cell {
         contentLayer.hint.clear()
         if hint.action == .none { return }
         
-        contentLayer.hint.add(
-            layer(frame) { layer, path in
-                let x = hint.area.origin.x - frame.origin.x - hint.offsetX + offsetX
-                layer.lineWidth = 1.5
-                layer.lineDashPattern = [5, 1.5]
-                layer.masksToBounds = true
-                layer.strokeColor = NSColor.orange.cgColor
-                if hint.action == .click {
-                    path.move(to: .init(x: x, y: 0))
-                    path.addLine(to: .init(x: x, y: frame.height))
-                } else if hint.action == .drag {
-                    let w = hint.area.size.width
-                    layer.fillColor = NSColor.orange.withAlphaComponent(0.15).cgColor
-                    path.addRect(.init(x: x, y: 0, width: w, height: frame.height))
+        contentLayer.hint.new(frame) { container, layer, path in
+            let x = hint.area.origin.x - frame.origin.x - hint.offsetX + offsetX
+            layer.lineWidth = 1.5
+            layer.lineDashPattern = [5, 1.5]
+            layer.masksToBounds = true
+            
+            if hint.action == .click {
+                path.move(to: .init(x: x, y: 0))
+                path.addLine(to: .init(x: x, y: frame.height))
+            } else if hint.action == .drag {
+                let w = hint.area.size.width
+                path.addRect(.init(x: x, y: 0, width: w, height: frame.height))
+                layer.fillColor = Color.P.BLUE1.NS.withAlphaComponent(0.15).cgColor
+            }
+            
+            let isDrag = hint.action == .drag
+            container.style { [weak self] in
+                layer.strokeColor = self?.hintStrokeColor
+                if isDrag {
+                    layer.fillColor = self?.hintFillColor
                 }
             }
-        )
-    }
-}
-
-extension IPerformanceView.ITableView.Cell {
-    fileprivate func layer(_ frame: CGRect, _ closure: (_ layer: CAShapeLayer, _ path: CGMutablePath) -> Void) -> CALayer {
-        let path = CGMutablePath()
-        let layer = CAShapeLayer()
-        layer.frame = frame
-        layer.lineWidth = 2.5
-        layer.fillColor = .clear
-        closure(layer, path)
-        layer.path = path
-        return layer
+            container.sync()
+        }
     }
 }
 
@@ -241,7 +262,9 @@ extension IPerformanceView.ITableView.Cell {
         private var hint_contentW: CGFloat = 0
         
         func chart(_ l: Int, _ r: Int, _ offset: CGFloat) -> Bool {
-            if chart_l == l, chart_r == r, chart_offset == offset {
+            if chart_l == l,
+               chart_r == r,
+               chart_offset == offset {
                 return false
             }
             chart_l = l
@@ -257,7 +280,7 @@ extension IPerformanceView.ITableView.Cell {
             if axis_content_width == contentWidth,
                axis_offset == offset,
                axis_count == count,
-               axis_upper == upper {
+               axis_upper == upper{
                 return false
             }
             axis_content_width = contentWidth
@@ -275,7 +298,7 @@ extension IPerformanceView.ITableView.Cell {
                self.hint.area.origin.x == hint.area.origin.x,
                self.hint.area.size.width == hint.area.size.width,
                self.hint_offsetX == offset,
-               self.hint_contentW == contentW {
+               self.hint_contentW == contentW{
                 return false
             }
             self.hint = hint
@@ -317,12 +340,14 @@ extension IPerformanceView.ITableView.Cell {
                 
         override func layoutSublayers() {
             chart.frame = bounds
-//            axis.frame = bounds
-//            hint.frame = bounds
+            axis.frame = bounds
+            hint.frame = bounds
         }
     }
     
     fileprivate class Layer: CALayer {
+        private var styleClosure: (() -> Void)? = nil
+        
         override func action(forKey event: String) -> CAAction? {
             return nil
         }
@@ -332,9 +357,26 @@ extension IPerformanceView.ITableView.Cell {
                 layer.removeFromSuperlayer()
             }
         }
-        
-        func add(_ layer: CALayer) {
+                
+        func new(_ frame: CGRect, _ closure: (_ container: Layer,
+                                              _ layer: CAShapeLayer,
+                                              _ path: CGMutablePath) -> Void) {
+            let path = CGMutablePath()
+            let layer = CAShapeLayer()
+            layer.frame = frame
+            layer.lineWidth = 2.5
+            layer.fillColor = .clear
+            closure(self, layer, path)
+            layer.path = path
             addSublayer(layer)
+        }
+        
+        func style(_ closure: @escaping () -> Void) {
+            styleClosure = closure
+        }
+        
+        func sync() {
+            styleClosure?()
         }
     }
 }

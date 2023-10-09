@@ -59,6 +59,7 @@ extension IPerformanceView {
         
         override func layout() {
             scrollView.frame = bounds
+            scrollView.backgroundColor = Color.P.BG1.NS
             refresh()
         }
         
