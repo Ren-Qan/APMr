@@ -14,7 +14,7 @@ extension CPerformance {
         
         private var map: [DSPMetrics.T : Notifier] = [:]
         
-        private var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
+        private var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
         private var width: CGFloat = 20
     
         public func preset(_ model: DSPMetrics.M) {

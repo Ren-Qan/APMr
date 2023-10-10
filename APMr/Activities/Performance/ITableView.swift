@@ -257,7 +257,6 @@ extension IPerformanceView.NSITableView {
             [action : \(action)]
             [X : \(area.origin.x)]
             [W : \(area.size.width)]
-            
             """
         }
         #endif

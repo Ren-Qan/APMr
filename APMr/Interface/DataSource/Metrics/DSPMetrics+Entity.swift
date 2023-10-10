@@ -34,6 +34,8 @@ extension DSPMetrics {
         case Memory
         case IO
         case Diagnostic
+        
+        var text: String { "\(self)" }
     }
     
     enum S {

@@ -18,16 +18,13 @@ struct IPerformanceView: View {
                 performance.Debug_sample()
                 performance.chart.group.reset()
             }
-            
+             
             Button("real Sample [\(performance.sampleCount)]") {
                 if let p = device.selectPhone, let app = device.selectApp {
                     performance.start(p, app)
                     performance.chart.group.reset()
                 }
             }
-        }
-        .background {
-            Color.P.BG1
         }
         .padding(.top, 10)
         #endif
