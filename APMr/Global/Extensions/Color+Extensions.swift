@@ -51,6 +51,14 @@ public extension Color {
         static var BLUE1 = Color("BLUE1")
         
         static var BLUE2 = Color("BLUE2")
+        
+        static var BLUE3 = Color("BLUE3")
+        
+        static var GREEN1 = Color("GREEN1")
+        
+        static var ORANGE1 = Color("ORANGE1")
+        
+        static var PURPLE1 = Color("PURPLE1")
     }
 }
 

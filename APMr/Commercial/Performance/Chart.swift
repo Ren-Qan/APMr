@@ -7,6 +7,7 @@
 
 import AppKit
 import Combine
+import SwiftUI
 
 extension CPerformance {
     class Chart {
@@ -172,9 +173,17 @@ extension CPerformance.Chart.Notifier {
         fileprivate func update(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
             if series.count != sources.count {
                 series.removeAll()
-                sources.forEach { _ in
+                let styles: [NSColor] = [
+                    Color.P.BLUE3.NS,
+                    Color.P.GREEN1.NS,
+                    Color.P.PURPLE1.NS,
+                    Color.P.ORANGE1.NS,
+                ]
+                sources.each { index, _ in
                     let item = Series()
+                    item.style = styles[index]
                     series.append(item)
+                    return true
                 }
             }
              
@@ -191,8 +200,8 @@ extension CPerformance.Chart.Notifier {
 extension CPerformance.Chart.Notifier.Graph {
     class Series: Identifiable {
         fileprivate(set) var sources: [DSPMetrics.M.R] = []
-        private(set) var visible: Bool = true
-        private(set) var style: NSColor = .random
+        fileprivate(set) var visible: Bool = true
+        fileprivate(set) var style: NSColor = .random
                 
         fileprivate func clean() {
             sources.removeAll()
@@ -206,10 +215,8 @@ extension CPerformance.Chart.Notifier.Graph {
 
 extension CPerformance.Chart.Notifier.Graph {
     class Axis {
-        fileprivate var style: NSColor = .black.withAlphaComponent(0.3)
         fileprivate(set) var upper: DSPMetrics.M.R? = nil
         fileprivate(set) var count = 0
-        
         fileprivate(set) var width: CGFloat = 20
         
         fileprivate func clean() {

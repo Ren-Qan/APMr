@@ -37,7 +37,7 @@ extension IPerformanceView.ITableView.Cell {
                 path.addLine(to: .init(x: x, y: frame.height - graph.inset.top))
                 path.addLine(to: .init(x: x - 5, y: frame.height - graph.inset.top))
 
-                let yText = CATextLayer()
+                let yText = Text()
                 yText.fontSize = 10
                 yText.alignmentMode = .center
                 yText.string = String(format: "%.1f", upper)
@@ -60,7 +60,7 @@ extension IPerformanceView.ITableView.Cell {
                     path.addLine(to: .init(x: x, y: graph.inset.bottom - 6))
                     path.move(to: point)
                     
-                    let text = CATextLayer()
+                    let text = Text()
                     text.fontSize = 10
                     text.alignmentMode = .center
                     

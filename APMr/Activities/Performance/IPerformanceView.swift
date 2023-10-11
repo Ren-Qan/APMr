@@ -26,8 +26,8 @@ struct IPerformanceView: View {
                 }
             }
                                     
-            Button("\(performance.isNeedShowDetialSide ? "关" : "开")") {
-                performance.isNeedShowDetialSide.toggle()
+            Button("\(performance.isNeedShowDetailSide ? "关" : "开")") {
+                performance.isNeedShowDetailSide.toggle()
             }
         }
         .padding(.top, 10)
@@ -39,7 +39,7 @@ struct IPerformanceView: View {
                 .frame(maxWidth: .infinity)
                 .frame(maxHeight: .infinity)
             
-            if performance.isNeedShowDetialSide {
+            if performance.isNeedShowDetailSide {
                 IDetailSideView()
                     .environmentObject(performance.chart.group.highlighter)
                     .environmentObject(performance.chart.group)

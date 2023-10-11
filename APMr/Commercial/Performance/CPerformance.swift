@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import Combine
+import SwiftUI
 
 class CPerformance: ObservableObject {
     private(set) lazy var chart = {
@@ -19,7 +19,7 @@ class CPerformance: ObservableObject {
     private var timer: Timer? = nil
     
     @Published var sampleCount = 0
-    @Published var isNeedShowDetialSide = false
+    @Published var isNeedShowDetailSide = false
 }
 
 extension CPerformance {

@@ -25,6 +25,12 @@ extension IPerformanceView.ITableView.Cell {
             return nil
         }
     }
+    
+    class ShapeLayer: CAShapeLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
+    }
 }
 
 extension IPerformanceView.ITableView.Cell.Layer {
@@ -61,7 +67,7 @@ extension IPerformanceView.ITableView.Cell.Layer {
                                 _ layer: CAShapeLayer,
                                 _ path: CGMutablePath) -> Void) {
         let path = CGMutablePath()
-        let layer = CAShapeLayer()
+        let layer = IPerformanceView.ITableView.Cell.ShapeLayer()
         layer.frame = frame
         layer.lineWidth = 2.5
         layer.fillColor = .clear

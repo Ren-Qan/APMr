@@ -25,6 +25,7 @@ extension IPerformanceView.ITableView.Cell {
             guard checker.chart(l, r, offsetX) else { return }
             
             clear()
+            var tasks: [(() -> Void)] = []
             graph.series.forEach { series in
                 new(frame) { container, layer, path in
                     let r = min(r, series.sources.count)
@@ -44,12 +45,16 @@ extension IPerformanceView.ITableView.Cell {
                         return x < frame.width + graph.inset.horizontal
                     }
                     
-                    container.style {
+                    tasks.append {
                         layer.strokeColor = series.style.cgColor
                     }
-                    container.sync()
                 }
             }
+            
+            self.style {
+                tasks.forEach{ $0() }
+            }
+            self.sync()
         }
     }
 }
