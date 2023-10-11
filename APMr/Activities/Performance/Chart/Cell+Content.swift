@@ -12,7 +12,7 @@ extension IPerformanceView.ITableView.Cell {
         fileprivate(set) lazy var chart = Chart()
         fileprivate(set) lazy var axis = Axis()
         fileprivate(set) lazy var hint = Hint()
-        fileprivate(set) lazy var title = CATextLayer()
+        fileprivate(set) lazy var title = Text()
                 
         override init() {
             super.init()
@@ -33,7 +33,7 @@ extension IPerformanceView.ITableView.Cell {
             chart.frame = bounds
             axis.frame = bounds
             hint.frame = bounds
-            title.frame = .init(x: (bounds.width - 100) / 2, y: bounds.height - 25, width: 100, height: 20)
+            title.frame = .init(x: 0, y: bounds.height - 25, width: bounds.width, height: 20)
         }
     }
 }

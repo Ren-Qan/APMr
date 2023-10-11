@@ -25,13 +25,28 @@ struct IPerformanceView: View {
                     performance.chart.group.reset()
                 }
             }
+                                    
+            Button("\(performance.isNeedShowDetialSide ? "关" : "开")") {
+                performance.isNeedShowDetialSide.toggle()
+            }
         }
         .padding(.top, 10)
         #endif
         
-        ITableView()
-            .environmentObject(performance.chart.group)
-            .frame(maxWidth: .infinity)
-            .frame(maxHeight: .infinity)
+        HStack(spacing: 0) {
+            ITableView()
+                .environmentObject(performance.chart.group)
+                .frame(maxWidth: .infinity)
+                .frame(maxHeight: .infinity)
+            
+            if performance.isNeedShowDetialSide {
+                IDetailSideView()
+                    .environmentObject(performance.chart.group.highlighter)
+                    .environmentObject(performance.chart.group)
+                    .frame(maxWidth: 250)
+                    .frame(maxHeight: .infinity)
+                    .background(Color.P.BG1)
+            }
+        }
     }
 }

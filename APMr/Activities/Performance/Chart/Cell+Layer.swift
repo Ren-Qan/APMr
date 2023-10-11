@@ -19,6 +19,12 @@ extension IPerformanceView.ITableView.Cell {
             
         }
     }
+    
+    class Text: CATextLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
+    }
 }
 
 extension IPerformanceView.ITableView.Cell.Layer {

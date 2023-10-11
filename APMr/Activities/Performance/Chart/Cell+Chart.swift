@@ -29,7 +29,6 @@ extension IPerformanceView.ITableView.Cell {
                 new(frame) { container, layer, path in
                     let r = min(r, series.sources.count)
                     layer.masksToBounds = true
-                    layer.strokeColor = series.style.cgColor
                     
                     series.sources[l ..< r].each { index, element in
                         let x: CGFloat = CGFloat(index + l) * w + offsetX
@@ -48,6 +47,7 @@ extension IPerformanceView.ITableView.Cell {
                     container.style {
                         layer.strokeColor = series.style.cgColor
                     }
+                    container.sync()
                 }
             }
         }

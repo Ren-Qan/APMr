@@ -24,9 +24,9 @@ extension IPerformanceView {
         
         private func setup(_ nsView: IPerformanceView.NSITableView) {
             nsView.target = self
-            nsView.scrollView.offsetXState = group.offsetXState
-            nsView.scrollView.offsetX = group.offsetX
-            nsView.scrollView.hint = group.hint
+            nsView.scrollView.offsetXState = group.highlighter.offsetXState
+            nsView.scrollView.offsetX = group.highlighter.offsetX
+            nsView.scrollView.hint = group.highlighter.hint
             nsView.refresh()
         }
     }
@@ -71,6 +71,8 @@ extension IPerformanceView {
 
 extension IPerformanceView.NSITableView {
     class ScrollView: NSScrollView {
+        fileprivate weak var target: IPerformanceView.NSITableView? = nil
+        
         private var view = NSView()
         private var cells: [IPerformanceView.ITableView.Cell] = []
         private var currentScrollIsHorizontal = false
@@ -78,8 +80,6 @@ extension IPerformanceView.NSITableView {
         fileprivate var offsetX: CGFloat = 0
         fileprivate var offsetXState: S = .latest
         fileprivate var hint = Hint()
-        
-        fileprivate weak var target: IPerformanceView.NSITableView? = nil
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -131,7 +131,7 @@ extension IPerformanceView.NSITableView {
                 guard notifier.graph.visible else {
                     return
                 }
-                cell.frame = CGRect(x: 0, y: y, width: bounds.width, height: 200)
+                cell.frame = CGRect(x: 0, y: y, width: bounds.width, height: 230)
                 y = cell.frame.maxY + padding
             }
             
@@ -143,7 +143,7 @@ extension IPerformanceView.NSITableView {
         }
         
         private func hintRender() {
-            target?.target?.group.hint = hint
+            target?.target?.group.highlighter.hint = hint
             cells.forEach { cell in
                 cell.hint(hint)
             }
@@ -174,6 +174,7 @@ extension IPerformanceView.NSITableView {
         @objc private func click(_ gesture: NSClickGestureRecognizer) {
             if hint.action != .none {
                 hint.action = .none
+                hint.area.size.width = 0
             } else {
                 hint.action = .click
                 hint.area.origin = gesture.location(in: self)
@@ -234,8 +235,8 @@ extension IPerformanceView.NSITableView {
             else if offsetX < min { offsetX = min }
             
             self.offsetX = offsetX
-            self.target?.target?.group.offsetX = offsetX
-            self.target?.target?.group.offsetXState = offsetXState
+            self.target?.target?.group.highlighter.offsetX = offsetX
+            self.target?.target?.group.highlighter.offsetXState = offsetXState
         }
     }
 }

@@ -62,7 +62,7 @@ extension IPerformanceView.ITableView.Cell {
                     
                     let text = CATextLayer()
                     text.fontSize = 10
-                    text.alignmentMode = .right
+                    text.alignmentMode = .center
                     
                     text.string = "\(index + 1) s"
                     text.frame = .init(x: x - 25, y: graph.inset.bottom - 16, width: 50, height: 10)

@@ -13,7 +13,6 @@ extension CPerformance {
         private(set) var group = Group()
         
         private var map: [DSPMetrics.T : Notifier] = [:]
-        
         private var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
         private var width: CGFloat = 20
     
@@ -79,18 +78,68 @@ extension CPerformance.Chart {
     class Group: ObservableObject {
         fileprivate(set) var notifiers: [Notifier] = []
         // 只需要编辑 Chart 中的inset
-        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
-        fileprivate(set) var width: CGFloat = 20
+        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0) {
+            didSet {
+                highlighter.inset = inset
+            }
+        }
+
+        fileprivate(set) var width: CGFloat = 20 {
+            didSet {
+                highlighter.chartWidth = width
+            }
+        }
         fileprivate(set) var snapCount: Int = 0
-        
+        fileprivate(set) var highlighter = Highlighter()
+                
+        public func reset() {
+            highlighter.reset()
+        }
+    }
+    
+    class Highlighter: ObservableObject {
         public var offsetX: CGFloat = 0
         public var offsetXState: IPerformanceView.NSITableView.S = .latest
-        public var hint = IPerformanceView.NSITableView.Hint()
+        public var hint = IPerformanceView.NSITableView.Hint() {
+            didSet {
+                objectWillChange.send()
+            }
+        }
         
-        public func reset() {
+        fileprivate var chartWidth: CGFloat = 20 {
+            didSet {
+                objectWillChange.send()
+            }
+        }
+        
+        fileprivate var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
+        
+        fileprivate func reset() {
             offsetX = 0
             offsetXState = .latest
             hint = .init()
+        }
+        
+        public func range(_ dataCount: Int) -> ClosedRange<Int>? {
+            guard dataCount > 0, hint.action != .none else {
+                return nil
+            }
+            
+            let c = Int(hint.area.width / chartWidth) + 1
+            var l = Int((-hint.offsetX + hint.area.origin.x - inset.left) / chartWidth)
+            var r = l + c
+            
+            if hint.area.size.width < 0 {
+                l -= c
+                r -= c
+            }
+            
+            if l < 0 { l = 0 }
+            if r >= dataCount { r = dataCount - 1 }
+            if l > r { l = r }
+            if hint.action == .click { r = l }
+            
+            return l ... r
         }
     }
     

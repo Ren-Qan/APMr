@@ -64,7 +64,7 @@ extension IPerformanceView.ITableView.Cell.Checker {
         if axis_content_width == contentWidth,
            axis_offset == offset,
            axis_count == count,
-           axis_upper == upper{
+           axis_upper == upper {
             return false
         }
         axis_content_width = contentWidth
@@ -85,7 +85,7 @@ extension IPerformanceView.ITableView.Cell.Checker {
            self.hint.area.origin.x == hint.area.origin.x,
            self.hint.area.size.width == hint.area.size.width,
            self.hint_offsetX == offset,
-           self.hint_contentW == contentW{
+           self.hint_contentW == contentW {
             return false
         }
         self.hint = hint

@@ -19,6 +19,7 @@ class CPerformance: ObservableObject {
     private var timer: Timer? = nil
     
     @Published var sampleCount = 0
+    @Published var isNeedShowDetialSide = false
 }
 
 extension CPerformance {
