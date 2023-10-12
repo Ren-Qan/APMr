@@ -280,7 +280,7 @@ extension PerformanceInstrumentsService {
     }
     
     private func cProcessCPU(_ process: IInstruments.Sysmontap.SystemProcessesModel) {
-        cSPI.cpu.process = process.cpuUsage
+        cSPI.cpu.process = process.cpuUsage * 100.0
     }
     
     private func cGPU(_ info: IInstruments.Opengl.Model) {

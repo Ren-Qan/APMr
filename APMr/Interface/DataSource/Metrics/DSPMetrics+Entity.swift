@@ -100,8 +100,8 @@ extension DSPMetrics.M {
     }
     
     struct R {
-        var value: CGFloat = 0
         let unit: U
+        var value: CGFloat = 0
         
         init(_ unit: U) {
             self.unit = unit

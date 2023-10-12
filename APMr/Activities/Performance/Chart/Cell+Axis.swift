@@ -19,7 +19,7 @@ extension IPerformanceView.ITableView.Cell {
             let offsetX = configure.offset
             
             let count = Int(frame.width / graph.axis.width) + 2
-            let upper = graph.axis.upper?.value ?? 0
+            let upper = graph.axis.upper?.source.value ?? 0
             guard checker.axis(frame.width, offsetX, count, upper) else { return }
             var l = Int((-offsetX) / graph.axis.width)
             if l < 0 { l = 0 }

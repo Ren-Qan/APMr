@@ -32,20 +32,40 @@ extension CPerformance {
         }
         
         public func clean() {
-            group.snapCount = 0
+            group.reset()
             group.notifiers.forEach { notifier in
                 notifier.graph.clean()
             }
         }
         
         public func sync(_ model: DSPMetrics.M) {
-            let cpu =           [model.cpu.total, model.cpu.process]
-            let gpu =           [model.gpu.device, model.gpu.tiler, model.gpu.renderer]
-            let fps =           [model.fps.fps]
-            let memory =        [model.memory.memory, model.memory.resident, model.memory.vm]
-            let io =            [model.io.write, model.io.readDelta, model.io.writeDelta, model.io.readDelta]
-            let network =       [model.network.down, model.network.up, model.network.downDelta, model.network.upDelta]
-            let diagnostic =    [model.diagnostic.amperage, model.diagnostic.battery, model.diagnostic.temperature, model.diagnostic.voltage]
+            let cpu = [Mark(model.cpu.total, "Total"),
+                       Mark(model.cpu.process, "Process")]
+            
+            let gpu = [Mark(model.gpu.device, "Device"),
+                       Mark(model.gpu.tiler, "Tiler"),
+                       Mark(model.gpu.renderer, "Renderer")]
+            
+            let fps = [Mark(model.fps.fps, "FPS")]
+            
+            let memory = [Mark(model.memory.memory, "Memory"),
+                          Mark(model.memory.resident, "Resident"),
+                          Mark(model.memory.vm, "VM")]
+            
+            let io = [Mark(model.io.write, "Write"),
+                      Mark(model.io.read, "Read"),
+                      Mark(model.io.writeDelta, "WriteDelta"),
+                      Mark(model.io.readDelta, "ReadDelta")]
+            
+            let network = [Mark(model.network.down, "Down"),
+                           Mark(model.network.up, "Up"),
+                           Mark(model.network.downDelta, "DownDelta"),
+                           Mark(model.network.upDelta, "UpDelta")]
+            
+            let diagnostic = [Mark(model.diagnostic.amperage, "Amperage"),
+                              Mark(model.diagnostic.battery, "Battery"),
+                              Mark(model.diagnostic.temperature, "Temperature"),
+                              Mark(model.diagnostic.voltage, "Voltage")]
             
             update(.CPU, cpu)
             update(.GPU, gpu)
@@ -65,7 +85,7 @@ extension CPerformance {
 
 extension CPerformance.Chart {
     private func update(_ type: DSPMetrics.T,
-                        _ sources: [DSPMetrics.M.R]) {
+                        _ sources: [CPerformance.Chart.Mark]) {
         guard let notifier = map[type] else {
             return
         }
@@ -95,6 +115,7 @@ extension CPerformance.Chart {
                 
         public func reset() {
             highlighter.reset()
+            snapCount = 0
         }
     }
     
@@ -119,9 +140,10 @@ extension CPerformance.Chart {
             offsetX = 0
             offsetXState = .latest
             hint = .init()
+            objectWillChange.send()
         }
         
-        public func range(_ dataCount: Int) -> ClosedRange<Int>? {
+        public func range(_ dataCount: Int) -> Range<Int>? {
             guard dataCount > 0, hint.action != .none else {
                 return nil
             }
@@ -140,7 +162,7 @@ extension CPerformance.Chart {
             if l > r { l = r }
             if hint.action == .click { r = l }
             
-            return l ... r
+            return l ..< r + 1
         }
     }
     
@@ -170,18 +192,13 @@ extension CPerformance.Chart.Notifier {
             }
         }
         
-        fileprivate func update(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
+        fileprivate func update(_ width: CGFloat,
+                                _ sources: [CPerformance.Chart.Mark]) {
             if series.count != sources.count {
                 series.removeAll()
-                let styles: [NSColor] = [
-                    Color.P.BLUE3.NS,
-                    Color.P.GREEN1.NS,
-                    Color.P.PURPLE1.NS,
-                    Color.P.ORANGE1.NS,
-                ]
+                
                 sources.each { index, _ in
                     let item = Series()
-                    item.style = styles[index]
                     series.append(item)
                     return true
                 }
@@ -199,23 +216,22 @@ extension CPerformance.Chart.Notifier {
 
 extension CPerformance.Chart.Notifier.Graph {
     class Series: Identifiable {
-        fileprivate(set) var sources: [DSPMetrics.M.R] = []
+        fileprivate(set) var marks: [CPerformance.Chart.Mark] = []
         fileprivate(set) var visible: Bool = true
-        fileprivate(set) var style: NSColor = .random
                 
         fileprivate func clean() {
-            sources.removeAll()
+            marks.removeAll()
         }
         
-        fileprivate func update(_ source: DSPMetrics.M.R) {
-            sources.append(source)
+        fileprivate func update(_ source: CPerformance.Chart.Mark) {
+            marks.append(source)
         }
     }
 }
 
 extension CPerformance.Chart.Notifier.Graph {
     class Axis {
-        fileprivate(set) var upper: DSPMetrics.M.R? = nil
+        fileprivate(set) var upper: CPerformance.Chart.Mark? = nil
         fileprivate(set) var count = 0
         fileprivate(set) var width: CGFloat = 20
         
@@ -224,15 +240,16 @@ extension CPerformance.Chart.Notifier.Graph {
             count = 0
         }
         
-        fileprivate func update(_ width: CGFloat, _ sources: [DSPMetrics.M.R]) {
+        fileprivate func update(_ width: CGFloat,
+                                _ sources: [CPerformance.Chart.Mark]) {
             self.width = width
             self.count += 1
             
             let max = sources.max { l, r in
-                return l.value < r.value
+                return l.source.value < r.source.value
             }
             
-            if (max?.value ?? 0) > (upper?.value ?? 0) {
+            if (max?.source.value ?? 0) > (upper?.source.value ?? 0) {
                 upper = max
             }
         }

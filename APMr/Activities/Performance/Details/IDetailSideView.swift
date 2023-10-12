@@ -13,11 +13,19 @@ extension IPerformanceView {
         @EnvironmentObject var group: CPerformance.Chart.Group
         
         var body: some View {
-            let string =
-        """
-        range:\(group.highlighter.range(group.snapCount))
-        """
-            Text(string)
+            if let indexRange = group.highlighter.range(group.snapCount) {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(indexRange, id: \.self) { index in
+                            IDetailSideView
+                                .Section(snapIndex: index)
+                                .environmentObject(group)
+                        }
+                    }
+                }
+            } else {
+                Text("待选中数据")
+            }
         }
     }
 }

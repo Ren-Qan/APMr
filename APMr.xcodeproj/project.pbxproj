@@ -63,6 +63,8 @@
 		C76ACF3B2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76ACF3A2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift */; };
 		C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76ACF3C299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift */; };
 		C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */; };
+		C76BE1882AD7A097004E6DDF /* IDetailSideView+Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76BE1872AD7A097004E6DDF /* IDetailSideView+Section.swift */; };
+		C76BE18A2AD7BCB8004E6DDF /* Chart+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76BE1892AD7BCB8004E6DDF /* Chart+Model.swift */; };
 		C76E7B5D2951BBB3004F009B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C76E7B5C2951BBB3004F009B /* Colors.xcassets */; };
 		C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E7B602951BC70004F009B /* Color+Extensions.swift */; };
 		C7719B42298664A100DC6044 /* PerformaceInstrumentsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7719B41298664A100DC6044 /* PerformaceInstrumentsModels.swift */; };
@@ -202,6 +204,8 @@
 		C76ACF3A2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PerformanceInstrumentsService+Summary.swift"; sourceTree = "<group>"; };
 		C76ACF3C299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PerformaceInstrumentsModels+Summary.swift"; sourceTree = "<group>"; };
 		C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
+		C76BE1872AD7A097004E6DDF /* IDetailSideView+Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IDetailSideView+Section.swift"; sourceTree = "<group>"; };
+		C76BE1892AD7BCB8004E6DDF /* Chart+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Chart+Model.swift"; sourceTree = "<group>"; };
 		C76E7B5C2951BBB3004F009B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		C76E7B602951BC70004F009B /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		C7719B41298664A100DC6044 /* PerformaceInstrumentsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceInstrumentsModels.swift; sourceTree = "<group>"; };
@@ -308,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				C71A9EBA2AD66D30001626A5 /* IDetailSideView.swift */,
+				C76BE1872AD7A097004E6DDF /* IDetailSideView+Section.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -762,6 +767,7 @@
 			children = (
 				C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */,
 				C7B8B35C2A541872008E9D53 /* Chart.swift */,
+				C76BE1892AD7BCB8004E6DDF /* Chart+Model.swift */,
 			);
 			path = Performance;
 			sourceTree = "<group>";
@@ -995,6 +1001,7 @@
 				C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */,
 				C7483BF129373ADC00F32BE0 /* DTXReceiveObject.m in Sources */,
 				C7483BF329373ADC00F32BE0 /* DTXArguments.m in Sources */,
+				C76BE18A2AD7BCB8004E6DDF /* Chart+Model.swift in Sources */,
 				C754F0E3296D33360053DBA3 /* PerformanceView.swift in Sources */,
 				C74C3E112AD52B5600F70A36 /* Cell+Axis.swift in Sources */,
 				C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */,
@@ -1045,6 +1052,7 @@
 				C76A6EF92A614E1900836807 /* IPerformanceView.swift in Sources */,
 				C7CB10512A0A102500828F3D /* CoreProfileSessionTapModels.swift in Sources */,
 				C7CB104F2A0A0B1B00828F3D /* ModelParser.swift in Sources */,
+				C76BE1882AD7A097004E6DDF /* IDetailSideView+Section.swift in Sources */,
 				C77B36852A6137800054DE7F /* NSEdgeInset.swift in Sources */,
 				C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */,
 				C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */,

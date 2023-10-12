@@ -35,7 +35,13 @@ extension IPerformanceView.ITableView {
             contentLayer.title.foregroundColor = Color.P.H1.NS.cgColor
             contentLayer.title.string = notifier?.type.text
             
-
+            contentLayer.chart.styles = [
+                Color.P.BLUE3.NS.cgColor,
+                Color.P.GREEN1.NS.cgColor,
+                Color.P.PURPLE1.NS.cgColor,
+                Color.P.ORANGE1.NS.cgColor,
+            ]
+            
             contentLayer.axis.lineColor = Color.P.B1.NS.cgColor
             contentLayer.axis.textColor = Color.P.H1.NS.cgColor
             

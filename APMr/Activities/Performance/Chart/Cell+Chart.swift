@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import AppKit
 
 extension IPerformanceView.ITableView.Cell {
     class Chart: Layer {
+        public var styles: [CGColor] = []
+        
         override func draw(_ configure: IPerformanceView.ITableView.Cell.Layer.Configure) {
             let graph = configure.graph
             let frame = configure.frame
@@ -26,14 +29,13 @@ extension IPerformanceView.ITableView.Cell {
             
             clear()
             var tasks: [(() -> Void)] = []
-            graph.series.forEach { series in
-                new(frame) { container, layer, path in
-                    let r = min(r, series.sources.count)
+            graph.series.each { i, series in
+                self.new(frame) { container, layer, path in
+                    let r = min(r, series.marks.count)
                     layer.masksToBounds = true
-                    
-                    series.sources[l ..< r].each { index, element in
+                    series.marks[l ..< r].each { index, element in
                         let x: CGFloat = CGFloat(index + l) * w + offsetX
-                        let y: CGFloat = element.value / (graph.axis.upper?.value ?? 1) * frame.height
+                        let y: CGFloat = element.source.value / (graph.axis.upper?.source.value ?? 1) * frame.height
                         let point = CGPoint(x: x, y: y)
                         
                         if index == 0 {
@@ -45,10 +47,13 @@ extension IPerformanceView.ITableView.Cell {
                         return x < frame.width + graph.inset.horizontal
                     }
                     
-                    tasks.append {
-                        layer.strokeColor = series.style.cgColor
+                    if styles.count > i {
+                        tasks.append { [weak self] in
+                            layer.strokeColor = self?.styles[i]
+                        }
                     }
                 }
+                return true
             }
             
             self.style {

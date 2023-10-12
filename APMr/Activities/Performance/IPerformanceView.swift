@@ -16,13 +16,12 @@ struct IPerformanceView: View {
         HStack {
             Button("Debug Sample [\(performance.sampleCount)]") {
                 performance.Debug_sample()
-                performance.chart.group.reset()
             }
              
             Button("real Sample [\(performance.sampleCount)]") {
-                if let p = device.selectPhone, let app = device.selectApp {
+                if let p = device.selectPhone,
+                   let app = device.selectApp {
                     performance.start(p, app)
-                    performance.chart.group.reset()
                 }
             }
                                     
