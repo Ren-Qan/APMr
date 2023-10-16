@@ -39,9 +39,8 @@ struct IPerformanceView: View {
                 .frame(maxHeight: .infinity)
             
             if performance.isNeedShowDetailSide {
-                IDetailSideView()
+                IDetailSideView(group: performance.chart.group)
                     .environmentObject(performance.chart.group.highlighter)
-                    .environmentObject(performance.chart.group)
                     .frame(maxWidth: 250)
                     .frame(maxHeight: .infinity)
                     .background(Color.P.BG1)

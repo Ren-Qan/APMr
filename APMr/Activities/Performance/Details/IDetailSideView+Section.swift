@@ -10,12 +10,11 @@ import SwiftUI
 extension IPerformanceView.IDetailSideView {
     struct Section: View {
         var snapIndex: Int
-        @EnvironmentObject var group: CPerformance.Chart.Group
-        
+        var group: CPerformance.Chart.Group        
         var body: some View {
             Text("\(snapIndex) S")
             ForEach(group.notifiers) { notifier in
-                Text(notifier.type.text)
+//                Text(notifier.type.text)
                 ForEach(notifier.graph.series) { series in
                     HStack {
                         let mark = series.marks[snapIndex]

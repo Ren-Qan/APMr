@@ -51,6 +51,7 @@
 		C74C3E152AD52C4300F70A36 /* Cell+Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C3E142AD52C4300F70A36 /* Cell+Layer.swift */; };
 		C74C3E172AD52C9900F70A36 /* Cell+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C3E162AD52C9900F70A36 /* Cell+Content.swift */; };
 		C74C3E192AD5381300F70A36 /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C3E182AD5381300F70A36 /* Font+Extensions.swift */; };
+		C74F591B2ADD34CD00DC9FE4 /* Chart+Highlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F591A2ADD34CD00DC9FE4 /* Chart+Highlighter.swift */; };
 		C7515C522A28851800CFA925 /* CoreParserModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7515C512A28851800CFA925 /* CoreParserModels.swift */; };
 		C754F0DF296D29040053DBA3 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = C754F0DE296D29040053DBA3 /* Root.swift */; };
 		C754F0E1296D2A350053DBA3 /* RootService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C754F0E0296D2A350053DBA3 /* RootService.swift */; };
@@ -84,7 +85,6 @@
 		C7AC98812956EB1D00A6580B /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* Networking.swift */; };
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
 		C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5B94329767921009A88D7 /* PerformaceChartView.swift */; };
-		C7B8B34A2A53EA0D008E9D53 /* IEventHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */; };
 		C7B8B35B2A5411B5008E9D53 /* CPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */; };
 		C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B8B35C2A541872008E9D53 /* Chart.swift */; };
 		C7C15F892A0B99E80066FA85 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C15F882A0B99E80066FA85 /* Data+Extension.swift */; };
@@ -192,6 +192,7 @@
 		C74C3E142AD52C4300F70A36 /* Cell+Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Layer.swift"; sourceTree = "<group>"; };
 		C74C3E162AD52C9900F70A36 /* Cell+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Content.swift"; sourceTree = "<group>"; };
 		C74C3E182AD5381300F70A36 /* Font+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extensions.swift"; sourceTree = "<group>"; };
+		C74F591A2ADD34CD00DC9FE4 /* Chart+Highlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Chart+Highlighter.swift"; sourceTree = "<group>"; };
 		C7515C512A28851800CFA925 /* CoreParserModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreParserModels.swift; sourceTree = "<group>"; };
 		C754F0DE296D29040053DBA3 /* Root.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		C754F0E0296D2A350053DBA3 /* RootService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootService.swift; sourceTree = "<group>"; };
@@ -225,7 +226,6 @@
 		C7AC98802956EB1D00A6580B /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
 		C7B5B94329767921009A88D7 /* PerformaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformaceChartView.swift; sourceTree = "<group>"; };
-		C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IEventHandleView.swift; sourceTree = "<group>"; };
 		C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPerformance.swift; sourceTree = "<group>"; };
 		C7B8B35C2A541872008E9D53 /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
 		C7C15F882A0B99E80066FA85 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
@@ -670,7 +670,6 @@
 			isa = PBXGroup;
 			children = (
 				C7A487D92A24AC4200A033B9 /* Constant */,
-				C7B8B3482A53E9E1008E9D53 /* IView */,
 				C73BBB0C2942E25700472A75 /* IServices */,
 				C7483BA629373ADC00F32BE0 /* Instruments */,
 				C76E7B5E2951BC29004F009B /* Extensions */,
@@ -709,14 +708,6 @@
 				C7A487DA2A24AC5700A033B9 /* Typealias.swift */,
 			);
 			path = Constant;
-			sourceTree = "<group>";
-		};
-		C7B8B3482A53E9E1008E9D53 /* IView */ = {
-			isa = PBXGroup;
-			children = (
-				C7B8B3492A53EA0D008E9D53 /* IEventHandleView.swift */,
-			);
-			path = IView;
 			sourceTree = "<group>";
 		};
 		C7B8B34B2A53F996008E9D53 /* Activities */ = {
@@ -767,6 +758,7 @@
 			children = (
 				C7B8B35A2A5411B5008E9D53 /* CPerformance.swift */,
 				C7B8B35C2A541872008E9D53 /* Chart.swift */,
+				C74F591A2ADD34CD00DC9FE4 /* Chart+Highlighter.swift */,
 				C76BE1892AD7BCB8004E6DDF /* Chart+Model.swift */,
 			);
 			path = Performance;
@@ -984,7 +976,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */,
-				C7B8B34A2A53EA0D008E9D53 /* IEventHandleView.swift in Sources */,
 				C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */,
 				C74C3E152AD52C4300F70A36 /* Cell+Layer.swift in Sources */,
 				C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */,
@@ -1004,6 +995,7 @@
 				C76BE18A2AD7BCB8004E6DDF /* Chart+Model.swift in Sources */,
 				C754F0E3296D33360053DBA3 /* PerformanceView.swift in Sources */,
 				C74C3E112AD52B5600F70A36 /* Cell+Axis.swift in Sources */,
+				C74F591B2ADD34CD00DC9FE4 /* Chart+Highlighter.swift in Sources */,
 				C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
 				C74C3E192AD5381300F70A36 /* Font+Extensions.swift in Sources */,

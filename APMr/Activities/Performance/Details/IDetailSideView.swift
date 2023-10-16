@@ -9,23 +9,16 @@ import SwiftUI
 
 extension IPerformanceView {
     struct IDetailSideView: View {
-        @EnvironmentObject var highlighter: CPerformance.Chart.Highlighter
-        @EnvironmentObject var group: CPerformance.Chart.Group
+        @EnvironmentObject
+        var highlighter: CPerformance.Chart.Highlighter
+        var group: CPerformance.Chart.Group
         
         var body: some View {
-            if let indexRange = group.highlighter.range(group.snapCount) {
-                ScrollView {
-                    LazyVStack {
-                        ForEach(indexRange, id: \.self) { index in
-                            IDetailSideView
-                                .Section(snapIndex: index)
-                                .environmentObject(group)
-                        }
-                    }
+            Text("In Progress")
+                .frame(maxWidth: .infinity)
+                .background {
+                    Color.random
                 }
-            } else {
-                Text("待选中数据")
-            }
         }
     }
 }

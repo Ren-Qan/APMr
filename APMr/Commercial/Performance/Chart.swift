@@ -75,10 +75,7 @@ extension CPerformance {
             update(.Network, network)
             update(.Diagnostic, diagnostic)
             
-            group.inset = inset
-            group.snapCount += 1
-            group.width = width
-            group.objectWillChange.send()
+            group.sync(inset, width)
         }
     }
 }
@@ -99,17 +96,9 @@ extension CPerformance.Chart {
     class Group: ObservableObject {
         fileprivate(set) var notifiers: [Notifier] = []
         // 只需要编辑 Chart 中的inset
-        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0) {
-            didSet {
-                highlighter.inset = inset
-            }
-        }
-
-        fileprivate(set) var width: CGFloat = 20 {
-            didSet {
-                highlighter.chartWidth = width
-            }
-        }
+        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
+        fileprivate(set) var width: CGFloat = 20
+        
         fileprivate(set) var snapCount: Int = 0
         fileprivate(set) var highlighter = Highlighter()
                 
@@ -117,52 +106,14 @@ extension CPerformance.Chart {
             highlighter.reset()
             snapCount = 0
         }
-    }
-    
-    class Highlighter: ObservableObject {
-        public var offsetX: CGFloat = 0
-        public var offsetXState: IPerformanceView.NSITableView.S = .latest
-        public var hint = IPerformanceView.NSITableView.Hint() {
-            didSet {
-                objectWillChange.send()
-            }
-        }
         
-        fileprivate var chartWidth: CGFloat = 20 {
-            didSet {
-                objectWillChange.send()
-            }
-        }
-        
-        fileprivate var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
-        
-        fileprivate func reset() {
-            offsetX = 0
-            offsetXState = .latest
-            hint = .init()
-            objectWillChange.send()
-        }
-        
-        public func range(_ dataCount: Int) -> Range<Int>? {
-            guard dataCount > 0, hint.action != .none else {
-                return nil
-            }
-            
-            let c = Int(hint.area.width / chartWidth) + 1
-            var l = Int((-hint.offsetX + hint.area.origin.x - inset.left) / chartWidth)
-            var r = l + c
-            
-            if hint.area.size.width < 0 {
-                l -= c
-                r -= c
-            }
-            
-            if l < 0 { l = 0 }
-            if r >= dataCount { r = dataCount - 1 }
-            if l > r { l = r }
-            if hint.action == .click { r = l }
-            
-            return l ..< r + 1
+        fileprivate func sync(_ inset: NSEdgeInsets,
+                              _ width: CGFloat) {
+            self.snapCount += 1
+            self.inset = inset
+            self.width = width
+            self.highlighter.sync(inset, width, snapCount)
+            self.objectWillChange.send()
         }
     }
     
