@@ -14,104 +14,94 @@ extension CPerformance {
         private(set) var group = Group()
         
         private var map: [DSPMetrics.T : Notifier] = [:]
-        private var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
-        private var width: CGFloat = 20
-    
-        public func preset(_ model: DSPMetrics.M) {
-            model.all.forEach { i in
-                if self.map[i.type] == nil {
-                    let notifier = Notifier(type: i.type)
-                    notifier.graph.inset = inset
-                    notifier.graph.axis.width = width
-                    self.group.notifiers.append(notifier)
-                    self.map[i.type] = notifier
-                }
-            }
-            group.inset = inset
-            group.width = width
-        }
         
+        fileprivate static var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
+        fileprivate static var width: CGFloat = 20
+    
         public func clean() {
             group.reset()
-            group.notifiers.forEach { notifier in
-                notifier.graph.clean()
-            }
         }
         
-        public func sync(_ model: DSPMetrics.M) {
-            let cpu = [Mark(model.cpu.total, "Total"),
-                       Mark(model.cpu.process, "Process")]
-            
-            let gpu = [Mark(model.gpu.device, "Device"),
-                       Mark(model.gpu.tiler, "Tiler"),
-                       Mark(model.gpu.renderer, "Renderer")]
-            
-            let fps = [Mark(model.fps.fps, "FPS")]
-            
-            let memory = [Mark(model.memory.memory, "Memory"),
-                          Mark(model.memory.resident, "Resident"),
-                          Mark(model.memory.vm, "VM")]
-            
-            let io = [Mark(model.io.write, "Write"),
-                      Mark(model.io.read, "Read"),
-                      Mark(model.io.writeDelta, "WriteDelta"),
-                      Mark(model.io.readDelta, "ReadDelta")]
-            
-            let network = [Mark(model.network.down, "Down"),
-                           Mark(model.network.up, "Up"),
-                           Mark(model.network.downDelta, "DownDelta"),
-                           Mark(model.network.upDelta, "UpDelta")]
-            
-            let diagnostic = [Mark(model.diagnostic.amperage, "Amperage"),
-                              Mark(model.diagnostic.battery, "Battery"),
-                              Mark(model.diagnostic.temperature, "Temperature"),
-                              Mark(model.diagnostic.voltage, "Voltage")]
-            
-            update(.CPU, cpu)
-            update(.GPU, gpu)
-            update(.FPS, fps)
-            update(.Memory, memory)
-            update(.IO, io)
-            update(.Network, network)
-            update(.Diagnostic, diagnostic)
-            
-            group.sync(inset, width)
-        }
-    }
-}
-
-extension CPerformance.Chart {
-    private func update(_ type: DSPMetrics.T,
-                        _ sources: [CPerformance.Chart.Mark]) {
-        guard let notifier = map[type] else {
-            return
+        public func preset(_ model: DSPMetrics.M) {
+            model.all.forEach { target in
+                if self.map[target.type] == nil {
+                    let notifier = Notifier(type: target.type)
+                    self.group.notifiers.append(notifier)
+                    self.map[target.type] = notifier
+                }
+            }
         }
                 
-        notifier.graph.inset = inset
-        notifier.graph.update(width, sources)
+        public func sync(_ model: DSPMetrics.M) {
+            struct M {
+                let type: DSPMetrics.T
+                let marks: [Mark]
+                
+                init(_ type: DSPMetrics.T,
+                     _ marks: [Mark]) {
+                    self.type = type
+                    self.marks = marks
+                }
+            }
+                        
+            let cpu = M(.CPU,
+                        [Mark(model.cpu.total, "Total"),
+                         Mark(model.cpu.process, "Process")])
+            
+            let gpu = M(.GPU,
+                        [Mark(model.gpu.device, "Device"),
+                         Mark(model.gpu.tiler, "Tiler"),
+                         Mark(model.gpu.renderer, "Renderer")])
+            
+            let fps = M(.FPS, [Mark(model.fps.fps, "FPS")])
+            
+            let memory = M(.Memory, [Mark(model.memory.memory, "Memory"),
+                                     Mark(model.memory.resident, "Resident"),
+                                     Mark(model.memory.vm, "VM")])
+            
+            let io = M(.IO, [Mark(model.io.write, "Write"),
+                             Mark(model.io.read, "Read"),
+                             Mark(model.io.writeDelta, "WriteDelta"),
+                             Mark(model.io.readDelta, "ReadDelta")])
+            
+            let network = M(.Network, [Mark(model.network.down, "Down"),
+                                       Mark(model.network.up, "Up"),
+                                       Mark(model.network.downDelta, "DownDelta"),
+                                       Mark(model.network.upDelta, "UpDelta")])
+            
+            let diagnostic = M(.Diagnostic, [Mark(model.diagnostic.amperage, "Amperage"),
+                                             Mark(model.diagnostic.battery, "Battery"),
+                                             Mark(model.diagnostic.temperature, "Temperature"),
+                                             Mark(model.diagnostic.voltage, "Voltage")])
+            
+            
+            [cpu, gpu, fps, memory, io, network, diagnostic].forEach { m in
+                self.map[m.type]?.graph.update(m.marks)
+            }
+            self.group.sync()
+        }
     }
 }
 
 extension CPerformance.Chart {
     class Group: ObservableObject {
-        fileprivate(set) var notifiers: [Notifier] = []
-        // 只需要编辑 Chart 中的inset
-        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
-        fileprivate(set) var width: CGFloat = 20
+        public var inset: NSEdgeInsets { CPerformance.Chart.inset }
+        public var width: CGFloat { CPerformance.Chart.width }
         
         fileprivate(set) var snapCount: Int = 0
+        fileprivate(set) var notifiers: [Notifier] = []
         fileprivate(set) var highlighter = Highlighter()
-                
-        public func reset() {
-            highlighter.reset()
+                     
+        fileprivate func reset() {
             snapCount = 0
+            highlighter.reset()
+            notifiers.forEach { notifier in
+                notifier.graph.clean()
+            }
         }
         
-        fileprivate func sync(_ inset: NSEdgeInsets,
-                              _ width: CGFloat) {
+        fileprivate func sync() {
             self.snapCount += 1
-            self.inset = inset
-            self.width = width
             self.highlighter.sync(inset, width, snapCount)
             self.objectWillChange.send()
         }
@@ -133,8 +123,8 @@ extension CPerformance.Chart.Notifier {
         fileprivate(set) var axis = Axis()
         fileprivate(set) var series: [Series] = []
         fileprivate(set) var visible: Bool = true
-        // 只需要编辑 Chart 中的inset
-        fileprivate(set) var inset = NSEdgeInsets(top: 10, left: 20, bottom: 20, right: 0)
+        
+        public var inset: NSEdgeInsets { CPerformance.Chart.inset }
         
         fileprivate func clean() {
             axis.clean()
@@ -143,8 +133,7 @@ extension CPerformance.Chart.Notifier {
             }
         }
         
-        fileprivate func update(_ width: CGFloat,
-                                _ sources: [CPerformance.Chart.Mark]) {
+        fileprivate func update(_ sources: [CPerformance.Chart.Mark]) {
             if series.count != sources.count {
                 series.removeAll()
                 
@@ -155,7 +144,7 @@ extension CPerformance.Chart.Notifier {
                 }
             }
              
-            axis.update(width, sources)
+            axis.update(sources)
             (0 ..< sources.count).forEach { i in
                 let series = series[i]
                 let source = sources[i]
@@ -184,16 +173,15 @@ extension CPerformance.Chart.Notifier.Graph {
     class Axis {
         fileprivate(set) var upper: CPerformance.Chart.Mark? = nil
         fileprivate(set) var count = 0
-        fileprivate(set) var width: CGFloat = 20
+        
+        public var width: CGFloat { CPerformance.Chart.width }
         
         fileprivate func clean() {
             upper = nil
             count = 0
         }
         
-        fileprivate func update(_ width: CGFloat,
-                                _ sources: [CPerformance.Chart.Mark]) {
-            self.width = width
+        fileprivate func update(_ sources: [CPerformance.Chart.Mark]) {
             self.count += 1
             
             let max = sources.max { l, r in
