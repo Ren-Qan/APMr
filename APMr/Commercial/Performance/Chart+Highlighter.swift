@@ -26,6 +26,10 @@ extension CPerformance.Chart {
 }
 
 extension CPerformance.Chart.Highlighter {
+    
+}
+
+extension CPerformance.Chart.Highlighter {
     public func reset() {
         offsetX = 0
         offsetXState = .latest
@@ -57,9 +61,7 @@ extension CPerformance.Chart.Highlighter {
             objectWillChange.send()
         }
     }
-}
-
-extension CPerformance.Chart.Highlighter {
+    
     private var range: Range<Int>? {
         guard snapCount > 0, hint.action != .none else {
             return nil
@@ -104,3 +106,4 @@ extension CPerformance.Chart.Highlighter {
         objectWillChange.send()
     }
 }
+

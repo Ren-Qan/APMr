@@ -56,7 +56,12 @@ extension IPerformanceView.ITableView.Cell {
                     } else {
                         path.addLine(to: point)
                     }
-                    guard (index + 1) % 5 == 0 || padding == 0 else { return x < frame.width + graph.inset.horizontal }
+                    
+                    let timing = TimeInterval(index) * CPerformance.interval
+                    guard (Int(timing * 10) % 50 == 0) || padding == 0 else {
+                        return x < frame.width + graph.inset.horizontal
+                    }
+                    
                     path.addLine(to: .init(x: x, y: graph.inset.bottom - 6))
                     path.move(to: point)
                     
@@ -64,7 +69,7 @@ extension IPerformanceView.ITableView.Cell {
                     text.fontSize = 10
                     text.alignmentMode = .center
                     
-                    text.string = "\(index + 1) s"
+                    text.string = "\(Int(timing)) s"
                     text.frame = .init(x: x - 25, y: graph.inset.bottom - 16, width: 50, height: 10)
                     layer.addSublayer(text)
                     

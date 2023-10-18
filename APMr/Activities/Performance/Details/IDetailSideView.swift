@@ -11,6 +11,7 @@ extension IPerformanceView {
     struct IDetailSideView: View {
         @EnvironmentObject
         var highlighter: CPerformance.Chart.Highlighter
+        
         var group: CPerformance.Chart.Group
         
         var body: some View {
