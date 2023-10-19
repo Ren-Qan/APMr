@@ -31,7 +31,8 @@ extension CPerformance {
         metrics.stop()
     }
     
-    func start(_ phone: IDevice.P, _ app: IApp) {
+    func start(_ phone: IDevice.P,
+               _ app: IApp) {
         metrics.link(phone) { [weak self] state in
             if state {
                 self?.monitor(app)
@@ -51,6 +52,7 @@ extension CPerformance {
         
         timer?.invalidate()
         timer = nil
+        
         let interval = CPerformance.interval
         timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
             DispatchQueue.global().async {

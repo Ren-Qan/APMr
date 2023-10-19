@@ -11,15 +11,16 @@ extension IPerformanceView {
     struct IDetailSideView: View {
         @EnvironmentObject
         var highlighter: CPerformance.Chart.Highlighter
-        
         var group: CPerformance.Chart.Group
         
         var body: some View {
-            Text("In Progress")
-                .frame(maxWidth: .infinity)
-                .background {
-                    Color.random
+            ScrollView {
+                LazyVStack(spacing: 5) {
+                    ForEach(highlighter.snaps) { snap in
+                        Text("\(snap.index)")
+                    }
                 }
+            }
         }
     }
 }

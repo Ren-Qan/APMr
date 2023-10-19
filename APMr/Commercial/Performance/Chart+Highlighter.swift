@@ -9,11 +9,16 @@ import Foundation
 
 extension CPerformance.Chart {
     class Highlighter: ObservableObject {
+        fileprivate(set) var snaps: [Snap] = []
+        private var dataRange: Range<Int>? = nil {
+            didSet {
+                collectSnap()
+            }
+        }
+        
         private var width: CGFloat = 20
         private var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
         private var snapCount = 0
-        
-        private var dataRange: Range<Int>? = nil
         
         public var offsetX: CGFloat = 0
         public var offsetXState: IPerformanceView.NSITableView.S = .latest
@@ -23,10 +28,6 @@ extension CPerformance.Chart {
             }
         }
     }
-}
-
-extension CPerformance.Chart.Highlighter {
-    
 }
 
 extension CPerformance.Chart.Highlighter {
@@ -104,6 +105,20 @@ extension CPerformance.Chart.Highlighter {
         
         self.dataRange = new
         objectWillChange.send()
+    }
+    
+    fileprivate func collectSnap() {
+        guard let range else {
+            snaps = []
+            return
+        }
+        
+        snaps = range.compactMap { index in
+            guard index < snapCount else {
+                return nil
+            }
+            return Snap(index)
+        }
     }
 }
 

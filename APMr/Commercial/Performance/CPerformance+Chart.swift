@@ -88,7 +88,6 @@ extension CPerformance.Chart {
         public var width: CGFloat { CPerformance.Chart.width }
         
         fileprivate(set) var snapCount: Int = 0
-        
         fileprivate(set) var notifiers: [Notifier] = []
         fileprivate(set) var highlighter = Highlighter()
                      
