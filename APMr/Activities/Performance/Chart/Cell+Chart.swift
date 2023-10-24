@@ -8,11 +8,11 @@
 import Foundation
 import AppKit
 
-extension IPerformanceView.ITableView.Cell {
+extension IPerformanceView.ICharts.Cell {
     class Chart: Layer {
         public var styles: [CGColor] = []
         
-        override func draw(_ configure: IPerformanceView.ITableView.Cell.Layer.Configure) {
+        override func draw(_ configure: IPerformanceView.ICharts.Cell.Layer.Configure) {
             let graph = configure.graph
             let frame = configure.frame
             let checker = configure.checker

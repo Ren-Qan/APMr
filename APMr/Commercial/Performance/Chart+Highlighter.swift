@@ -21,8 +21,8 @@ extension CPerformance.Chart {
         private var snapCount = 0
         
         public var offsetX: CGFloat = 0
-        public var offsetXState: IPerformanceView.NSITableView.S = .latest
-        public var hint = IPerformanceView.NSITableView.Hint() {
+        public var offsetXState: IPerformanceView.NSICharts.S = .latest
+        public var hint = IPerformanceView.NSICharts.Hint() {
             didSet {
                 check()
             }

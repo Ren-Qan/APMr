@@ -7,7 +7,7 @@
 
 import AppKit
 
-extension IPerformanceView.ITableView.Cell {
+extension IPerformanceView.ICharts.Cell {
     class Content: Layer {
         fileprivate(set) lazy var chart = Chart()
         fileprivate(set) lazy var axis = Axis()

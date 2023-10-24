@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IPerformanceView.ITableView.Cell {
+extension IPerformanceView.ICharts.Cell {
     class Checker {
         fileprivate var chart_l: Int = 0
         fileprivate var chart_r: Int = 0
@@ -18,7 +18,7 @@ extension IPerformanceView.ITableView.Cell {
         fileprivate var axis_count: Int = 0
         fileprivate var axis_upper: CGFloat = 0
         
-        fileprivate var hint = IPerformanceView.NSITableView.Hint()
+        fileprivate var hint = IPerformanceView.NSICharts.Hint()
         fileprivate var hint_offsetX: CGFloat = 0
         fileprivate var hint_contentW: CGFloat = 0
         
@@ -39,7 +39,7 @@ extension IPerformanceView.ITableView.Cell {
 }
 
 // MARK: - Chart
-extension IPerformanceView.ITableView.Cell.Checker {
+extension IPerformanceView.ICharts.Cell.Checker {
     func chart(_ l: Int,
                _ r: Int,
                _ offset: CGFloat) -> Bool {
@@ -56,7 +56,7 @@ extension IPerformanceView.ITableView.Cell.Checker {
 }
 
 // MARK: - Axis
-extension IPerformanceView.ITableView.Cell.Checker {
+extension IPerformanceView.ICharts.Cell.Checker {
     func axis(_ contentWidth: CGFloat,
               _ offset: CGFloat,
               _ count: Int,
@@ -76,8 +76,8 @@ extension IPerformanceView.ITableView.Cell.Checker {
 }
 
 // MARK: - Hint
-extension IPerformanceView.ITableView.Cell.Checker {
-    func hint(_ hint: IPerformanceView.NSITableView.Hint,
+extension IPerformanceView.ICharts.Cell.Checker {
+    func hint(_ hint: IPerformanceView.NSICharts.Hint,
               _ offset: CGFloat,
               _ contentW: CGFloat) -> Bool {
         if self.hint.action == hint.action,

@@ -7,7 +7,7 @@
 
 import AppKit
 
-extension IPerformanceView.ITableView.Cell {
+extension IPerformanceView.ICharts.Cell {
     class Layer: CALayer {
         fileprivate var styleClosure: (() -> Void)? = nil
         
@@ -33,19 +33,19 @@ extension IPerformanceView.ITableView.Cell {
     }
 }
 
-extension IPerformanceView.ITableView.Cell.Layer {
+extension IPerformanceView.ICharts.Cell.Layer {
     struct Configure {
         let frame: CGRect
         let offset: CGFloat
-        let hint: IPerformanceView.NSITableView.Hint
+        let hint: IPerformanceView.NSICharts.Hint
         let graph: CPerformance.Chart.Notifier.Graph
-        let checker: IPerformanceView.ITableView.Cell.Checker
+        let checker: IPerformanceView.ICharts.Cell.Checker
         
         init(_ frame: CGRect,
              _ offset: CGFloat,
-             _ hint: IPerformanceView.NSITableView.Hint,
+             _ hint: IPerformanceView.NSICharts.Hint,
              _ graph: CPerformance.Chart.Notifier.Graph,
-             _ checker: IPerformanceView.ITableView.Cell.Checker) {
+             _ checker: IPerformanceView.ICharts.Cell.Checker) {
             self.frame = frame
             self.offset = offset
             self.hint = hint
@@ -55,7 +55,7 @@ extension IPerformanceView.ITableView.Cell.Layer {
     }
 }
 
-extension IPerformanceView.ITableView.Cell.Layer {
+extension IPerformanceView.ICharts.Cell.Layer {
     public func clear() {
         sublayers?.forEach { layer in
             layer.removeFromSuperlayer()
@@ -63,11 +63,11 @@ extension IPerformanceView.ITableView.Cell.Layer {
     }
     
     public func new(_ frame: CGRect,
-                    _ closure: (_ container: IPerformanceView.ITableView.Cell.Layer,
+                    _ closure: (_ container: IPerformanceView.ICharts.Cell.Layer,
                                 _ layer: CAShapeLayer,
                                 _ path: CGMutablePath) -> Void) {
         let path = CGMutablePath()
-        let layer = IPerformanceView.ITableView.Cell.ShapeLayer()
+        let layer = IPerformanceView.ICharts.Cell.ShapeLayer()
         layer.frame = frame
         layer.lineWidth = 2.5
         layer.fillColor = .clear

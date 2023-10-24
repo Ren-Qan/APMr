@@ -25,18 +25,18 @@ extension CPerformance.Chart {
 
 extension CPerformance.Chart.Highlighter {
     class Snap: Identifiable, ObservableObject {
-        private(set) var showing: Bool = false
+        private(set) var isExpand: Bool = false
         public let index: Int
         
         init(_ index: Int) {
             self.index = index
         }
         
-        public func showing(_ value: Bool) {
-            if self.showing != value {
+        public func expand(_ value: Bool) {
+            if self.isExpand != value {
                 objectWillChange.send()
             }
-            self.showing = value
+            self.isExpand = value
         }
     }
 }

@@ -7,12 +7,12 @@
 
 import AppKit
 
-extension IPerformanceView.ITableView.Cell {
+extension IPerformanceView.ICharts.Cell {
     class Hint: Layer {
         public var strokeColor: CGColor? = nil
         public var fillColor: CGColor? = nil
         
-        override func draw(_ configure: IPerformanceView.ITableView.Cell.Layer.Configure) {
+        override func draw(_ configure: IPerformanceView.ICharts.Cell.Layer.Configure) {
             let frame = configure.frame
             let checker = configure.checker
             let offsetX = configure.offset

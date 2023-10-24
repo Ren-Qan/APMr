@@ -9,20 +9,20 @@ import AppKit
 import SwiftUI
 
 extension IPerformanceView {
-    struct ITableView: NSViewRepresentable {
+    struct ICharts: NSViewRepresentable {
         @EnvironmentObject var group: CPerformance.Chart.Group
         
-        func makeNSView(context: Context) -> IPerformanceView.NSITableView {
-            let nsView = IPerformanceView.NSITableView()
+        func makeNSView(context: Context) -> IPerformanceView.NSICharts {
+            let nsView = IPerformanceView.NSICharts()
             setup(nsView)
             return nsView
         }
         
-        func updateNSView(_ nsView: IPerformanceView.NSITableView, context: Context) {
+        func updateNSView(_ nsView: IPerformanceView.NSICharts, context: Context) {
             setup(nsView)
         }
         
-        private func setup(_ nsView: IPerformanceView.NSITableView) {
+        private func setup(_ nsView: IPerformanceView.NSICharts) {
             nsView.target = self
             nsView.scrollView.offsetXState = group.highlighter.offsetXState
             nsView.scrollView.offsetX = group.highlighter.offsetX
@@ -33,8 +33,8 @@ extension IPerformanceView {
 }
 
 extension IPerformanceView {
-    class NSITableView: NSView {
-        fileprivate var target: IPerformanceView.ITableView? = nil
+    class NSICharts: NSView {
+        fileprivate var target: IPerformanceView.ICharts? = nil
         
         fileprivate lazy var scrollView: ScrollView = {
             let scrollView = ScrollView()
@@ -69,12 +69,12 @@ extension IPerformanceView {
     }
 }
 
-extension IPerformanceView.NSITableView {
+fileprivate extension IPerformanceView.NSICharts {
     class ScrollView: NSScrollView {
-        fileprivate weak var target: IPerformanceView.NSITableView? = nil
+        fileprivate weak var target: IPerformanceView.NSICharts? = nil
         
         private var view = NSView()
-        private var cells: [IPerformanceView.ITableView.Cell] = []
+        private var cells: [IPerformanceView.ICharts.Cell] = []
         private var currentScrollIsHorizontal = false
         
         fileprivate var offsetX: CGFloat = 0
@@ -110,7 +110,7 @@ extension IPerformanceView.NSITableView {
             if datas.count > cells.count {
                 let padding = datas.count - cells.count
                 (0 ..< padding).forEach { _ in
-                    let cell = IPerformanceView.ITableView.Cell()
+                    let cell = IPerformanceView.ICharts.Cell()
                     cell.frame.size = .init(width: bounds.width, height: 200)
                     cells.append(cell)
                     view.addSubview(cell)
@@ -241,7 +241,7 @@ extension IPerformanceView.NSITableView {
     }
 }
 
-extension IPerformanceView.NSITableView {
+extension IPerformanceView.NSICharts {
     enum Action {
         case none
         case click
@@ -264,7 +264,7 @@ extension IPerformanceView.NSITableView {
     }
 }
 
-extension IPerformanceView.NSITableView {
+extension IPerformanceView.NSICharts {
     enum S {
         case latest
         case stable

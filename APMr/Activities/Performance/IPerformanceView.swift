@@ -33,13 +33,13 @@ struct IPerformanceView: View {
         #endif
         
         HStack(spacing: 0) {
-            ITableView()
+            ICharts()
                 .environmentObject(performance.chart.group)
                 .frame(maxWidth: .infinity)
                 .frame(maxHeight: .infinity)
             
             if performance.isNeedShowDetailSide {
-                IDetailSideView(group: performance.chart.group)
+                ICharts.ISides(group: performance.chart.group)
                     .environmentObject(performance.chart.group.highlighter)
                     .frame(maxWidth: 250)
                     .frame(maxHeight: .infinity)

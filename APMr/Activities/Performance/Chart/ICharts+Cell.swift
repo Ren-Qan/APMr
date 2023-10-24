@@ -8,14 +8,14 @@
 import AppKit
 import SwiftUI
 
-extension IPerformanceView.ITableView {
+extension IPerformanceView.ICharts {
     class Cell: NSView {
         private lazy var checker = Checker()
         private lazy var contentLayer = Content()
         
         private var canVisible: Bool = true
         private var notifier: CPerformance.Chart.Notifier? = nil
-        private var hint = IPerformanceView.NSITableView.Hint()
+        private var hint = IPerformanceView.NSICharts.Hint()
         private var offsetX: CGFloat = 0
         
         private var axisColor: CGColor? = nil
@@ -60,7 +60,7 @@ extension IPerformanceView.ITableView {
         }
                 
         public func reload(_ notifier: CPerformance.Chart.Notifier,
-                           _ hint: IPerformanceView.NSITableView.Hint,
+                           _ hint: IPerformanceView.NSICharts.Hint,
                            _ offset: CGFloat) {
             self.notifier = notifier
             self.offsetX = offset
@@ -73,7 +73,7 @@ extension IPerformanceView.ITableView {
             refresh()
         }
         
-        public func hint(_ hint: IPerformanceView.NSITableView.Hint) {
+        public func hint(_ hint: IPerformanceView.NSICharts.Hint) {
             self.hint = hint
             refresh()
         }
