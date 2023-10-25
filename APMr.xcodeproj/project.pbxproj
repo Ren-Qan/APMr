@@ -74,6 +74,7 @@
 		C771EF702A4A8AE800EC305E /* ANavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C771EF6F2A4A8AE800EC305E /* ANavigation.swift */; };
 		C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */; };
 		C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7790F2629A5EEAF00948934 /* CoreProfileSessionTap.swift */; };
+		C77952832AE8D59500DBF98E /* NSITable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77952822AE8D59500DBF98E /* NSITable.swift */; };
 		C77B36852A6137800054DE7F /* NSEdgeInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77B36842A6137800054DE7F /* NSEdgeInset.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* OpenglModels.swift */; };
@@ -215,6 +216,7 @@
 		C771EF6F2A4A8AE800EC305E /* ANavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANavigation.swift; sourceTree = "<group>"; };
 		C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyModels.swift; sourceTree = "<group>"; };
 		C7790F2629A5EEAF00948934 /* CoreProfileSessionTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreProfileSessionTap.swift; sourceTree = "<group>"; };
+		C77952822AE8D59500DBF98E /* NSITable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSITable.swift; sourceTree = "<group>"; };
 		C77B36842A6137800054DE7F /* NSEdgeInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSEdgeInset.swift; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* OpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenglModels.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 			children = (
 				C71A9EBA2AD66D30001626A5 /* ISides.swift */,
 				C74B14A42AE7684200A06D05 /* NSIides.swift */,
+				C77952822AE8D59500DBF98E /* NSITable.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -1050,6 +1053,7 @@
 				C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */,
 				C71A9EBB2AD66D30001626A5 /* ISides.swift in Sources */,
 				C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */,
+				C77952832AE8D59500DBF98E /* NSITable.swift in Sources */,
 				C7483B9429373A0400F32BE0 /* Application.swift in Sources */,
 				C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */,
 				C771EF702A4A8AE800EC305E /* ANavigation.swift in Sources */,
