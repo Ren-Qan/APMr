@@ -27,6 +27,8 @@ extension IPerformanceView.ICharts {
         
         private func setup(_ nsView: NSViewType) {
             nsView.target = self
+            nsView.count = highlighter.snaps.count
+            nsView.refresh()
         }
     }
 }

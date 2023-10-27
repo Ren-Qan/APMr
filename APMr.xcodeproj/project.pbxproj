@@ -75,9 +75,11 @@
 		C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */; };
 		C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7790F2629A5EEAF00948934 /* CoreProfileSessionTap.swift */; };
 		C77952832AE8D59500DBF98E /* NSITable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77952822AE8D59500DBF98E /* NSITable.swift */; };
-		C77B36852A6137800054DE7F /* NSEdgeInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77B36842A6137800054DE7F /* NSEdgeInset.swift */; };
+		C77B36852A6137800054DE7F /* NSEdgeInset+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77B36842A6137800054DE7F /* NSEdgeInset+Extensions.swift */; };
 		C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */; };
 		C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C780D11729419E6100EF5633 /* OpenglModels.swift */; };
+		C7842C2E2AEB694700658692 /* NSICollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7842C2D2AEB694700658692 /* NSICollection.swift */; };
+		C7842C302AEB842500658692 /* DispatchQueue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7842C2F2AEB842500658692 /* DispatchQueue+Extensions.swift */; };
 		C786B3602A4ACF7800F3ABB8 /* DSPMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C786B35F2A4ACF7800F3ABB8 /* DSPMetrics.swift */; };
 		C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */; };
 		C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A1C4522A0384C5009BA0D5 /* Engery.swift */; };
@@ -217,9 +219,11 @@
 		C7764FDD29652D3000D4A6C6 /* EnergyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyModels.swift; sourceTree = "<group>"; };
 		C7790F2629A5EEAF00948934 /* CoreProfileSessionTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreProfileSessionTap.swift; sourceTree = "<group>"; };
 		C77952822AE8D59500DBF98E /* NSITable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSITable.swift; sourceTree = "<group>"; };
-		C77B36842A6137800054DE7F /* NSEdgeInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSEdgeInset.swift; sourceTree = "<group>"; };
+		C77B36842A6137800054DE7F /* NSEdgeInset+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSEdgeInset+Extensions.swift"; sourceTree = "<group>"; };
 		C780D1152941911B00EF5633 /* IInstrumentsServiceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstrumentsServiceGroup.swift; sourceTree = "<group>"; };
 		C780D11729419E6100EF5633 /* OpenglModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenglModels.swift; sourceTree = "<group>"; };
+		C7842C2D2AEB694700658692 /* NSICollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSICollection.swift; sourceTree = "<group>"; };
+		C7842C2F2AEB842500658692 /* DispatchQueue+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Extensions.swift"; sourceTree = "<group>"; };
 		C786B35F2A4ACF7800F3ABB8 /* DSPMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSPMetrics.swift; sourceTree = "<group>"; };
 		C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonStyle.swift; sourceTree = "<group>"; };
 		C7A1C4522A0384C5009BA0D5 /* Engery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engery.swift; sourceTree = "<group>"; };
@@ -315,7 +319,6 @@
 			children = (
 				C71A9EBA2AD66D30001626A5 /* ISides.swift */,
 				C74B14A42AE7684200A06D05 /* NSIides.swift */,
-				C77952822AE8D59500DBF98E /* NSITable.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -599,9 +602,10 @@
 				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
 				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
 				C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */,
-				C77B36842A6137800054DE7F /* NSEdgeInset.swift */,
+				C77B36842A6137800054DE7F /* NSEdgeInset+Extensions.swift */,
 				C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */,
 				C74C3E182AD5381300F70A36 /* Font+Extensions.swift */,
+				C7842C2F2AEB842500658692 /* DispatchQueue+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -676,8 +680,18 @@
 				C73BBB0C2942E25700472A75 /* IServices */,
 				C7483BA629373ADC00F32BE0 /* Instruments */,
 				C76E7B5E2951BC29004F009B /* Extensions */,
+				C7842C312AEB851500658692 /* Component */,
 			);
 			path = Global;
+			sourceTree = "<group>";
+		};
+		C7842C312AEB851500658692 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				C77952822AE8D59500DBF98E /* NSITable.swift */,
+				C7842C2D2AEB694700658692 /* NSICollection.swift */,
+			);
+			path = Component;
 			sourceTree = "<group>";
 		};
 		C78CB9132973AC3300F86B33 /* View */ = {
@@ -1045,10 +1059,11 @@
 				C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */,
 				C74C3E172AD52C9900F70A36 /* Cell+Content.swift in Sources */,
 				C771EF6E2A4A8AC800EC305E /* NavigationView.swift in Sources */,
+				C7842C302AEB842500658692 /* DispatchQueue+Extensions.swift in Sources */,
 				C76A6EF92A614E1900836807 /* IPerformanceView.swift in Sources */,
 				C7CB10512A0A102500828F3D /* CoreProfileSessionTapModels.swift in Sources */,
 				C7CB104F2A0A0B1B00828F3D /* ModelParser.swift in Sources */,
-				C77B36852A6137800054DE7F /* NSEdgeInset.swift in Sources */,
+				C77B36852A6137800054DE7F /* NSEdgeInset+Extensions.swift in Sources */,
 				C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */,
 				C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */,
 				C71A9EBB2AD66D30001626A5 /* ISides.swift in Sources */,
@@ -1061,6 +1076,7 @@
 				C74C3E132AD52B5E00F70A36 /* Cell+Hint.swift in Sources */,
 				C7640A612A84C41100C1F267 /* ICharts.swift in Sources */,
 				C73BBB18294315A600472A75 /* ADevice.swift in Sources */,
+				C7842C2E2AEB694700658692 /* NSICollection.swift in Sources */,
 				C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */,
 				C7E137CD299CB52A000CD484 /* Base.swift in Sources */,
 				C76ACF3B2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift in Sources */,

@@ -32,7 +32,9 @@ class NSITable: NSTableView {
 }
 
 extension NSTableView {
-    func reuse<T : NSTableCellView>(_ owner: Any?) -> T {
+    typealias Cell = NSTableCellView
+    
+    func reuse<T : Cell>(_ owner: Any?) -> T {
         let id = NSUserInterfaceItemIdentifier(NSStringFromClass(T.self))
         var cell = makeView(withIdentifier: id, owner: owner) as? T
         
