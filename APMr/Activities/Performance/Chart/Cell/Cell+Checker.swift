@@ -18,7 +18,8 @@ extension IPerformanceView.ICharts.Cell {
         fileprivate var axis_count: Int = 0
         fileprivate var axis_upper: CGFloat = 0
         
-        fileprivate var hint = IPerformanceView.NSICharts.Hint()
+        typealias Hint = CPerformance.Chart.Actor.Highlighter.Hint
+        fileprivate var hint = Hint()
         fileprivate var hint_offsetX: CGFloat = 0
         fileprivate var hint_contentW: CGFloat = 0
         
@@ -34,6 +35,7 @@ extension IPerformanceView.ICharts.Cell {
             
             self.hint = .init()
             self.hint_offsetX = 0
+            self.hint_contentW = 0
         }
     }
 }
@@ -77,13 +79,11 @@ extension IPerformanceView.ICharts.Cell.Checker {
 
 // MARK: - Hint
 extension IPerformanceView.ICharts.Cell.Checker {
-    func hint(_ hint: IPerformanceView.NSICharts.Hint,
+    func hint(_ hint: Hint,
               _ offset: CGFloat,
               _ contentW: CGFloat) -> Bool {
         if self.hint.action == hint.action,
-           self.hint.offsetX == hint.offsetX,
-           self.hint.area.origin.x == hint.area.origin.x,
-           self.hint.area.size.width == hint.area.size.width,
+           self.hint.equal(hint),
            self.hint_offsetX == offset,
            self.hint_contentW == contentW {
             return false

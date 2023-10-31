@@ -16,8 +16,8 @@ extension IPerformanceView.ICharts.Cell {
             let graph = configure.graph
             let frame = configure.frame
             let checker = configure.checker
-            let offsetX = configure.offset
-            
+            let offsetX = configure.actor.displayer.mutate.offsetX
+
             let count = Int(frame.width / graph.axis.width) + 2
             let upper = graph.axis.upper?.source.value ?? 0
             guard checker.axis(frame.width, offsetX, count, upper) else { return }

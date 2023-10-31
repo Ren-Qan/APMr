@@ -23,8 +23,8 @@ extension CPerformance.Chart {
     }
 }
 
-extension CPerformance.Chart.Highlighter {
-    class Snap: Identifiable, ObservableObject {
+extension CPerformance.Chart.Actor.Highlighter.Snap {
+    class Shot: Identifiable, ObservableObject {
         private(set) var isExpand: Bool = false
         public let index: Int
         

@@ -36,19 +36,16 @@ extension IPerformanceView.ICharts.Cell {
 extension IPerformanceView.ICharts.Cell.Layer {
     struct Configure {
         let frame: CGRect
-        let offset: CGFloat
-        let hint: IPerformanceView.NSICharts.Hint
-        let graph: CPerformance.Chart.Notifier.Graph
+        let actor: CPerformance.Chart.Actor
+        let graph: CPerformance.Chart.Drawer.Graph
         let checker: IPerformanceView.ICharts.Cell.Checker
         
         init(_ frame: CGRect,
-             _ offset: CGFloat,
-             _ hint: IPerformanceView.NSICharts.Hint,
-             _ graph: CPerformance.Chart.Notifier.Graph,
+             _ actor: CPerformance.Chart.Actor,
+             _ graph: CPerformance.Chart.Drawer.Graph,
              _ checker: IPerformanceView.ICharts.Cell.Checker) {
             self.frame = frame
-            self.offset = offset
-            self.hint = hint
+            self.actor = actor
             self.graph = graph
             self.checker = checker
         }

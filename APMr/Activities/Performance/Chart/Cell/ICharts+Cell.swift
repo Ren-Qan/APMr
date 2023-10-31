@@ -13,10 +13,10 @@ extension IPerformanceView.ICharts {
         private lazy var checker = Checker()
         private lazy var contentLayer = Content()
         
+        private var notifier: CPerformance.Chart.Drawer.Notifier? = nil
+        private var actor: CPerformance.Chart.Actor? = nil
+        
         private var canVisible: Bool = true
-        private var notifier: CPerformance.Chart.Notifier? = nil
-        private var hint = IPerformanceView.NSICharts.Hint()
-        private var offsetX: CGFloat = 0
         
         private var axisColor: CGColor? = nil
         private var axisTextColor: CGColor? = nil
@@ -59,22 +59,14 @@ extension IPerformanceView.ICharts {
             fatalError("init(coder:) has not been implemented")
         }
                 
-        public func reload(_ notifier: CPerformance.Chart.Notifier,
-                           _ hint: IPerformanceView.NSICharts.Hint,
-                           _ offset: CGFloat) {
+        public func bind(_ notifier: CPerformance.Chart.Drawer.Notifier,
+                         _ actor: CPerformance.Chart.Actor) {
             self.notifier = notifier
-            self.offsetX = offset
-            self.hint = hint
+            self.actor = actor
             refresh()
         }
         
-        public func scroll(_ offsetX: CGFloat) {
-            self.offsetX = offsetX
-            refresh()
-        }
-        
-        public func hint(_ hint: IPerformanceView.NSICharts.Hint) {
-            self.hint = hint
+        public func reload() {
             refresh()
         }
         
@@ -83,17 +75,16 @@ extension IPerformanceView.ICharts {
             canVisible = visible
             if isNeedRefresh {
                 checker.reset()
-                refresh()
             }
         }
         
         private func refresh() {
-            guard let graph = notifier?.graph, canVisible else {
+            guard canVisible, let graph = notifier?.graph, let actor else {
                 return
             }
             
             func config(_ frame: CGRect) -> Layer.Configure {
-                return .init(frame, offsetX, hint, graph, checker)
+                return .init(frame, actor, graph, checker)
             }
             
             var frame: CGRect = .zero

@@ -15,16 +15,20 @@ extension IPerformanceView.ICharts.Cell {
         override func draw(_ configure: IPerformanceView.ICharts.Cell.Layer.Configure) {
             let frame = configure.frame
             let checker = configure.checker
-            let offsetX = configure.offset
-            let hint = configure.hint
+            let hint = configure.actor.hilighter.hint
+            let offsetX = configure.actor.displayer.mutate.offsetX
             
             guard checker.hint(hint, offsetX, frame.size.width) else { return }
             
             clear()
-            if hint.action == .none { return }
+            guard hint.action != .none,
+                  let begin = hint.begin,
+                  let end = hint.end else {
+                return
+            }
             
             new(frame) { container, layer, path in
-                let x = hint.area.origin.x - frame.origin.x - hint.offsetX + offsetX
+                let x = begin.location.x - frame.origin.x - begin.offset + offsetX
                 layer.lineWidth = 1.5
                 layer.lineDashPattern = [5, 1.5]
                 layer.masksToBounds = true
@@ -33,7 +37,8 @@ extension IPerformanceView.ICharts.Cell {
                     path.move(to: .init(x: x, y: 0))
                     path.addLine(to: .init(x: x, y: frame.height))
                 } else if hint.action == .drag {
-                    let w = hint.area.size.width
+                    let endX = end.location.x - frame.origin.x - end.offset + offsetX
+                    let w = endX - x
                     path.addRect(.init(x: x, y: 0, width: w, height: frame.height))
                 }
                 

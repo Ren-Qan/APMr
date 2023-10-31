@@ -10,7 +10,8 @@ import SwiftUI
 
 extension IPerformanceView {
     struct ICharts: NSViewRepresentable {
-        @EnvironmentObject var group: CPerformance.Chart.Group
+        @EnvironmentObject var group: CPerformance.Chart.Drawer.Group
+        @EnvironmentObject var actor: CPerformance.Chart.Actor
         
         func makeNSView(context: Context) -> IPerformanceView.NSICharts {
             let nsView = IPerformanceView.NSICharts()
@@ -24,10 +25,9 @@ extension IPerformanceView {
         
         private func setup(_ nsView: IPerformanceView.NSICharts) {
             nsView.target = self
-            nsView.scrollView.offsetXState = group.highlighter.offsetXState
-            nsView.scrollView.offsetX = group.highlighter.offsetX
-            nsView.scrollView.hint = group.highlighter.hint
-            nsView.refresh()
+            DispatchQueue.mainAsync {
+                nsView.refresh()
+            }
         }
     }
 }
@@ -73,13 +73,17 @@ fileprivate extension IPerformanceView.NSICharts {
     class ScrollView: NSScrollView {
         fileprivate weak var target: IPerformanceView.NSICharts? = nil
         
+        fileprivate var actor: CPerformance.Chart.Actor? {
+            return target?.target?.actor
+        }
+        
+        fileprivate var group: CPerformance.Chart.Drawer.Group? {
+            return target?.target?.group
+        }
+        
         private var view = NSView()
         private var cells: [IPerformanceView.ICharts.Cell] = []
         private var currentScrollIsHorizontal = false
-        
-        fileprivate var offsetX: CGFloat = 0
-        fileprivate var offsetXState: S = .latest
-        fileprivate var hint = Hint()
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -96,15 +100,14 @@ fileprivate extension IPerformanceView.NSICharts {
             fatalError("init(coder:) has not been implemented")
         }
         
-        func refresh() {
-            guard let group = target?.target?.group else {
+        fileprivate func refresh() {
+            guard let group, let actor else {
                 return
             }
             
-            reload(group.notifiers)
-        }
-                
-        private func reload(_ datas: [CPerformance.Chart.Notifier]) {
+            
+            
+            let datas = group.notifiers
             let isNeedScrollTop = cells.count == 0
             
             if datas.count > cells.count {
@@ -119,14 +122,14 @@ fileprivate extension IPerformanceView.NSICharts {
             
             let padding: CGFloat = 10
             var y: CGFloat = 10
+                  
+            horizontal(0)
             
-            calculate(0)
-                        
             (0 ..< cells.count).forEach { index in
                 let i = cells.count - index - 1
                 let cell = cells[i]
                 let notifier = datas[i]
-                cell.reload(notifier, hint, offsetX)
+                cell.bind(notifier, actor)
                 cell.isHidden = !notifier.graph.visible
                 guard notifier.graph.visible else {
                     return
@@ -141,133 +144,135 @@ fileprivate extension IPerformanceView.NSICharts {
                 scrollToTop()
             }
         }
-        
-        private func hintRender() {
-            target?.target?.group.highlighter.hint = hint
+                        
+        private func render() {
             cells.forEach { cell in
-                cell.hint(hint)
+                cell.reload()
             }
         }
         
         // MARK: - calculate function
         
         override func scrollWheel(with event: NSEvent) {
+            func visible(_ frame: CGRect) -> Bool {
+                if frame.maxY < -frame.height || frame.minY > self.frame.height + frame.height {
+                    return false
+                }
+                return true
+            }
+            
             if event.phase == .began {
                 currentScrollIsHorizontal = abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY)
             }
 
             if currentScrollIsHorizontal {
-                calculate(event.scrollingDeltaX)
+                horizontal(event.scrollingDeltaX)
                 cells.forEach { cell in
-                    cell.visible(canVisible(cell.convert(cell.bounds, to: self)))
-                    cell.scroll(offsetX)
+                    cell.visible(visible(cell.convert(cell.bounds, to: self)))
+                    cell.reload()
                 }
                 return
             }
             
             super.scrollWheel(with: event)
             cells.forEach { cell in
-                cell.visible(canVisible(cell.convert(cell.bounds, to: self)))
+                cell.visible(visible(cell.convert(cell.bounds, to: self)))
+                cell.reload()
             }
         }
         
         @objc private func click(_ gesture: NSClickGestureRecognizer) {
-            if hint.action != .none {
-                hint.action = .none
-                hint.area.size.width = 0
-            } else {
-                hint.action = .click
-                hint.area.origin = gesture.location(in: self)
-                hint.offsetX = offsetX
+            typealias H = CPerformance.Chart.Actor.Highlighter.Hint
+
+            guard let actor else { return }
+            
+            actor.hilighter.update(gesture.state == .began ? .click : .none)
+            actor.hilighter.sync { hint in
+                var hint = hint
+                if hint.action != .none {
+                    hint = H()
+                } else {
+                    let config = H.C(offset: actor.displayer.mutate.offsetX,
+                                     location: gesture.location(in: self))
+                    hint.action = .click
+                    hint.begin = config
+                    hint.end = config
+                }
+                return hint
             }
-            hintRender()
+            
+            render()
         }
         
         @objc private func drag(_ gesture: NSPanGestureRecognizer) {
-            if gesture.state == .began {
-                hint.action = .drag
-                hint.area.origin = gesture.location(in: self)
-                hint.area.size.width = 0
-                hint.offsetX = offsetX
-            } else {
-                hint.area.size.width = gesture.location(in: self).x - hint.area.origin.x
+            typealias H = CPerformance.Chart.Actor.Highlighter.Hint
+            guard let actor else { return }
+                        
+            var current: H.C {
+                H.C(offset: actor.displayer.mutate.offsetX,
+                    location: gesture.location(in: self))
             }
-            hintRender()
-        }
-                
-        private func canVisible(_ frame: CGRect) -> Bool {
-            if frame.maxY < -frame.height || frame.minY > self.frame.height + frame.height {
-                return false
-            }
-            return true
-        }
-        
-        private func calculate(_ deltaX: CGFloat) {
-            var offsetX = self.offsetX
-            guard let group = target?.target?.group else {
-                return
+            actor.hilighter.update(gesture.state == .ended ? .none : .drag)
+            actor.hilighter.sync { hint in
+                var hint = actor.hilighter.hint
+                if gesture.state == .began {
+                    hint.action = .drag
+                    hint.end = nil
+                    hint.begin = current
+                } else {
+                    hint.end = current
+                }
+                return hint
             }
             
-            offsetX += deltaX
+            render()
+        }
+                
+        private func horizontal(_ deltaX: CGFloat) {
+            guard let group ,let actor else { return }
             
             let w = frame.width - group.inset.left - group.inset.right
             let contentWidth: CGFloat = group.width * CGFloat(group.snapCount)
-            
             let max: CGFloat = 0
             var min = w - contentWidth
             if min > 0 { min = 0 }
             
-            if offsetXState == .stable {
-                if offsetX < min {
-                    offsetXState = .latest
+            actor.displayer.sync { mutate in
+                var mutate = mutate
+                var offset = mutate.offsetX
+                var state = mutate.state
+                
+                offset += deltaX
+                
+                if state == .stable {
+                    if offset < min {
+                        state = .latest
+                    }
+                } else {
+                    if deltaX > 0 {
+                        state = .stable
+                    }
                 }
-            } else {
-                if deltaX > 0 {
-                    offsetXState = .stable
+                
+                if state == .latest {
+                    offset = min
                 }
+                
+                if offset > max { offset = max }
+                else if offset < min { offset = min }
+                mutate.offsetX = offset
+                mutate.state = state
+                return mutate
             }
             
-            if offsetXState == .latest {
-                offsetX = min
+            guard actor.hilighter.current == .drag, let end = actor.hilighter.hint.end else { return }
+            actor.hilighter.sync { hint in
+                var hint = actor.hilighter.hint
+                hint.end = .init(offset: actor.displayer.mutate.offsetX,
+                                  location: end.location)
+                return hint
             }
-            
-            if offsetX > max { offsetX = max }
-            else if offsetX < min { offsetX = min }
-            
-            self.offsetX = offsetX
-            self.target?.target?.group.highlighter.offsetX = offsetX
-            self.target?.target?.group.highlighter.offsetXState = offsetXState
         }
-    }
-}
-
-extension IPerformanceView.NSICharts {
-    enum Action {
-        case none
-        case click
-        case drag
-    }
-    
-    struct Hint {
-        var offsetX: CGFloat = 0
-        var action: Action = .none
-        var area: CGRect = .zero
-        #if DEBUG
-        var description: String {
-            """
-            [action : \(action)]
-            [X : \(area.origin.x)]
-            [W : \(area.size.width)]
-            """
-        }
-        #endif
-    }
-}
-
-extension IPerformanceView.NSICharts {
-    enum S {
-        case latest
-        case stable
     }
 }
 

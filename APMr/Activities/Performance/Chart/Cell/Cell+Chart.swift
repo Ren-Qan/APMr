@@ -16,7 +16,7 @@ extension IPerformanceView.ICharts.Cell {
             let graph = configure.graph
             let frame = configure.frame
             let checker = configure.checker
-            let offsetX = configure.offset
+            let offsetX = configure.actor.displayer.mutate.offsetX
             
             let w = graph.axis.width
             var l = Int((-offsetX) / graph.axis.width)

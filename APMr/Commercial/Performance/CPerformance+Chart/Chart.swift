@@ -7,26 +7,27 @@
 
 import AppKit
 import Combine
-import SwiftUI
 
 extension CPerformance {
     class Chart {
-        private(set) var group = Group()
+        fileprivate(set) static var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
+        fileprivate(set) static var width: CGFloat = 20
         
-        private var map: [DSPMetrics.T : Notifier] = [:]
+        private(set) var actor = Actor()
+        private(set) var group = Drawer.Group()
         
-        fileprivate static var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
-        fileprivate static var width: CGFloat = 20
-    
+        private var map: [DSPMetrics.T : Drawer.Notifier] = [:]
+            
         public func clean() {
+            actor.reset()
             group.reset()
         }
         
         public func preset(_ model: DSPMetrics.M) {
             model.all.forEach { target in
                 if self.map[target.type] == nil {
-                    let notifier = Notifier(type: target.type)
-                    self.group.notifiers.append(notifier)
+                    let notifier = Drawer.Notifier(type: target.type)
+                    self.group.add(notifier)
                     self.map[target.type] = notifier
                 }
             }
@@ -77,123 +78,12 @@ extension CPerformance {
             [cpu, gpu, fps, memory, io, network, diagnostic].forEach { m in
                 self.map[m.type]?.graph.update(m.marks)
             }
+            
             self.group.sync()
+            self.actor.hilighter.snap.match(Self.width, Self.inset, self.group.snapCount)
         }
     }
 }
-
-extension CPerformance.Chart {
-    class Group: ObservableObject {
-        public var inset: NSEdgeInsets { CPerformance.Chart.inset }
-        public var width: CGFloat { CPerformance.Chart.width }
-        
-        fileprivate(set) var snapCount: Int = 0
-        fileprivate(set) var notifiers: [Notifier] = []
-        fileprivate(set) var highlighter = Highlighter()
-                     
-        fileprivate func reset() {
-            snapCount = 0
-            highlighter.reset()
-            notifiers.forEach { notifier in
-                notifier.graph.clean()
-            }
-        }
-        
-        fileprivate func sync() {
-            self.snapCount += 1
-            self.highlighter.sync(inset, width, snapCount)
-            self.objectWillChange.send()
-        }
-    }
-    
-    class Notifier: Identifiable, ObservableObject {
-        public let type: DSPMetrics.T
-        public let graph = Graph()
-        
-        init(type: DSPMetrics.T) {
-            self.type = type
-        }
-    }
-}
-
-// Line
-extension CPerformance.Chart.Notifier {
-    class Graph {
-        fileprivate(set) var axis = Axis()
-        fileprivate(set) var series: [Series] = []
-        fileprivate(set) var visible: Bool = true
-        
-        public var inset: NSEdgeInsets { CPerformance.Chart.inset }
-        
-        fileprivate func clean() {
-            axis.clean()
-            series.forEach { s in
-                s.clean()
-            }
-        }
-        
-        fileprivate func update(_ sources: [CPerformance.Chart.Mark]) {
-            if series.count != sources.count {
-                series.removeAll()
-                
-                sources.each { index, _ in
-                    let item = Series()
-                    series.append(item)
-                    return true
-                }
-            }
-             
-            axis.update(sources)
-            (0 ..< sources.count).forEach { i in
-                let series = series[i]
-                let source = sources[i]
-                series.update(source)
-            }
-        }
-    }
-}
-
-extension CPerformance.Chart.Notifier.Graph {
-    class Series: Identifiable {
-        fileprivate(set) var marks: [CPerformance.Chart.Mark] = []
-        fileprivate(set) var visible: Bool = true
-                
-        fileprivate func clean() {
-            marks.removeAll()
-        }
-        
-        fileprivate func update(_ source: CPerformance.Chart.Mark) {
-            marks.append(source)
-        }
-    }
-}
-
-extension CPerformance.Chart.Notifier.Graph {
-    class Axis {
-        fileprivate(set) var upper: CPerformance.Chart.Mark? = nil
-        fileprivate(set) var count = 0
-        
-        public var width: CGFloat { CPerformance.Chart.width }
-        
-        fileprivate func clean() {
-            upper = nil
-            count = 0
-        }
-        
-        fileprivate func update(_ sources: [CPerformance.Chart.Mark]) {
-            self.count += 1
-            
-            let max = sources.max { l, r in
-                return l.source.value < r.source.value
-            }
-            
-            if (max?.source.value ?? 0) > (upper?.source.value ?? 0) {
-                upper = max
-            }
-        }
-    }
-}
-
 
 
 #if DEBUG

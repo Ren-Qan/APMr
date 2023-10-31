@@ -35,12 +35,13 @@ struct IPerformanceView: View {
         HStack(spacing: 0) {
             ICharts()
                 .environmentObject(performance.chart.group)
+                .environmentObject(performance.chart.actor)
                 .frame(maxWidth: .infinity)
                 .frame(maxHeight: .infinity)
             
             if performance.isNeedShowDetailSide {
                 ICharts.ISides(group: performance.chart.group)
-                    .environmentObject(performance.chart.group.highlighter)
+                    .environmentObject(performance.chart.actor.hilighter.snap)
                     .frame(maxWidth: 250)
                     .frame(maxHeight: .infinity)
                     .background(Color.P.BG1)
