@@ -10,10 +10,6 @@ import AppKit
 extension IPerformanceView.ICharts {
     class NSISides: NSView  {
         public var target: ISides? = nil
-        public var baseX = 0
-        public var count = 0
-                
-        fileprivate var indexPath: IndexPath? = nil
         
         fileprivate lazy var collection: NSICollection = {
             let layout = NSCollectionViewFlowLayout()
@@ -24,6 +20,7 @@ extension IPerformanceView.ICharts {
             collection.collectionViewLayout = layout
             collection.delegate = self
             collection.dataSource = self
+            collection.isSelectable = true
             return collection
         }()
         
@@ -49,6 +46,19 @@ extension IPerformanceView.ICharts {
     }
 }
 
+extension IPerformanceView.ICharts.NSISides {
+    typealias S = CPerformance.Chart.Actor.Highlighter.Snap.Shot
+    
+    fileprivate var shots: [S]? {
+        return target?.snap.items
+    }
+    
+    fileprivate func shot(_ indexPath: IndexPath) -> S? {
+        guard let shots, shots.count > indexPath.item else { return nil }
+        return shots[indexPath.item]
+    }
+}
+
 extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
                                              NSCollectionViewDataSource {
     func numberOfSections(in collectionView: NSCollectionView) -> Int {
@@ -56,30 +66,32 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
     }
     
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        return count
+        return shots?.count ?? 0
     }
     
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let cell: Cell = collectionView.reuse(indexPath)
-        cell.label.stringValue = "\(indexPath.item + baseX)"
-        cell.closure = { [weak self] in
-            if let row = self?.indexPath?.item, row == indexPath.item {
-                self?.indexPath = nil
-            } else {
-                self?.indexPath = indexPath
-            }
         
-            self?.collection.animator().reloadItems(at: [indexPath])
-            
+        if let shot = shot(indexPath) {
+            cell.sync(shot)
         }
+        
         return cell
     }
     
     func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
-        if let i = self.indexPath, i.item == indexPath.item {
-            return .init(width: bounds.width, height: 100)
+        if let shots, shots.count > indexPath.item {
+            return .init(width: bounds.width, height: shots[indexPath.item].expand ? 100 : 20)
         }
-        return .init(width: bounds.width, height: 50)
+        return .init(width: bounds.width, height: 20)
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        if let shots, let indexPath = indexPaths.first, shots.count > indexPath.section {
+            let shot = shots[indexPath.item]
+            shot.expand.toggle()
+            collectionView.reloadItems(at: indexPaths)
+        }
     }
 }
 

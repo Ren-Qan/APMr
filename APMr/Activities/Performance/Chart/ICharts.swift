@@ -25,9 +25,7 @@ extension IPerformanceView {
         
         private func setup(_ nsView: IPerformanceView.NSICharts) {
             nsView.target = self
-            DispatchQueue.mainAsync {
-                nsView.refresh()
-            }
+            nsView.refresh()
         }
     }
 }
@@ -104,8 +102,6 @@ fileprivate extension IPerformanceView.NSICharts {
             guard let group, let actor else {
                 return
             }
-            
-            
             
             let datas = group.notifiers
             let isNeedScrollTop = cells.count == 0

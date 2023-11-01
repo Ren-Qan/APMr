@@ -35,61 +35,65 @@ extension CPerformance {
                 
         public func sync(_ model: DSPMetrics.M,
                          _ timing: TimeInterval) {
-            struct M {
-                let type: DSPMetrics.T
-                let marks: [Mark]
-                
-                init(_ type: DSPMetrics.T,
-                     _ marks: [Mark]) {
-                    self.type = type
-                    self.marks = marks
-                }
-            }
-                        
-            let cpu = M(.CPU, [Mark(timing, model.cpu.total, "Total"),
+            let cpu = V(.CPU, [Mark(timing, model.cpu.total, "Total"),
                          Mark(timing, model.cpu.process, "Process")])
             
-            let gpu = M(.GPU, [Mark(timing, model.gpu.device, "Device"),
+            let gpu = V(.GPU, [Mark(timing, model.gpu.device, "Device"),
                          Mark(timing, model.gpu.tiler, "Tiler"),
                          Mark(timing, model.gpu.renderer, "Renderer")])
             
-            let fps = M(.FPS, [Mark(timing, model.fps.fps, "FPS")])
+            let fps = V(.FPS, [Mark(timing, model.fps.fps, "FPS")])
             
-            let memory = M(.Memory, [Mark(timing, model.memory.memory, "Memory"),
+            let memory = V(.Memory, [Mark(timing, model.memory.memory, "Memory"),
                                      Mark(timing, model.memory.resident, "Resident"),
                                      Mark(timing, model.memory.vm, "VM")])
             
-            let io = M(.IO, [Mark(timing, model.io.write, "Write"),
+            let io = V(.IO, [Mark(timing, model.io.write, "Write"),
                              Mark(timing, model.io.read, "Read"),
                              Mark(timing, model.io.writeDelta, "WriteDelta"),
                              Mark(timing, model.io.readDelta, "ReadDelta")])
             
-            let network = M(.Network, [Mark(timing, model.network.down, "Down"),
+            let network = V(.Network, [Mark(timing, model.network.down, "Down"),
                                        Mark(timing, model.network.up, "Up"),
                                        Mark(timing, model.network.downDelta, "DownDelta"),
                                        Mark(timing, model.network.upDelta, "UpDelta")])
             
-            let diagnostic = M(.Diagnostic, [Mark(timing, model.diagnostic.amperage, "Amperage"),
+            let diagnostic = V(.Diagnostic, [Mark(timing, model.diagnostic.amperage, "Amperage"),
                                              Mark(timing, model.diagnostic.battery, "Battery"),
                                              Mark(timing, model.diagnostic.temperature, "Temperature"),
                                              Mark(timing, model.diagnostic.voltage, "Voltage")])
             
+            let values = [cpu, gpu, fps, memory, io, network, diagnostic]
             
-            [cpu, gpu, fps, memory, io, network, diagnostic].forEach { m in
-                self.map[m.type]?.graph.update(m.marks)
+            values.forEach { v in
+                self.map[v.type]?.graph.update(v.marks)
             }
             
+            self.actor.hilighter.snap.set(timing, values)
+            self.actor.hilighter.snap.match(Self.width, Self.inset)
+
             self.group.sync()
-            self.actor.hilighter.snap.match(Self.width, Self.inset, self.group.snapCount)
         }
     }
 }
 
+extension CPerformance.Chart {
+    struct V {
+        let type: DSPMetrics.T
+        let marks: [Mark]
+        
+        init(_ type: DSPMetrics.T,
+             _ marks: [Mark]) {
+            self.type = type
+            self.marks = marks
+        }
+    }
+}
 
 #if DEBUG
 extension CPerformance.Chart {
     static var debug_Data = DSPMetrics.M()
-    public func addRandom(_ timming: TimeInterval) {
+    public func addRandom(_ timing: TimeInterval) {
         CPerformance.Chart.debug_Data.cpu.total.value = .random(in:  0.1 ... 99.9)
         CPerformance.Chart.debug_Data.cpu.process.value = .random(in:  0.1 ... 99.9)
 
@@ -118,7 +122,7 @@ extension CPerformance.Chart {
         CPerformance.Chart.debug_Data.diagnostic.temperature.value = .random(in:  0.1 ... 99.9)
         CPerformance.Chart.debug_Data.diagnostic.voltage.value = .random(in:  0.1 ... 99.9)
         
-        sync(CPerformance.Chart.debug_Data, timming)
+        sync(CPerformance.Chart.debug_Data, timing)
     }
 }
 #endif

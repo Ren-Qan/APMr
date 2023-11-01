@@ -24,19 +24,18 @@ extension CPerformance.Chart {
 }
 
 extension CPerformance.Chart.Actor.Highlighter.Snap {
-    class Shot: Identifiable, ObservableObject {
-        private(set) var isExpand: Bool = false
-        public let index: Int
+    class Shot {
+        public var expand: Bool = false
+        private(set) var index: Int
+        private(set) var timing: TimeInterval
+        private(set) var values: [CPerformance.Chart.V]
         
-        init(_ index: Int) {
+        init(_ index: Int,
+             _ timing: TimeInterval,
+             _ values: [CPerformance.Chart.V]) {
             self.index = index
-        }
-        
-        public func expand(_ value: Bool) {
-            if self.isExpand != value {
-                objectWillChange.send()
-            }
-            self.isExpand = value
+            self.timing = timing
+            self.values = values
         }
     }
 }

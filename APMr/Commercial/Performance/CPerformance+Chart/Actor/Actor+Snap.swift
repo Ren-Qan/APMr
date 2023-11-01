@@ -12,27 +12,34 @@ extension CPerformance.Chart.Actor.Highlighter {
     class Snap: ObservableObject {
         typealias H = CPerformance.Chart.Actor.Highlighter
         
-        fileprivate(set) var shots: [Shot] = []
+        fileprivate var shots: [Shot] = []
         fileprivate var range: Range<Int>? = nil
         
         fileprivate var width: CGFloat = 20
         fileprivate var inset = NSEdgeInsets(top: 25, left: 20, bottom: 20, right: 0)
-        fileprivate var ceil = 0
     }
 }
 
 extension CPerformance.Chart.Actor.Highlighter.Snap {
-    public func reset() {
-        guard range != nil else {
-             return
+    public var items: [Shot] {
+        guard let range else {
+            return []
         }
-        range = nil
-        shots = []
-        objectWillChange.send()
+        return Array(shots[range])
     }
     
-    public func match(_ width: CGFloat, _ inset: NSEdgeInsets, _ ceil: Int) {
-        self.ceil = ceil
+    public func reset() {
+        shots.removeAll()
+        sync(nil)
+    }
+    
+    public func set(_ timing: TimeInterval, _ values: [CPerformance.Chart.V]) {
+        let shot = Shot(shots.count, timing, values)
+        shots.append(shot)
+    }
+    
+    public func match(_ width: CGFloat,
+                      _ inset: NSEdgeInsets) {
         var isNeedSend = false
 
         if self.width != width {
@@ -55,8 +62,11 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
     }
     
     public func check(_ hint: H.Hint) {
-        guard ceil > 0, hint.action != .none, let begin = hint.begin, let end = hint.end else {
-            if shots.count > 0 {
+        guard shots.count > 0,
+              hint.action != .none,
+              let begin = hint.begin,
+              let end = hint.end else {
+            if range != nil {
                 sync(nil)
             }
             return
@@ -70,15 +80,13 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
         var l = Int(startX / width)
         var r = l + c
         
-        print("All:\(c) L:\(l) R:\(r)")
-        
         if endX < startX {
             l -= c
             r -= c
         }
         
         if l < 0 { l = 0 }
-        if r >= ceil { r = ceil - 1 }
+        if r >= shots.count { r = shots.count - 1 }
         if l > r { l = r }
         if hint.action == .click { r = l }
         self.sync(l ..< r + 1)
@@ -90,7 +98,6 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
         guard let value else {
             if self.range != nil {
                 self.range = nil
-                self.shots = []
                 objectWillChange.send()
             }
             return
@@ -103,10 +110,6 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
         }
         
         self.range = value
-        self.shots = value.compactMap { index in
-            guard index < ceil else { return nil }
-            return Shot(index)
-        }
         objectWillChange.send()
     }
 }

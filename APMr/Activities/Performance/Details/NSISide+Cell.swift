@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import SwiftUI
 
 extension IPerformanceView.ICharts.NSISides {
     class Cell: NSCollectionView.Cell {
@@ -14,17 +15,11 @@ extension IPerformanceView.ICharts.NSISides {
             textField.wantsLayer = true
             textField.isBordered = false
             textField.isEditable = false
-            textField.textColor = .black
+            textField.textColor = .white
             textField.alignment = .center
-            textField.backgroundColor = .random.withAlphaComponent(0.1)
-            
-            let tap = NSClickGestureRecognizer(target: self, action: #selector(click))
-            self.view.addGestureRecognizer(tap)
-            
+            textField.backgroundColor = .orange
             return textField
         }()
-        
-        var closure: (() -> Void)? = nil
         
         override func viewDidLoad() {
             super.viewDidLoad()
@@ -35,9 +30,11 @@ extension IPerformanceView.ICharts.NSISides {
             super.viewDidLayout()
             label.frame = view.bounds
         }
-        
-        @objc private func click() {
-            closure?()
-        }
+    }
+}
+
+extension IPerformanceView.ICharts.NSISides.Cell {
+    public func sync(_ shot: IPerformanceView.ICharts.NSISides.S) {
+        label.stringValue = "第\(shot.timing)S 时刻数据"
     }
 }

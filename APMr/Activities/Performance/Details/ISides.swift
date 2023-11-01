@@ -8,9 +8,7 @@
 import SwiftUI
 
 extension IPerformanceView.ICharts {
-    struct ISides: NSViewRepresentable {
-        var group: CPerformance.Chart.Drawer.Group
-        
+    struct ISides: NSViewRepresentable {        
         @EnvironmentObject var snap: CPerformance.Chart.Actor.Highlighter.Snap
         
         typealias NSViewType = IPerformanceView.ICharts.NSISides
@@ -27,8 +25,6 @@ extension IPerformanceView.ICharts {
         
         private func setup(_ nsView: NSViewType) {
             nsView.target = self
-            nsView.baseX = snap.shots.first?.index ?? 0
-            nsView.count = snap.shots.count
             nsView.refresh()
         }
     }
