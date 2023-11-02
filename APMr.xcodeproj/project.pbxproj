@@ -93,6 +93,9 @@
 		C78CB9172973AD0300F86B33 /* ButtonCommonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */; };
 		C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A1C4522A0384C5009BA0D5 /* Engery.swift */; };
 		C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A487DA2A24AC5700A033B9 /* Typealias.swift */; };
+		C7AB90632AF388E700DDE900 /* IColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AB90622AF388E700DDE900 /* IColors.swift */; };
+		C7AB90652AF38BED00DDE900 /* IColors+NSColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AB90642AF38BED00DDE900 /* IColors+NSColor.swift */; };
+		C7AB90672AF38C8300DDE900 /* IColors+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AB90662AF38C8300DDE900 /* IColors+Color.swift */; };
 		C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC987E2956E0C200A6580B /* NetworkStatistics.swift */; };
 		C7AC98812956EB1D00A6580B /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC98802956EB1D00A6580B /* Networking.swift */; };
 		C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */; };
@@ -247,6 +250,9 @@
 		C78CB9162973AD0300F86B33 /* ButtonCommonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommonStyle.swift; sourceTree = "<group>"; };
 		C7A1C4522A0384C5009BA0D5 /* Engery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engery.swift; sourceTree = "<group>"; };
 		C7A487DA2A24AC5700A033B9 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
+		C7AB90622AF388E700DDE900 /* IColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IColors.swift; sourceTree = "<group>"; };
+		C7AB90642AF38BED00DDE900 /* IColors+NSColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IColors+NSColor.swift"; sourceTree = "<group>"; };
+		C7AB90662AF38C8300DDE900 /* IColors+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IColors+Color.swift"; sourceTree = "<group>"; };
 		C7AC987E2956E0C200A6580B /* NetworkStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatistics.swift; sourceTree = "<group>"; };
 		C7AC98802956EB1D00A6580B /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C7AC9894295C816500A6580B /* NetworkStatisticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatisticsModels.swift; sourceTree = "<group>"; };
@@ -660,8 +666,11 @@
 		C76E7B5B2951BAA7004F009B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				C76E7B5C2951BBB3004F009B /* Colors.xcassets */,
 				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
+				C76E7B5C2951BBB3004F009B /* Colors.xcassets */,
+				C7AB90622AF388E700DDE900 /* IColors.swift */,
+				C7AB90642AF38BED00DDE900 /* IColors+NSColor.swift */,
+				C7AB90662AF38C8300DDE900 /* IColors+Color.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1063,6 +1072,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */,
+				C7AB90672AF38C8300DDE900 /* IColors+Color.swift in Sources */,
 				C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */,
 				C737D6A92AF0A97200F901A8 /* Chart+Actor.swift in Sources */,
 				C74C3E152AD52C4300F70A36 /* Cell+Layer.swift in Sources */,
@@ -1095,6 +1105,7 @@
 				C754F0DF296D29040053DBA3 /* Root.swift in Sources */,
 				C737D6AE2AF0AD6B00F901A8 /* Actor+Highlighter.swift in Sources */,
 				C70BFCBA2A29D97800CBD6B3 /* CoreParser+Handles.swift in Sources */,
+				C7AB90652AF38BED00DDE900 /* IColors+NSColor.swift in Sources */,
 				C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */,
 				C737D69D2AF0A3BD00F901A8 /* Drawer+Notifier.swift in Sources */,
 				C74C3E0D2AD52B3E00F70A36 /* Cell+Checker.swift in Sources */,
@@ -1113,6 +1124,7 @@
 				C7FA2E52299E28F900FE78F2 /* Sampling.swift in Sources */,
 				C7CCDA95298A127100948BA3 /* ButtonCommonModifier.swift in Sources */,
 				C70BFCBC2A29DFA900CBD6B3 /* CoreParserHandleModels.swift in Sources */,
+				C7AB90632AF388E700DDE900 /* IColors.swift in Sources */,
 				C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */,
 				C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */,
 				C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */,

@@ -23,50 +23,6 @@ public extension Color {
 }
 
 public extension Color {
-    struct P {
-        static var A1 = Color("Accent1")
-        
-        static var BG1 = Color("Background1")
-        
-        static var BG2 = Color("Background2")
-        
-        static var B1 = Color("Border1")
-        
-        static var H1 = Color("Headline1")
-        
-        static var H2 = Color("Headline2")
-        
-        static var C1 = Color("Content1")
-        
-        static var CS1 = Color("ContentSeparator1")
-        
-        static var S1 = Color("Separator1")
-        
-        static var S2 = Color("Separator2")
-        
-        static var SEL1 = Color("Selected1")
-        
-        static var SEL2 = Color("Selected2")
-        
-        static var BLUE1 = Color("BLUE1")
-        
-        static var BLUE2 = Color("BLUE2")
-        
-        static var BLUE3 = Color("BLUE3")
-        
-        static var GREEN1 = Color("GREEN1")
-        
-        static var ORANGE1 = Color("ORANGE1")
-        
-        static var PURPLE1 = Color("PURPLE1")
-    }
-}
-
-public extension Color {
-    var NS: NSColor {
-        NSColor(self)
-    }
-    
     init(hex: UInt, alpha: Double = 1) {
         self.init(
             .sRGB,

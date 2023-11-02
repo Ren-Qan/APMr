@@ -35,6 +35,6 @@ extension IPerformanceView.ICharts.NSISides {
 
 extension IPerformanceView.ICharts.NSISides.Cell {
     public func sync(_ shot: IPerformanceView.ICharts.NSISides.S) {
-        label.stringValue = "第\(shot.timing)S 时刻数据"
+        
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import AppKit
-import SwiftUI
 
 extension IPerformanceView.ICharts {
     class Cell: NSView {
@@ -31,22 +30,22 @@ extension IPerformanceView.ICharts {
         
         override func layout() {
             contentLayer.frame = bounds
-            contentLayer.backgroundColor = Color.P.BG2.NS.cgColor
-            contentLayer.title.foregroundColor = Color.P.H1.NS.cgColor
+            contentLayer.backgroundColor = NSColor.box.BG2.cgColor
+            contentLayer.title.foregroundColor = NSColor.box.H1.cgColor
             contentLayer.title.string = notifier?.type.text
             
             contentLayer.chart.styles = [
-                Color.P.BLUE3.NS.cgColor,
-                Color.P.GREEN1.NS.cgColor,
-                Color.P.PURPLE1.NS.cgColor,
-                Color.P.ORANGE1.NS.cgColor,
+                NSColor.box.BLUE3.cgColor,
+                NSColor.box.GREEN1.cgColor,
+                NSColor.box.PURPLE1.cgColor,
+                NSColor.box.ORANGE1.cgColor,
             ]
             
-            contentLayer.axis.lineColor = Color.P.B1.NS.cgColor
-            contentLayer.axis.textColor = Color.P.H1.NS.cgColor
+            contentLayer.axis.lineColor = NSColor.box.B1.cgColor
+            contentLayer.axis.textColor = NSColor.box.H1.cgColor
             
-            contentLayer.hint.strokeColor = Color.P.BLUE1.NS.cgColor
-            contentLayer.hint.fillColor = Color.P.BLUE1.NS.withAlphaComponent(0.15).cgColor
+            contentLayer.hint.strokeColor = NSColor.box.BLUE1.cgColor
+            contentLayer.hint.fillColor = NSColor.box.BLUE1.withAlphaComponent(0.15).cgColor
             
             contentLayer.chart.sync()
             contentLayer.axis.sync()

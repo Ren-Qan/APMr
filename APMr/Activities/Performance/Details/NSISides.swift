@@ -20,7 +20,7 @@ extension IPerformanceView.ICharts {
             collection.collectionViewLayout = layout
             collection.delegate = self
             collection.dataSource = self
-            collection.isSelectable = true
+            collection.backgroundColors = [.box.BG1]
             return collection
         }()
         
@@ -29,7 +29,7 @@ extension IPerformanceView.ICharts {
             self.wantsLayer = true
             addSubview(collection.view)
         }
-        
+                
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
