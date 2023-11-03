@@ -20,6 +20,7 @@ extension IPerformanceView.ICharts {
             collection.collectionViewLayout = layout
             collection.delegate = self
             collection.dataSource = self
+            collection.isSelectable = true
             collection.backgroundColors = [.box.BG1]
             return collection
         }()
@@ -81,7 +82,7 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
     
     func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
         if let shots, shots.count > indexPath.item {
-            return .init(width: bounds.width, height: shots[indexPath.item].expand ? 100 : 20)
+            return .init(width: bounds.width, height: shots[indexPath.item].expand ? 300 : 50)
         }
         return .init(width: bounds.width, height: 20)
     }
@@ -92,6 +93,10 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
             shot.expand.toggle()
             collectionView.reloadItems(at: indexPaths)
         }
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
 }
 

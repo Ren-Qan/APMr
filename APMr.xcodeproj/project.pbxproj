@@ -29,6 +29,11 @@
 		C73BBB162943154300472A75 /* PerformanceInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB152943154300472A75 /* PerformanceInstrumentsService.swift */; };
 		C73BBB18294315A600472A75 /* ADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB17294315A600472A75 /* ADevice.swift */; };
 		C73BBB1A29431AD200472A75 /* Processcontrol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB1929431AD200472A75 /* Processcontrol.swift */; };
+		C7429B8C2AF4C7BD0048574D /* NSIText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7429B8B2AF4C7BD0048574D /* NSIText.swift */; };
+		C7429B8F2AF4C91E0048574D /* NSIText+Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7429B8E2AF4C91E0048574D /* NSIText+Storage.swift */; };
+		C7429B912AF4CC520048574D /* NSIText+Drawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7429B902AF4CC520048574D /* NSIText+Drawer.swift */; };
+		C7429B932AF4CD540048574D /* NSIText+Flag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7429B922AF4CD540048574D /* NSIText+Flag.swift */; };
+		C7429B952AF4CFF80048574D /* NSIText+Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7429B942AF4CFF80048574D /* NSIText+Layer.swift */; };
 		C7483B9429373A0400F32BE0 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* Application.swift */; };
 		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
 		C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */; };
@@ -112,12 +117,19 @@
 		C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */; };
 		C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0D1B32A5E742600F610F6 /* ALockAction.swift */; };
 		C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */; };
-		C7D901DF2AEFAAC200E231D9 /* NSISide+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D901DE2AEFAAC200E231D9 /* NSISide+Cell.swift */; };
+		C7D901DF2AEFAAC200E231D9 /* NSISides+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D901DE2AEFAAC200E231D9 /* NSISides+Cell.swift */; };
 		C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C5299C8BE5000CD484 /* LaunchView.swift */; };
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
 		C7E137CD299CB52A000CD484 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CC299CB52A000CD484 /* Base.swift */; };
 		C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */; };
+		C7E8C3642AF497FF0001FC4B /* Cell+Headline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */; };
+		C7E8C3662AF4995C0001FC4B /* Cell+Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */; };
+		C7E8C3682AF49A390001FC4B /* NSView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */; };
+		C7E8C36A2AF49AFE0001FC4B /* Cell+PanelSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3692AF49AFE0001FC4B /* Cell+PanelSet.swift */; };
+		C7E8C36C2AF4A13F0001FC4B /* NSILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C36B2AF4A13F0001FC4B /* NSILabel.swift */; };
+		C7E8C36E2AF4A47E0001FC4B /* NSILabel+Flag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C36D2AF4A47E0001FC4B /* NSILabel+Flag.swift */; };
+		C7E8C3702AF4A6260001FC4B /* NSILabel+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C36F2AF4A6260001FC4B /* NSILabel+Display.swift */; };
 		C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */; };
 		C7F5DA892946EF94005C6F7D /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* GPU.swift */; };
 		C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA2E4F299E036A00FE78F2 /* ProcessControlByDictionary.swift */; };
@@ -150,6 +162,11 @@
 		C73BBB152943154300472A75 /* PerformanceInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceInstrumentsService.swift; sourceTree = "<group>"; };
 		C73BBB17294315A600472A75 /* ADevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADevice.swift; sourceTree = "<group>"; };
 		C73BBB1929431AD200472A75 /* Processcontrol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Processcontrol.swift; sourceTree = "<group>"; };
+		C7429B8B2AF4C7BD0048574D /* NSIText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSIText.swift; sourceTree = "<group>"; };
+		C7429B8E2AF4C91E0048574D /* NSIText+Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIText+Storage.swift"; sourceTree = "<group>"; };
+		C7429B902AF4CC520048574D /* NSIText+Drawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIText+Drawer.swift"; sourceTree = "<group>"; };
+		C7429B922AF4CD540048574D /* NSIText+Flag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIText+Flag.swift"; sourceTree = "<group>"; };
+		C7429B942AF4CFF80048574D /* NSIText+Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIText+Layer.swift"; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7483B9329373A0400F32BE0 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		C7483B9729373A0600F32BE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -269,12 +286,19 @@
 		C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoModels.swift; sourceTree = "<group>"; };
 		C7D0D1B32A5E742600F610F6 /* ALockAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALockAction.swift; sourceTree = "<group>"; };
 		C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
-		C7D901DE2AEFAAC200E231D9 /* NSISide+Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISide+Cell.swift"; sourceTree = "<group>"; };
+		C7D901DE2AEFAAC200E231D9 /* NSISides+Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+Cell.swift"; sourceTree = "<group>"; };
 		C7E137C5299C8BE5000CD484 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
 		C7E137CC299CB52A000CD484 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
 		C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DSPMetrics+Entity.swift"; sourceTree = "<group>"; };
+		C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Headline.swift"; sourceTree = "<group>"; };
+		C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Panel.swift"; sourceTree = "<group>"; };
+		C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Extensions.swift"; sourceTree = "<group>"; };
+		C7E8C3692AF49AFE0001FC4B /* Cell+PanelSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+PanelSet.swift"; sourceTree = "<group>"; };
+		C7E8C36B2AF4A13F0001FC4B /* NSILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSILabel.swift; sourceTree = "<group>"; };
+		C7E8C36D2AF4A47E0001FC4B /* NSILabel+Flag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSILabel+Flag.swift"; sourceTree = "<group>"; };
+		C7E8C36F2AF4A6260001FC4B /* NSILabel+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSILabel+Display.swift"; sourceTree = "<group>"; };
 		C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* GPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPU.swift; sourceTree = "<group>"; };
 		C7FA2E4F299E036A00FE78F2 /* ProcessControlByDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessControlByDictionary.swift; sourceTree = "<group>"; };
@@ -339,7 +363,7 @@
 			children = (
 				C71A9EBA2AD66D30001626A5 /* ISides.swift */,
 				C74B14A42AE7684200A06D05 /* NSISides.swift */,
-				C7D901DE2AEFAAC200E231D9 /* NSISide+Cell.swift */,
+				C7E8C3622AF497D80001FC4B /* NSSIdes+Cell */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -419,6 +443,28 @@
 				C73BBB122943094B00472A75 /* ILockdownModels.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		C7429B8D2AF4C7C90048574D /* NSIText */ = {
+			isa = PBXGroup;
+			children = (
+				C7429B8B2AF4C7BD0048574D /* NSIText.swift */,
+				C7429B942AF4CFF80048574D /* NSIText+Layer.swift */,
+				C7429B922AF4CD540048574D /* NSIText+Flag.swift */,
+				C7429B8E2AF4C91E0048574D /* NSIText+Storage.swift */,
+				C7429B902AF4CC520048574D /* NSIText+Drawer.swift */,
+			);
+			path = NSIText;
+			sourceTree = "<group>";
+		};
+		C7429B962AF4F0440048574D /* NSILabel */ = {
+			isa = PBXGroup;
+			children = (
+				C7E8C36B2AF4A13F0001FC4B /* NSILabel.swift */,
+				C7E8C36F2AF4A6260001FC4B /* NSILabel+Display.swift */,
+				C7E8C36D2AF4A47E0001FC4B /* NSILabel+Flag.swift */,
+			);
+			path = NSILabel;
 			sourceTree = "<group>";
 		};
 		C7483B8729373A0400F32BE0 = {
@@ -687,6 +733,7 @@
 				C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */,
 				C74C3E182AD5381300F70A36 /* Font+Extensions.swift */,
 				C7842C2F2AEB842500658692 /* DispatchQueue+Extensions.swift */,
+				C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -769,6 +816,8 @@
 		C7842C312AEB851500658692 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				C7429B962AF4F0440048574D /* NSILabel */,
+				C7429B8D2AF4C7C90048574D /* NSIText */,
 				C77952822AE8D59500DBF98E /* NSITable.swift */,
 				C7842C2D2AEB694700658692 /* NSICollection.swift */,
 			);
@@ -956,6 +1005,17 @@
 			path = Metrics;
 			sourceTree = "<group>";
 		};
+		C7E8C3622AF497D80001FC4B /* NSSIdes+Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C7D901DE2AEFAAC200E231D9 /* NSISides+Cell.swift */,
+				C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */,
+				C7E8C3692AF49AFE0001FC4B /* Cell+PanelSet.swift */,
+				C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */,
+			);
+			path = "NSSIdes+Cell";
+			sourceTree = "<group>";
+		};
 		C7FBB47A2A1C969C00A6A8DF /* CoreProfileSessionTap */ = {
 			isa = PBXGroup;
 			children = (
@@ -1074,11 +1134,13 @@
 				C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */,
 				C7AB90672AF38C8300DDE900 /* IColors+Color.swift in Sources */,
 				C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */,
+				C7E8C36C2AF4A13F0001FC4B /* NSILabel.swift in Sources */,
 				C737D6A92AF0A97200F901A8 /* Chart+Actor.swift in Sources */,
 				C74C3E152AD52C4300F70A36 /* Cell+Layer.swift in Sources */,
 				C737D69F2AF0A3EC00F901A8 /* Drawer+Graph.swift in Sources */,
 				C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */,
 				C7483BEE29373ADC00F32BE0 /* Sysmontap.swift in Sources */,
+				C7E8C3662AF4995C0001FC4B /* Cell+Panel.swift in Sources */,
 				C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */,
 				C73BBB162943154300472A75 /* PerformanceInstrumentsService.swift in Sources */,
 				C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */,
@@ -1096,15 +1158,18 @@
 				C74C3E112AD52B5600F70A36 /* Cell+Axis.swift in Sources */,
 				C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
-				C7D901DF2AEFAAC200E231D9 /* NSISide+Cell.swift in Sources */,
+				C7D901DF2AEFAAC200E231D9 /* NSISides+Cell.swift in Sources */,
 				C74C3E192AD5381300F70A36 /* Font+Extensions.swift in Sources */,
+				C7429B912AF4CC520048574D /* NSIText+Drawer.swift in Sources */,
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C737D6A32AF0A45F00F901A8 /* Drawer+Axis.swift in Sources */,
 				C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */,
+				C7429B932AF4CD540048574D /* NSIText+Flag.swift in Sources */,
 				C737D6B32AF0D48200F901A8 /* Actor+Snap.swift in Sources */,
 				C754F0DF296D29040053DBA3 /* Root.swift in Sources */,
 				C737D6AE2AF0AD6B00F901A8 /* Actor+Highlighter.swift in Sources */,
 				C70BFCBA2A29D97800CBD6B3 /* CoreParser+Handles.swift in Sources */,
+				C7E8C3702AF4A6260001FC4B /* NSILabel+Display.swift in Sources */,
 				C7AB90652AF38BED00DDE900 /* IColors+NSColor.swift in Sources */,
 				C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */,
 				C737D69D2AF0A3BD00F901A8 /* Drawer+Notifier.swift in Sources */,
@@ -1113,12 +1178,15 @@
 				C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */,
 				C7FBB4792A1C965F00A6A8DF /* CoreParser.swift in Sources */,
 				C737D69B2AF0A38C00F901A8 /* Drawer+Group.swift in Sources */,
+				C7E8C36A2AF49AFE0001FC4B /* Cell+PanelSet.swift in Sources */,
 				C7515C522A28851800CFA925 /* CoreParserModels.swift in Sources */,
 				C737D6A62AF0A7BD00F901A8 /* Chart+Drawer.swift in Sources */,
 				C74B14A52AE7684200A06D05 /* NSISides.swift in Sources */,
 				C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */,
 				C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */,
+				C7429B952AF4CFF80048574D /* NSIText+Layer.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
+				C7E8C3682AF49A390001FC4B /* NSView+Extensions.swift in Sources */,
 				C7651EFF298B5FC3006F3310 /* Int64+Extensions.swift in Sources */,
 				C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */,
 				C7FA2E52299E28F900FE78F2 /* Sampling.swift in Sources */,
@@ -1126,6 +1194,7 @@
 				C70BFCBC2A29DFA900CBD6B3 /* CoreParserHandleModels.swift in Sources */,
 				C7AB90632AF388E700DDE900 /* IColors.swift in Sources */,
 				C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */,
+				C7E8C3642AF497FF0001FC4B /* Cell+Headline.swift in Sources */,
 				C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */,
 				C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */,
 				C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */,
@@ -1143,9 +1212,11 @@
 				C754F0E1296D2A350053DBA3 /* RootService.swift in Sources */,
 				C7719B42298664A100DC6044 /* PerformaceInstrumentsModels.swift in Sources */,
 				C7A1C4532A0384C5009BA0D5 /* Engery.swift in Sources */,
+				C7429B8F2AF4C91E0048574D /* NSIText+Storage.swift in Sources */,
 				C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */,
 				C786B3602A4ACF7800F3ABB8 /* DSPMetrics.swift in Sources */,
 				C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */,
+				C7E8C36E2AF4A47E0001FC4B /* NSILabel+Flag.swift in Sources */,
 				C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */,
 				C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */,
 				C737D6AC2AF0ABC900F901A8 /* Actor+Displayer.swift in Sources */,
@@ -1163,6 +1234,7 @@
 				C77952832AE8D59500DBF98E /* NSITable.swift in Sources */,
 				C7483B9429373A0400F32BE0 /* Application.swift in Sources */,
 				C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */,
+				C7429B8C2AF4C7BD0048574D /* NSIText.swift in Sources */,
 				C771EF702A4A8AE800EC305E /* ANavigation.swift in Sources */,
 				C7640A632A84DBAD00C1F267 /* ICharts+Cell.swift in Sources */,
 				C74C3E132AD52B5E00F70A36 /* Cell+Hint.swift in Sources */,

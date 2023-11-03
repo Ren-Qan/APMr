@@ -44,7 +44,6 @@ struct IPerformanceView: View {
                     .environmentObject(performance.chart.actor.hilighter.snap)
                     .frame(maxWidth: 250)
                     .frame(maxHeight: .infinity)
-                    .background(Color.box.BG1)
             }
         }
     }
