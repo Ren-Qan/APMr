@@ -40,9 +40,7 @@ extension IPerformanceView.ICharts {
         }
             
         public func refresh() {
-            DispatchQueue.mainAsync {
-                self.collection.reloadData()
-            }
+            self.collection.reloadData()
         }
     }
 }
@@ -91,7 +89,7 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
         if let shots, let indexPath = indexPaths.first, shots.count > indexPath.section {
             let shot = shots[indexPath.item]
             shot.expand.toggle()
-            collectionView.reloadItems(at: indexPaths)
+            collectionView.reloadData()
         }
     }
     

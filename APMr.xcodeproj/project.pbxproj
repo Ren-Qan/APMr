@@ -24,6 +24,7 @@
 		C737D6B32AF0D48200F901A8 /* Actor+Snap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D6B22AF0D48200F901A8 /* Actor+Snap.swift */; };
 		C73B7E372AF8906300C3A219 /* NSIText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B7E362AF8906300C3A219 /* NSIText.swift */; };
 		C73B7E3B2AF8A56A00C3A219 /* NSIText+Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B7E3A2AF8A56A00C3A219 /* NSIText+Layer.swift */; };
+		C73B7E3D2AF8C79500C3A219 /* NSSCreen+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B7E3C2AF8C79500C3A219 /* NSSCreen+Extensions.swift */; };
 		C73BBB0B2942E25100472A75 /* ILockdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0A2942E25100472A75 /* ILockdown.swift */; };
 		C73BBB0E2942E84D00472A75 /* IInstproxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB0D2942E84D00472A75 /* IInstproxy.swift */; };
 		C73BBB112942FBE700472A75 /* IInstproxyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB102942FBE700472A75 /* IInstproxyModels.swift */; };
@@ -152,6 +153,7 @@
 		C737D6B22AF0D48200F901A8 /* Actor+Snap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Actor+Snap.swift"; sourceTree = "<group>"; };
 		C73B7E362AF8906300C3A219 /* NSIText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSIText.swift; sourceTree = "<group>"; };
 		C73B7E3A2AF8A56A00C3A219 /* NSIText+Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIText+Layer.swift"; sourceTree = "<group>"; };
+		C73B7E3C2AF8C79500C3A219 /* NSSCreen+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSCreen+Extensions.swift"; sourceTree = "<group>"; };
 		C73BBB0A2942E25100472A75 /* ILockdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdown.swift; sourceTree = "<group>"; };
 		C73BBB0D2942E84D00472A75 /* IInstproxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxy.swift; sourceTree = "<group>"; };
 		C73BBB102942FBE700472A75 /* IInstproxyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IInstproxyModels.swift; sourceTree = "<group>"; };
@@ -719,6 +721,7 @@
 				C74C3E182AD5381300F70A36 /* Font+Extensions.swift */,
 				C7842C2F2AEB842500658692 /* DispatchQueue+Extensions.swift */,
 				C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */,
+				C73B7E3C2AF8C79500C3A219 /* NSSCreen+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1132,6 +1135,7 @@
 				C7C15F892A0B99E80066FA85 /* Data+Extension.swift in Sources */,
 				C704D0102963EC600065004D /* NetworkingModels.swift in Sources */,
 				C73BBB1A29431AD200472A75 /* Processcontrol.swift in Sources */,
+				C73B7E3D2AF8C79500C3A219 /* NSSCreen+Extensions.swift in Sources */,
 				C7F5DA892946EF94005C6F7D /* GPU.swift in Sources */,
 				C7483BED29373ADC00F32BE0 /* IInstrumentsServiceProtocols.swift in Sources */,
 				C7CCDA97298A176900948BA3 /* PerformaceChartModels.swift in Sources */,

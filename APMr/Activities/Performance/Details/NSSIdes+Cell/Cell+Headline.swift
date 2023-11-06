@@ -9,7 +9,13 @@ import AppKit
 
 extension IPerformanceView.ICharts.NSISides.Cell {
     class Headline: NSView {
-        fileprivate lazy var label = NSILabel()
+        fileprivate lazy var label: NSILabel = {
+            let label = NSILabel()
+                .vertical(.top)
+                .horizontal(.center)
+                .color(.box.C1)
+            return label
+        }()
         
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
@@ -29,11 +35,6 @@ extension IPerformanceView.ICharts.NSISides.Cell {
 
 extension IPerformanceView.ICharts.NSISides.Cell.Headline {
     public func render(_ value: IPerformanceView.ICharts.NSISides.S) {
-        var string = "\(value.timing) S 时刻"
-        let count = Int.random(in: 0 ..< 100)
-        (100 ..< 100+count).forEach { i in
-            string += "\(i)"
-        }
-        label.text = string
+        label.text("\(value.timing) S 时刻")
     }
 }

@@ -8,8 +8,6 @@
 import AppKit
 
 class NSIText {
-    private var isDidAddRenderTask = false
-    
     private(set) lazy var layer = NSIText.Layer()
     public var complete: (() -> Void)? = nil
     
@@ -26,9 +24,7 @@ class NSIText {
     
     public var color: NSColor = .textColor {
         didSet {
-            if oldValue != color {
-                sync()
-            }
+            sync()
         }
     }
     
@@ -79,28 +75,22 @@ class NSIText {
             }
         }
     }
+    
+    public func reload() {
+        sync()
+    }
 }
 
 extension NSIText {
     fileprivate func sync() {
-        if isDidAddRenderTask { return }
-        isDidAddRenderTask = true
-        DispatchQueue.main.async {
-            self.draw()
-            self.isDidAddRenderTask = false
-        }
-    }
-    
-    private func draw() {
         let container = container.size
         guard let attribute = renderAttribute(), container.width > 1, container.height > 1 else {
-            layer.isHidden = true
             return
         }
         
         let size = attribute.boundingRect(with: container, options: .usesLineFragmentOrigin).size
-        layer.isHidden = false
         layer.frame.size = size
+        layer.contentsScale = NSScreen.scale
         layer.isWrapped = isWrapped
         layer.string = attribute
         

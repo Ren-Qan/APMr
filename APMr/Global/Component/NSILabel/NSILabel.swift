@@ -22,9 +22,7 @@ class NSILabel: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
-        layer?.backgroundColor = NSColor.orange.cgColor
         layer?.addSublayer(iText.layer)
-        iText.layer.backgroundColor = NSColor.random.cgColor
         iText.complete = { [weak self] in
             self?.graphAdjust()
         }
@@ -33,6 +31,10 @@ class NSILabel: NSView {
     override func layout() {
         iText.container = .area(bounds.size)
         graphAdjust()
+    }
+    
+    override func updateLayer() {
+        iText.reload()
     }
     
     required init?(coder: NSCoder) {
@@ -157,5 +159,63 @@ extension NSILabel {
         get {
             iText.attribute
         }
+    }
+}
+
+extension NSILabel {
+    @discardableResult
+    public func horizontal(_ value: NSILabel.Adjust.H) -> Self {
+        self.adjust.horizontal = value
+        return self
+    }
+    
+    @discardableResult
+    public func vertical(_ value: NSILabel.Adjust.V) -> Self {
+        self.adjust.vertical = value
+        return self
+    }
+}
+
+extension NSILabel {
+    @discardableResult
+    public func text(_ value: String) -> Self {
+        self.iText.text = value
+        return self
+    }
+    
+    @discardableResult
+    public func color(_ value: NSColor) -> Self {
+        self.iText.color = value
+        return self
+    }
+    
+    @discardableResult
+    public func align(_ value: NSIText.Align) -> Self {
+        self.iText.align = value
+        return self
+    }
+    
+    @discardableResult
+    public func wrapped(_ value: Bool) -> Self {
+        self.iText.isWrapped = value
+        return self
+    }
+
+    @discardableResult
+    public func spacing(_ value: CGFloat) -> Self {
+        self.iText.spacing = value
+        return self
+    }
+    
+    @discardableResult
+    public func font(_ value: NSFont) -> Self {
+        self.iText.font = value
+        return self
+    }
+
+    @discardableResult
+    public func container(_ value: NSIText.Container) -> Self {
+        self.iText.container = value
+        return self
     }
 }
