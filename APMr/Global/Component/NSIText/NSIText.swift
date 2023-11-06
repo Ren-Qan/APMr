@@ -2,147 +2,159 @@
 //  NSIText.swift
 //  APMr
 //
-//  Created by 任玉乾 on 2023/11/3.
+//  Created by 任玉乾 on 2023/11/6.
 //
 
 import AppKit
 
 class NSIText {
-    fileprivate lazy var content = Layer()
+    private var isDidAddRenderTask = false
     
-    fileprivate lazy var storage = Storage()
+    private(set) lazy var layer = NSIText.Layer()
+    public var complete: (() -> Void)? = nil
     
-    fileprivate lazy var drawer = Drawer()
-    
-    fileprivate lazy var flag = Flag()
-    
-    public var complete: ((CALayer) -> Void)? = nil
-        
-    init() {
-        storage.notice = { [weak self] _, new in
-            self?.flag.render.current = new
-            self?.sync()
-        }
-        
-        drawer.verify = { [weak self] make in
-            make.version = self?.flag.render.current
-            make.size = self?.frame.size
-            make.lines = self?.lines
-            make.spacing = self?.spacing
-            make.attribute = self?.create()
-        }
-        
-        drawer.complete = { [weak self] result in
-            switch result {
-                case .failure: break
-                case .success(let layer, let _): self?.complete?(layer)
+    public var text: String? = nil {
+        didSet {
+            let old = oldValue ?? ""
+            let new = text ?? ""
+            
+            if new != old {
+                sync()
             }
         }
     }
     
-    private func create() -> NSAttributedString? {
-        guard let text, frame.width > 1 else { return nil }
-        
-        let range = NSRange(location: 0, length: text.count)
-        let string = NSMutableAttributedString(string: text)
-        let style = NSMutableParagraphStyle()
-        style.alignment = align.nsAlign
-        style.lineSpacing = spacing
-        
-        string.addAttribute(.font, value: font, range: range)
-        string.addAttribute(.foregroundColor, value: color, range: range)
-        string.addAttribute(.paragraphStyle, value: style, range: range)
-        return string
+    public var color: NSColor = .textColor {
+        didSet {
+            if oldValue != color {
+                sync()
+            }
+        }
     }
     
-    private func sync() {
-        if flag.render.isNeedRedraw() {
-            drawer.setNeedUpdate()
+    public var align: Align = .left {
+        didSet {
+            if oldValue != align {
+                sync()
+            }
+        }
+    }
+    
+    public var isWrapped: Bool = true {
+        didSet {
+            if oldValue != isWrapped {
+                sync()
+            }
+        }
+    }
+    
+    public var spacing: CGFloat = 0 {
+        didSet {
+            if oldValue != spacing {
+                sync()
+            }
+        }
+    }
+    
+    public var font: NSFont = .systemFont(ofSize: 14) {
+        didSet {
+            if oldValue != font {
+                sync()
+            }
+        }
+    }
+    
+    public var attribute: NSAttributedString? = nil {
+        didSet {
+            sync()
+        }
+    }
+    
+    public var container: Container = .unlimit {
+        didSet {
+            let old = oldValue.size
+            let new = container.size
+            if !old.equalTo(new), new.width > 1, new.height > 1 {
+                sync()
+            }
         }
     }
 }
 
 extension NSIText {
-    public var layer: CALayer { content }
-    
-    public var frame: CGRect {
-        get {
-            return storage.frame
-        }
-        
-        set {
-            storage.frame = newValue
+    fileprivate func sync() {
+        if isDidAddRenderTask { return }
+        isDidAddRenderTask = true
+        DispatchQueue.main.async {
+            self.draw()
+            self.isDidAddRenderTask = false
         }
     }
     
-    public var text: String? {
-        get {
-            return storage.text
+    private func draw() {
+        let container = container.size
+        guard let attribute = renderAttribute(), container.width > 1, container.height > 1 else {
+            layer.isHidden = true
+            return
         }
         
-        set {
-            storage.text = newValue
-        }
+        let size = attribute.boundingRect(with: container, options: .usesLineFragmentOrigin).size
+        layer.isHidden = false
+        layer.frame.size = size
+        layer.isWrapped = isWrapped
+        layer.string = attribute
+        
+        complete?()
     }
     
-    public var align: Align {
-        get {
-            return storage.align
+    private func renderAttribute() -> NSAttributedString? {
+        if let attribute {
+            return attribute
         }
         
-        set {
-            storage.align = newValue
-        }
-    }
-    
-    public var lines: Int {
-        get {
-            return storage.lines
-        }
-        
-        set {
-            storage.lines = newValue
-        }
-    }
-    
-    public var color: NSColor {
-        get {
-            return storage.color
+        if let text {
+            let range = NSRange(location: 0, length: text.count)
+            let style = NSMutableParagraphStyle()
+            let attribute = NSMutableAttributedString(string: text)
+            
+            style.alignment = align.nsAlign
+            style.lineSpacing = spacing
+            style.lineBreakMode = .byWordWrapping
+            
+            attribute.addAttribute(.font, value: font, range: range)
+            attribute.addAttribute(.foregroundColor, value: color.cgColor, range: range)
+            attribute.addAttribute(.paragraphStyle, value: style, range: range)
+            return attribute
         }
         
-        set {
-            storage.color = newValue
-        }
-    }
-    
-    public var font: NSFont {
-        get {
-            return storage.font
-        }
-        
-        set {
-            storage.font = newValue
-        }
-    }
-    
-    public var spacing: CGFloat {
-        get {
-            return storage.spacing
-        }
-        
-        set {
-            storage.spacing = newValue
-        }
+        return nil
     }
 }
 
 extension NSIText {
+    enum Container {
+        case unlimit
+        case width(CGFloat)
+        case height(CGFloat)
+        case area(CGSize)
+        
+        fileprivate var size: CGSize {
+            let max: CGFloat = .greatestFiniteMagnitude
+            switch self {
+                case .unlimit: return .init(width: max, height: max)
+                case .width(let w): return .init(width: w, height: max)
+                case .height(let h): return .init(width: max, height: h)
+                case .area(let size): return size
+            }
+        }
+    }
+    
     enum Align {
         case left
         case center
         case right
         
-        var nsAlign: NSTextAlignment {
+        fileprivate var nsAlign: NSTextAlignment {
             switch self {
                 case .left: return .left
                 case .center: return .center
