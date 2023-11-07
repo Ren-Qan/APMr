@@ -14,6 +14,9 @@ extension IPerformanceView.ICharts {
         fileprivate lazy var collection: NSICollection = {
             let layout = NSCollectionViewFlowLayout()
             layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 0
+            layout.sectionInset.top = 10
+            layout.sectionInset.left = 1
             
             let collection = NSICollection()
             collection.register(cell: Cell.self)
@@ -80,9 +83,9 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
     
     func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
         if let shots, shots.count > indexPath.item {
-            return .init(width: bounds.width, height: shots[indexPath.item].expand ? 300 : 50)
+            return .init(width: collectionView.bounds.width - 1, height: shots[indexPath.item].expand ? 300 : 40)
         }
-        return .init(width: bounds.width, height: 20)
+        return .init(width: collectionView.bounds.width, height: 30)
     }
     
     func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
@@ -91,10 +94,6 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
             shot.expand.toggle()
             collectionView.reloadData()
         }
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
     }
 }
 

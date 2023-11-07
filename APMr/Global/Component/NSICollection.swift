@@ -101,10 +101,22 @@ extension NSCollectionView {
 
 extension NSCollectionView {
     class BaseCell: NSCollectionViewItem {
+        private class BaseView: NSView {
+            weak var target: BaseCell? = nil
+            override func updateLayer() {
+                target?.updateLayer()
+            }
+        }
+        
         override func loadView() {
-            let view = NSView()
+            let view = BaseView()
+            view.target = self
             view.wantsLayer = true
             self.view = view
+        }
+        
+        func updateLayer() {
+            
         }
     }
 }

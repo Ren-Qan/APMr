@@ -70,7 +70,7 @@ class NSIText {
         didSet {
             let old = oldValue.size
             let new = container.size
-            if !old.equalTo(new), new.width > 1, new.height > 1 {
+            if old.equalTo(new).counter, new.width > 1, new.height > 1 {
                 sync()
             }
         }

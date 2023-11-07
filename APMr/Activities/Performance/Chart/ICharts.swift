@@ -126,7 +126,7 @@ fileprivate extension IPerformanceView.NSICharts {
                 let cell = cells[i]
                 let notifier = datas[i]
                 cell.bind(notifier, actor)
-                cell.isHidden = !notifier.graph.visible
+                cell.isHidden = notifier.graph.visible.counter
                 guard notifier.graph.visible else {
                     return
                 }

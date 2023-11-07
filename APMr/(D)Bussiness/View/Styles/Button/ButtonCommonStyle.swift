@@ -31,7 +31,7 @@ struct ButtonCommonStyle: ButtonStyle {
                 isHoivering = isHover
                 
                 if isHover {
-                    if !enable {
+                    if enable.counter {
                         NSCursor.operationNotAllowed.set()
                     }
                 } else {

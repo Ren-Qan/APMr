@@ -30,7 +30,7 @@ struct IApp: Mappable, Identifiable {
             return false
         }
         
-        if !signer.hasPrefix("Apple"), signer.contains("Developer") {
+        if signer.hasPrefix("Apple").counter, signer.contains("Developer") {
             return true
         }
         

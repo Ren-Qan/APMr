@@ -120,6 +120,11 @@
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
 		C7E137CD299CB52A000CD484 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CC299CB52A000CD484 /* Base.swift */; };
+		C7E3A7032AFA128400F0C35A /* Bool+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A7022AFA128400F0C35A /* Bool+Extensions.swift */; };
+		C7E3A7052AFA13D400F0C35A /* CALayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A7042AFA13D400F0C35A /* CALayer+Extensions.swift */; };
+		C7E3A7102AFA36F500F0C35A /* ILaunchMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A70F2AFA36F500F0C35A /* ILaunchMonitorView.swift */; };
+		C7E3A7132AFA3AF700F0C35A /* NSImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */; };
+		C7E3A7192AFA422000F0C35A /* NSImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */; };
 		C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */; };
 		C7E8C3642AF497FF0001FC4B /* Cell+Headline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */; };
 		C7E8C3662AF4995C0001FC4B /* Cell+Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */; };
@@ -285,6 +290,11 @@
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
 		C7E137CC299CB52A000CD484 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
+		C7E3A7022AFA128400F0C35A /* Bool+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Extensions.swift"; sourceTree = "<group>"; };
+		C7E3A7042AFA13D400F0C35A /* CALayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extensions.swift"; sourceTree = "<group>"; };
+		C7E3A70F2AFA36F500F0C35A /* ILaunchMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILaunchMonitorView.swift; sourceTree = "<group>"; };
+		C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+Extensions.swift"; sourceTree = "<group>"; };
+		C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
 		C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DSPMetrics+Entity.swift"; sourceTree = "<group>"; };
 		C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Headline.swift"; sourceTree = "<group>"; };
 		C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Panel.swift"; sourceTree = "<group>"; };
@@ -701,9 +711,7 @@
 			children = (
 				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
 				C76E7B5C2951BBB3004F009B /* Colors.xcassets */,
-				C7AB90622AF388E700DDE900 /* IColors.swift */,
-				C7AB90642AF38BED00DDE900 /* IColors+NSColor.swift */,
-				C7AB90662AF38C8300DDE900 /* IColors+Color.swift */,
+				C7E3A7142AFA3B3400F0C35A /* IColors */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -711,17 +719,21 @@
 		C76E7B5E2951BC29004F009B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C76E7B602951BC70004F009B /* Color+Extensions.swift */,
-				C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */,
-				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
-				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
-				C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */,
-				C77B36842A6137800054DE7F /* NSEdgeInset+Extensions.swift */,
 				C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */,
-				C74C3E182AD5381300F70A36 /* Font+Extensions.swift */,
+				C7E3A7022AFA128400F0C35A /* Bool+Extensions.swift */,
+				C7E3A7042AFA13D400F0C35A /* CALayer+Extensions.swift */,
+				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
+				C76E7B602951BC70004F009B /* Color+Extensions.swift */,
+				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
 				C7842C2F2AEB842500658692 /* DispatchQueue+Extensions.swift */,
-				C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */,
+				C74C3E182AD5381300F70A36 /* Font+Extensions.swift */,
+				C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */,
+				C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */,
+				C77B36842A6137800054DE7F /* NSEdgeInset+Extensions.swift */,
 				C73B7E3C2AF8C79500C3A219 /* NSSCreen+Extensions.swift */,
+				C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */,
+				C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */,
+				C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -850,6 +862,7 @@
 			children = (
 				C771EF6C2A4A8AB100EC305E /* Navigation */,
 				C76A6EF32A614E1900836807 /* Performance */,
+				C7E3A70E2AFA366500F0C35A /* LaunchMonitor */,
 			);
 			path = Activities;
 			sourceTree = "<group>";
@@ -982,6 +995,24 @@
 				C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		C7E3A70E2AFA366500F0C35A /* LaunchMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				C7E3A70F2AFA36F500F0C35A /* ILaunchMonitorView.swift */,
+			);
+			path = LaunchMonitor;
+			sourceTree = "<group>";
+		};
+		C7E3A7142AFA3B3400F0C35A /* IColors */ = {
+			isa = PBXGroup;
+			children = (
+				C7AB90622AF388E700DDE900 /* IColors.swift */,
+				C7AB90662AF38C8300DDE900 /* IColors+Color.swift */,
+				C7AB90642AF38BED00DDE900 /* IColors+NSColor.swift */,
+			);
+			path = IColors;
 			sourceTree = "<group>";
 		};
 		C7E40A472A5E5C7E001629E3 /* Metrics */ = {
@@ -1119,6 +1150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E3A7052AFA13D400F0C35A /* CALayer+Extensions.swift in Sources */,
 				C7A487DB2A24AC5700A033B9 /* Typealias.swift in Sources */,
 				C7AB90672AF38C8300DDE900 /* IColors+Color.swift in Sources */,
 				C7790F2729A5EEAF00948934 /* CoreProfileSessionTap.swift in Sources */,
@@ -1131,6 +1163,7 @@
 				C7E8C3662AF4995C0001FC4B /* Cell+Panel.swift in Sources */,
 				C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */,
 				C73BBB162943154300472A75 /* PerformanceInstrumentsService.swift in Sources */,
+				C7E3A7192AFA422000F0C35A /* NSImage+Extensions.swift in Sources */,
 				C7B5B94429767921009A88D7 /* PerformaceChartView.swift in Sources */,
 				C7C15F892A0B99E80066FA85 /* Data+Extension.swift in Sources */,
 				C704D0102963EC600065004D /* NetworkingModels.swift in Sources */,
@@ -1172,6 +1205,7 @@
 				C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */,
 				C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
+				C7E3A7032AFA128400F0C35A /* Bool+Extensions.swift in Sources */,
 				C7E8C3682AF49A390001FC4B /* NSView+Extensions.swift in Sources */,
 				C73B7E3B2AF8A56A00C3A219 /* NSIText+Layer.swift in Sources */,
 				C7651EFF298B5FC3006F3310 /* Int64+Extensions.swift in Sources */,
@@ -1223,9 +1257,11 @@
 				C7640A632A84DBAD00C1F267 /* ICharts+Cell.swift in Sources */,
 				C74C3E132AD52B5E00F70A36 /* Cell+Hint.swift in Sources */,
 				C7640A612A84C41100C1F267 /* ICharts.swift in Sources */,
+				C7E3A7102AFA36F500F0C35A /* ILaunchMonitorView.swift in Sources */,
 				C73BBB18294315A600472A75 /* ADevice.swift in Sources */,
 				C7842C2E2AEB694700658692 /* NSICollection.swift in Sources */,
 				C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */,
+				C7E3A7132AFA3AF700F0C35A /* NSImageView+Extensions.swift in Sources */,
 				C7E137CD299CB52A000CD484 /* Base.swift in Sources */,
 				C76ACF3B2996041B005CF720 /* PerformanceInstrumentsService+Summary.swift in Sources */,
 			);
