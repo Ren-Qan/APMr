@@ -52,7 +52,7 @@ class NSIText {
         }
     }
     
-    public var font: NSFont = .systemFont(ofSize: 14) {
+    public var font: NSFont = .current.regular(14) {
         didSet {
             if oldValue != font {
                 sync()

@@ -15,14 +15,11 @@ extension IPerformanceView.ICharts.NSISides.Cell {
         }
         
         override func layout() {
+            
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
-        }
-        
-        override func draw(_ dirtyRect: NSRect) {
-            
         }
     }
 }

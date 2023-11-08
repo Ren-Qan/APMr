@@ -70,6 +70,8 @@
 		C754F0E1296D2A350053DBA3 /* RootService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C754F0E0296D2A350053DBA3 /* RootService.swift */; };
 		C754F0E3296D33360053DBA3 /* PerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C754F0E2296D33360053DBA3 /* PerformanceView.swift */; };
 		C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* SysmotapModels.swift */; };
+		C758DE8B2AFB4E0500467F83 /* IFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C758DE8A2AFB4E0500467F83 /* IFonts.swift */; };
+		C758DE8D2AFB568B00467F83 /* CATextLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */; };
 		C7640A612A84C41100C1F267 /* ICharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7640A602A84C41100C1F267 /* ICharts.swift */; };
 		C7640A632A84DBAD00C1F267 /* ICharts+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7640A622A84DBAD00C1F267 /* ICharts+Cell.swift */; };
 		C7651EFF298B5FC3006F3310 /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */; };
@@ -240,6 +242,8 @@
 		C754F0E0296D2A350053DBA3 /* RootService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootService.swift; sourceTree = "<group>"; };
 		C754F0E2296D33360053DBA3 /* PerformanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceView.swift; sourceTree = "<group>"; };
 		C75750F6293DA1980074E707 /* SysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SysmotapModels.swift; sourceTree = "<group>"; };
+		C758DE8A2AFB4E0500467F83 /* IFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFonts.swift; sourceTree = "<group>"; };
+		C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CATextLayer+Extensions.swift"; sourceTree = "<group>"; };
 		C7640A602A84C41100C1F267 /* ICharts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICharts.swift; sourceTree = "<group>"; };
 		C7640A622A84DBAD00C1F267 /* ICharts+Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICharts+Cell.swift"; sourceTree = "<group>"; };
 		C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int64+Extensions.swift"; sourceTree = "<group>"; };
@@ -667,6 +671,14 @@
 			path = libimobiledevice;
 			sourceTree = "<group>";
 		};
+		C758DE892AFB4DF900467F83 /* IFonts */ = {
+			isa = PBXGroup;
+			children = (
+				C758DE8A2AFB4E0500467F83 /* IFonts.swift */,
+			);
+			path = IFonts;
+			sourceTree = "<group>";
+		};
 		C76A6EF32A614E1900836807 /* Performance */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,6 +723,7 @@
 			children = (
 				C7483B9729373A0600F32BE0 /* Assets.xcassets */,
 				C76E7B5C2951BBB3004F009B /* Colors.xcassets */,
+				C758DE892AFB4DF900467F83 /* IFonts */,
 				C7E3A7142AFA3B3400F0C35A /* IColors */,
 			);
 			path = Assets;
@@ -721,7 +734,6 @@
 			children = (
 				C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */,
 				C7E3A7022AFA128400F0C35A /* Bool+Extensions.swift */,
-				C7E3A7042AFA13D400F0C35A /* CALayer+Extensions.swift */,
 				C76ACF3E2996166C005CF720 /* CGFloat+Extensions.swift */,
 				C76E7B602951BC70004F009B /* Color+Extensions.swift */,
 				C7C15F882A0B99E80066FA85 /* Data+Extension.swift */,
@@ -731,6 +743,8 @@
 				C7651EFE298B5FC3006F3310 /* Int64+Extensions.swift */,
 				C77B36842A6137800054DE7F /* NSEdgeInset+Extensions.swift */,
 				C73B7E3C2AF8C79500C3A219 /* NSSCreen+Extensions.swift */,
+				C7E3A7042AFA13D400F0C35A /* CALayer+Extensions.swift */,
+				C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */,
 				C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */,
 				C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */,
 				C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */,
@@ -1206,6 +1220,7 @@
 				C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
 				C7E3A7032AFA128400F0C35A /* Bool+Extensions.swift in Sources */,
+				C758DE8D2AFB568B00467F83 /* CATextLayer+Extensions.swift in Sources */,
 				C7E8C3682AF49A390001FC4B /* NSView+Extensions.swift in Sources */,
 				C73B7E3B2AF8A56A00C3A219 /* NSIText+Layer.swift in Sources */,
 				C7651EFF298B5FC3006F3310 /* Int64+Extensions.swift in Sources */,
@@ -1221,6 +1236,7 @@
 				C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */,
 				C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */,
 				C7B8B35B2A5411B5008E9D53 /* CPerformance.swift in Sources */,
+				C758DE8B2AFB4E0500467F83 /* IFonts.swift in Sources */,
 				C7AC9895295C816500A6580B /* NetworkStatisticsModels.swift in Sources */,
 				C7483BEA29373ADC00F32BE0 /* IDevice.swift in Sources */,
 				C7AC98812956EB1D00A6580B /* Networking.swift in Sources */,

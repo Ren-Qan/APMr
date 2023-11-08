@@ -20,7 +20,7 @@ extension IPerformanceView.ICharts.Cell {
         }
     }
     
-    class Text: CATextLayer {
+    class Text: CATextLayer {        
         override func action(forKey event: String) -> CAAction? {
             return nil
         }

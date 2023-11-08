@@ -10,13 +10,16 @@ import AppKit
 extension IPerformanceView.ICharts.NSISides.Cell {
     class Headline: NSView {
         fileprivate lazy var icon: NSImageView = {            
-            return NSImageView()
+            let view = NSImageView()
                 .symbol("chevron.right")
                 .mode(.fit)
+                .tint(.box.H1)
+            return view
         }()
         
         fileprivate lazy var label: NSILabel = {
             return NSILabel()
+                .font(.current.medium(14))
                 .vertical(.center)
                 .horizontal(.left)
                 .color(.box.H1)
@@ -41,5 +44,9 @@ extension IPerformanceView.ICharts.NSISides.Cell {
 extension IPerformanceView.ICharts.NSISides.Cell.Headline {
     public func render(_ value: IPerformanceView.ICharts.NSISides.S) {
         label.text("\(value.timing)S 时刻数据")
+        
+        icon.layer?
+            .anchor(CGPoint(x: 0.5, y: 0.5))
+            .rotate(value.expand ? -90 : 0)
     }
 }

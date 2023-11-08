@@ -34,4 +34,10 @@ extension NSImageView {
         let image = NSImage(systemSymbolName: name, variableValue: variableValue, accessibilityDescription: nil)
         return self.image(image)
     }
+    
+    @discardableResult
+    internal func tint(_ color: NSColor) -> Self {
+        self.contentTintColor = color
+        return self
+    }
 }

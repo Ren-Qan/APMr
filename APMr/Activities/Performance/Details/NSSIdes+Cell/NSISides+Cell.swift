@@ -19,27 +19,24 @@ extension IPerformanceView.ICharts.NSISides {
             self.view.adds([headline, panelSet])
             self.view.layer?.add(separator)
         }
-        
+                
         override func viewDidLayout() {
             let hH: CGFloat = 40
             if headline.frame.width != view.bounds.width {
                 headline.frame = .init(x: 0, y: view.bounds.height - hH, width: view.bounds.width, height: hH)
             }
             
-            if headline.frame.origin.y != view.bounds.height - hH {
-                headline.frame.origin.y = view.bounds.height - hH
+            if panelSet.frame.width != view.bounds.width {
+                panelSet.frame.size.width = view.bounds.width
             }
             
-            
-            if panelSet.frame.width != view.bounds.width {
-                panelSet.frame = .init(x: 0,
-                                       y: 0,
-                                       width: view.bounds.width,
-                                       height: view.bounds.height - headline.frame.size.height)
+            if headline.frame.origin.y != view.bounds.height - hH {
+                headline.frame.origin.y = view.bounds.height - hH
+                panelSet.frame.size.height = view.bounds.height - hH
             }
             
             if let w = view.layer?.frame.width, separator.frame.width != w {
-                separator.frame = .init(x: 0, y: 0, width: w, height: 1)
+                separator.frame = .init(x: 0, y: 0, width: w, height: 0.5)
             }
         }
 

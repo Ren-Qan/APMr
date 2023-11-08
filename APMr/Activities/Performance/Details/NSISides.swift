@@ -92,7 +92,7 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
         if let shots, let indexPath = indexPaths.first, shots.count > indexPath.section {
             let shot = shots[indexPath.item]
             shot.expand.toggle()
-            collectionView.reloadData()
+            collectionView.reloadItems(at: [indexPath])
         }
     }
 }

@@ -22,6 +22,7 @@ extension IPerformanceView.ICharts.Cell {
             addSublayer(title)
             
             self.title.alignmentMode = .center
+            self.title.font = NSFont.current.regular(11.5)
             self.title.fontSize = 11.5
         }
         

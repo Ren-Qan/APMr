@@ -36,4 +36,34 @@ extension CALayer {
         backgroundColor = color.cgColor
         return self
     }
+    
+    @discardableResult
+    public func anchor(_ anchor: CGPoint) -> Self {
+        var newPoint = CGPoint(x: self.bounds.size.width * anchor.x,
+                               y: self.bounds.size.height * anchor.y)
+        var oldPoint = CGPoint(x: self.bounds.size.width * anchorPoint.x,
+                               y: self.bounds.size.height * anchorPoint.y)
+        
+        newPoint = newPoint.applying(affineTransform())
+        oldPoint = oldPoint.applying(affineTransform())
+        
+        var position = position
+        
+        position.x -= oldPoint.x
+        position.x += newPoint.x
+        
+        position.y -= oldPoint.y
+        position.y += newPoint.y
+        
+        self.position = position
+        self.anchorPoint = anchor
+        
+        return self
+    }
+    
+    @discardableResult
+    public func rotate(_ degress: CGFloat) -> Self {
+        transform = CATransform3DMakeRotation((degress / 180) * .pi, 0, 0, 1)
+        return self
+    }
 }
