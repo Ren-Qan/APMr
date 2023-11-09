@@ -38,6 +38,7 @@ extension IPerformanceView.ICharts.Cell {
                 path.addLine(to: .init(x: x - 5, y: frame.height - graph.inset.top))
 
                 let yText = Text()
+                yText.contentsScale = NSScreen.scale
                 yText.font = NSFont.current.medium(10)
                 yText.fontSize = 10
                 yText.alignmentMode = .center
@@ -72,6 +73,7 @@ extension IPerformanceView.ICharts.Cell {
                     text.string = "\(Int(timing)) s"
                     text.font = NSFont.current.medium(10)
                     text.fontSize = 10
+                    text.contentsScale = NSScreen.scale
                     text.frame = .init(x: x - 25, y: graph.inset.bottom - 16, width: 50, height: 10)
                     layer.addSublayer(text)
                     

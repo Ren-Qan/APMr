@@ -12,6 +12,8 @@
 		C70BFCBC2A29DFA900CBD6B3 /* CoreParserHandleModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70BFCBB2A29DFA900CBD6B3 /* CoreParserHandleModels.swift */; };
 		C70F8FA8293850F400E8DCE1 /* Opengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* Opengl.swift */; };
 		C71A9EBB2AD66D30001626A5 /* ISides.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A9EBA2AD66D30001626A5 /* ISides.swift */; };
+		C72271712AFCE56C00811E55 /* NSISides+HeadlineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */; };
+		C72271732AFCE58000811E55 /* NSISides+PanelSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271722AFCE58000811E55 /* NSISides+PanelSetCell.swift */; };
 		C737D69B2AF0A38C00F901A8 /* Drawer+Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D69A2AF0A38C00F901A8 /* Drawer+Group.swift */; };
 		C737D69D2AF0A3BD00F901A8 /* Drawer+Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D69C2AF0A3BD00F901A8 /* Drawer+Notifier.swift */; };
 		C737D69F2AF0A3EC00F901A8 /* Drawer+Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D69E2AF0A3EC00F901A8 /* Drawer+Graph.swift */; };
@@ -117,7 +119,6 @@
 		C7D0A1A62A08EF0200E8769C /* DeviceInfoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */; };
 		C7D0D1B42A5E742600F610F6 /* ALockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D0D1B32A5E742600F610F6 /* ALockAction.swift */; };
 		C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */; };
-		C7D901DF2AEFAAC200E231D9 /* NSISides+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D901DE2AEFAAC200E231D9 /* NSISides+Cell.swift */; };
 		C7E137C6299C8BE5000CD484 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C5299C8BE5000CD484 /* LaunchView.swift */; };
 		C7E137C9299C9A36000CD484 /* LaunchInstrumentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */; };
 		C7E137CB299C9C92000CD484 /* ObjectAlloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */; };
@@ -128,10 +129,8 @@
 		C7E3A7132AFA3AF700F0C35A /* NSImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */; };
 		C7E3A7192AFA422000F0C35A /* NSImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */; };
 		C7E40A492A5E5CA5001629E3 /* DSPMetrics+Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */; };
-		C7E8C3642AF497FF0001FC4B /* Cell+Headline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */; };
-		C7E8C3662AF4995C0001FC4B /* Cell+Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */; };
+		C7E8C3662AF4995C0001FC4B /* PanelSetCell+Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3652AF4995C0001FC4B /* PanelSetCell+Panel.swift */; };
 		C7E8C3682AF49A390001FC4B /* NSView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */; };
-		C7E8C36A2AF49AFE0001FC4B /* Cell+PanelSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C3692AF49AFE0001FC4B /* Cell+PanelSet.swift */; };
 		C7E8C36C2AF4A13F0001FC4B /* NSILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E8C36B2AF4A13F0001FC4B /* NSILabel.swift */; };
 		C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */; };
 		C7F5DA892946EF94005C6F7D /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5DA882946EF94005C6F7D /* GPU.swift */; };
@@ -148,6 +147,8 @@
 		C70BFCBB2A29DFA900CBD6B3 /* CoreParserHandleModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreParserHandleModels.swift; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* Opengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opengl.swift; sourceTree = "<group>"; };
 		C71A9EBA2AD66D30001626A5 /* ISides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISides.swift; sourceTree = "<group>"; };
+		C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+HeadlineCell.swift"; sourceTree = "<group>"; };
+		C72271722AFCE58000811E55 /* NSISides+PanelSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+PanelSetCell.swift"; sourceTree = "<group>"; };
 		C737D69A2AF0A38C00F901A8 /* Drawer+Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawer+Group.swift"; sourceTree = "<group>"; };
 		C737D69C2AF0A3BD00F901A8 /* Drawer+Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawer+Notifier.swift"; sourceTree = "<group>"; };
 		C737D69E2AF0A3EC00F901A8 /* Drawer+Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawer+Graph.swift"; sourceTree = "<group>"; };
@@ -289,7 +290,6 @@
 		C7D0A1A52A08EF0200E8769C /* DeviceInfoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoModels.swift; sourceTree = "<group>"; };
 		C7D0D1B32A5E742600F610F6 /* ALockAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALockAction.swift; sourceTree = "<group>"; };
 		C7D70FA62A13342A0015ABAE /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
-		C7D901DE2AEFAAC200E231D9 /* NSISides+Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+Cell.swift"; sourceTree = "<group>"; };
 		C7E137C5299C8BE5000CD484 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		C7E137C8299C9A36000CD484 /* LaunchInstrumentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchInstrumentsService.swift; sourceTree = "<group>"; };
 		C7E137CA299C9C92000CD484 /* ObjectAlloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectAlloc.swift; sourceTree = "<group>"; };
@@ -300,10 +300,8 @@
 		C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+Extensions.swift"; sourceTree = "<group>"; };
 		C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
 		C7E40A482A5E5CA5001629E3 /* DSPMetrics+Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DSPMetrics+Entity.swift"; sourceTree = "<group>"; };
-		C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Headline.swift"; sourceTree = "<group>"; };
-		C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Panel.swift"; sourceTree = "<group>"; };
+		C7E8C3652AF4995C0001FC4B /* PanelSetCell+Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PanelSetCell+Panel.swift"; sourceTree = "<group>"; };
 		C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Extensions.swift"; sourceTree = "<group>"; };
-		C7E8C3692AF49AFE0001FC4B /* Cell+PanelSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+PanelSet.swift"; sourceTree = "<group>"; };
 		C7E8C36B2AF4A13F0001FC4B /* NSILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSILabel.swift; sourceTree = "<group>"; };
 		C7F2AB752A64EEA00031E97A /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		C7F5DA882946EF94005C6F7D /* GPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPU.swift; sourceTree = "<group>"; };
@@ -372,6 +370,23 @@
 				C7E8C3622AF497D80001FC4B /* NSSIdes+Cell */,
 			);
 			path = Details;
+			sourceTree = "<group>";
+		};
+		C72271742AFCED9800811E55 /* PanelSetCell */ = {
+			isa = PBXGroup;
+			children = (
+				C72271722AFCE58000811E55 /* NSISides+PanelSetCell.swift */,
+				C7E8C3652AF4995C0001FC4B /* PanelSetCell+Panel.swift */,
+			);
+			path = PanelSetCell;
+			sourceTree = "<group>";
+		};
+		C72271752AFCEDA800811E55 /* HeadlineCell */ = {
+			isa = PBXGroup;
+			children = (
+				C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */,
+			);
+			path = HeadlineCell;
 			sourceTree = "<group>";
 		};
 		C737D6972AF09F2000F901A8 /* CPerformance+Chart */ = {
@@ -1041,10 +1056,8 @@
 		C7E8C3622AF497D80001FC4B /* NSSIdes+Cell */ = {
 			isa = PBXGroup;
 			children = (
-				C7D901DE2AEFAAC200E231D9 /* NSISides+Cell.swift */,
-				C7E8C3632AF497FF0001FC4B /* Cell+Headline.swift */,
-				C7E8C3692AF49AFE0001FC4B /* Cell+PanelSet.swift */,
-				C7E8C3652AF4995C0001FC4B /* Cell+Panel.swift */,
+				C72271752AFCEDA800811E55 /* HeadlineCell */,
+				C72271742AFCED9800811E55 /* PanelSetCell */,
 			);
 			path = "NSSIdes+Cell";
 			sourceTree = "<group>";
@@ -1174,7 +1187,7 @@
 				C737D69F2AF0A3EC00F901A8 /* Drawer+Graph.swift in Sources */,
 				C7F2AB762A64EEA00031E97A /* Array+Extensions.swift in Sources */,
 				C7483BEE29373ADC00F32BE0 /* Sysmontap.swift in Sources */,
-				C7E8C3662AF4995C0001FC4B /* Cell+Panel.swift in Sources */,
+				C7E8C3662AF4995C0001FC4B /* PanelSetCell+Panel.swift in Sources */,
 				C76ACF3D299604F3005CF720 /* PerformaceInstrumentsModels+Summary.swift in Sources */,
 				C73BBB162943154300472A75 /* PerformanceInstrumentsService.swift in Sources */,
 				C7E3A7192AFA422000F0C35A /* NSImage+Extensions.swift in Sources */,
@@ -1194,7 +1207,6 @@
 				C74C3E112AD52B5600F70A36 /* Cell+Axis.swift in Sources */,
 				C7C3255529751E0E006939B8 /* PerformanceSummaryView.swift in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
-				C7D901DF2AEFAAC200E231D9 /* NSISides+Cell.swift in Sources */,
 				C74C3E192AD5381300F70A36 /* Font+Extensions.swift in Sources */,
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,
 				C737D6A32AF0A45F00F901A8 /* Drawer+Axis.swift in Sources */,
@@ -1206,13 +1218,13 @@
 				C70BFCBA2A29D97800CBD6B3 /* CoreParser+Handles.swift in Sources */,
 				C7AB90652AF38BED00DDE900 /* IColors+NSColor.swift in Sources */,
 				C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */,
+				C72271712AFCE56C00811E55 /* NSISides+HeadlineCell.swift in Sources */,
 				C737D69D2AF0A3BD00F901A8 /* Drawer+Notifier.swift in Sources */,
 				C74C3E0D2AD52B3E00F70A36 /* Cell+Checker.swift in Sources */,
 				C780D1162941911B00EF5633 /* IInstrumentsServiceGroup.swift in Sources */,
 				C76E7B612951BC70004F009B /* Color+Extensions.swift in Sources */,
 				C7FBB4792A1C965F00A6A8DF /* CoreParser.swift in Sources */,
 				C737D69B2AF0A38C00F901A8 /* Drawer+Group.swift in Sources */,
-				C7E8C36A2AF49AFE0001FC4B /* Cell+PanelSet.swift in Sources */,
 				C7515C522A28851800CFA925 /* CoreParserModels.swift in Sources */,
 				C737D6A62AF0A7BD00F901A8 /* Chart+Drawer.swift in Sources */,
 				C74B14A52AE7684200A06D05 /* NSISides.swift in Sources */,
@@ -1230,7 +1242,6 @@
 				C70BFCBC2A29DFA900CBD6B3 /* CoreParserHandleModels.swift in Sources */,
 				C7AB90632AF388E700DDE900 /* IColors.swift in Sources */,
 				C7C3255329751B9B006939B8 /* PerformanceSettingBarView.swift in Sources */,
-				C7E8C3642AF497FF0001FC4B /* Cell+Headline.swift in Sources */,
 				C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */,
 				C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */,
 				C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */,
@@ -1274,6 +1285,7 @@
 				C74C3E132AD52B5E00F70A36 /* Cell+Hint.swift in Sources */,
 				C7640A612A84C41100C1F267 /* ICharts.swift in Sources */,
 				C7E3A7102AFA36F500F0C35A /* ILaunchMonitorView.swift in Sources */,
+				C72271732AFCE58000811E55 /* NSISides+PanelSetCell.swift in Sources */,
 				C73BBB18294315A600472A75 /* ADevice.swift in Sources */,
 				C7842C2E2AEB694700658692 /* NSICollection.swift in Sources */,
 				C7764FDE29652D3000D4A6C6 /* EnergyModels.swift in Sources */,

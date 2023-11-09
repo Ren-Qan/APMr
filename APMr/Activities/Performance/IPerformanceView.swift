@@ -42,7 +42,7 @@ struct IPerformanceView: View {
             if performance.isNeedShowDetailSide {
                 ICharts.ISides()
                     .environmentObject(performance.chart.actor.hilighter.snap)
-                    .frame(maxWidth: 250)
+                    .frame(maxWidth: 280)
                     .frame(maxHeight: .infinity)
             }
         }
