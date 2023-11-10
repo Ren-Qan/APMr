@@ -23,7 +23,7 @@ class NSILabel: NSView {
         super.init(frame: frameRect)
         wantsLayer = true
         layer?.addSublayer(iText.layer)
-        iText.complete = { [weak self] in
+        iText.complete = { [weak self] _ in
             self?.graphAdjust()
         }
     }

@@ -32,7 +32,7 @@ extension IPerformanceView.ICharts {
             contentLayer.frame = bounds
             contentLayer.backgroundColor = NSColor.box.BG2.cgColor
             contentLayer.title.foregroundColor = NSColor.box.H1.cgColor
-            contentLayer.title.string = notifier?.type.text
+            contentLayer.title.string = notifier?.type.headline
             
             contentLayer.chart.styles = [
                 NSColor.box.BLUE3.cgColor,

@@ -9,7 +9,7 @@ import AppKit
 
 class NSIText {
     private(set) lazy var layer = NSIText.Layer()
-    public var complete: (() -> Void)? = nil
+    public var complete: ((NSIText) -> Void)? = nil
     
     public var text: String? = nil {
         didSet {
@@ -94,7 +94,7 @@ extension NSIText {
         layer.isWrapped = isWrapped
         layer.string = attribute
         
-        complete?()
+        complete?(self)
     }
     
     private func renderAttribute() -> NSAttributedString? {

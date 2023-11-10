@@ -6,7 +6,6 @@
 //
 
 import AppKit
-import SnapKit
 
 extension IPerformanceView.ICharts.NSISides {
     class HeadlineCell: NSCollectionView.Cell {
@@ -29,16 +28,6 @@ extension IPerformanceView.ICharts.NSISides {
             super.viewDidLoad()
             view.adds([label, icon])
             view.layer?.add(separator)
-            
-            icon.snp.makeConstraints { make in
-                make.centerX.equalTo(view.snp.left).offset(18)
-                make.centerY.equalToSuperview()
-            }
-            
-            label.snp.makeConstraints { make in
-                make.bottom.height.right.equalToSuperview()
-                make.left.equalToSuperview().offset(35)
-            }
         }
         
         override func updateLayer() {
@@ -47,7 +36,9 @@ extension IPerformanceView.ICharts.NSISides {
         }
         
         override func viewDidLayout() {
+            icon.frame = CGRect(x: 15, y: (view.bounds.height - 13) / 2, width: 13, height: 13)
             separator.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 0.5)
+            label.frame = CGRect(x: 35, y: 0, width: view.bounds.width, height: view.bounds.height)
         }
     }
 }

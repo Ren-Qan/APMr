@@ -35,7 +35,7 @@ extension DSPMetrics {
         case IO
         case Diagnostic
         
-        var text: String { "\(self)" }
+        var headline: String { "\(self)" }
     }
     
     enum S {

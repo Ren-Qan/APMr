@@ -13,7 +13,7 @@ extension IPerformanceView.ICharts.NSISides {
         
         fileprivate lazy var panels: [Panel] = []
         fileprivate lazy var contentLayer = ContentLayer()
-        fileprivate lazy var separator = ContentLayer()
+        fileprivate lazy var separator = Separator()
         
         override func viewDidLoad() {
             super.viewDidLoad()
@@ -29,6 +29,9 @@ extension IPerformanceView.ICharts.NSISides {
         override func updateLayer() {
             view.layer?.backgroundColor = NSColor.box.BG2.cgColor
             separator.backgroundColor = NSColor.box.S1.cgColor
+            panels.forEach { panel in
+                panel.update()
+            }
         }
     }
 }
@@ -76,6 +79,6 @@ extension IPerformanceView.ICharts.NSISides.PanelSetCell {
 
 extension IPerformanceView.ICharts.NSISides.PanelSetCell {
     fileprivate class ContentLayer: CALayer {
-        
+
     }
 }

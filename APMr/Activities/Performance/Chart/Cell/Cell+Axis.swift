@@ -68,7 +68,6 @@ extension IPerformanceView.ICharts.Cell {
                     path.move(to: point)
                     
                     let text = Text()
-                    
                     text.alignmentMode = .center
                     text.string = "\(Int(timing)) s"
                     text.font = NSFont.current.medium(10)
