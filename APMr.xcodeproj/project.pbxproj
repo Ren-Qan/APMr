@@ -13,7 +13,7 @@
 		C70F8FA8293850F400E8DCE1 /* Opengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* Opengl.swift */; };
 		C71A9EBB2AD66D30001626A5 /* ISides.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A9EBA2AD66D30001626A5 /* ISides.swift */; };
 		C72271712AFCE56C00811E55 /* NSISides+HeadlineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */; };
-		C72271732AFCE58000811E55 /* NSISides+PanelSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271722AFCE58000811E55 /* NSISides+PanelSetCell.swift */; };
+		C72271732AFCE58000811E55 /* NSISides+PanelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271722AFCE58000811E55 /* NSISides+PanelCell.swift */; };
 		C737D69B2AF0A38C00F901A8 /* Drawer+Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D69A2AF0A38C00F901A8 /* Drawer+Group.swift */; };
 		C737D69D2AF0A3BD00F901A8 /* Drawer+Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D69C2AF0A3BD00F901A8 /* Drawer+Notifier.swift */; };
 		C737D69F2AF0A3EC00F901A8 /* Drawer+Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737D69E2AF0A3EC00F901A8 /* Drawer+Graph.swift */; };
@@ -135,7 +135,7 @@
 		C70F8FA7293850F400E8DCE1 /* Opengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opengl.swift; sourceTree = "<group>"; };
 		C71A9EBA2AD66D30001626A5 /* ISides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISides.swift; sourceTree = "<group>"; };
 		C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+HeadlineCell.swift"; sourceTree = "<group>"; };
-		C72271722AFCE58000811E55 /* NSISides+PanelSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+PanelSetCell.swift"; sourceTree = "<group>"; };
+		C72271722AFCE58000811E55 /* NSISides+PanelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+PanelCell.swift"; sourceTree = "<group>"; };
 		C737D69A2AF0A38C00F901A8 /* Drawer+Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawer+Group.swift"; sourceTree = "<group>"; };
 		C737D69C2AF0A3BD00F901A8 /* Drawer+Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawer+Notifier.swift"; sourceTree = "<group>"; };
 		C737D69E2AF0A3EC00F901A8 /* Drawer+Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawer+Graph.swift"; sourceTree = "<group>"; };
@@ -346,15 +346,15 @@
 			path = Details;
 			sourceTree = "<group>";
 		};
-		C72271742AFCED9800811E55 /* PanelSetCell */ = {
+		C72271742AFCED9800811E55 /* PanelCell */ = {
 			isa = PBXGroup;
 			children = (
-				C72271722AFCE58000811E55 /* NSISides+PanelSetCell.swift */,
+				C72271722AFCE58000811E55 /* NSISides+PanelCell.swift */,
 				C7E8C3652AF4995C0001FC4B /* PanelSetCell+Panel.swift */,
 				C7EA8E032AFDE31400D412AC /* Panel+Headline.swift */,
 				C7EA8E052AFE18B900D412AC /* Panel+NoteRow.swift */,
 			);
-			path = PanelSetCell;
+			path = PanelCell;
 			sourceTree = "<group>";
 		};
 		C72271752AFCEDA800811E55 /* HeadlineCell */ = {
@@ -890,7 +890,7 @@
 			isa = PBXGroup;
 			children = (
 				C72271752AFCEDA800811E55 /* HeadlineCell */,
-				C72271742AFCED9800811E55 /* PanelSetCell */,
+				C72271742AFCED9800811E55 /* PanelCell */,
 			);
 			path = "NSSIdes+Cell";
 			sourceTree = "<group>";
@@ -1105,7 +1105,7 @@
 				C74C3E132AD52B5E00F70A36 /* Cell+Hint.swift in Sources */,
 				C7640A612A84C41100C1F267 /* ICharts.swift in Sources */,
 				C7E3A7102AFA36F500F0C35A /* ILaunchMonitorView.swift in Sources */,
-				C72271732AFCE58000811E55 /* NSISides+PanelSetCell.swift in Sources */,
+				C72271732AFCE58000811E55 /* NSISides+PanelCell.swift in Sources */,
 				C7EA8E042AFDE31400D412AC /* Panel+Headline.swift in Sources */,
 				C73BBB18294315A600472A75 /* ADevice.swift in Sources */,
 				C7842C2E2AEB694700658692 /* NSICollection.swift in Sources */,

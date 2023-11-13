@@ -82,7 +82,7 @@ extension DSPMetrics.M {
         var format: String {
             switch self {
                 case .Percent:
-                    return "%"
+                    return "%%"
                 case .MB:
                     return "MB"
                 case .GB:

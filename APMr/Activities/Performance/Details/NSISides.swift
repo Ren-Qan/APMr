@@ -24,7 +24,7 @@ extension IPerformanceView.ICharts {
             collection.dataSource = self
             collection.isSelectable = true
             collection.backgroundColors = [.box.BG1]
-            collection.register(cells: [HeadlineCell.self, PanelSetCell.self])
+            collection.register(cells: [HeadlineCell.self, PanelCell.self])
 
             return collection
         }()
@@ -70,7 +70,7 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
     
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
         if let shot = shot(section) {
-            return shot.expand ? 2 : 1
+            return 1 + (shot.expand ? shot.values.count : 0)
         }
         return 0
     }
@@ -84,9 +84,9 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
             return cell
         }
         
-        let cell: PanelSetCell = collectionView.reuse(indexPath)
-        if let shot = shot(indexPath.section) {
-            cell.render(shot)
+        let cell: PanelCell = collectionView.reuse(indexPath)
+        if let shot = shot(indexPath.section), shot.values.count > indexPath.item - 1 {
+            cell.render(shot.values[indexPath.item - 1])
         }
         return cell
     }
@@ -95,17 +95,24 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
         guard let shot = shot(indexPath.section) else {
             return .zero
         }
-        let w: CGFloat = shot.sideCellWidth
+        let w: CGFloat = collectionView.bounds.width - 1
         if indexPath.item == 0 {
             return NSSize(width: w, height: 40)
         }
-        return NSSize(width: w, height: shot.sideCellExpandHeight)
+        var h: CGFloat = 0
+        if shot.values.count > indexPath.item - 1 {
+            h = CGFloat(shot.values[indexPath.item - 1].marks.count) * 30 + 35
+        }
+        return NSSize(width: w, height: h)
     }
     
     func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        if let indexPath = indexPaths.first, let shot = shot(indexPath.section) {
+        guard let indexPath = indexPaths.first else { return }
+        
+        if indexPath.item == 0, let shot = shot(indexPath.section) {
             shot.expand.toggle()
             collectionView.reloadData()
+            return
         }
     }
     
@@ -118,26 +125,8 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
 
 extension IPerformanceView.ICharts.NSISides {
     class Separator: CALayer {
-        
-    }
-}
-
-extension CPerformance.Chart.Actor.Highlighter.Snap.Shot {
-    var sideCellWidth: CGFloat {
-        return 279
-    }
-    var sideCellExpandHeight: CGFloat {
-        guard expand else { return 0 }
-        var h: CGFloat = 0
-        values.forEach { value in
-            h += value.sidePartViewHeight
+        override func action(forKey event: String) -> CAAction? {
+            return nil
         }
-        return h
-    }
-}
-
-extension CPerformance.Chart.V {
-    var sidePartViewHeight: CGFloat {
-        return 35 + CGFloat(marks.count + 1) * 30
     }
 }

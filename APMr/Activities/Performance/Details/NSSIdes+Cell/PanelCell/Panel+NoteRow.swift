@@ -7,17 +7,17 @@
 
 import AppKit
 
-extension IPerformanceView.ICharts.NSISides.PanelSetCell.Panel {
+extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
     class NoteRow: CALayer {
         fileprivate lazy var notes: [Note] = {
             layoutManager = CAConstraintLayoutManager()
             var relative: String? = nil
-            return (0 ..< 3).compactMap { i in
+            return (0 ..< 2).compactMap { i in
                 let note = Note()
                 note.name = "note\(i)"
                 note.addConstraint(CAConstraint(attribute: .minY, relativeTo: "superlayer", attribute: .minY))
                 note.addConstraint(CAConstraint(attribute: .height, relativeTo: "superlayer", attribute: .height))
-                note.addConstraint(CAConstraint(attribute: .width, relativeTo: "superlayer", attribute: .width, scale: 1 / 3, offset: 0))
+                note.addConstraint(CAConstraint(attribute: .width, relativeTo: "superlayer", attribute: .width, scale: 1 / 2, offset: 0))
                 if let relative {
                     note.addConstraint(CAConstraint(attribute: .minX, relativeTo: relative, attribute: .maxX))
                 } else {
@@ -29,6 +29,10 @@ extension IPerformanceView.ICharts.NSISides.PanelSetCell.Panel {
             }
         }()
         
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
+        
         public func update() {
             notes.forEach { note in
                 note.foregroundColor = NSColor.box.C1.cgColor
@@ -37,21 +41,21 @@ extension IPerformanceView.ICharts.NSISides.PanelSetCell.Panel {
         
         public func load(_ mark: CPerformance.Chart.Mark) {
             notes[0].text(mark.label)
-            notes[1].text(String(format: "%.1f", mark.source.value))
-            notes[2].text(mark.source.unit.format)
+            notes[1].text(String(format: "%.1f \(mark.source.unit.format)", mark.source.value))
         }
         
         public func load(_ values: [String]) {
-            (0 ..< 3).forEach { i in
+            (0 ..< 2).forEach { i in
                 notes[i].text(values[i])
             }
         }
     }
 }
 
-extension IPerformanceView.ICharts.NSISides.PanelSetCell.Panel {
+extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
     fileprivate class Note: CATextLayer {
         func text(_ string: String) {
+            contentsScale = NSScreen.scale
             fontSize = 13
             font = NSFont.current.regular(13)
             alignmentMode = .left

@@ -24,6 +24,10 @@ struct IColorBox<M: IColorsMakerProtocol> {
     
     let BG2 = M.color("Background2")
     
+    let BG3 = M.color("Background3")
+    
+    let SBG1 = M.color("SubBackground1")
+    
     let B1 = M.color("Border1")
     
     let H1 = M.color("Headline1")
