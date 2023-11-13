@@ -16,7 +16,7 @@ extension IPerformanceView.ICharts {
             layout.scrollDirection = .vertical
             layout.minimumLineSpacing = 0
             layout.sectionInset.top = 0
-            layout.sectionInset.left = 1
+            layout.sectionInset.left = 10
             
             let collection = NSICollection()
             collection.collectionViewLayout = layout
@@ -95,7 +95,7 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
         guard let shot = shot(indexPath.section) else {
             return .zero
         }
-        let w: CGFloat = collectionView.bounds.width - 1
+        let w: CGFloat = collectionView.bounds.width - 10
         if indexPath.item == 0 {
             return NSSize(width: w, height: 40)
         }

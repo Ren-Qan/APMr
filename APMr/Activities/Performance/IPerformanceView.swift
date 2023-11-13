@@ -12,25 +12,9 @@ struct IPerformanceView: View {
     @EnvironmentObject var performance: CPerformance
     
     var body: some View {
-        #if DEBUG
-        HStack {
-            Button("Debug Sample [\(performance.sampleCount)]") {
-                performance.Debug_sample()
-            }
-             
-            Button("real Sample [\(performance.sampleCount)]") {
-                if let p = device.selectPhone,
-                   let app = device.selectApp {
-                    performance.start(p, app)
-                }
-            }
-                                    
-            Button("\(performance.isNeedShowDetailSide ? "关" : "开")") {
-                performance.isNeedShowDetailSide.toggle()
-            }
-        }
-        .padding(.top, 10)
-        #endif
+        IManagerBar()
+            .environmentObject(device)
+            .environmentObject(performance)
         
         HStack(spacing: 0) {
             ICharts()
