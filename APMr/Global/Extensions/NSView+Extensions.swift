@@ -32,4 +32,9 @@ extension NSView {
         frame = rect
         return self
     }
+    
+    @discardableResult internal func addTo(_ target: NSView) -> Self {
+        target.add(self)
+        return self
+    }
 }

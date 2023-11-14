@@ -12,22 +12,30 @@ struct IPerformanceView: View {
     @EnvironmentObject var performance: CPerformance
     
     var body: some View {
-        IManagerBar()
-            .environmentObject(device)
-            .environmentObject(performance)
-        
-        HStack(spacing: 0) {
-            ICharts()
-                .environmentObject(performance.chart.group)
-                .environmentObject(performance.chart.actor)
-                .frame(maxWidth: .infinity)
-                .frame(maxHeight: .infinity)
+        VStack(spacing: 0) {
+            IPlate()
+                .frame(maxHeight: 45)
+                .environmentObject(device)
+                .environmentObject(performance)
             
-            if performance.isNeedShowDetailSide {
-                ICharts.ISides()
-                    .environmentObject(performance.chart.actor.hilighter.snap)
-                    .frame(maxWidth: 280)
+            HStack(spacing: 10) {
+                ICharts()
+                    .environmentObject(performance.chart.group)
+                    .environmentObject(performance.chart.actor)
+                    .frame(maxWidth: .infinity)
                     .frame(maxHeight: .infinity)
+                
+                if performance.isNeedShowDetailSide {
+                    ICharts.ISides()
+                        .environmentObject(performance.chart.actor.hilighter.snap)
+                        .frame(maxWidth: 255)
+                        .frame(maxHeight: .infinity)
+                }
+            }
+            .padding(.leading, 10)
+            .padding(.trailing, 10)
+            .background {
+                Color.box.BG1
             }
         }
     }

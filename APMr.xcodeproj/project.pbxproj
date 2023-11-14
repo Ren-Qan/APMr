@@ -33,7 +33,10 @@
 		C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB122943094B00472A75 /* ILockdownModels.swift */; };
 		C73BBB18294315A600472A75 /* ADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB17294315A600472A75 /* ADevice.swift */; };
 		C73BBB1A29431AD200472A75 /* Processcontrol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73BBB1929431AD200472A75 /* Processcontrol.swift */; };
-		C742D0842B01F07F00A3697F /* IManagerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C742D0832B01F07F00A3697F /* IManagerBar.swift */; };
+		C73E45922B03260B004D2C2F /* NSIPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E45912B03260B004D2C2F /* NSIPlate.swift */; };
+		C73E45942B032630004D2C2F /* NSICharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E45932B032630004D2C2F /* NSICharts.swift */; };
+		C73E45962B033E1E004D2C2F /* NSIEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E45952B033E1E004D2C2F /* NSIEventView.swift */; };
+		C742D0842B01F07F00A3697F /* IPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C742D0832B01F07F00A3697F /* IPlate.swift */; };
 		C7483B9429373A0400F32BE0 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7483B9329373A0400F32BE0 /* Application.swift */; };
 		C7483B9829373A0600F32BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9729373A0600F32BE0 /* Assets.xcassets */; };
 		C7483B9B29373A0600F32BE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7483B9A29373A0600F32BE0 /* Preview Assets.xcassets */; };
@@ -156,7 +159,10 @@
 		C73BBB122943094B00472A75 /* ILockdownModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILockdownModels.swift; sourceTree = "<group>"; };
 		C73BBB17294315A600472A75 /* ADevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADevice.swift; sourceTree = "<group>"; };
 		C73BBB1929431AD200472A75 /* Processcontrol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Processcontrol.swift; sourceTree = "<group>"; };
-		C742D0832B01F07F00A3697F /* IManagerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IManagerBar.swift; sourceTree = "<group>"; };
+		C73E45912B03260B004D2C2F /* NSIPlate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSIPlate.swift; sourceTree = "<group>"; };
+		C73E45932B032630004D2C2F /* NSICharts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSICharts.swift; sourceTree = "<group>"; };
+		C73E45952B033E1E004D2C2F /* NSIEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSIEventView.swift; sourceTree = "<group>"; };
+		C742D0832B01F07F00A3697F /* IPlate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPlate.swift; sourceTree = "<group>"; };
 		C7483B9029373A0400F32BE0 /* APMr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APMr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7483B9329373A0400F32BE0 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		C7483B9729373A0600F32BE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -333,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				C7640A602A84C41100C1F267 /* ICharts.swift */,
+				C73E45932B032630004D2C2F /* NSICharts.swift */,
 				C737D6B42AF0E36400F901A8 /* Cell */,
 			);
 			path = Charts;
@@ -461,12 +468,13 @@
 			path = NSILabel;
 			sourceTree = "<group>";
 		};
-		C742D0822B01EFCA00A3697F /* Manager */ = {
+		C742D0822B01EFCA00A3697F /* Plate */ = {
 			isa = PBXGroup;
 			children = (
-				C742D0832B01F07F00A3697F /* IManagerBar.swift */,
+				C742D0832B01F07F00A3697F /* IPlate.swift */,
+				C73E45912B03260B004D2C2F /* NSIPlate.swift */,
 			);
-			path = Manager;
+			path = Plate;
 			sourceTree = "<group>";
 		};
 		C7483B8729373A0400F32BE0 = {
@@ -683,7 +691,7 @@
 			isa = PBXGroup;
 			children = (
 				C76A6EF62A614E1900836807 /* IPerformanceView.swift */,
-				C742D0822B01EFCA00A3697F /* Manager */,
+				C742D0822B01EFCA00A3697F /* Plate */,
 				C71A9EB82AD66B7A001626A5 /* Charts */,
 				C71A9EB92AD66BC9001626A5 /* Sides */,
 			);
@@ -786,6 +794,7 @@
 			children = (
 				C77952822AE8D59500DBF98E /* NSITable.swift */,
 				C7842C2D2AEB694700658692 /* NSICollection.swift */,
+				C73E45952B033E1E004D2C2F /* NSIEventView.swift */,
 				C73B7E352AF88F0300C3A219 /* NSIText */,
 				C7429B962AF4F0440048574D /* NSILabel */,
 			);
@@ -1054,6 +1063,7 @@
 				C737D6AE2AF0AD6B00F901A8 /* Actor+Highlighter.swift in Sources */,
 				C70BFCBA2A29D97800CBD6B3 /* CoreParser+Handles.swift in Sources */,
 				C7AB90652AF38BED00DDE900 /* IColors+NSColor.swift in Sources */,
+				C73E45922B03260B004D2C2F /* NSIPlate.swift in Sources */,
 				C7D70FA72A13342A0015ABAE /* InputStream+Extensions.swift in Sources */,
 				C72271712AFCE56C00811E55 /* NSISides+HeadlineCell.swift in Sources */,
 				C737D69D2AF0A3BD00F901A8 /* Drawer+Notifier.swift in Sources */,
@@ -1065,6 +1075,7 @@
 				C7515C522A28851800CFA925 /* CoreParserModels.swift in Sources */,
 				C737D6A62AF0A7BD00F901A8 /* Chart+Drawer.swift in Sources */,
 				C74B14A52AE7684200A06D05 /* NSISides.swift in Sources */,
+				C73E45942B032630004D2C2F /* NSICharts.swift in Sources */,
 				C7AC987F2956E0C200A6580B /* NetworkStatistics.swift in Sources */,
 				C7B8B35D2A541872008E9D53 /* Chart.swift in Sources */,
 				C7483BF029373ADC00F32BE0 /* IInstruments.swift in Sources */,
@@ -1077,7 +1088,7 @@
 				C7FA2E52299E28F900FE78F2 /* Sampling.swift in Sources */,
 				C70BFCBC2A29DFA900CBD6B3 /* CoreParserHandleModels.swift in Sources */,
 				C7AB90632AF388E700DDE900 /* IColors.swift in Sources */,
-				C742D0842B01F07F00A3697F /* IManagerBar.swift in Sources */,
+				C742D0842B01F07F00A3697F /* IPlate.swift in Sources */,
 				C76ACF3F2996166C005CF720 /* CGFloat+Extensions.swift in Sources */,
 				C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */,
 				C7FA2E50299E036A00FE78F2 /* ProcessControlByDictionary.swift in Sources */,
@@ -1109,6 +1120,7 @@
 				C77B36852A6137800054DE7F /* NSEdgeInset+Extensions.swift in Sources */,
 				C7719B442987B5D700DC6044 /* IDiagnosticsRelay.swift in Sources */,
 				C71A9EBB2AD66D30001626A5 /* ISides.swift in Sources */,
+				C73E45962B033E1E004D2C2F /* NSIEventView.swift in Sources */,
 				C77952832AE8D59500DBF98E /* NSITable.swift in Sources */,
 				C7483B9429373A0400F32BE0 /* Application.swift in Sources */,
 				C780D11829419E6100EF5633 /* OpenglModels.swift in Sources */,

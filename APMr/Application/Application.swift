@@ -21,18 +21,6 @@ struct Application: App {
     
     var body: some Scene {
         WindowGroup {
-//            Root()
-//                .preferredColorScheme(.dark)
-//                .monospaced()
-//                .frame(minWidth: 1200)
-//                .frame(minHeight: 400)
-//                .background {
-//                    Color.fabulaBack0
-//                }
-//                .onAppear {
-//                    NSWindow.allowsAutomaticWindowTabbing = false
-//                }
-
             NavigationView()
                 .environmentObject(navigation)
                 .environmentObject(device)
