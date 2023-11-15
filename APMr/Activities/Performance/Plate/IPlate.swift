@@ -22,7 +22,6 @@ extension IPerformanceView {
         
         func updateNSView(_ nsView: IPerformanceView.NSIPlate, context: Context) {
             nsView.target = self
-            nsView.refresh()
         }
     }
 }

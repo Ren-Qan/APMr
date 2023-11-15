@@ -11,7 +11,7 @@ extension IPerformanceView {
     class NSIPlate: NSView {
         public var target: IPlate? = nil
         
-        fileprivate lazy var listButton = ListButton().wants(true)
+        fileprivate lazy var listButton = ListButton()
         fileprivate lazy var separator = Separator()
         
         override init(frame frameRect: NSRect) {
@@ -19,13 +19,19 @@ extension IPerformanceView {
             wantsLayer = true
             
             layer?.add(separator)
+            add(listButton)
             
-            listButton.addTo(self)
+            event()
         }
         
         override func layout() {
-            listButton.frame = .init(x: 10, y: 8, width: 80, height: bounds.size.height - 16)
-            separator.frame = .init(x: 0, y: 0, width: bounds.width, height: 0.5)
+            listButton.iLayout.make(bounds) { maker in
+                maker.top(10).bottom(10).width(80).left(10)
+            }
+            
+            separator.iLayout.make(bounds) { maker in
+                maker.bottom(0).right(0).left(0).height(0.5)
+            }
         }
         
         override func updateLayer() {
@@ -40,46 +46,33 @@ extension IPerformanceView {
 }
 
 extension IPerformanceView.NSIPlate {
-    public func refresh() {
-        
+    fileprivate func event() {
+        listButton.eventView.mouse(.click) { [weak self] view in
+
+        }
     }
 }
 
 extension IPerformanceView.NSIPlate {
-    fileprivate class Separator: CALayer {
-        
-    }
-    
-    fileprivate class BGLayer: CALayer {
-        
-    }
+    fileprivate class Separator: CALayer { }
     
     fileprivate class ListButton: NSView {
-        fileprivate lazy var highlight = BGLayer()
-        
-        fileprivate lazy var normal = BGLayer()
-        
         fileprivate lazy var eventView = NSIEventView()
-
+        fileprivate lazy var highlight = CALayer().alpha(0)
+        fileprivate lazy var normal = CALayer()
+    
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
-            add(eventView)
             layer?.adds([normal, highlight])
-            
-            highlight.opacity = 0
+            add(eventView)
+
             eventView
                 .mouse(.down) { [weak self] button in
                     self?.highlight.opacity = 1
                 }
                 .mouse(.up) { [weak self] button in
                     self?.highlight.opacity = 0
-                }
-                .mouse(.entered) { button in
-                    
-                }
-                .mouse(.existed) { button in
-                    
                 }
         }
         
@@ -94,8 +87,27 @@ extension IPerformanceView.NSIPlate {
         }
         
         override func updateLayer() {
-            highlight.backgroundColor = NSColor.black.withAlphaComponent(0.3).cgColor
-            normal.backgroundColor = NSColor.box.GREEN1.cgColor
+            highlight.background(.random)
+            normal.background(.random)
+        }
+    }
+}
+
+extension IPerformanceView.NSIPlate.ListButton {
+    fileprivate class CellButton: NSView {
+        fileprivate lazy var eventView = NSIEventView().addTo(self)
+        
+        override init(frame frameRect: NSRect) {
+            super.init(frame: frameRect)
+            wants(true).background(.random)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func layout() {
+            eventView.frame = bounds
         }
     }
 }

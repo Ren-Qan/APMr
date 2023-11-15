@@ -66,4 +66,10 @@ extension CALayer {
         transform = CATransform3DMakeRotation((degress / 180) * .pi, 0, 0, 1)
         return self
     }
+    
+    @discardableResult
+    public func alpha(_ value: CGFloat) -> Self {
+        opacity = Float(value)
+        return self
+    }
 }

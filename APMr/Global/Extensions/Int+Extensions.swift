@@ -24,3 +24,9 @@ extension Int64 {
         return MB / 1024
     }
 }
+
+extension Int {
+    var f: CGFloat {
+        return CGFloat(self)
+    }
+}

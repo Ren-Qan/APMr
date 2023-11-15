@@ -29,13 +29,9 @@ struct NavigationView: View {
                     IPerformanceView()
                         .environmentObject(device)
                         .environmentObject(performance)
-                #if Debug
+                    
                 case .launch:
                     ILaunchMonitorView()
-                #endif
-                    
-                default:
-                    Text(navigation.selection.title + " In Progress")
             }
         }
         .navigationTitle(

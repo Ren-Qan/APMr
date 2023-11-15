@@ -77,7 +77,7 @@ extension NSIEventView {
 }
 
 extension NSIEventView {
-    typealias Closue = (_ button: NSIEventView) -> Void
+    typealias Closue = (_ view: NSIEventView) -> Void
     
     enum MouseOperation {
         case click

@@ -12,8 +12,8 @@ extension CPerformance.Chart.Drawer {
     class Graph {
         fileprivate(set) var axis = Axis()
         fileprivate(set) var series: [Series] = []
-        fileprivate(set) var visible: Bool = true
-        
+        public var visible: Bool = true
+         
         public var inset: NSEdgeInsets { CPerformance.Chart.inset }
         
         public func clean() {
