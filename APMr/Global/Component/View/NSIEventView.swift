@@ -15,7 +15,9 @@ class NSIEventView: NSView {
     }
     
     private var trackArea: NSTrackingArea? = nil
-    private lazy var mouseOperationMap: [MouseOperation : Closue] = [:]
+    private lazy var mouseOperationMap: [MouseOperation : Closure] = [:]
+    private lazy var highlightClosure: HClosure? = nil
+    private var highlightState = false
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -38,7 +40,9 @@ class NSIEventView: NSView {
             let track = NSTrackingArea(rect: bounds,
                                        options: [.activeInActiveApp,
                                                  .mouseEnteredAndExited,
-                                                 .mouseMoved],
+                                                 .mouseMoved,
+                                                 .enabledDuringMouseDrag
+                                            ],
                                        owner: self)
             addTrackingArea(track)
             self.trackArea = track
@@ -46,38 +50,55 @@ class NSIEventView: NSView {
     }
     
     override func mouseEntered(with event: NSEvent) {
-        mouseOperationMap[.entered]?(self)
+        mouseOperationMap[.entered]?(MEvent(view: self, event: event))
     }
 
     override func mouseExited(with event: NSEvent) {
-        mouseOperationMap[.existed]?(self)
-
+        mouseOperationMap[.existed]?(MEvent(view: self, event: event))
+        highlight(false, event)
     }
     
     override func mouseMoved(with event: NSEvent) {
-        mouseOperationMap[.moved]?(self)
+        mouseOperationMap[.moved]?(MEvent(view: self, event: event))
     }
     
     override func mouseDown(with event: NSEvent) {
-        mouseOperationMap[.down]?(self)
+        mouseOperationMap[.down]?(MEvent(view: self, event: event))
+        highlight(true, event)
     }
-    
+        
     override func mouseUp(with event: NSEvent) {
         if event.clickCount == 1 {
-            mouseOperationMap[.click]?(self)
+            mouseOperationMap[.click]?(MEvent(view: self, event: event))
         }
-        mouseOperationMap[.up]?(self)
+        mouseOperationMap[.up]?(MEvent(view: self, event: event))
+        highlight(false, event)
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        mouseOperationMap[.drag]?(MEvent(view: self, event: event))
+        highlight(true, event)
     }
 }
 
 extension NSIEventView {
-    @objc fileprivate func click(_ sender: NSIEventView) {
-        mouseOperationMap[.click]?(self)
+    fileprivate func highlight(_ state: Bool, _ event: NSEvent) {
+        if highlightState != state {
+            highlightClosure?(state, MEvent(view: self, event: event))
+        }
+        
+        highlightState = state
     }
 }
 
 extension NSIEventView {
-    typealias Closue = (_ view: NSIEventView) -> Void
+    typealias Closure = (_ event: MEvent) -> Void
+    typealias HClosure = (_ highlight: Bool, _ event: MEvent) -> Void
+    
+    struct MEvent {
+        let view: NSIEventView
+        let event: NSEvent
+    }
     
     enum MouseOperation {
         case click
@@ -86,16 +107,24 @@ extension NSIEventView {
         case moved
         case down
         case up
+        case drag
     }
     
     @discardableResult
     public func mouse(_ operation: MouseOperation,
-                      _ closure: @escaping Closue) -> Self {
+                      _ closure: @escaping Closure) -> Self {
         switch operation {
             case .existed, .entered, .moved: self.isNeedTrackEvent = true
             default: break
         }
         mouseOperationMap[operation] = closure
+        return self
+    }
+    
+    @discardableResult
+    public func highlight(_ closure: @escaping HClosure) -> Self {
+        self.isNeedTrackEvent = true
+        self.highlightClosure = closure
         return self
     }
 }

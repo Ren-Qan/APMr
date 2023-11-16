@@ -40,8 +40,8 @@ extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
         }
         
         public func load(_ mark: CPerformance.Chart.Mark) {
-            notes[0].text(mark.label)
-            notes[1].text(String(format: "%.1f \(mark.source.unit.format)", mark.source.value))
+            notes[0].string(mark.label)
+            notes[1].string(String(format: "%.1f \(mark.source.unit.format)", mark.source.value))
         }
         
         public func load(_ values: [String]) {
@@ -54,7 +54,7 @@ extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
 
 extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
     fileprivate class Note: CATextLayer {
-        func text(_ string: String) {
+        func string(_ string: String) {
             contentsScale = NSScreen.scale
             fontSize = 13
             font = NSFont.current.regular(13)

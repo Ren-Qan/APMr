@@ -72,4 +72,16 @@ extension CALayer {
         opacity = Float(value)
         return self
     }
+    
+    @discardableResult
+    public func then(_ closure: (_ entity: Self) -> Void) -> Self {
+        closure(self)
+        return self
+    }
+    
+    @discardableResult
+    public func addTo(_ target: CALayer) -> Self {
+        target.add(self)
+        return self
+    }
 }
