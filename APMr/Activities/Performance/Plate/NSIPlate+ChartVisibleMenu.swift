@@ -9,16 +9,22 @@ import AppKit
 
 extension IPerformanceView.NSIPlate {
     class ChartVisibleMenu: NSMenu {
+        private(set) var group: CPerformance.Chart.Drawer.Group? = nil
         
+        public var click: ((_ notifer: CPerformance.Chart.Drawer.Notifier) -> Void)? = nil
+        
+        public func setup(_ group: CPerformance.Chart.Drawer.Group) {
+            if self.group === group {
+                return
+            }
+            self.group = group
+            adjust(group)
+            load(group)
+        }
     }
 }
 
-extension IPerformanceView.NSIPlate.ChartVisibleMenu {
-    public func setup(_ group: CPerformance.Chart.Drawer.Group) {
-        adjust(group)
-        load(group)
-    }
-    
+extension IPerformanceView.NSIPlate.ChartVisibleMenu {    
     private func adjust(_ group: CPerformance.Chart.Drawer.Group) {
         let count = group.notifiers.count - items.count
         if count == 0 {
@@ -45,50 +51,78 @@ extension IPerformanceView.NSIPlate.ChartVisibleMenu {
             let item = items[i] as? Item
             let notifer = group.notifiers[i]
             item?.setup(notifer)
+            item?.contentView.eventView.mouse(.click) { [weak self, weak item] event in
+                self?.click?(notifer)
+                item?.contentView.refresh()
+            }
         }
     }
 }
 
 extension IPerformanceView.NSIPlate.ChartVisibleMenu {
     fileprivate class Item: NSMenuItem {
-        lazy var contentView = ItemView(frame: CGRect(x: 0, y: 0, width: 200, height: 40)).wants(true)
+        fileprivate lazy var contentView = ItemView(frame: CGRect(x: 0, y: 0, width: 200, height: 40)).wants(true)
 
         fileprivate func setup(_ notifer: CPerformance.Chart.Drawer.Notifier) {
             self.view = contentView
-            self.contentView.target = notifer
-            self.contentView.eventView.mouse(.moved) { view in
-                print("[\(self.tag)] ===== \(Int.random(in: 0 ..< 1000))")
-            }
+            self.contentView.notifer = notifer
+            self.contentView.refresh()
         }
     }
     
     fileprivate class ItemView: NSView {
-        var target: CPerformance.Chart.Drawer.Notifier? = nil {
-            didSet {
-                refresh()
-            }
-        }
-        
-        private lazy var bgLayer = CALayer()
+        var notifer: CPerformance.Chart.Drawer.Notifier? = nil
+                
+        private lazy var highlight = CALayer()
             .addTo(self.layer!)
             .alpha(0)
             .background(.black.withAlphaComponent(0.3))
         
-        lazy var eventView = NSIEventView()
+        fileprivate lazy var eventView = NSIEventView()
             .addTo(self)
-            .highlight { [weak self] highlight, event in
-                self?.bgLayer.alpha(highlight ? 1 : 0)
+            .highlight { [weak self] event in
+                self?.highlight.alpha(event.isHighligt ? 1 : 0)
             }
-
+        
+        fileprivate lazy var select = NSView().wants(true).addTo(self)
+        fileprivate lazy var icon = NSImageView().wants(true).addTo(self)
+        fileprivate lazy var title = CATextLayer().addTo(self.layer!)
+        
         override func layout() {
             eventView.frame = bounds
-            bgLayer.iLayout.make(bounds) { maker in
+            
+            select.iLayout.make(bounds) { maker in
+                maker.centerV(0).left(10).width(15).height(15)
+            }
+            
+            icon.iLayout.make(bounds) { maker in
+                maker.centerV(0).left(40).width(25).height(25)
+            }
+                        
+            highlight.iLayout.make(bounds) { maker in
                 maker.left(5).right(5).top(0).bottom(0)
             }
         }
         
-        func refresh() {
-            
+        override func updateLayer() {
+            title.color(.box.H1)
+            title.background(.random)
+            select.background(.random)
+            icon.background(.random)
+        }
+        
+        fileprivate func refresh() {
+            guard let notifer else { return }
+
+            if let string = title.string as? String,
+               string == notifer.type.headline {} else {
+                   title.common
+                       .text(notifer.type.headline)
+                       .font(12, .current.medium(12))
+                       .iFit().iLayout.make(bounds) { maker in
+                           maker.centerV(0).left(80)
+                       }
+               }
         }
     }
 }

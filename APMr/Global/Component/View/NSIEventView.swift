@@ -84,7 +84,7 @@ class NSIEventView: NSView {
 extension NSIEventView {
     fileprivate func highlight(_ state: Bool, _ event: NSEvent) {
         if highlightState != state {
-            highlightClosure?(state, MEvent(view: self, event: event))
+            highlightClosure?(HEvent(isHighligt: state, view: self, event: event))
         }
         
         highlightState = state
@@ -93,7 +93,13 @@ extension NSIEventView {
 
 extension NSIEventView {
     typealias Closure = (_ event: MEvent) -> Void
-    typealias HClosure = (_ highlight: Bool, _ event: MEvent) -> Void
+    typealias HClosure = (_ event: HEvent) -> Void
+    
+    struct HEvent {
+        let isHighligt: Bool
+        let view: NSIEventView
+        let event: NSEvent
+    }
     
     struct MEvent {
         let view: NSIEventView

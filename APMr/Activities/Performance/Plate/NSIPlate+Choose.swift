@@ -47,7 +47,7 @@ extension IPerformanceView.NSIPlate {
             eventView.frame = bounds
             highlight.frame = bounds
             normal.frame = bounds
-            textLayer.fitSize().iLayout.make(bounds) { maker in
+            textLayer.iFit().iLayout.make(bounds) { maker in
                 maker.centerH(0).centerV(0)
             }
         }

@@ -44,7 +44,7 @@ extension CATextLayer {
     }
     
     @discardableResult
-    public func fitSize() -> Self {
+    public func iFit() -> Self {
         self.frame.size = preferredFrameSize()
         return self
     }

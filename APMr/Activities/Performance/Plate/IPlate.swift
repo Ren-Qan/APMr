@@ -16,12 +16,17 @@ extension IPerformanceView {
         
         func makeNSView(context: Context) -> IPerformanceView.NSIPlate {
             let plate = NSIPlate()
-            plate.target = self
+            setup(plate)
             return plate
         }
         
         func updateNSView(_ nsView: IPerformanceView.NSIPlate, context: Context) {
+            setup(nsView)
+        }
+        
+        private func setup(_ nsView: IPerformanceView.NSIPlate) {
             nsView.target = self
+            nsView.refresh()
         }
     }
 }

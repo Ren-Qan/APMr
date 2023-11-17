@@ -9,13 +9,7 @@ import AppKit
 
 extension IPerformanceView {
     class NSIPlate: NSView {
-        public var target: IPlate? = nil {
-            didSet {
-                if let group = target?.performance.chart.group {
-                    self.visibleMenu.setup(group)
-                }
-            }
-        }
+        public var target: IPlate? = nil
         
         fileprivate lazy var chooseButton = ChooseButton()
         fileprivate lazy var separator = Separator()
@@ -27,7 +21,6 @@ extension IPerformanceView {
             
             separator.addTo(self.layer!)
             chooseButton.addTo(self)
-            self.menu = visibleMenu
             
             event()
         }
@@ -54,9 +47,25 @@ extension IPerformanceView {
 }
 
 extension IPerformanceView.NSIPlate {
+    public func refresh() {
+        if let group = target?.performance.chart.group {
+            self.visibleMenu.setup(group)
+        }
+    }
+}
+    
+extension IPerformanceView.NSIPlate {
     fileprivate func event() {
-        chooseButton.eventView.mouse(.click) { [weak self] view in
-            self?.visibleMenu.popUp(positioning: nil, at: .init(x: (79 - (self?.visibleMenu.size.width ?? 0)) / 2, y: -10), in: view.view)
+        chooseButton.eventView.mouse(.click) { [weak self] targtet in
+            self?.visibleMenu
+                .popUp(positioning: nil,
+                       at: .init(x: (80 - (self?.visibleMenu.size.width ?? 0)) / 2, y: -10),
+                       in: targtet.view)
+        }
+        
+        
+        visibleMenu.click = { [weak self] notifier in
+
         }
     }
 }
