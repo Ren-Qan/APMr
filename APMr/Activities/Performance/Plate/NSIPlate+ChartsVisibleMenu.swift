@@ -1,5 +1,5 @@
 //
-//  NSIPlate+ChartVisibleMenu.swift
+//  NSIPlate+ChartsVisibleMenu.swift
 //  APMr
 //
 //  Created by 任玉乾 on 2023/11/16.
@@ -8,7 +8,7 @@
 import AppKit
 
 extension IPerformanceView.NSIPlate {
-    class ChartVisibleMenu: NSMenu {
+    class ChartsVisibleMenu: NSMenu {
         private(set) var group: CPerformance.Chart.Drawer.Group? = nil
         
         public var click: ((_ notifer: CPerformance.Chart.Drawer.Notifier) -> Void)? = nil
@@ -24,7 +24,7 @@ extension IPerformanceView.NSIPlate {
     }
 }
 
-extension IPerformanceView.NSIPlate.ChartVisibleMenu {    
+extension IPerformanceView.NSIPlate.ChartsVisibleMenu {
     private func adjust(_ group: CPerformance.Chart.Drawer.Group) {
         let count = group.notifiers.count - items.count
         if count == 0 {
@@ -59,7 +59,7 @@ extension IPerformanceView.NSIPlate.ChartVisibleMenu {
     }
 }
 
-extension IPerformanceView.NSIPlate.ChartVisibleMenu {
+extension IPerformanceView.NSIPlate.ChartsVisibleMenu {
     fileprivate class Item: NSMenuItem {
         fileprivate lazy var contentView = ItemView(frame: CGRect(x: 0, y: 0, width: 200, height: 40)).wants(true)
 
@@ -84,7 +84,7 @@ extension IPerformanceView.NSIPlate.ChartVisibleMenu {
                 self?.highlight.alpha(event.isHighligt ? 1 : 0)
             }
         
-        fileprivate lazy var select = NSView().wants(true).addTo(self)
+        fileprivate lazy var select = NSImageView().mode(.fit).wants(true).addTo(self)
         fileprivate lazy var icon = NSImageView().wants(true).addTo(self)
         fileprivate lazy var title = CATextLayer().addTo(self.layer!)
         
@@ -92,34 +92,37 @@ extension IPerformanceView.NSIPlate.ChartVisibleMenu {
             eventView.frame = bounds
             
             select.iLayout.make(bounds) { maker in
-                maker.centerV(0).left(10).width(15).height(15)
+                maker.centerV(0).left(10).width(20).height(20)
             }
             
             icon.iLayout.make(bounds) { maker in
                 maker.centerV(0).left(40).width(25).height(25)
             }
                         
-            highlight.iLayout.make(bounds) { maker in
-                maker.left(5).right(5).top(0).bottom(0)
-            }
+            highlight.corner(4).iLayout.make(bounds) { maker in
+                maker.left(5).right(5).top(5).bottom(5)
+            }            
         }
         
         override func updateLayer() {
             title.color(.box.H1)
-            title.background(.random)
-            select.background(.random)
-            icon.background(.random)
+
+            title.background(.box.BLUE1)
+            icon.background(.box.BLUE3)
         }
         
         fileprivate func refresh() {
             guard let notifer else { return }
-
+            
+            select.symbol(Bool.random() ? "square" : "checkmark.square.fill")
+            
             if let string = title.string as? String,
                string == notifer.type.headline {} else {
                    title.common
                        .text(notifer.type.headline)
                        .font(12, .current.medium(12))
-                       .iFit().iLayout.make(bounds) { maker in
+                       .iFit()
+                       .iLayout.make(bounds) { maker in
                            maker.centerV(0).left(80)
                        }
                }

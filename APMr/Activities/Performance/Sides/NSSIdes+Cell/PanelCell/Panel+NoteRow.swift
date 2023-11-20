@@ -46,7 +46,7 @@ extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
         
         public func load(_ values: [String]) {
             (0 ..< 2).forEach { i in
-                notes[i].text(values[i])
+                notes[i].string(values[i])
             }
         }
     }

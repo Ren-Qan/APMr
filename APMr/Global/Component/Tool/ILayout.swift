@@ -24,6 +24,7 @@ extension NSView: ILayoutProtocol {
 
 protocol ILayoutProtocol {
     var frame: CGRect { get }
+    
     func setFrame(rect: CGRect)
 }
 

@@ -31,11 +31,11 @@ extension IPerformanceView.ICharts.NSISides.PanelCell {
 
         override func layoutSublayers() {
             super.layoutSublayers()
-            separator.frame = .init(x: 35, y: 0, width: bounds.width - 35, height: 0.5)
+            separator.frame = .init(x: 25, y: 0, width: bounds.width - 35, height: 0.5)
             var y = frame.height - 35
             rows.forEach { row in
                 y -= 30
-                row.frame = CGRect(x: 35, y: y, width: bounds.width - 35, height: 30)
+                row.frame = CGRect(x: 25, y: y, width: bounds.width - 35, height: 30)
             }
         }
         

@@ -74,6 +74,18 @@ extension CALayer {
     }
     
     @discardableResult
+    public func corner(_ radius: CGFloat) -> Self {
+        cornerRadius = radius
+        return self
+    }
+    
+    @discardableResult
+    public func masksToBounds(_ value: Bool) -> Self {
+        masksToBounds = value
+        return self
+    }
+    
+    @discardableResult
     public func then(_ closure: (_ entity: Self) -> Void) -> Self {
         closure(self)
         return self

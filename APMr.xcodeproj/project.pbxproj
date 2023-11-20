@@ -12,7 +12,7 @@
 		C70BFCBC2A29DFA900CBD6B3 /* CoreParserHandleModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70BFCBB2A29DFA900CBD6B3 /* CoreParserHandleModels.swift */; };
 		C70F8FA8293850F400E8DCE1 /* Opengl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8FA7293850F400E8DCE1 /* Opengl.swift */; };
 		C717A86F2B05D07C00B96BC0 /* NSIPlate+Choose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C717A86E2B05D07C00B96BC0 /* NSIPlate+Choose.swift */; };
-		C717A8712B05D2C600B96BC0 /* NSIPlate+ChartVisibleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C717A8702B05D2C600B96BC0 /* NSIPlate+ChartVisibleMenu.swift */; };
+		C717A8712B05D2C600B96BC0 /* NSIPlate+ChartsVisibleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C717A8702B05D2C600B96BC0 /* NSIPlate+ChartsVisibleMenu.swift */; };
 		C71A9EBB2AD66D30001626A5 /* ISides.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A9EBA2AD66D30001626A5 /* ISides.swift */; };
 		C72271712AFCE56C00811E55 /* NSISides+HeadlineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */; };
 		C72271732AFCE58000811E55 /* NSISides+PanelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72271722AFCE58000811E55 /* NSISides+PanelCell.swift */; };
@@ -73,6 +73,7 @@
 		C74C3E172AD52C9900F70A36 /* Cell+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C3E162AD52C9900F70A36 /* Cell+Content.swift */; };
 		C74C3E192AD5381300F70A36 /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C3E182AD5381300F70A36 /* Font+Extensions.swift */; };
 		C7515C522A28851800CFA925 /* CoreParserModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7515C512A28851800CFA925 /* CoreParserModels.swift */; };
+		C751D69F2B0B5681009C71B4 /* NSIPlate+CoreHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = C751D69E2B0B5681009C71B4 /* NSIPlate+CoreHub.swift */; };
 		C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* SysmotapModels.swift */; };
 		C758DE8B2AFB4E0500467F83 /* IFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C758DE8A2AFB4E0500467F83 /* IFonts.swift */; };
 		C758DE8D2AFB568B00467F83 /* CATextLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */; };
@@ -141,7 +142,7 @@
 		C70BFCBB2A29DFA900CBD6B3 /* CoreParserHandleModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreParserHandleModels.swift; sourceTree = "<group>"; };
 		C70F8FA7293850F400E8DCE1 /* Opengl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opengl.swift; sourceTree = "<group>"; };
 		C717A86E2B05D07C00B96BC0 /* NSIPlate+Choose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIPlate+Choose.swift"; sourceTree = "<group>"; };
-		C717A8702B05D2C600B96BC0 /* NSIPlate+ChartVisibleMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIPlate+ChartVisibleMenu.swift"; sourceTree = "<group>"; };
+		C717A8702B05D2C600B96BC0 /* NSIPlate+ChartsVisibleMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIPlate+ChartsVisibleMenu.swift"; sourceTree = "<group>"; };
 		C71A9EBA2AD66D30001626A5 /* ISides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISides.swift; sourceTree = "<group>"; };
 		C72271702AFCE56C00811E55 /* NSISides+HeadlineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+HeadlineCell.swift"; sourceTree = "<group>"; };
 		C72271722AFCE58000811E55 /* NSISides+PanelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSISides+PanelCell.swift"; sourceTree = "<group>"; };
@@ -238,6 +239,7 @@
 		C74C3E162AD52C9900F70A36 /* Cell+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Content.swift"; sourceTree = "<group>"; };
 		C74C3E182AD5381300F70A36 /* Font+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extensions.swift"; sourceTree = "<group>"; };
 		C7515C512A28851800CFA925 /* CoreParserModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreParserModels.swift; sourceTree = "<group>"; };
+		C751D69E2B0B5681009C71B4 /* NSIPlate+CoreHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSIPlate+CoreHub.swift"; sourceTree = "<group>"; };
 		C75750F6293DA1980074E707 /* SysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SysmotapModels.swift; sourceTree = "<group>"; };
 		C758DE8A2AFB4E0500467F83 /* IFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFonts.swift; sourceTree = "<group>"; };
 		C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CATextLayer+Extensions.swift"; sourceTree = "<group>"; };
@@ -479,8 +481,9 @@
 			children = (
 				C742D0832B01F07F00A3697F /* IPlate.swift */,
 				C73E45912B03260B004D2C2F /* NSIPlate.swift */,
+				C751D69E2B0B5681009C71B4 /* NSIPlate+CoreHub.swift */,
 				C717A86E2B05D07C00B96BC0 /* NSIPlate+Choose.swift */,
-				C717A8702B05D2C600B96BC0 /* NSIPlate+ChartVisibleMenu.swift */,
+				C717A8702B05D2C600B96BC0 /* NSIPlate+ChartsVisibleMenu.swift */,
 			);
 			path = Plate;
 			sourceTree = "<group>";
@@ -1078,7 +1081,8 @@
 				C76BE18A2AD7BCB8004E6DDF /* Chart+Model.swift in Sources */,
 				C74C3E112AD52B5600F70A36 /* Cell+Axis.swift in Sources */,
 				C7EA8E062AFE18B900D412AC /* Panel+NoteRow.swift in Sources */,
-				C717A8712B05D2C600B96BC0 /* NSIPlate+ChartVisibleMenu.swift in Sources */,
+				C717A8712B05D2C600B96BC0 /* NSIPlate+ChartsVisibleMenu.swift in Sources */,
+				C751D69F2B0B5681009C71B4 /* NSIPlate+CoreHub.swift in Sources */,
 				C7483C0029373ADC00F32BE0 /* MDUtil.m in Sources */,
 				C74C3E192AD5381300F70A36 /* Font+Extensions.swift in Sources */,
 				C73BBB132943094B00472A75 /* ILockdownModels.swift in Sources */,

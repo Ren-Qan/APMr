@@ -77,12 +77,13 @@ class NSIEventView: NSView {
     
     override func mouseDragged(with event: NSEvent) {
         mouseOperationMap[.drag]?(MEvent(view: self, event: event))
-        highlight(true, event)
+        highlight(bounds.contains(convert(event.locationInWindow, from: nil)), event)
     }
 }
 
 extension NSIEventView {
     fileprivate func highlight(_ state: Bool, _ event: NSEvent) {
+        print(state)
         if highlightState != state {
             highlightClosure?(HEvent(isHighligt: state, view: self, event: event))
         }
