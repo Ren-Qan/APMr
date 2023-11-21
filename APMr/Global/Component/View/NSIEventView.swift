@@ -83,7 +83,6 @@ class NSIEventView: NSView {
 
 extension NSIEventView {
     fileprivate func highlight(_ state: Bool, _ event: NSEvent) {
-        print(state)
         if highlightState != state {
             highlightClosure?(HEvent(isHighligt: state, view: self, event: event))
         }

@@ -10,20 +10,8 @@ import AppKit
 extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
     class NoteRow: CALayer {
         fileprivate lazy var notes: [Note] = {
-            layoutManager = CAConstraintLayoutManager()
-            var relative: String? = nil
             return (0 ..< 2).compactMap { i in
                 let note = Note()
-                note.name = "note\(i)"
-                note.addConstraint(CAConstraint(attribute: .minY, relativeTo: "superlayer", attribute: .minY))
-                note.addConstraint(CAConstraint(attribute: .height, relativeTo: "superlayer", attribute: .height))
-                note.addConstraint(CAConstraint(attribute: .width, relativeTo: "superlayer", attribute: .width, scale: 1 / 2, offset: 0))
-                if let relative {
-                    note.addConstraint(CAConstraint(attribute: .minX, relativeTo: relative, attribute: .maxX))
-                } else {
-                    note.addConstraint(CAConstraint(attribute: .minX, relativeTo: "superlayer", attribute: .minX))
-                }
-                relative = note.name
                 self.add(note)
                 return note
             }
@@ -33,27 +21,43 @@ extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
             return nil
         }
         
-        public func update() {
+        override func layoutSublayers() {
+            var left: CGFloat = 0
             notes.forEach { note in
-                note.foregroundColor = NSColor.box.C1.cgColor
+                note.iLayout.make(bounds) { maker in
+                    maker.top(0).bottom(0).left(left).width(bounds.width / CGFloat(notes.count))
+                }
+                left = note.frame.maxX
             }
         }
-        
-        public func load(_ mark: CPerformance.Chart.Mark) {
-            notes[0].string(mark.label)
-            notes[1].string(String(format: "%.1f \(mark.source.unit.format)", mark.source.value))
+    }
+}
+
+extension IPerformanceView.ICharts.NSISides.PanelCell.Panel.NoteRow {
+    public func update() {
+        notes.forEach { note in
+            note.foregroundColor = NSColor.box.C1.cgColor
         }
-        
-        public func load(_ values: [String]) {
-            (0 ..< 2).forEach { i in
-                notes[i].string(values[i])
-            }
+    }
+    
+    public func load(_ mark: CPerformance.Chart.Mark) {
+        notes[0].string(mark.label)
+        notes[1].string(String(format: "%.1f \(mark.source.unit.format)", mark.source.value))
+    }
+    
+    public func load(_ values: [String]) {
+        (0 ..< 2).forEach { i in
+            notes[i].string(values[i])
         }
     }
 }
 
 extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
     fileprivate class Note: CATextLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
+        
         func string(_ string: String) {
             contentsScale = NSScreen.scale
             fontSize = 13

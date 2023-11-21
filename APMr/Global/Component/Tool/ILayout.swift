@@ -45,7 +45,7 @@ extension ILayout {
         @discardableResult
         public func make(_ reference: CGRect,
                          _ closure: (_ maker: Maker) -> Void) -> T {
-            let maker = Maker(reference.size, targtet.frame)
+            let maker = Maker(reference, targtet.frame)
             closure(maker)
             targtet.setFrame(rect: maker.result)
             return targtet
@@ -67,7 +67,7 @@ extension ILayout {
         typealias InsetPadding = CGFloat
         
         fileprivate let targetFrame: CGRect
-        fileprivate let referenceSize: CGSize
+        fileprivate let referenceFrame: CGRect
         fileprivate var layouts: [L] = []
         
         fileprivate var priorW: CGFloat? = nil
@@ -75,8 +75,8 @@ extension ILayout {
         fileprivate var priorLayoutH: L? = nil
         fileprivate var priorLayoutV: L? = nil
         
-        init(_ size: CGSize, _ targetFrame: CGRect) {
-            self.referenceSize = size
+        init(_ referenceFrame: CGRect, _ targetFrame: CGRect) {
+            self.referenceFrame = referenceFrame
             self.targetFrame = targetFrame
         }
         
@@ -168,13 +168,13 @@ extension ILayout.Maker {
         if let width = priorW {
             size.width = width
         } else if let l, let r {
-            size.width = referenceSize.width - r - l
+            size.width = referenceFrame.size.width - r - l
         }
         
         if let height = priorH {
             size.height = height
         } else if let t, let b {
-            size.height = referenceSize.height - t - b
+            size.height = referenceFrame.size.height - t - b
         }
         
         return make(size, h, v)
@@ -184,18 +184,20 @@ extension ILayout.Maker {
         var origin = CGPoint.zero
         switch h {
             case .left(let inset): origin.x = inset
-            case .right(let inset): origin.x = referenceSize.width - size.width - inset
-            case .centerH(let inset): origin.x = (referenceSize.width - size.width) / 2 + inset
+            case .right(let inset): origin.x = referenceFrame.size.width - size.width - inset
+            case .centerH(let inset): origin.x = (referenceFrame.size.width - size.width) / 2 + inset
             default: break
         }
         
         switch v {
-            case .top(let inset): origin.y = referenceSize.height - size.height - inset
+            case .top(let inset): origin.y = referenceFrame.size.height - size.height - inset
             case .bottom(let inset): origin.y = inset
-            case .centerV(let inset): origin.y = (referenceSize.height - size.height) / 2 + inset
+            case .centerV(let inset): origin.y = (referenceFrame.size.height - size.height) / 2 + inset
             default: break
         }
         
+        origin.x += referenceFrame.origin.x
+        origin.y += referenceFrame.origin.y
         return CGRect(origin: origin, size: size)
     }
 }

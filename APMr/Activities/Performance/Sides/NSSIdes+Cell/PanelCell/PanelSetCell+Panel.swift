@@ -15,9 +15,6 @@ extension IPerformanceView.ICharts.NSISides.PanelCell {
         
         override init() {
             super.init()
-            layoutManager = CAConstraintLayoutManager()
-            headline.addConstraint(CAConstraint(attribute: .midY, relativeTo: "superlayer", attribute: .maxY, offset: -17.5))
-            headline.addConstraint(CAConstraint(attribute: .minX, relativeTo: "superlayer", attribute: .minX, offset: 35))
             adds([headline, separator])
         }
         
@@ -30,8 +27,14 @@ extension IPerformanceView.ICharts.NSISides.PanelCell {
         }
 
         override func layoutSublayers() {
-            super.layoutSublayers()
-            separator.frame = .init(x: 25, y: 0, width: bounds.width - 35, height: 0.5)
+            separator.iLayout.make(bounds) { maker in
+                maker.left(25).bottom(0).height(0.5).right(0)
+            }
+            
+            headline.iFit().iLayout.make(bounds.bottom(bounds.height - 35)) { maker in
+                    maker.left(25).centerV(0)
+            }
+            
             var y = frame.height - 35
             rows.forEach { row in
                 y -= 30

@@ -77,6 +77,7 @@
 		C75750F7293DA1980074E707 /* SysmotapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75750F6293DA1980074E707 /* SysmotapModels.swift */; };
 		C758DE8B2AFB4E0500467F83 /* IFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C758DE8A2AFB4E0500467F83 /* IFonts.swift */; };
 		C758DE8D2AFB568B00467F83 /* CATextLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */; };
+		C75BE6102B0C600E0061B80F /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75BE60F2B0C600E0061B80F /* CGRect+Extensions.swift */; };
 		C7640A612A84C41100C1F267 /* ICharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7640A602A84C41100C1F267 /* ICharts.swift */; };
 		C7640A632A84DBAD00C1F267 /* ICharts+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7640A622A84DBAD00C1F267 /* ICharts+Cell.swift */; };
 		C7651EFF298B5FC3006F3310 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7651EFE298B5FC3006F3310 /* Int+Extensions.swift */; };
@@ -243,6 +244,7 @@
 		C75750F6293DA1980074E707 /* SysmotapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SysmotapModels.swift; sourceTree = "<group>"; };
 		C758DE8A2AFB4E0500467F83 /* IFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFonts.swift; sourceTree = "<group>"; };
 		C758DE8C2AFB568B00467F83 /* CATextLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CATextLayer+Extensions.swift"; sourceTree = "<group>"; };
+		C75BE60F2B0C600E0061B80F /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		C7640A602A84C41100C1F267 /* ICharts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICharts.swift; sourceTree = "<group>"; };
 		C7640A622A84DBAD00C1F267 /* ICharts+Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICharts+Cell.swift"; sourceTree = "<group>"; };
 		C7651EFE298B5FC3006F3310 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
@@ -758,6 +760,7 @@
 				C7E8C3672AF49A390001FC4B /* NSView+Extensions.swift */,
 				C7E3A7122AFA3AF700F0C35A /* NSImageView+Extensions.swift */,
 				C7E3A7182AFA422000F0C35A /* NSImage+Extensions.swift */,
+				C75BE60F2B0C600E0061B80F /* CGRect+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1146,6 +1149,7 @@
 				C771EF6E2A4A8AC800EC305E /* NavigationView.swift in Sources */,
 				C7842C302AEB842500658692 /* DispatchQueue+Extensions.swift in Sources */,
 				C76A6EF92A614E1900836807 /* IPerformanceView.swift in Sources */,
+				C75BE6102B0C600E0061B80F /* CGRect+Extensions.swift in Sources */,
 				C7CB10512A0A102500828F3D /* CoreProfileSessionTapModels.swift in Sources */,
 				C7CB104F2A0A0B1B00828F3D /* ModelParser.swift in Sources */,
 				C77B36852A6137800054DE7F /* NSEdgeInset+Extensions.swift in Sources */,
