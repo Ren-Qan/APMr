@@ -99,7 +99,7 @@ extension IPerformanceView.ICharts.NSISides: NSCollectionViewDelegateFlowLayout,
         }
         var h: CGFloat = 0
         if shot.values.count > indexPath.item - 1 {
-            h = CGFloat(shot.values[indexPath.item - 1].marks.count) * 30 + 35
+            h = CGFloat(shot.values[indexPath.item - 1].marks.count + 1) * 30 + 35
         }
         return NSSize(width: w, height: h)
     }

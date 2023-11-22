@@ -24,7 +24,7 @@ extension IPerformanceView.ICharts.NSISides {
         }
         
         override func updateLayer() {
-            view.layer?.backgroundColor = NSColor.box.BG2.cgColor
+            view.layer?.backgroundColor = NSColor.box.SBG1.cgColor
             separator.backgroundColor = NSColor.box.S2.cgColor
             panel.update()
         }

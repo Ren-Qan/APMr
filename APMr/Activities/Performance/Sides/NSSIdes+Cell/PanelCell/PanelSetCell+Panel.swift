@@ -28,7 +28,7 @@ extension IPerformanceView.ICharts.NSISides.PanelCell {
 
         override func layoutSublayers() {
             separator.iLayout.make(bounds) { maker in
-                maker.left(25).bottom(0).height(0.5).right(0)
+                maker.left(0).bottom(0).height(0.5).right(0)
             }
             
             headline.iFit().iLayout.make(bounds.bottom(bounds.height - 35)) { maker in
@@ -56,7 +56,7 @@ extension IPerformanceView.ICharts.NSISides.PanelCell.Panel {
     }
     
     public func update() {
-        separator.backgroundColor = NSColor.box.S1.cgColor
+        separator.backgroundColor = NSColor.box.S3.cgColor
         headline.update()
         rows.forEach { row in
             row.update()

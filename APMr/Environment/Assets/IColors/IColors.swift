@@ -42,6 +42,8 @@ struct IColorBox<M: IColorsMakerProtocol> {
     
     let S2 = M.color("Separator2")
     
+    let S3 = M.color("Separator3")
+    
     let SEL1 = M.color("Selected1")
     
     let SEL2 = M.color("Selected2")

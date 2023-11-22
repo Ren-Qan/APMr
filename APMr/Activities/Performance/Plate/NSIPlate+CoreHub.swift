@@ -9,7 +9,18 @@ import AppKit
 
 extension IPerformanceView.NSIPlate {
     class CoreHub: NSView {
+        public var isSelected = false {
+            didSet {
+                selectedLayer.alpha(isSelected ? 1 : 0)
+            }
+        }
+        
         fileprivate lazy var highlightLayer = CALayer().alpha(0)
+        fileprivate lazy var selectedLayer = CALayer().alpha(0)
+        
+        fileprivate lazy var icon = NSImageView()
+        fileprivate lazy var title = CATextLayer().common
+        
         fileprivate(set) lazy var eventView = NSIEventView().highlight { [weak self] event in
             self?.highlightLayer.alpha(event.isHighligt ? 1 : 0)
         }
@@ -17,12 +28,16 @@ extension IPerformanceView.NSIPlate {
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
+            
+            icon.addTo(self)
             eventView.addTo(self)
             
-            
-            
-            
+            selectedLayer.addTo(self.layer!)
             highlightLayer.addTo(self.layer!)
+            
+            title.font(13.5, .current.medium(13.5))
+                .addTo(self.layer!)
+                .text("元神启动")
         }
         
         required init?(coder: NSCoder) {
@@ -31,12 +46,25 @@ extension IPerformanceView.NSIPlate {
         
         override func layout() {
             eventView.frame = bounds
+            selectedLayer.frame = bounds
             highlightLayer.frame = bounds
+                        
+            title.iFit().iLayout.make(bounds) { maker in
+                maker.centerH(8.5).centerV(0)
+            }
+            
+            icon.iLayout.make(bounds) { maker in
+                maker.width(15).height(15).centerH(-(title.bounds.width / 2 + 1)).centerV(0)
+            }
         }
         
         override func updateLayer() {
-            background(.random)
+            background(.box.SBG1)
+            title.color(.box.H1)
+            
+            selectedLayer.background(.red)
             highlightLayer.background(.orange)
-        }
+            icon.background(.random)
+        }    
     }
 }

@@ -33,11 +33,11 @@ extension IPerformanceView {
         
         override func layout() {
             coreHub.iLayout.make(bounds) { maker in
-                maker.left(10).bottom(10).top(10).width(80)
+                maker.left(10).bottom(10).top(10).width(105)
             }
             
             chooseButton.iLayout.make(bounds) { maker in
-                maker.top(10).bottom(10).width(80).left(100)
+                maker.top(10).bottom(10).left(125).width(90)
             }
             
             separator.iLayout.make(bounds) { maker in
@@ -46,7 +46,7 @@ extension IPerformanceView {
             
             #if DEBUG
             debug_CoreHub.iLayout.make(bounds) { maker in
-                maker.left(300).width(80).top(10).bottom(10)
+                maker.left(300).width(105).top(10).bottom(10)
             }
             #endif
         }
@@ -86,6 +86,7 @@ extension IPerformanceView.NSIPlate {
         
         #if DEBUG
         debug_CoreHub.addTo(self).eventView.mouse(.click) { [weak self] event in
+            self?.debug_CoreHub.isSelected.toggle()
             self?.target?.performance.Debug_sample()
         }
         #endif
