@@ -68,6 +68,7 @@ extension IPerformanceView.ICharts.Cell.Layer {
         layer.frame = frame
         layer.lineWidth = 2.5
         layer.fillColor = .clear
+        layer.contentsScale = NSScreen.scale
         closure(self, layer, path)
         layer.path = path
         addSublayer(layer)

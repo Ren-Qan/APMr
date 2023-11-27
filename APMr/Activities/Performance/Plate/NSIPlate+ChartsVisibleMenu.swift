@@ -84,21 +84,16 @@ extension IPerformanceView.NSIPlate.ChartsVisibleMenu {
                 self?.highlight.alpha(event.isHighligt ? 1 : 0)
             }
         
-        fileprivate lazy var select = NSImageView().mode(.fit).wants(true).addTo(self)
-        fileprivate lazy var icon = NSImageView().wants(true).addTo(self)
+        fileprivate lazy var select = NSImageView().wants(true).addTo(self)
         fileprivate lazy var title = CATextLayer().addTo(self.layer!)
         
         override func layout() {
             eventView.frame = bounds
             
             select.iLayout.make(bounds) { maker in
-                maker.centerV(0).left(10).width(20).height(20)
+                maker.centerV(0).left(10).width(23).height(23)
             }
-            
-            icon.iLayout.make(bounds) { maker in
-                maker.centerV(0).left(40).width(25).height(25)
-            }
-                        
+    
             highlight.corner(4).iLayout.make(bounds) { maker in
                 maker.left(5).right(5).top(5).bottom(5)
             }            
@@ -106,9 +101,6 @@ extension IPerformanceView.NSIPlate.ChartsVisibleMenu {
         
         override func updateLayer() {
             title.color(.box.H1)
-
-            title.background(.box.BLUE1)
-            icon.background(.box.BLUE3)
         }
         
         fileprivate func refresh() {
@@ -123,7 +115,7 @@ extension IPerformanceView.NSIPlate.ChartsVisibleMenu {
                        .font(12, .current.medium(12))
                        .iFit()
                        .iLayout.make(bounds) { maker in
-                           maker.centerV(0).left(80)
+                           maker.centerV(0).left(40)
                        }
                }
         }

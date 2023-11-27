@@ -18,9 +18,8 @@ extension IPerformanceView.NSIPlate {
         fileprivate lazy var highlightLayer = CALayer().alpha(0)
         fileprivate lazy var selectedLayer = CALayer().alpha(0)
         
-        fileprivate lazy var icon = NSImageView()
-        fileprivate lazy var title = CATextLayer().common
-        
+        fileprivate(set) lazy var icon = NSImageView()
+        fileprivate(set) lazy var title = CATextLayer().common
         fileprivate(set) lazy var eventView = NSIEventView().highlight { [weak self] event in
             self?.highlightLayer.alpha(event.isHighligt ? 1 : 0)
         }
@@ -37,7 +36,6 @@ extension IPerformanceView.NSIPlate {
             
             title.font(13.5, .current.medium(13.5))
                 .addTo(self.layer!)
-                .text("元神启动")
         }
         
         required init?(coder: NSCoder) {

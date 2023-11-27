@@ -88,6 +88,11 @@ extension IPerformanceView.NSIPlate {
         debug_CoreHub.addTo(self).eventView.mouse(.click) { [weak self] event in
             self?.debug_CoreHub.isSelected.toggle()
             self?.target?.performance.Debug_sample()
+            if let state = self?.target?.performance.isInSample {
+                self?.debug_CoreHub.title.string = state ? "stop" : "start"
+                self?.debug_CoreHub.layout()
+            }
+            
         }
         #endif
     }

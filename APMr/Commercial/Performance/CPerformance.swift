@@ -19,6 +19,8 @@ class CPerformance: ObservableObject {
     
     private var timer: Timer? = nil
     private(set) static var interval: TimeInterval = 0.5
+    private(set) var isInSample = false
+    
     
     @Published var sampleCount = 0
     @Published var isNeedShowDetailSide = true
@@ -82,12 +84,13 @@ extension CPerformance {
         if timer != nil {
             timer?.invalidate()
             timer = nil
+            isInSample = false
             return
         }
         
         chart.clean()
         sampleCount = 0
-        
+        isInSample = true
         let interval = CPerformance.interval
         timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
             DispatchQueue.global().async {
