@@ -48,11 +48,11 @@ extension IPerformanceView.NSIPlate {
             highlightLayer.frame = bounds
                         
             title.iFit().iLayout.make(bounds) { maker in
-                maker.centerH(8.5).centerV(0)
+                maker.centerH(0).centerV(0)
             }
             
             icon.iLayout.make(bounds) { maker in
-                maker.width(15).height(15).centerH(-(title.bounds.width / 2 + 1)).centerV(0)
+                maker.width(20).height(20).centerH(-(title.bounds.width / 2 + 1)).centerV(0)
             }
         }
         
@@ -61,8 +61,7 @@ extension IPerformanceView.NSIPlate {
             title.color(.box.H1)
             
             selectedLayer.background(.red)
-            highlightLayer.background(.orange)
-            icon.background(.random)
+            highlightLayer.background(.black.withAlphaComponent(0.13))
         }    
     }
 }

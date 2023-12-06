@@ -12,12 +12,12 @@ extension IPerformanceView {
         public var target: IPlate? = nil
         
         fileprivate lazy var coreHub = CoreHub()
-        fileprivate lazy var chooseButton = ChooseButton()
         fileprivate lazy var separator = Separator()
-        fileprivate lazy var visibleMenu = ChartsVisibleMenu()
         
         #if DEBUG
-        fileprivate(set) lazy var debug_CoreHub = CoreHub()
+        fileprivate lazy var debug_CoreHub = CoreHub()
+        fileprivate lazy var visibleMenu = ChartsVisibleMenu()
+        fileprivate lazy var chooseButton = ChooseButton()
         #endif
         
         override init(frame frameRect: NSRect) {
@@ -25,8 +25,13 @@ extension IPerformanceView {
             wantsLayer = true
             
             separator.addTo(self.layer!)
-            chooseButton.addTo(self)
             coreHub.addTo(self)
+            coreHub.title.text("start")
+            
+            #if DEBUG
+            debug_CoreHub.title.text("start")
+            chooseButton.addTo(self)
+            #endif
             
             event()
         }
@@ -35,16 +40,16 @@ extension IPerformanceView {
             coreHub.iLayout.make(bounds) { maker in
                 maker.left(10).bottom(10).top(10).width(105)
             }
-            
-            chooseButton.iLayout.make(bounds) { maker in
-                maker.top(10).bottom(10).left(125).width(90)
-            }
-            
+                        
             separator.iLayout.make(bounds) { maker in
                 maker.bottom(0).right(0).left(0).height(0.5)
             }
             
             #if DEBUG
+            chooseButton.iLayout.make(bounds) { maker in
+                maker.top(10).bottom(10).left(125).width(90)
+            }
+            
             debug_CoreHub.iLayout.make(bounds) { maker in
                 maker.left(300).width(105).top(10).bottom(10)
             }
@@ -64,14 +69,18 @@ extension IPerformanceView {
 
 extension IPerformanceView.NSIPlate {
     public func refresh() {
+        #if DEBUG
         if let group = target?.performance.chart.group {
             self.visibleMenu.setup(group)
         }
+        #endif
     }
 }
     
 extension IPerformanceView.NSIPlate {
     fileprivate func event() {
+        #if DEBUG
+        
         chooseButton.eventView.mouse(.click) { [weak self] targtet in
             self?.visibleMenu
                 .popUp(positioning: nil,
@@ -81,14 +90,32 @@ extension IPerformanceView.NSIPlate {
         
         
         visibleMenu.click = { [weak self] notifier in
+            
+        }
+        #endif
 
+        coreHub.eventView.mouse(.click) { [weak self] event in
+            guard let performance = self?.target?.performance,
+                  let device = self?.target?.device.selectPhone,
+                  let app = self?.target?.device.selectApp else { return }
+            
+            if performance.isSampling {
+                performance.stop()
+            } else {
+                performance.start(device, app) { state in
+                    DispatchQueue.mainAsync {
+                        self?.coreHub.title.text(state ? "stop" : "start")
+                        self?.coreHub.layout()
+                    }
+                }
+            }
         }
         
         #if DEBUG
         debug_CoreHub.addTo(self).eventView.mouse(.click) { [weak self] event in
             self?.debug_CoreHub.isSelected.toggle()
             self?.target?.performance.Debug_sample()
-            if let state = self?.target?.performance.isInSample {
+            if let state = self?.target?.performance.isSampling {
                 self?.debug_CoreHub.title.string = state ? "stop" : "start"
                 self?.debug_CoreHub.layout()
             }
