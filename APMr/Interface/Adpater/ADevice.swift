@@ -82,18 +82,24 @@ extension ADevice: IInstrumentsDeviceInfoDelegate {
 extension ADevice {
     func refreshDeviceList() {
         DispatchQueue.global().async {
-            var nameMap: [String : String] = [:]
+            var nameCache: [String : String] = [:]
+            var osCache: [String : String] = [:]
             self.phoneList = MobileManager.share.deviceList.compactMap { item in
                 var result = item
                 
-                if let name = nameMap[result.udid] {
+                if let name = nameCache[result.udid],
+                    let version = osCache[result.udid] {
                     result.name = name
+                    result.osVersion = version
                 } else {
                     if let iDevice = IDevice(item),
                        let lockdown = ILockdown(iDevice),
-                       let name = lockdown.fetchDeviceInfo?.deivceName {
-                        result.name = name
-                        nameMap[result.udid] = name
+                       let info = lockdown.fetchDeviceInfo {
+                        result.name = info.deivceName
+                        result.osVersion = info.osVersion
+                        
+                        nameCache[result.udid] = info.deivceName
+                        osCache[result.udid] = info.osVersion
                     }
                 }
                 

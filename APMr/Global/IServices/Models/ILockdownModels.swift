@@ -10,6 +10,7 @@ import ObjectMapper
 
 struct ILockdownDeivceInfo: Mappable {
     var deivceName: String = ""
+    var osVersion: String = ""
     
     init?(map: ObjectMapper.Map) {
         
@@ -17,5 +18,6 @@ struct ILockdownDeivceInfo: Mappable {
     
     mutating func mapping(map: ObjectMapper.Map) {
         deivceName <- map["DeviceName"]
+        osVersion <- map["ProductVersion"]
     }
 }

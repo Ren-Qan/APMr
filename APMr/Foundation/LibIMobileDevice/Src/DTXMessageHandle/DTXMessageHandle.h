@@ -61,9 +61,10 @@ typedef NS_ENUM(NSUInteger, DTXMessageProgressState) {
 
 - (void)stopService;
 
-- (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device;
-
 - (BOOL)isVaildServer:(NSString *)server;
+
+- (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device
+                                  osVersion:(NSString *)osVersion;
 
 - (BOOL)sendWithChannel:(uint32_t)channel
              identifier:(uint32_t)identifier

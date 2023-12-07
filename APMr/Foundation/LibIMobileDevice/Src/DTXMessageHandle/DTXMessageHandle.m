@@ -85,7 +85,7 @@ struct DTXMessagePayloadHeader {
 
 // MARK: - Setup -
 
-- (BOOL)setupWithDevice:(idevice_t)device {
+- (BOOL)setupWithDevice:(idevice_t)device osVersion:(NSString *)osVersion {
     if (!device) { return NO; }
     
     BOOL state = YES;
@@ -97,7 +97,7 @@ struct DTXMessagePayloadHeader {
 
     plist_t mounter_lookup_result = NULL;
     plist_t mount_image_result = NULL;
-    
+        
     [self progress:DTXMessageProgressStateMonterStartService message:@"mobile_image_mounter_start_service"];
     if (mobile_image_mounter_start_service(device, &_mounter_client, "INSTRUMENTS") != 0) {
         [self error:DTXMessageErrorCodeMounterStartFailed message:@"mounter_start_service_failed"];
@@ -179,8 +179,8 @@ struct DTXMessagePayloadHeader {
     [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instruments_shake_hand_begin"];
     
     NSDictionary * par = @{
-        @"com.apple.private.DTXBlockCompression" : [NSNumber numberWithLongLong:2],
-        @"com.apple.private.DTXConnection" : [NSNumber numberWithLongLong:1]
+        @"com.apple.private.DTXBlockCompression" : @2,
+        @"com.apple.private.DTXConnection" : @1,
     };
     
     DTXArguments *args = [[DTXArguments alloc] init];
@@ -236,9 +236,18 @@ struct DTXMessagePayloadHeader {
     _receive_map = NULL;
 }
 
-- (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device {
+- (BOOL)connectInstrumentsServiceWithDevice:(idevice_t)device
+                                  osVersion:(NSString *)osVersion {
     [self stopService];
-    return [self setupWithDevice:device];
+    NSInteger version = [osVersion componentsSeparatedByString:@"."].firstObject.intValue;
+    
+    if (version >= 14 && version < 17) {
+        return [self setupWithDevice:device osVersion:osVersion];
+    } else if (version >= 17) {
+        return NO;
+    }
+    
+    return NO;
 }
 
 - (BOOL)isVaildServer:(NSString *)server {

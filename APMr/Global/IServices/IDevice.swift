@@ -72,6 +72,7 @@ extension IDevice {
         let udid: String
         let type: C
         var name: String = ""
+        var osVersion: String = ""
         
         init(udid: String, type: C) {
             self.udid = udid

@@ -57,11 +57,12 @@ extension IInstruments {
     /// - Returns: success
     @discardableResult
     public func start(_ device: IDevice) -> Bool {
-        guard let device_t = device.device_t else {
+        guard let device_t = device.device_t,
+              let osVersion = device.phone?.osVersion else {
             return false
         }
         
-        isConnected = dtxService.connectInstrumentsService(withDevice: device_t)
+        isConnected = dtxService.connectInstrumentsService(withDevice: device_t, osVersion: osVersion)
         
         if isConnected, let fd = fd {
             let queue = DispatchQueue(label: "serial.dtxmsg.queue", attributes: .concurrent, target: .global())
@@ -124,7 +125,7 @@ extension IInstruments: DTXMessageHandleDelegate {
     }
     
     func error(_ error: DTXMessageErrorCode, message: String?, handle: DTXMessageHandle) {
-        debugPrint("[\(error.rawValue)] - \(message)")
+        debugPrint("[\(error.rawValue)] - \(message ?? "")")
     }
 }
 

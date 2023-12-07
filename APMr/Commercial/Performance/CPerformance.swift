@@ -81,6 +81,7 @@ extension CPerformance {
                 self?.metrics.sample { state in
                     switch state {
                         case .invalid:
+                            debugPrint("invalid=[Sampling]")
                             break
                         case .success(let m):
                             let timing = interval * TimeInterval(self?.sampleCount ?? 0)
