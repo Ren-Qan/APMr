@@ -24,6 +24,7 @@ extension IPerformanceView.ICharts.Cell {
             self.title.alignmentMode = .center
             self.title.font = NSFont.current.regular(11.5)
             self.title.fontSize = 11.5
+            self.title.contentsScale = NSScreen.scale
         }
         
         required init?(coder: NSCoder) {

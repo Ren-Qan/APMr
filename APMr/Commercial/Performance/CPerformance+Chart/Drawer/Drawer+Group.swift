@@ -25,7 +25,9 @@ extension CPerformance.Chart.Drawer {
         
         public func sync() {
             self.snapCount += 1
-            self.objectWillChange.send()
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
         }
         
         public func add(_ notifier: Notifier) {

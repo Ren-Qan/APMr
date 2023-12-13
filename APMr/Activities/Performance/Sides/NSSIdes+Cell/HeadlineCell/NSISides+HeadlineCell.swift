@@ -9,36 +9,34 @@ import AppKit
 
 extension IPerformanceView.ICharts.NSISides {
     class HeadlineCell: NSCollectionView.Cell {
-        fileprivate lazy var icon: NSImageView = {
-            let view = NSImageView()
-            return view
-        }()
-        
-        fileprivate lazy var label: NSILabel = {
-            return NSILabel()
-                .font(.current.medium(14))
-                .vertical(.center)
-                .horizontal(.left)
-                .color(.box.H1)
-        }()
-        
+        fileprivate lazy var icon = NSImageView()
+        fileprivate lazy var label = Headline().common.font(14, .current.medium(14))
         fileprivate lazy var separator = Separator()
-        
+                
         override func viewDidLoad() {
             super.viewDidLoad()
-            view.adds([label, icon])
-            view.layer?.add(separator)
+            view.adds([icon])
+            view.layer?.adds([label, separator])
         }
         
         override func updateLayer() {
-            view.layer?.backgroundColor = NSColor.box.BG2.cgColor
-            separator.backgroundColor = NSColor.box.S1.cgColor
+            view.layer?.background(.box.BG2)
+            separator.background(.box.S1)
+            label.color(.box.H1)
         }
         
         override func viewDidLayout() {
-            icon.frame = CGRect(x: 15, y: (view.bounds.height - 13) / 2, width: 13, height: 13)
-            separator.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 0.5)
-            label.frame = CGRect(x: 35, y: 0, width: view.bounds.width, height: view.bounds.height)
+            icon.iLayout.make(view.bounds) { maker in
+                maker.left(15).centerV(0).width(13).height(13)
+            }
+            
+            separator.iLayout.make(view.bounds) { maker in
+                maker.left(0).right(0).bottom(0).height(0.5)
+            }
+            
+            label.iFit().iLayout.make(view.bounds) { maker in
+                maker.left(35).centerV(0)
+            }
         }
     }
 }
@@ -48,5 +46,13 @@ extension IPerformanceView.ICharts.NSISides.HeadlineCell {
         label.text("\(value.timing)S 时刻数据")
         icon.symbol("chevron." + (value.expand ? "down" : "right"))
         separator.isHidden = value.expand
+    }
+}
+
+extension IPerformanceView.ICharts.NSISides.HeadlineCell {
+   fileprivate class Headline: CATextLayer {
+        override func action(forKey event: String) -> CAAction? {
+            return nil
+        }
     }
 }

@@ -113,12 +113,10 @@ extension CPerformance {
         isSampling = true
         let interval = CPerformance.interval
         timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
-            DispatchQueue.global().async {
-                (0 ..< 5).forEach { _ in
-                    let timing = interval * TimeInterval(self?.sampleCount ?? 0)
-                    self?.chart.addRandom(timing)
-                    self?.sampleCount += 1
-                }
+            (0 ..< 5).forEach { _ in
+                let timing = interval * TimeInterval(self?.sampleCount ?? 0)
+                self?.chart.addRandom(timing)
+                self?.sampleCount += 1
             }
         }
         

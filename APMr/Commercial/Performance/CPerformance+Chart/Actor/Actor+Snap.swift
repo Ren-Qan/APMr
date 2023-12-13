@@ -57,7 +57,9 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
 
         if isNeedSend {
             sync(nil)
-            objectWillChange.send()
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
         }
     }
     
@@ -98,7 +100,9 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
         guard let value else {
             if self.range != nil {
                 self.range = nil
-                objectWillChange.send()
+                DispatchQueue.main.async {
+                    self.objectWillChange.send()
+                }
             }
             return
         }
@@ -110,6 +114,8 @@ extension CPerformance.Chart.Actor.Highlighter.Snap {
         }
         
         self.range = value
-        objectWillChange.send()
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+        }
     }
 }
