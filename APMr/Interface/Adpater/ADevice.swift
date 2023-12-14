@@ -47,9 +47,7 @@ class ADevice: NSObject, ObservableObject {
         
         return group
     }()
-    
-    var injectClosure: ((ADevice) -> Void)? = nil
-    
+        
     override init() {
         super.init()
         NotificationCenter
@@ -84,7 +82,7 @@ extension ADevice {
         DispatchQueue.global().async {
             var nameCache: [String : String] = [:]
             var osCache: [String : String] = [:]
-            self.phoneList = MobileManager.share.deviceList.compactMap { item in
+            let deviceList = MobileManager.share.deviceList.compactMap { item in
                 var result = item
                 
                 if let name = nameCache[result.udid],
@@ -110,7 +108,9 @@ extension ADevice {
                 return result
             }
             
-            self.injectClosure?(self)
+            DispatchQueue.main.async {
+                self.phoneList = deviceList
+            }
         }
     }
     
