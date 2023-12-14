@@ -120,12 +120,16 @@ extension IInstruments {
 }
 
 extension IInstruments: DTXMessageHandleDelegate {
-    func progress(_ progress: DTXMessageProgressState, message: String?, handle: DTXMessageHandle) {
-        debugPrint("[progress] - \(progress) - \(message ?? "none message")")
+    func log(_ message: String, handle: DTXMessageHandle) {
+        debugPrint("[Log] - \(message)")
     }
     
-    func error(_ error: DTXMessageErrorCode, message: String?, handle: DTXMessageHandle) {
-        debugPrint("[\(error.rawValue)] - \(message ?? "")")
+    func complete(_ message: String, success: Bool, handle: DTXMessageHandle) {
+        debugPrint("[\(success ? "Success" : "Failed")] - \(message)")
+    }
+    
+    func progress(_ message: String, handle: DTXMessageHandle) {
+        debugPrint("[Progress] - \(message)")
     }
 }
 

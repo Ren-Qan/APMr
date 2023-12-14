@@ -6,63 +6,36 @@
 //
 
 #import <DTXMessageHandle/DTXMessageHandle.h>
-
-#import <stdio.h>
-#import <stdint.h>
-#import <stdlib.h>
-
-#import <libimobiledevice/lockdown.h>
-#import <libimobiledevice/mobile_image_mounter.h>
-#import <libimobiledevice/service.h>
-
-#define REMOTESERVER_SERVICE_NAME "com.apple.instruments.remoteserver.DVTSecureSocketProxy"
-
-struct DTXMessageHeader {
-    uint32_t magic;
-    uint32_t cb;
-    uint16_t fragmentId;
-    uint16_t fragmentCount;
-    uint32_t length;
-    uint32_t identifier;
-    uint32_t conversationIndex;
-    uint32_t channelCode;
-    uint32_t expectsReply;
-};
-
-struct DTXMessagePayloadHeader {
-    uint32_t flags;
-    uint32_t auxiliaryLength;
-    uint64_t totalLength;
-};
-
-@interface DTXPayload : NSObject
-
-@property (nonatomic, assign) uint32_t identifier;
-
-@property (nonatomic, assign) uint32_t channel;
-
-@property (nonatomic, strong, readonly) NSMutableArray<NSData *> *payloads;
-
-- (instancetype)initWithCapacity:(NSInteger)capacity;
-
-- (void)addData:(NSData *)data index:(NSInteger)index;
-
-- (NSData *)data;
-
-- (BOOL)readComplete;
-
-@end
+#import <DTXConnection/DTXDiskMountConnection.h>
+#import <DTXConnection/DTXRSDConnection.h>
 
 @interface DTXMessageHandle()
+
+@property (nonatomic, strong) DTXDiskMountConnection *diskMount;
+
+@property (nonatomic, strong) DTXRSDConnection *rsd;
 
 @end
 
 @implementation DTXMessageHandle {
-    idevice_connection_t _connection;
-    mobile_image_mounter_client_t _mounter_client;
-        
+    DTXConnection *_connection;
+    
     NSDictionary *_server_dic;
     NSMutableDictionary <NSString *, DTXPayload *> *_receive_map;
+}
+
+- (DTXDiskMountConnection *)diskMount {
+    if (!_diskMount) {
+        _diskMount = [DTXDiskMountConnection.alloc init];
+    }
+    return _diskMount;
+}
+
+- (DTXRSDConnection *)rsd {
+    if (!_rsd) {
+        _rsd = [DTXRSDConnection.alloc init];
+    }
+    return  _rsd;
 }
 
 - (void)dealloc {
@@ -71,112 +44,28 @@ struct DTXMessagePayloadHeader {
 
 // MARK: - Private -
 
-- (void)error:(DTXMessageErrorCode)error message:(NSString *)message {
-    if ([self.delegate respondsToSelector:@selector(error:message:handle:)]) {
-        [self.delegate error:error message:message handle:self];
+- (void)log:(NSString *)message {
+    if ([self.delegate respondsToSelector:@selector(log:handle:)]) {
+        [self.delegate log:message handle:self];
     }
 }
 
-- (void)progress:(DTXMessageProgressState)progress message:(NSString *)message {
-    if ([self.delegate respondsToSelector:@selector(progress:message:handle:)]) {
-        [self.delegate progress:progress message:message handle:self];
+- (void)complete:(NSString *)message success:(BOOL)success {
+    if ([self.delegate respondsToSelector:@selector(complete:success:handle:)]) {
+        [self.delegate complete:message success:success handle:self];
+    }
+}
+
+- (void)progress:(NSString *)message {
+    if ([self.delegate respondsToSelector:@selector(progress:handle:)]) {
+        [self.delegate progress:message handle:self];
     }
 }
 
 // MARK: - Setup -
 
-- (BOOL)setupWithDevice:(idevice_t)device osVersion:(NSString *)osVersion {
-    if (!device) { return NO; }
-    
-    BOOL state = YES;
-    BOOL isNeedMountImage = NO;
-    
-    uint64_t signture_length = 0;
-    char *signature_string = NULL;
-    char * image_path = NULL;
-
-    plist_t mounter_lookup_result = NULL;
-    plist_t mount_image_result = NULL;
-        
-    [self progress:DTXMessageProgressStateMonterStartService message:@"mobile_image_mounter_start_service"];
-    if (mobile_image_mounter_start_service(device, &_mounter_client, "INSTRUMENTS") != 0) {
-        [self error:DTXMessageErrorCodeMounterStartFailed message:@"mounter_start_service_failed"];
-        state = NO;
-    }
-    
-    if (state) {
-        [self progress:DTXMessageProgressStateMonterLookupImage message:@"mobile_image_mounter_lookup_image"];
-        if (mobile_image_mounter_lookup_image(_mounter_client, "Developer", &mounter_lookup_result) != 0) {
-            [self error:DTXMessageErrorCodeMounterLookupImageFailed message:@"mounter_lookup_image_failed"];
-            state = NO;
-        }
-    }
-    
-    if (state) {
-        [self progress:DTXMessageProgressStateFindSignature message:@"finding ImageSignature"];
-        plist_t signature_map = plist_dict_get_item(mounter_lookup_result, "ImageSignature");
-        plist_t signature_arr = plist_array_get_item(signature_map, 0);
-                
-        plist_get_data_val(signature_arr, &signature_string, &signture_length);
-        
-        if (signture_length <= 0 || signature_string == NULL) {
-            isNeedMountImage = YES;
-        }
-    }
-    
-    if (isNeedMountImage) {
-        if (state) {
-            [self progress:DTXMessageProgressStateMonterUploadImage message:@"mobile_image_mounter_upload_image"];
-            if (mobile_image_mounter_upload_image(_mounter_client, "Developer", 9, signature_string, (uint16_t)signture_length, upload_mounter_callback, NULL) != 0) {
-                [self error:DTXMessageErrorCodeUploadImageFailed message:@"upload image error"];
-                state = NO;
-            }
-        }
-        
-        if (state) {
-            [self progress:DTXMessageProgressStateFindImagePath message:@"find_image_path"];
-            image_path = find_image_path(device);
-            if (image_path == NULL) {
-                [self error:DTXMessageErrorCodeNotFoundImagePath message:@"not found imagePath"];
-                state = NO;
-            }
-        }
-        
-        if (state) {
-            [self progress:DTXMessageProgressStateMonterMountImage message:@"mobile_image_mounter_mount_image"];
-            if (mobile_image_mounter_mount_image(_mounter_client, image_path, signature_string, signture_length, "Developer", &mount_image_result) != 0) {
-                NSString *path = [NSString stringWithUTF8String:image_path];
-                NSString *msg = [NSString stringWithFormat:@"mount image failed check path %@", path];
-                [self error:DTXMessageErrorCodeMonterMountImageFailed message:msg];
-                state = NO;
-            }
-        }
-    }
-    
-    if (state) {
-        [self progress:DTXMessageProgressStateStartInstrumentsService message:@"service_client_factory_start_service"];
-        if (service_client_factory_start_service(device, REMOTESERVER_SERVICE_NAME, (void **)(&_connection), "Remote", SERVICE_CONSTRUCTOR(constructor_remote_service), NULL) != 0) {
-            [self error:DTXMessageErrorCodeStartInstrumentsServiceFailed message:@"strat instruments service failed"];
-            state = NO;
-        }
-    }
-    
-    if (state) {
-        if (_connection) {
-            state = [self instrumentsShakeHand];
-        }
-    }
-        
-    if (image_path) free(image_path);
-    if (signature_string) free(signature_string);
-    if (mount_image_result) plist_free(mount_image_result);
-    if (mounter_lookup_result) plist_free(mounter_lookup_result);
-    
-    return state;
-}
-
-- (BOOL)instrumentsShakeHand {
-    [self progress:DTXMessageProgressStateInstrumentsHandShake message:@"instruments_shake_hand_begin"];
+- (BOOL)instrumentsHandshake {
+    [self progress: @"instruments_shake_hand_begin"];
     
     NSDictionary * par = @{
         @"com.apple.private.DTXBlockCompression" : @2,
@@ -206,12 +95,7 @@ struct DTXMessagePayloadHeader {
         }
     }
     
-    if (!success) {
-        [self error:DTXMessageErrorCodeInstrumentsHandShakeFailed message:@"instruments hand shake failed"];
-    } else {
-        [self progress:DTXMessageProgressStateSuccess message:@"success"];
-    }
-    
+    [self complete:@"instrument" success:success];
     return success;
 }
 
@@ -223,15 +107,10 @@ struct DTXMessagePayloadHeader {
 
 - (void)stopService {
     if (_connection) {
-        idevice_disconnect(_connection);
-    }
-    
-    if (_mounter_client) {
-        mobile_image_mounter_free(_mounter_client);
+        [_connection stop];
     }
     
     _connection = NULL;
-    _mounter_client = NULL;
     _server_dic = NULL;
     _receive_map = NULL;
 }
@@ -242,9 +121,25 @@ struct DTXMessagePayloadHeader {
     NSInteger version = [osVersion componentsSeparatedByString:@"."].firstObject.intValue;
     
     if (version >= 14 && version < 17) {
-        return [self setupWithDevice:device osVersion:osVersion];
+        _connection = self.diskMount;
     } else if (version >= 17) {
-        return NO;
+        _connection = self.rsd;
+    }
+    
+    BOOL connectionIsSuccess = NO;
+    if (_connection) {
+        __weak typeof(self) _self = self;
+        connectionIsSuccess = [_connection connectionWithDevice:device
+                                                      osVersion:osVersion
+                                                       progress:^(NSString * _Nonnull message) {
+            [_self progress:message];
+        } complete:^(NSString * _Nonnull message, BOOL success) {
+            [_self complete:message success:success];
+        }];
+    }
+    
+    if (connectionIsSuccess) {
+        return [self instrumentsHandshake];
     }
     
     return NO;
@@ -264,6 +159,7 @@ struct DTXMessagePayloadHeader {
                selector:(NSString *)selector
                    args:(DTXArguments *)args
            expectsReply:(BOOL)expectsReply {
+    if (!_connection) { return NO; }
     
     NSData *selData = [self getByteWithObj:selector];
     NSData *argData = [args getArgBytes];
@@ -290,40 +186,37 @@ struct DTXMessagePayloadHeader {
     [argument append_b:argData];
     [argument append_b:selData];
     
-    uint32_t nsent;
     NSData *datas = [argument bytes];
-    size_t msglen = datas.length;
-    
-    idevice_connection_send(_connection, [datas bytes], (uint32_t)msglen, &nsent);
-    
-    return nsent == msglen;
+
+    return [_connection sendData:datas];
 }
 
 - (DTXReceiveObject * _Nullable)receive {
+    if (!_connection) { return NULL; }
+    
     uint32_t channelCode = 0;
     uint32_t identifier = 0;
     NSData *payload = NULL;
     
     while (true) {
-        struct DTXMessageHeader mheader;
-        uint32_t nrecv = 0;
-        idevice_connection_receive(_connection, (char *)(&mheader), sizeof(mheader), &nrecv);
+        if (!_connection) { return NULL; }
+
+        NSData *receiveData = [_connection receiveWithSize:sizeof(struct DTXMessageHeader)];
+        struct DTXMessageHeader mheader = *(struct DTXMessageHeader *)receiveData.bytes;
         
-        if (nrecv != sizeof(mheader)) {
-            [self error:DTXMessageErrorCodeReadMessageHeaderFailed
-                message:[NSString stringWithFormat:@"failed to read message header: %s, nrecv = %x", strerror(errno), nrecv]];
+        if (receiveData.length != sizeof(mheader)) {
+            NSString *error = [NSString stringWithFormat:@"failed to read message header: %s, nrecv = %lx", strerror(errno), (unsigned long)receiveData.length];
+            [self log:error];
             return NULL;
         }
         
         if (mheader.magic != 0x1F3D5B79) {
-            [self error:DTXMessageErrorCodeBadHeaderMagic
-                message:[NSString stringWithFormat:@"bad header magic: %x", mheader.magic]];
+            [self log:[NSString stringWithFormat:@"bad header magic: %x", mheader.magic]];
             return NULL;
         }
         
         if (mheader.conversationIndex != 0 && mheader.conversationIndex != 1) {
-            [self error:DTXMessageErrorCodeInvalidConversationIndex
-                message:[NSString stringWithFormat:@"invalid conversation index: %d", mheader.conversationIndex]];
+            [self log:[NSString stringWithFormat:@"invalid conversation index: %d", mheader.conversationIndex]];
             return NULL;
         }
         
@@ -335,22 +228,17 @@ struct DTXMessagePayloadHeader {
         
         NSMutableData *frag = [NSMutableData data];
         uint32_t nbytes = 0;
-        uint8_t *fragData = (uint8_t *)malloc(sizeof(uint8_t) * mheader.length);
                 
         while (nbytes < mheader.length) {
-            uint8_t *curptr = fragData + nbytes;
-            size_t curlen = mheader.length - nbytes;
-            idevice_connection_receive(_connection, (char *)curptr, (uint32_t)curlen, &nrecv);
-                                
-            if (nrecv > 0) {
-                NSData *temData = [NSData dataWithBytes:curptr length:nrecv];
-                [frag appendData:temData];
-                nbytes += nrecv;
+            uint32_t curlen = mheader.length - nbytes;
+            NSData *curptr = [_connection receiveWithSize:curlen];
+                                            
+            if (curptr.length > 0) {
+                [frag appendData:curptr];
+                nbytes += curptr.length;
             }
         }
         
-        free(fragData);
-
         NSString *key = [NSString stringWithFormat:@"%@-%@", @(mheader.channelCode), @(mheader.identifier)];
         BOOL loadFinish = NO;
 
@@ -391,7 +279,6 @@ struct DTXMessagePayloadHeader {
     objlen = pheader->totalLength - auxlen;
             
     DTXReceiveObject *result = [[DTXReceiveObject alloc] init];
-    
     [result setChannel:channelCode];
     [result setIdentifier:identifier];
     [result setFlag:pheader -> flags];
@@ -409,138 +296,7 @@ struct DTXMessagePayloadHeader {
 }
 
 - (NSNumber * _Nullable)fd {
-    if (!_connection) {
-        return NULL;
-    }
-    
-    int fd = -1;
-    if (idevice_connection_get_fd(_connection, &fd) == IDEVICE_E_SUCCESS && fd != -1) {
-        return [NSNumber.alloc initWithInt:fd];
-    }
-    return NULL;
-}
-
-// MARK: - C Func -
-
-ssize_t upload_mounter_callback(void* buffer, size_t length, void *user_data) {
-    return 0;
-}
-
-int32_t constructor_remote_service(idevice_t device,
-                                   lockdownd_service_descriptor_t service,
-                                   idevice_connection_t * conn) {
-    if (!device || !service || service -> port == 0) {
-        return SERVICE_E_INVALID_ARG;
-    }
-    
-    // connect
-    idevice_connection_t connection;
-    idevice_error_t error = idevice_connect(device, service -> port, &connection);
-    if (error != IDEVICE_E_SUCCESS) {
-        return error;
-    };
-    
-    int fd;
-    error = idevice_connection_get_fd(connection, &fd);
-    if (error != IDEVICE_E_SUCCESS) {
-        return error;
-    }
-    
-    if (service -> ssl_enabled) {
-        idevice_connection_enable_ssl(connection);
-    }
-        
-    (*conn) = connection;
-    return SERVICE_E_SUCCESS;
-}
-
-char * idevice_get_version(idevice_t device) {
-    if (device == NULL) {
-        return NULL;
-    }
-    
-    char *s_version = NULL;
-    lockdownd_client_t client_loc = NULL;
-    plist_t p_version = NULL;
-    
-    lockdownd_client_new(device, &client_loc, "getVersion");
-    
-    if (lockdownd_get_value(client_loc, NULL, "ProductVersion", &p_version) == 0) {
-        plist_get_string_val(p_version, &s_version);
-    }
-    
-    lockdownd_client_free(client_loc);
-    plist_free(p_version);
-    return s_version;
-}
-
-char * find_image_path(idevice_t device) {
-    char * version = idevice_get_version(device);
-    if (version == NULL) {
-        return NULL;
-    }
-    
-    const char *path = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/";
-    const char *fileName = "/DeveloperDiskImage.dmg";
-    
-    int len = (int)(strlen(version) + strlen(path) + strlen(fileName) + 1);
-    char * result = (char *)malloc(sizeof(char) * len);
-    
-    strcat(result, path);
-    strcat(result, version);
-    strcat(result, fileName);
-    
-    return result;
-}
-
-@end
-
-
-@implementation DTXPayload {
-    NSInteger _count;
-    NSInteger _capacity;
-    
-    NSInteger _currentLen;
-    NSInteger _totalLen;
-}
-
-- (instancetype)initWithCapacity:(NSInteger)capacity {
-    if (self = [super init]) {
-        _payloads = [NSMutableArray arrayWithCapacity:capacity];
-        for (int i = 0; i < capacity; i++) {
-            [_payloads addObject:[NSData data]];
-        }
-        _capacity = capacity;
-        _count = 0;
-        _totalLen = -1;
-        _currentLen = 0;
-    }
-    return self;
-}
-
-- (void)addData:(NSData *)data index:(NSInteger)index {
-    if (index == 1 && data.length > 16) {
-        struct DTXMessagePayloadHeader *pheader = (struct DTXMessagePayloadHeader *)(data.bytes);
-        _totalLen = pheader->totalLength + 16;
-    }
-    
-    if (index < _capacity) {
-        _payloads[index] = data;
-        _count += 1;
-        _currentLen += data.length;
-    }
-}
-
-- (NSData *)data {
-    NSMutableData *data = [NSMutableData data];
-    [_payloads enumerateObjectsUsingBlock:^(NSData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [data appendData:obj];
-    }];
-    return data;
-}
-
-- (BOOL)readComplete {
-    return _currentLen >= _totalLen;
+    return [_connection fd];
 }
 
 @end

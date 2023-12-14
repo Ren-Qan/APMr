@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <DTXMessageHandle/DTXPayload.h>
 #import <DTXMessageHandle/DTXArguments.h>
 #import <DTXMessageHandle/DTXReceiveObject.h>
 
@@ -15,42 +16,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class DTXMessageHandle;
 
-typedef NS_ENUM(NSUInteger, DTXMessageErrorCode) {
-    DTXMessageErrorCodeMounterStartFailed = 1,
-    DTXMessageErrorCodeMounterLookupImageFailed,
-    DTXMessageErrorCodeUploadImageFailed,
-    DTXMessageErrorCodeNotFoundImagePath,
-    DTXMessageErrorCodeMonterMountImageFailed,
-    DTXMessageErrorCodeStartInstrumentsServiceFailed,
-    DTXMessageErrorCodeInstrumentsHandShakeFailed,
-    DTXMessageErrorCodeReadMessageHeaderFailed,
-    DTXMessageErrorCodeBadHeaderMagic,
-    DTXMessageErrorCodeInvalidConversationIndex,
-    DTXMessageErrorCodeReadingFromSocketFailed,
-};
-
-typedef NS_ENUM(NSUInteger, DTXMessageProgressState) {
-    DTXMessageProgressStateMonterStartService = 1,
-    DTXMessageProgressStateMonterLookupImage,
-    DTXMessageProgressStateFindSignature,
-    DTXMessageProgressStateMonterUploadImage,
-    DTXMessageProgressStateFindImagePath,
-    DTXMessageProgressStateMonterMountImage,
-    DTXMessageProgressStateStartInstrumentsService,
-    DTXMessageProgressStateInstrumentsHandShake,
-    DTXMessageProgressStateSuccess,
-};
-
 @protocol DTXMessageHandleDelegate <NSObject>
 
 @optional
 
-- (void)error:(DTXMessageErrorCode)error
-      message:(NSString * _Nullable)message
-       handle:(DTXMessageHandle *)handle;
+- (void)log:(nonnull NSString *)message
+     handle:(DTXMessageHandle *)handle;
 
-- (void)progress:(DTXMessageProgressState)progress
-         message:(NSString * _Nullable)message
+- (void)complete:(nonnull NSString *)message
+         success:(BOOL)success
+          handle:(DTXMessageHandle *)handle;
+
+- (void)progress:(nonnull NSString *)message
           handle:(DTXMessageHandle *)handle;
 
 @end

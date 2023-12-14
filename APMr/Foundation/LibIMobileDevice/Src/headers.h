@@ -10,6 +10,8 @@
 
 #import "DTXMessageHandle/MDUtil.h"
 #import "DTXMessageHandle/DTXMessageHandle.h"
+#import "DTXConnection/DTXRSDConnection.h"
+#import "DTXConnection/DTXDiskMountConnection.h"
 #import "plist/plist.h"
 #import "libimobiledevice/afc.h"
 #import "libimobiledevice/companion_proxy.h"
