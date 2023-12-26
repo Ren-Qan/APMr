@@ -92,7 +92,7 @@ extension ADevice {
                 } else {
                     if let iDevice = IDevice(item),
                        let lockdown = ILockdown(iDevice),
-                       let info = lockdown.fetchDeviceInfo {
+                       let info = lockdown.fetchDeviceInfo() {
                         result.name = info.deivceName
                         result.osVersion = info.osVersion
                         

@@ -37,7 +37,7 @@ class ILockdown {
 }
 
 extension ILockdown {
-    public var fetchDeviceInfo: ILockdownDeivceInfo? {
+    public func fetchDeviceInfo() -> ILockdownDeivceInfo? {
         guard let lockdown_t = lockdown_t else {
             return nil
         }
