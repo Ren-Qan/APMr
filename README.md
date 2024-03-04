@@ -1,5 +1,11 @@
 # APMr
 `App性能分析工作台`山寨版。
+> 小记 \
+> `目前的适配过程还远远不够`
+> 1. 发出第一个release版本后，我开始了大幅度的重构工作。UI、交互、Service等。
+> 2. 紧接着iOS17出了[《pymobiledevice3》](https://github.com/doronz88/pymobiledevice3)，我想抄一个swift版本出来。 
+> 3. [测试工程](https://github.com/Ren-Qan/LibIMobileDevice-Debug)目前完成了建立scoket，Bonjour，XPC数据结构，HTTP2Frame数据结构等初步工作，
+
 
 ![APM-0](https://user-images.githubusercontent.com/17810210/224478734-e6fc7b99-6e29-47c3-b81b-bbe8b2938888.png)
 
